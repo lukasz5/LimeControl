@@ -20,6 +20,7 @@ import type {
   LimeSurveyItem,
   ScheduleJob,
 } from '../types/limesurvey';
+import { useNotifications } from './NotificationProvider';
 
 interface ScheduleViewProps {
   activeSession: ActiveSession | null;
@@ -42,6 +43,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   preselectedSurveyId,
   onJobExecuted,
 }) => {
+  const { notify } = useNotifications();
   const [jobs, setJobs] = useState<ScheduleJob[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -149,8 +151,20 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       setSuccessMsg(
         `Zaplanowano automatyczne wywołanie activate_survey dla ankiety #${sid}.`
       );
+      notify({
+        type: 'info',
+        title: 'Dodano zadanie do harmonogramu',
+        message: `Aktywacja ankiety #${sid} zaplanowana na ${scheduledDate.toLocaleString('pl-PL')}.`,
+        dedupeKey: `schedule:create:${job.id}`,
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      notify({
+        type: 'error',
+        title: 'Błąd planowania harmonogramu',
+        message: msg,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -162,9 +176,30 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     try {
       const updated = await runScheduleNow(jobId);
       setJobs((prev) => prev.map((j) => (j.id === jobId ? updated : j)));
+      if (updated.status === 'completed') {
+        notify({
+          type: 'success',
+          title: 'Zadanie wykonane pomyślnie',
+          message: `Ankieta #${updated.surveyId} (${updated.surveyTitle}) została aktywowana.`,
+          dedupeKey: `job:${updated.id}:completed`,
+        });
+      } else if (updated.status === 'failed') {
+        notify({
+          type: 'error',
+          title: `Błąd wykonania zadania (#${updated.surveyId})`,
+          message: updated.resultMessage,
+          dedupeKey: `job:${updated.id}:failed`,
+        });
+      }
       onJobExecuted?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      notify({
+        type: 'error',
+        title: 'Błąd uruchamiania zadania',
+        message: msg,
+      });
     } finally {
       setActionId(null);
     }
@@ -176,8 +211,19 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     try {
       const updated = await cancelSchedule(jobId);
       setJobs((prev) => prev.map((j) => (j.id === jobId ? updated : j)));
+      notify({
+        type: 'info',
+        title: 'Anulowano zadanie harmonogramu',
+        message: `Ankieta #${updated.surveyId} nie zostanie automatycznie aktywowana.`,
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      notify({
+        type: 'error',
+        title: 'Błąd anulowania zadania',
+        message: msg,
+      });
     } finally {
       setActionId(null);
     }

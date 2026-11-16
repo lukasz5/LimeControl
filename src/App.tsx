@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   CalendarClock,
   ClipboardList,
@@ -8,6 +8,10 @@ import {
   Users,
 } from 'lucide-react';
 import { InstancesView } from './components/InstancesView';
+import {
+  NotificationProvider,
+  useNotifications,
+} from './components/NotificationProvider';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { ParticipantsView } from './components/ParticipantsView';
 import { PWAInstallButton } from './components/PWAInstallButton';
@@ -21,6 +25,7 @@ import {
   releaseSessionKey,
   subscribeRpcTrace,
 } from './services/limeSurveyRpc';
+import { fetchSchedules } from './services/schedulerApi';
 import type {
   ActiveSession,
   AppTab,
@@ -28,6 +33,7 @@ import type {
   InstanceProfile,
   LimeSurveyItem,
   RpcTraceEntry,
+  ScheduleJob,
 } from './types/limesurvey';
 
 const PROFILES_KEY = 'limecontrol_profiles_v1';
@@ -44,7 +50,8 @@ function loadStoredProfiles(): InstanceProfile[] {
   }
 }
 
-export default function App() {
+function AppContent() {
+  const { notify } = useNotifications();
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     try {
       return localStorage.getItem(THEME_KEY) === 'dark';
@@ -70,6 +77,12 @@ export default function App() {
   const [rpcTraces, setRpcTraces] = useState<RpcTraceEntry[]>([]);
   const [preselectedSid, setPreselectedSid] = useState<number | null>(null);
 
+  const knownJobStatusesRef = useRef<Map<string, ScheduleJob['status']> | null>(
+    null
+  );
+  const activeSessionRef = useRef<ActiveSession | null>(null);
+  activeSessionRef.current = activeSession;
+
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
     try {
@@ -90,8 +103,90 @@ export default function App() {
   useEffect(() => {
     return subscribeRpcTrace((entry) => {
       setRpcTraces((prev) => [entry, ...prev].slice(0, 60));
+
+      if (!entry.ok) {
+        const isExpectedProbe =
+          (entry.method === 'get_summary' &&
+            /no data|not active|no survey/i.test(entry.summary)) ||
+          (entry.method === 'list_participants' &&
+            /no token table|not exist|no data/i.test(entry.summary));
+
+        if (!isExpectedProbe) {
+          notify({
+            type: 'error',
+            title: `Błąd komunikacji z API (${entry.method})`,
+            message: entry.summary,
+            actionLabel: 'Log RPC',
+            onAction: () => setTab('instances'),
+            dedupeKey: `rpc:${entry.method}:${entry.summary}`,
+          });
+        }
+      }
     });
-  }, []);
+  }, [notify]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const pollSchedules = async () => {
+      try {
+        const jobs = await fetchSchedules();
+        if (cancelled) return;
+
+        const prevMap = knownJobStatusesRef.current;
+        const nextMap = new Map<string, ScheduleJob['status']>();
+        let shouldRefreshSurveys = false;
+
+        for (const job of jobs) {
+          nextMap.set(job.id, job.status);
+          if (prevMap !== null) {
+            const previousStatus = prevMap.get(job.id);
+            const transitionedFromActive =
+              previousStatus === 'scheduled' || previousStatus === 'running';
+
+            if (transitionedFromActive && job.status === 'completed') {
+              shouldRefreshSurveys = true;
+              notify({
+                type: 'success',
+                title: 'Zaplanowana aktywacja zakończona',
+                message: `Ankieta #${job.surveyId} (${job.surveyTitle}) została pomyślnie aktywowana.`,
+                actionLabel: 'Harmonogram',
+                onAction: () => setTab('schedule'),
+                dedupeKey: `job:${job.id}:completed`,
+              });
+            } else if (transitionedFromActive && job.status === 'failed') {
+              notify({
+                type: 'error',
+                title: `Błąd zadania harmonogramu (#${job.surveyId})`,
+                message: job.resultMessage,
+                actionLabel: 'Szczegóły',
+                onAction: () => setTab('schedule'),
+                dedupeKey: `job:${job.id}:failed`,
+              });
+            }
+          }
+        }
+
+        knownJobStatusesRef.current = nextMap;
+
+        if (shouldRefreshSurveys && activeSessionRef.current) {
+          void refreshSurveysForSession(activeSessionRef.current);
+        }
+      } catch {
+        // Silent retry on transient background schedule poll
+      }
+    };
+
+    void pollSchedules();
+    const timer = setInterval(() => {
+      void pollSchedules();
+    }, 15_000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [notify]);
 
   async function refreshSurveysForSession(session: ActiveSession) {
     setLoadingSurveys(true);
@@ -165,6 +260,12 @@ export default function App() {
       );
 
       await refreshSurveysForSession(session);
+      notify({
+        type: 'success',
+        title: 'Połączono z instancją LimeSurvey',
+        message: `${session.profileName} · użytkownik ${session.username}`,
+        dedupeKey: `connect:${session.profileId}`,
+      });
       setTab('surveys');
     } catch (err) {
       const isCors =
@@ -391,5 +492,13 @@ export default function App() {
 
       <OfflineIndicator />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <NotificationProvider>
+      <AppContent />
+    </NotificationProvider>
   );
 }

@@ -28,6 +28,7 @@ import type {
   SurveyProperties,
   SurveySummary,
 } from '../types/limesurvey';
+import { useNotifications } from './NotificationProvider';
 import { SurveySummaryCharts } from './SurveySummaryCharts';
 import { SurveySummaryRing } from './SurveySummaryRing';
 
@@ -52,6 +53,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
   onOpenParticipants,
   onGoToInstances,
 }) => {
+  const { notify } = useNotifications();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [selectedSurvey, setSelectedSurvey] = useState<LimeSurveyItem | null>(null);
@@ -207,7 +209,13 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       }
 
       await onRefreshSurveys();
-      setActionMsg(`Ankieta #${selectedSurvey.sid} została pomyślnie aktywowana.`);
+      const msg = `Ankieta #${selectedSurvey.sid} została pomyślnie aktywowana.`;
+      setActionMsg(msg);
+      notify({
+        type: 'success',
+        title: 'Ankieta aktywowana',
+        message: `${selectedSurvey.surveyls_title} (SID ${selectedSurvey.sid})`,
+      });
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
     } finally {
@@ -234,6 +242,11 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       );
       await onRefreshSurveys();
       setActionMsg('Zaktualizowano daty startdate / expires w LimeSurvey.');
+      notify({
+        type: 'success',
+        title: 'Zaktualizowano harmonogram dat',
+        message: `Zapisano właściwości ankiety #${selectedSurvey.sid}.`,
+      });
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
     } finally {
@@ -260,6 +273,11 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       setActionMsg(
         `Zamknięto przyjmowanie odpowiedzi (ustawiono expires = ${nowFormatted}).`
       );
+      notify({
+        type: 'info',
+        title: 'Zamknięto ankietę',
+        message: `Ankieta #${selectedSurvey.sid} wygasła (${nowFormatted}).`,
+      });
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
     } finally {
@@ -308,6 +326,11 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         setExportPreview(lines);
       }
       setActionMsg(`Pobrano plik odpowiedzi (${exportFormat.toUpperCase()}).`);
+      notify({
+        type: 'success',
+        title: 'Eksport odpowiedzi zakończony',
+        message: `Pobrano plik ${exportFormat.toUpperCase()} dla ankiety #${selectedSurvey.sid}.`,
+      });
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
     } finally {
