@@ -1,0 +1,6 @@
+{
+  "name": "LimeControl — LimeSurvey Mobile RC2",
+  "description": "Mobilna aplikacja PWA i eksporter projektu React Native dla API LimeSurvey RemoteControl 2 z harmonogramem aktywacji ankiet, statystykami, uczestnikami i eksportem odpowiedzi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
