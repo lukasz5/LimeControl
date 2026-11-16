@@ -46,10 +46,24 @@ export interface SurveyProperties {
   format?: string;
   template?: string;
   language?: string;
+  additional_languages?: string;
   allowregister?: 'Y' | 'N' | string;
   autoredirect?: 'Y' | 'N' | string;
   datestamp?: 'Y' | 'N' | string;
   usecookie?: 'Y' | 'N' | string;
+  [key: string]: unknown;
+}
+
+export interface SurveyLanguageProperties {
+  surveyls_survey_id?: number | string;
+  surveyls_language?: string;
+  surveyls_title?: string;
+  surveyls_email_invite_subj?: string;
+  surveyls_email_invite?: string;
+  surveyls_email_remind_subj?: string;
+  surveyls_email_remind?: string;
+  surveyls_email_register_subj?: string;
+  surveyls_email_register?: string;
   [key: string]: unknown;
 }
 

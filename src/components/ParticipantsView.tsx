@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   BellRing,
   Check,
+  FileEdit,
   Mail,
   RefreshCw,
   Trash2,
@@ -23,6 +24,7 @@ import type {
   ParticipantItem,
   SurveySummary,
 } from '../types/limesurvey';
+import { EmailTemplateEditor } from './EmailTemplateEditor';
 
 interface ParticipantsViewProps {
   activeSession: ActiveSession | null;
@@ -53,6 +55,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [subTab, setSubTab] = useState<'list' | 'email-template'>('list');
 
   useEffect(() => {
     if (preselectedSurveyId) {
@@ -290,31 +293,58 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200 dark:border-slate-800">
             <button
               type="button"
-              onClick={() => setUnusedOnly(false)}
+              onClick={() => setSubTab('list')}
               className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-                !unusedOnly
+                subTab === 'list'
                   ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
                   : 'text-slate-600 dark:text-slate-400'
               }`}
             >
-              Wszyscy
+              Lista ({participants.length})
             </button>
             <button
               type="button"
-              onClick={() => setUnusedOnly(true)}
+              onClick={() => setSubTab('email-template')}
               className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-                unusedOnly
+                subTab === 'email-template'
                   ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
                   : 'text-slate-600 dark:text-slate-400'
               }`}
             >
-              Niewykorzystane
+              Szablon e-mail
             </button>
           </div>
+
+          {subTab === 'list' && (
+            <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setUnusedOnly(false)}
+                className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  !unusedOnly
+                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                Wszyscy
+              </button>
+              <button
+                type="button"
+                onClick={() => setUnusedOnly(true)}
+                className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  unusedOnly
+                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                Niewykorzystane
+              </button>
+            </div>
+          )}
 
           <button
             type="button"
@@ -370,7 +400,22 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         </div>
       )}
 
-      {tokensMissing ? (
+      {subTab === 'email-template' && selectedSid ? (
+        <EmailTemplateEditor
+          activeSession={activeSession}
+          surveyId={Number(selectedSid)}
+          survey={surveys.find((s) => String(s.sid) === selectedSid)}
+          sampleParticipant={participants[0]}
+          selectedTidsCount={selectedTids.length}
+          hasParticipants={participants.length > 0}
+          onSaveAndSendInvite={async () => {
+            await handleInvite(selectedTids);
+          }}
+          onSaveAndSendRemind={async () => {
+            await handleRemind(selectedTids);
+          }}
+        />
+      ) : tokensMissing ? (
         <div className="rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/70 dark:bg-amber-950/30 p-6 space-y-3">
           <h3 className="text-base font-bold text-slate-900 dark:text-white">
             Tabela uczestników nie jest jeszcze aktywna
@@ -479,6 +524,15 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                   <span>Przypomnij</span>
                 </button>
               </div>
+              <button
+                type="button"
+                disabled={!selectedSid}
+                onClick={() => setSubTab('email-template')}
+                className="w-full inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/60 dark:bg-emerald-950/30 px-3 text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100/70 dark:hover:bg-emerald-950/50 disabled:opacity-50"
+              >
+                <FileEdit className="h-3.5 w-3.5" />
+                <span>Edytuj i podejrzyj szablon e-mail</span>
+              </button>
               {selectedTids.length > 0 && (
                 <button
                   type="button"

@@ -3,6 +3,7 @@ import type {
   LimeSurveyItem,
   ParticipantItem,
   RpcTraceEntry,
+  SurveyLanguageProperties,
   SurveyProperties,
   SurveySummary,
 } from '../types/limesurvey';
@@ -347,6 +348,45 @@ export async function copySurvey(
     rpcEndpoint,
     'copy_survey',
     [sessionKey, surveyId, newName],
+    mode
+  );
+}
+
+export async function getLanguageProperties(
+  rpcEndpoint: string,
+  sessionKey: string,
+  surveyId: number,
+  settings: string[] | null = [
+    'surveyls_language',
+    'surveyls_title',
+    'surveyls_email_invite_subj',
+    'surveyls_email_invite',
+    'surveyls_email_remind_subj',
+    'surveyls_email_remind',
+  ],
+  language: string | null = null,
+  mode: ConnectionMode = 'direct'
+): Promise<SurveyLanguageProperties> {
+  return callLimeSurveyRpc<SurveyLanguageProperties>(
+    rpcEndpoint,
+    'get_language_properties',
+    [sessionKey, surveyId, settings, language],
+    mode
+  );
+}
+
+export async function setLanguageProperties(
+  rpcEndpoint: string,
+  sessionKey: string,
+  surveyId: number,
+  localeData: Partial<SurveyLanguageProperties>,
+  language: string | null = null,
+  mode: ConnectionMode = 'direct'
+): Promise<Record<string, unknown>> {
+  return callLimeSurveyRpc<Record<string, unknown>>(
+    rpcEndpoint,
+    'set_language_properties',
+    [sessionKey, surveyId, localeData, language],
     mode
   );
 }
