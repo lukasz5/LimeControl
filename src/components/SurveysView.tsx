@@ -1,10 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  BarChart3,
   CalendarClock,
   ChevronRight,
   CopyPlus,
   Download,
+  GitCompareArrows,
   Lock,
+  MoreVertical,
   Play,
   RefreshCw,
   Search,
@@ -29,6 +32,7 @@ import type {
   SurveySummary,
 } from '../types/limesurvey';
 import { useNotifications } from './NotificationProvider';
+import { SurveyComparisonChart } from './SurveyComparisonChart';
 import { SurveySummaryCharts } from './SurveySummaryCharts';
 import { SurveySummaryRing } from './SurveySummaryRing';
 
@@ -58,6 +62,31 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [selectedSurvey, setSelectedSurvey] = useState<LimeSurveyItem | null>(null);
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [openQuickMenuSid, setOpenQuickMenuSid] = useState<number | null>(null);
+  const comparisonSectionRef = useRef<HTMLDivElement | null>(null);
+  const statsSectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (openQuickMenuSid === null) return;
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target?.closest('[data-quick-actions-root="true"]')) {
+        setOpenQuickMenuSid(null);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpenQuickMenuSid(null);
+      }
+    };
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [openQuickMenuSid]);
 
   // Selected survey details
   const [summary, setSummary] = useState<SurveySummary | null>(null);
@@ -435,20 +464,36 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         </div>
       )}
 
-      <SurveySummaryRing
-        summary={summary}
-        loading={summaryLoading}
-        error={summaryError}
-      />
+      <div ref={statsSectionRef} className="space-y-5 scroll-mt-4">
+        <SurveySummaryRing
+          summary={summary}
+          loading={summaryLoading}
+          error={summaryError}
+        />
 
-      <SurveySummaryCharts
-        surveyTitle={selectedSurvey.surveyls_title}
-        surveyId={selectedSurvey.sid}
-        isActive={selectedSurvey.active === 'Y'}
-        summary={summary}
-        loading={summaryLoading}
-        error={summaryError}
-      />
+        <SurveySummaryCharts
+          surveyTitle={selectedSurvey.surveyls_title}
+          surveyId={selectedSurvey.sid}
+          isActive={selectedSurvey.active === 'Y'}
+          summary={summary}
+          loading={summaryLoading}
+          error={summaryError}
+          onCompareWithAnother={
+            surveys.length >= 2
+              ? () => {
+                  setMobileDetailOpen(false);
+                  setCompareOpen(true);
+                  requestAnimationFrame(() => {
+                    comparisonSectionRef.current?.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start',
+                    });
+                  });
+                }
+              : undefined
+          }
+        />
+      </div>
 
       {/* Aktywacja / Harmonogram / Zamknięcie */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4">
@@ -493,6 +538,18 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                 <span>Zaplanuj na później</span>
               </button>
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileDetailOpen(false);
+                onOpenParticipants(selectedSurvey.sid);
+              }}
+              className="min-h-[44px] w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+            >
+              <Users className="h-4 w-4" />
+              <span>Uczestnicy i tokeny</span>
+            </button>
           </div>
         ) : (
           <div className="flex flex-wrap gap-2.5">
@@ -664,16 +721,34 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            void onRefreshSurveys();
-          }}
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 self-start"
-        >
-          <RefreshCw className={`h-4 w-4 ${loadingSurveys ? 'animate-spin' : ''}`} />
-          <span>Odśwież listę</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2 self-start">
+          {surveys.length >= 2 && (
+            <button
+              type="button"
+              aria-expanded={compareOpen}
+              onClick={() => setCompareOpen((prev) => !prev)}
+              className={`inline-flex min-h-[44px] items-center gap-2 rounded-xl border px-3.5 text-xs font-semibold transition-colors ${
+                compareOpen
+                  ? 'border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700'
+                  : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <GitCompareArrows className="h-4 w-4" aria-hidden="true" />
+              <span>{compareOpen ? 'Ukryj porównanie' : 'Porównaj ankiety'}</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              void onRefreshSurveys();
+            }}
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+          >
+            <RefreshCw className={`h-4 w-4 ${loadingSurveys ? 'animate-spin' : ''}`} />
+            <span>Odśwież listę</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -725,6 +800,17 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         </div>
       </div>
 
+      {compareOpen && surveys.length >= 2 && (
+        <div ref={comparisonSectionRef}>
+          <SurveyComparisonChart
+            activeSession={activeSession}
+            surveys={surveys}
+            initialSurveyAId={selectedSurvey?.sid}
+            onClose={() => setCompareOpen(false)}
+          />
+        </div>
+      )}
+
       {selectedSurvey && selectedSurvey.active === 'Y' && (
         <div className="lg:hidden">
           <SurveySummaryCharts
@@ -735,6 +821,19 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             loading={summaryLoading}
             error={summaryError}
             compact
+            onCompareWithAnother={
+              surveys.length >= 2
+                ? () => {
+                    setCompareOpen(true);
+                    requestAnimationFrame(() => {
+                      comparisonSectionRef.current?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                      });
+                    });
+                  }
+                : undefined
+            }
           />
         </div>
       )}
@@ -749,46 +848,158 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             filteredSurveys.map((survey) => {
               const isSelected = selectedSurvey?.sid === survey.sid;
               const isActive = survey.active === 'Y';
+              const isMenuOpen = openQuickMenuSid === survey.sid;
+              const titleText = survey.surveyls_title || `Ankieta #${survey.sid}`;
+
               return (
-                <button
+                <div
                   key={survey.sid}
-                  type="button"
-                  onClick={() => {
-                    setSelectedSurvey(survey);
-                    setMobileDetailOpen(true);
-                  }}
-                  className={`w-full text-left px-4 py-4 flex items-center justify-between gap-3 transition-colors ${
+                  className={`relative flex items-center justify-between gap-2 px-3 py-2.5 transition-colors ${
                     isSelected
                       ? 'bg-emerald-50/70 dark:bg-emerald-950/30'
                       : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'
                   }`}
                 >
-                  <div className="min-w-0 space-y-1">
-                    <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                      {survey.surveyls_title || `Ankieta #${survey.sid}`}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpenQuickMenuSid(null);
+                      setSelectedSurvey(survey);
+                      setMobileDetailOpen(true);
+                    }}
+                    className="min-w-0 flex-1 text-left px-1.5 py-1.5 flex items-center justify-between gap-2 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                  >
+                    <div className="min-w-0 space-y-1">
+                      <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                        {titleText}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-x-2 text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
+                        <span>SID {survey.sid}</span>
+                        <span aria-hidden="true">·</span>
+                        <span
+                          className={
+                            isActive
+                              ? 'text-emerald-600 dark:text-emerald-400 font-semibold'
+                              : 'text-amber-700 dark:text-amber-400 font-semibold'
+                          }
+                        >
+                          {isActive ? 'Aktywna' : 'Nieaktywna'}
+                        </span>
+                        {survey.expires && (
+                          <>
+                            <span aria-hidden="true">·</span>
+                            <span>Koniec: {survey.expires.slice(0, 10)}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-2 text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
-                      <span>SID {survey.sid}</span>
-                      <span aria-hidden="true">·</span>
-                      <span
-                        className={
-                          isActive
-                            ? 'text-emerald-600 dark:text-emerald-400 font-semibold'
-                            : 'text-amber-700 dark:text-amber-400 font-semibold'
-                        }
+                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                  </button>
+
+                  <div
+                    className="relative shrink-0"
+                    data-quick-actions-root="true"
+                  >
+                    <button
+                      type="button"
+                      aria-label={`Szybkie akcje dla ankiety ${titleText}`}
+                      aria-haspopup="menu"
+                      aria-expanded={isMenuOpen}
+                      title="Szybkie akcje"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenQuickMenuSid((prev) =>
+                          prev === survey.sid ? null : survey.sid
+                        );
+                      }}
+                      className={`min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl border transition-colors ${
+                        isMenuOpen
+                          ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300'
+                          : 'border-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'
+                      }`}
+                    >
+                      <MoreVertical className="h-4 w-4" aria-hidden="true" />
+                    </button>
+
+                    {isMenuOpen && (
+                      <div
+                        role="menu"
+                        aria-label={`Szybkie akcje: ${titleText}`}
+                        className="absolute right-0 top-full mt-1.5 z-30 w-56 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1.5 shadow-xl space-y-0.5"
                       >
-                        {isActive ? 'Aktywna' : 'Nieaktywna'}
-                      </span>
-                      {survey.expires && (
-                        <>
-                          <span aria-hidden="true">·</span>
-                          <span>Koniec: {survey.expires.slice(0, 10)}</span>
-                        </>
-                      )}
-                    </div>
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            setOpenQuickMenuSid(null);
+                            onOpenParticipants(survey.sid);
+                          }}
+                          className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        >
+                          <Users className="h-4 w-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                          <span>Edycja tokenów i uczestników</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            setOpenQuickMenuSid(null);
+                            setSelectedSurvey(survey);
+                            setMobileDetailOpen(true);
+                            requestAnimationFrame(() => {
+                              statsSectionRef.current?.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start',
+                              });
+                            });
+                          }}
+                          className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        >
+                          <BarChart3 className="h-4 w-4 text-sky-600 shrink-0" aria-hidden="true" />
+                          <span>Statystyki i wykresy</span>
+                        </button>
+
+                        {surveys.length >= 2 && (
+                          <button
+                            type="button"
+                            role="menuitem"
+                            onClick={() => {
+                              setOpenQuickMenuSid(null);
+                              setSelectedSurvey(survey);
+                              setCompareOpen(true);
+                              requestAnimationFrame(() => {
+                                comparisonSectionRef.current?.scrollIntoView({
+                                  behavior: 'smooth',
+                                  block: 'start',
+                                });
+                              });
+                            }}
+                            className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                          >
+                            <GitCompareArrows className="h-4 w-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                            <span>Porównaj na wykresie</span>
+                          </button>
+                        )}
+
+                        {!isActive && (
+                          <button
+                            type="button"
+                            role="menuitem"
+                            onClick={() => {
+                              setOpenQuickMenuSid(null);
+                              onScheduleSurvey(survey.sid);
+                            }}
+                            className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                          >
+                            <CalendarClock className="h-4 w-4 text-amber-600 shrink-0" aria-hidden="true" />
+                            <span>Zaplanuj aktywację</span>
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
-                </button>
+                </div>
               );
             })
           )}

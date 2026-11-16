@@ -9,6 +9,7 @@ import {
   KeyRound,
   LogOut,
   Plus,
+  Search,
   Server,
   ShieldCheck,
   Terminal,
@@ -70,6 +71,25 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
 
   const [promptProfile, setPromptProfile] = useState<InstanceProfile | null>(null);
   const [promptPassword, setPromptPassword] = useState('');
+  const [profileSearch, setProfileSearch] = useState('');
+  const [profileModeFilter, setProfileModeFilter] = useState<'all' | ConnectionMode>('all');
+
+  const filteredProfiles = useMemo(() => {
+    const q = profileSearch.trim().toLowerCase();
+    return profiles.filter((p) => {
+      if (profileModeFilter !== 'all' && p.connectionMode !== profileModeFilter) {
+        return false;
+      }
+      if (!q) return true;
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.baseUrl.toLowerCase().includes(q) ||
+        p.rpcEndpoint.toLowerCase().includes(q) ||
+        p.username.toLowerCase().includes(q) ||
+        (p.authPlugin || '').toLowerCase().includes(q)
+      );
+    });
+  }, [profiles, profileSearch, profileModeFilter]);
 
   // React Native Exporter state
   const rnFiles = useMemo(
@@ -269,13 +289,72 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
             )}
 
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
-              <div className="px-5 py-4 flex items-center justify-between">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                  Zapisane profile instancji
-                </h3>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Zapis lokalny w urządzeniu
-                </span>
+              <div className="px-5 py-4 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                    Zapisane profile instancji
+                  </h3>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
+                    {filteredProfiles.length === profiles.length
+                      ? `Łącznie: ${profiles.length}`
+                      : `Wyniki: ${filteredProfiles.length} / ${profiles.length}`}
+                  </span>
+                </div>
+
+                {profiles.length > 0 && (
+                  <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+                    <div className="relative flex-1">
+                      <Search
+                        className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                        aria-hidden="true"
+                      />
+                      <input
+                        type="search"
+                        value={profileSearch}
+                        onChange={(e) => setProfileSearch(e.target.value)}
+                        placeholder="Szukaj po nazwie, URL lub loginie..."
+                        aria-label="Szukaj zapisanych instancji"
+                        className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-10 pr-3.5 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-950 p-1 border border-slate-200 dark:border-slate-800 self-start shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setProfileModeFilter('all')}
+                        className={`min-h-[36px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
+                          profileModeFilter === 'all'
+                            ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        Wszystkie
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setProfileModeFilter('direct')}
+                        className={`min-h-[36px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
+                          profileModeFilter === 'direct'
+                            ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        Bezpośredni
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setProfileModeFilter('relay')}
+                        className={`min-h-[36px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
+                          profileModeFilter === 'relay'
+                            ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        Przekaźnik
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {profiles.length === 0 ? (
@@ -289,8 +368,24 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                     <span className="font-medium">Ustawienia globalne → Interfejsy</span>.
                   </p>
                 </div>
+              ) : filteredProfiles.length === 0 ? (
+                <div className="p-8 text-center space-y-3">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                    Brak profili pasujących do wyszukiwania
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileSearch('');
+                      setProfileModeFilter('all');
+                    }}
+                    className="min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  >
+                    Wyczyść filtry
+                  </button>
+                </div>
               ) : (
-                profiles.map((profile) => {
+                filteredProfiles.map((profile) => {
                   const isActive = activeSession?.profileId === profile.id;
                   return (
                     <div

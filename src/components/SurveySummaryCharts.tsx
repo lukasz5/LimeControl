@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, GitCompareArrows } from 'lucide-react';
 import type { SurveySummary } from '../types/limesurvey';
 
 interface SurveySummaryChartsProps {
@@ -20,6 +20,7 @@ interface SurveySummaryChartsProps {
   loading?: boolean;
   error?: string | null;
   compact?: boolean;
+  onCompareWithAnother?: () => void;
 }
 
 interface ChartDatum {
@@ -66,6 +67,7 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
   loading,
   error,
   compact = false,
+  onCompareWithAnother,
 }) => {
   if (!isActive) {
     return (
@@ -150,9 +152,21 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
             </p>
           )}
         </div>
-        <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
-          Źródło: get_summary
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
+            Źródło: get_summary
+          </span>
+          {onCompareWithAnother && (
+            <button
+              type="button"
+              onClick={onCompareWithAnother}
+              className="min-h-[36px] inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
+            >
+              <GitCompareArrows className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>Porównaj</span>
+            </button>
+          )}
+        </div>
       </div>
 
       <div
