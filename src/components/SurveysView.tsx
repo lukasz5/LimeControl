@@ -38,6 +38,7 @@ import { useNotifications } from './NotificationProvider';
 import { SurveyComparisonChart } from './SurveyComparisonChart';
 import { SurveySummaryCharts } from './SurveySummaryCharts';
 import { SurveySummaryRing } from './SurveySummaryRing';
+import { t } from '../i18n';
 
 interface SurveysViewProps {
   activeSession: ActiveSession | null;
@@ -162,7 +163,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
     setActionErr(null);
     setExportPreview(null);
     setFieldmapPreview(null);
-    setCopyTitle(`${selectedSurvey.surveyls_title} (Kopia)`);
+    setCopyTitle(t('{0} (Kopia)', selectedSurvey.surveyls_title));
     setStartDateInput(
       selectedSurvey.startdate
         ? selectedSurvey.startdate.replace(' ', 'T').slice(0, 16)
@@ -184,7 +185,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       ).catch((err) => {
         if (!cancelled) {
           setSummaryError(
-            err instanceof Error ? err.message : 'Brak podsumowania dla nieaktywnej ankiety.'
+            err instanceof Error ? err.message : t('Brak podsumowania dla nieaktywnej ankiety.')
           );
         }
         return null;
@@ -249,11 +250,11 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       }
 
       await onRefreshSurveys();
-      const msg = `Ankieta #${selectedSurvey.sid} została pomyślnie aktywowana.`;
+      const msg = t('Ankieta #{0} została pomyślnie aktywowana.', selectedSurvey.sid);
       setActionMsg(msg);
       notify({
         type: 'success',
-        title: 'Ankieta aktywowana',
+        title: t('Ankieta aktywowana'),
         message: `${selectedSurvey.surveyls_title} (SID ${selectedSurvey.sid})`,
       });
     } catch (err) {
@@ -288,13 +289,13 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       await onRefreshSurveys();
       setActionMsg(
         useUtc
-          ? 'Zaktualizowano daty startdate / expires (UTC dla LimeSurvey 7).'
-          : 'Zaktualizowano daty startdate / expires w LimeSurvey.'
+          ? t('Zaktualizowano daty startdate / expires (UTC dla LimeSurvey 7).')
+          : t('Zaktualizowano daty startdate / expires w LimeSurvey.')
       );
       notify({
         type: 'success',
-        title: 'Zaktualizowano harmonogram dat',
-        message: `Zapisano właściwości ankiety #${selectedSurvey.sid}.`,
+        title: t('Zaktualizowano harmonogram dat'),
+        message: t('Zapisano właściwości ankiety #{0}.', selectedSurvey.sid),
       });
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
@@ -322,12 +323,12 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       setExpiresDateInput(formatLimeSurveyDateTime(nowIso, false).replace(' ', 'T').slice(0, 16));
       await onRefreshSurveys();
       setActionMsg(
-        `Zamknięto przyjmowanie odpowiedzi (ustawiono expires = ${nowFormatted}${useUtc ? ' UTC' : ''}).`
+        t('Zamknięto przyjmowanie odpowiedzi (ustawiono expires = {0}{1}).', nowFormatted, useUtc ? ' UTC' : '')
       );
       notify({
         type: 'info',
-        title: 'Zamknięto ankietę',
-        message: `Ankieta #${selectedSurvey.sid} wygasła (${nowFormatted}).`,
+        title: t('Zamknięto ankietę'),
+        message: t('Ankieta #{0} wygasła ({1}).', selectedSurvey.sid, nowFormatted),
       });
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
@@ -397,11 +398,11 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         const lines = result.textPreview.split('\n').slice(0, 12).join('\n');
         setExportPreview(lines);
       }
-      setActionMsg(`Pobrano plik odpowiedzi (${exportFormat.toUpperCase()}).`);
+      setActionMsg(t('Pobrano plik odpowiedzi ({0}).', exportFormat.toUpperCase()));
       notify({
         type: 'success',
-        title: 'Eksport odpowiedzi zakończony',
-        message: `Pobrano plik ${exportFormat.toUpperCase()} dla ankiety #${selectedSurvey.sid}.`,
+        title: t('Eksport odpowiedzi zakończony'),
+        message: t('Pobrano plik {0} dla ankiety #{1}.', exportFormat.toUpperCase(), selectedSurvey.sid),
       });
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
@@ -424,7 +425,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         activeSession.connectionMode
       );
       await onRefreshSurveys();
-      setActionMsg(`Utworzono kopię ankiety: „${copyTitle.trim()}”.`);
+      setActionMsg(t('Utworzono kopię ankiety: „{0}”.', copyTitle.trim()));
     } catch (err) {
       setActionErr(err instanceof Error ? err.message : String(err));
     } finally {
@@ -438,10 +439,10 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         <Server className="mx-auto h-10 w-10 text-emerald-600" aria-hidden="true" />
         <div className="space-y-1.5 max-w-lg mx-auto">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-            Połącz się z instancją LimeSurvey
+            {t('Połącz się z instancją LimeSurvey')}
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Dodaj adres swojego serwera i dane administratora w zakładce Instancje, aby przeglądać ankiety, uruchamiać je, planować harmonogram aktywacji i eksportować odpowiedzi.
+            {t('Dodaj adres swojego serwera i dane administratora w zakładce Instancje, aby przeglądać ankiety, uruchamiać je, planować harmonogram aktywacji i eksportować odpowiedzi.')}
           </p>
         </div>
         <button
@@ -449,7 +450,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           onClick={onGoToInstances}
           className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-emerald-600 px-6 text-sm font-semibold text-white hover:bg-emerald-700"
         >
-          Konfiguruj połączenie
+          {t('Konfiguruj połączenie')}
         </button>
       </div>
     );
@@ -472,12 +473,12 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                   : 'font-semibold text-amber-700 dark:text-amber-400'
               }
             >
-              {selectedSurvey.active === 'Y' ? 'Aktywna' : 'Nieaktywna'}
+              {selectedSurvey.active === 'Y' ? t('Aktywna') : t('Nieaktywna')}
             </span>
             {properties?.language && (
               <>
                 <span aria-hidden="true">·</span>
-                <span>Język: {String(properties.language)}</span>
+                <span>{t('Język:')}{' '}{String(properties.language)}</span>
               </>
             )}
           </div>
@@ -488,7 +489,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         <button
           type="button"
           onClick={() => setMobileDetailOpen(false)}
-          aria-label="Zamknij szczegóły"
+          aria-label={t('Zamknij szczegóły')}
           className="lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
         >
           <X className="h-5 w-5" />
@@ -541,7 +542,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       {/* Aktywacja / Harmonogram / Zamknięcie */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4">
         <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-          Cykl życia ankiety
+          {t('Cykl życia ankiety')}
         </h4>
 
         {selectedSurvey.active !== 'Y' ? (
@@ -553,7 +554,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                 onChange={(e) => setAlsoActivateTokens(e.target.checked)}
                 className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
               />
-              <span>Jednocześnie utwórz tabelę uczestników (activate_tokens)</span>
+              <span>{t('Jednocześnie utwórz tabelę uczestników (activate_tokens)')}</span>
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -566,7 +567,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                 className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
               >
                 <Play className="h-4 w-4" />
-                <span>Aktywuj teraz (activate_survey)</span>
+                <span>{t('Aktywuj teraz (activate_survey)')}</span>
               </button>
 
               <button
@@ -578,7 +579,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                 className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
               >
                 <CalendarClock className="h-4 w-4 text-emerald-600" />
-                <span>Zaplanuj na później</span>
+                <span>{t('Zaplanuj na później')}</span>
               </button>
             </div>
 
@@ -591,7 +592,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
               className="min-h-[44px] w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               <Users className="h-4 w-4" />
-              <span>Uczestnicy i tokeny</span>
+              <span>{t('Uczestnicy i tokeny')}</span>
             </button>
           </div>
         ) : (
@@ -605,7 +606,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
               className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-rose-200 dark:border-rose-900/60 px-4 text-xs font-semibold text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 disabled:opacity-50"
             >
               <Lock className="h-4 w-4" />
-              <span>Zamknij ankietę teraz (expires)</span>
+              <span>{t('Zamknij ankietę teraz (expires)')}</span>
             </button>
 
             <button
@@ -617,7 +618,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
               className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               <Users className="h-4 w-4" />
-              <span>Uczestnicy i tokeny</span>
+              <span>{t('Uczestnicy i tokeny')}</span>
             </button>
           </div>
         )}
@@ -625,18 +626,18 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Okno dostępności (set_survey_properties)
+              {t('Okno dostępności (set_survey_properties)')}
             </div>
             {activeSession.limeVersion === 'v7' && (
               <span className="font-mono text-[11px] text-emerald-700 dark:text-emerald-400">
-                Tryb LS 7: zapis w UTC
+                {t('Tryb LS 7: zapis w UTC')}
               </span>
             )}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">
-                Data startu (startdate)
+                {t('Data startu (startdate)')}
               </label>
               <input
                 type="datetime-local"
@@ -647,7 +648,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             </div>
             <div>
               <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">
-                Data wygaśnięcia (expires)
+                {t('Data wygaśnięcia (expires)')}
               </label>
               <input
                 type="datetime-local"
@@ -665,7 +666,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             }}
             className="min-h-[44px] rounded-xl bg-slate-900 dark:bg-slate-800 px-4 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
           >
-            Zapisz daty w LimeSurvey
+            {t('Zapisz daty w LimeSurvey')}
           </button>
         </div>
       </div>
@@ -673,12 +674,12 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       {/* Eksport odpowiedzi */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-3.5">
         <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-          Eksport odpowiedzi (export_responses)
+          {t('Eksport odpowiedzi (export_responses)')}
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Format pliku
+              {t('Format pliku')}
             </label>
             <select
               value={exportFormat}
@@ -687,14 +688,14 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
               }
               className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 text-xs font-medium text-slate-900 dark:text-white"
             >
-              <option value="csv">CSV (tekst rozdzielany przecinkami)</option>
+              <option value="csv">{t('CSV (tekst rozdzielany przecinkami)')}</option>
               <option value="xls">Excel (.xls)</option>
               <option value="json">JSON</option>
             </select>
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Zakres odpowiedzi
+              {t('Zakres odpowiedzi')}
             </label>
             <select
               value={exportStatus}
@@ -705,9 +706,9 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
               }
               className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 text-xs font-medium text-slate-900 dark:text-white"
             >
-              <option value="all">Wszystkie odpowiedzi</option>
-              <option value="complete">Tylko ukończone</option>
-              <option value="incomplete">Tylko nieukończone</option>
+              <option value="all">{t('Wszystkie odpowiedzi')}</option>
+              <option value="complete">{t('Tylko ukończone')}</option>
+              <option value="incomplete">{t('Tylko nieukończone')}</option>
             </select>
           </div>
         </div>
@@ -721,7 +722,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             className="min-h-[44px] inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
           >
             <Download className="h-4 w-4" />
-            <span>Pobierz wyniki ({exportFormat.toUpperCase()})</span>
+            <span>{t('Pobierz wyniki (')}{exportFormat.toUpperCase()})</span>
           </button>
 
           <button
@@ -734,8 +735,8 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           >
             <span>
               {fieldmapLoading
-                ? 'Pobieranie pól...'
-                : 'Mapa pól (get_fieldmap)'}
+                ? t('Pobieranie pól...')
+                : t('Mapa pól (get_fieldmap)')}
             </span>
           </button>
         </div>
@@ -743,7 +744,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         {fieldmapPreview && (
           <div className="rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 p-3 space-y-2">
             <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-              <span>Struktura kolumn odpowiedzi (pierwsze {fieldmapPreview.length})</span>
+              <span>{t('Struktura kolumn odpowiedzi (pierwsze')}{' '}{fieldmapPreview.length})</span>
               <span className="font-mono text-slate-500">SGQA / LS 7 Q-code</span>
             </div>
             <div className="max-h-40 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
@@ -774,14 +775,14 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       {/* Kopiowanie ankiety */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-3">
         <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-          Duplikowanie ankiety (copy_survey)
+          {t('Duplikowanie ankiety (copy_survey)')}
         </h4>
         <div className="flex flex-col sm:flex-row gap-2">
           <input
             type="text"
             value={copyTitle}
             onChange={(e) => setCopyTitle(e.target.value)}
-            placeholder="Nazwa nowej kopii"
+            placeholder={t('Nazwa nowej kopii')}
             className="flex-1 min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 text-sm text-slate-900 dark:text-white"
           />
           <button
@@ -793,7 +794,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             className="min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap shrink-0"
           >
             <CopyPlus className="h-4 w-4" />
-            <span>Kopiuj ankietę</span>
+            <span>{t('Kopiuj ankietę')}</span>
           </button>
         </div>
       </div>
@@ -805,10 +806,10 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-            Ankiety w instancji
+            {t('Ankiety w instancji')}
           </h2>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
-            {activeSession.profileName} · Łącznie: {surveys.length} · Aktywne: {activeCount} · Nieaktywne: {inactiveCount}
+            {activeSession.profileName}{' '}{t('· Łącznie:')}{' '}{surveys.length}{' '}{t('· Aktywne:')}{' '}{activeCount}{' '}{t('· Nieaktywne:')}{' '}{inactiveCount}
           </p>
         </div>
 
@@ -818,14 +819,12 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
               type="button"
               aria-expanded={compareOpen}
               onClick={() => setCompareOpen((prev) => !prev)}
-              className={`inline-flex min-h-[44px] items-center gap-2 rounded-xl border px-3.5 text-xs font-semibold transition-colors ${
-                compareOpen
+              className={`inline-flex min-h-[44px] items-center gap-2 rounded-xl border px-3.5 text-xs font-semibold transition-colors ${compareOpen
                   ? 'border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700'
-                  : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
-              }`}
+                  : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
             >
               <GitCompareArrows className="h-4 w-4" aria-hidden="true" />
-              <span>{compareOpen ? 'Ukryj porównanie' : 'Porównaj ankiety'}</span>
+              <span>{compareOpen ? t('Ukryj porównanie') : t('Porównaj ankiety')}</span>
             </button>
           )}
 
@@ -837,7 +836,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             <RefreshCw className={`h-4 w-4 ${loadingSurveys ? 'animate-spin' : ''}`} />
-            <span>Odśwież listę</span>
+            <span>{t('Odśwież listę')}</span>
           </button>
         </div>
       </div>
@@ -853,17 +852,15 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             inputMode="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            aria-label="Szukaj ankiet po tytule lub ID"
-            placeholder="Szukaj po tytule lub ID (np. 123456)..."
-            className={`w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-10 ${
-              search ? 'pr-11' : 'pr-4'
-            } text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none`}
+            aria-label={t('Szukaj ankiet po tytule lub ID')}
+            placeholder={t('Szukaj po tytule lub ID (np. 123456)...')}
+            className={`w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-10 ${search ? 'pr-11' : 'pr-4'} text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none`}
           />
           {search && (
             <button
               type="button"
               onClick={() => setSearch('')}
-              aria-label="Wyczyść wyszukiwanie"
+              aria-label={t('Wyczyść wyszukiwanie')}
               className="absolute right-1 top-1/2 -translate-y-1/2 min-h-[38px] min-w-[38px] inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               <X className="h-4 w-4" aria-hidden="true" />
@@ -874,7 +871,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         <div className="flex flex-wrap items-center gap-3 self-start">
           {(search.trim() !== '' || filter !== 'all') && (
             <span className="font-mono text-xs text-slate-500 dark:text-slate-400 tabular-nums">
-              Wyniki: {filteredSurveys.length} / {surveys.length}
+              {t('Wyniki:')}{' '}{filteredSurveys.length} / {surveys.length}
             </span>
           )}
 
@@ -882,35 +879,29 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             <button
               type="button"
               onClick={() => setFilter('all')}
-              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-                filter === 'all'
+              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${filter === 'all'
                   ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
+                  : 'text-slate-600 dark:text-slate-400'}`}
             >
-              Wszystkie
+              {t('Wszystkie')}
             </button>
             <button
               type="button"
               onClick={() => setFilter('active')}
-              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-                filter === 'active'
+              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${filter === 'active'
                   ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
+                  : 'text-slate-600 dark:text-slate-400'}`}
             >
-              Aktywne
+              {t('Aktywne')}
             </button>
             <button
               type="button"
               onClick={() => setFilter('inactive')}
-              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-                filter === 'inactive'
+              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${filter === 'inactive'
                   ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
+                  : 'text-slate-600 dark:text-slate-400'}`}
             >
-              Nieaktywne
+              {t('Nieaktywne')}
             </button>
           </div>
         </div>
@@ -959,7 +950,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           {filteredSurveys.length === 0 ? (
             <div className="p-8 text-center space-y-3">
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Brak ankiet pasujących do wybranych kryteriów.
+                {t('Brak ankiet pasujących do wybranych kryteriów.')}
               </p>
               {(search.trim() !== '' || filter !== 'all') && surveys.length > 0 && (
                 <button
@@ -970,7 +961,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                   }}
                   className="inline-flex min-h-[40px] items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 px-3.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
                 >
-                  Wyczyść filtry
+                  {t('Wyczyść filtry')}
                 </button>
               )}
             </div>
@@ -979,16 +970,14 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
               const isSelected = selectedSurvey?.sid === survey.sid;
               const isActive = survey.active === 'Y';
               const isMenuOpen = openQuickMenuSid === survey.sid;
-              const titleText = survey.surveyls_title || `Ankieta #${survey.sid}`;
+              const titleText = survey.surveyls_title || t('Ankieta #{0}', survey.sid);
 
               return (
                 <div
                   key={survey.sid}
-                  className={`relative flex items-center justify-between gap-2 px-3 py-2.5 transition-colors ${
-                    isSelected
+                  className={`relative flex items-center justify-between gap-2 px-3 py-2.5 transition-colors ${isSelected
                       ? 'bg-emerald-50/70 dark:bg-emerald-950/30'
-                      : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'
-                  }`}
+                      : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}
                 >
                   <button
                     type="button"
@@ -1013,12 +1002,12 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                               : 'text-amber-700 dark:text-amber-400 font-semibold'
                           }
                         >
-                          {isActive ? 'Aktywna' : 'Nieaktywna'}
+                          {isActive ? t('Aktywna') : t('Nieaktywna')}
                         </span>
                         {survey.expires && (
                           <>
                             <span aria-hidden="true">·</span>
-                            <span>Koniec: {survey.expires.slice(0, 10)}</span>
+                            <span>{t('Koniec:')}{' '}{survey.expires.slice(0, 10)}</span>
                           </>
                         )}
                       </div>
@@ -1032,21 +1021,19 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                   >
                     <button
                       type="button"
-                      aria-label={`Szybkie akcje dla ankiety ${titleText}`}
+                      aria-label={t('Szybkie akcje dla ankiety {0}', titleText)}
                       aria-haspopup="menu"
                       aria-expanded={isMenuOpen}
-                      title="Szybkie akcje"
+                      title={t('Szybkie akcje')}
                       onClick={(e) => {
                         e.stopPropagation();
                         setOpenQuickMenuSid((prev) =>
                           prev === survey.sid ? null : survey.sid
                         );
                       }}
-                      className={`min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl border transition-colors ${
-                        isMenuOpen
+                      className={`min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl border transition-colors ${isMenuOpen
                           ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300'
-                          : 'border-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'
-                      }`}
+                          : 'border-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'}`}
                     >
                       <MoreVertical className="h-4 w-4" aria-hidden="true" />
                     </button>
@@ -1054,7 +1041,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                     {isMenuOpen && (
                       <div
                         role="menu"
-                        aria-label={`Szybkie akcje: ${titleText}`}
+                        aria-label={t('Szybkie akcje: {0}', titleText)}
                         className="absolute right-0 top-full mt-1.5 z-30 w-56 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1.5 shadow-xl space-y-0.5"
                       >
                         <button
@@ -1067,7 +1054,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                           className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
                           <Users className="h-4 w-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                          <span>Edycja tokenów i uczestników</span>
+                          <span>{t('Edycja tokenów i uczestników')}</span>
                         </button>
 
                         <button
@@ -1087,7 +1074,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                           className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
                           <BarChart3 className="h-4 w-4 text-sky-600 shrink-0" aria-hidden="true" />
-                          <span>Statystyki i wykresy</span>
+                          <span>{t('Statystyki i wykresy')}</span>
                         </button>
 
                         {surveys.length >= 2 && (
@@ -1108,7 +1095,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                             className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <GitCompareArrows className="h-4 w-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                            <span>Porównaj na wykresie</span>
+                            <span>{t('Porównaj na wykresie')}</span>
                           </button>
                         )}
 
@@ -1123,7 +1110,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
                             className="min-h-[44px] w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <CalendarClock className="h-4 w-4 text-amber-600 shrink-0" aria-hidden="true" />
-                            <span>Zaplanuj aktywację</span>
+                            <span>{t('Zaplanuj aktywację')}</span>
                           </button>
                         )}
                       </div>
@@ -1138,7 +1125,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         <div className="hidden lg:block lg:col-span-7">
           {detailContent || (
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 text-center text-sm text-slate-500 dark:text-slate-400">
-              Wybierz ankietę z listy po lewej stronie, aby zarządzać aktywacją, statystykami i eksportem.
+              {t('Wybierz ankietę z listy po lewej stronie, aby zarządzać aktywacją, statystykami i eksportem.')}
             </div>
           )}
         </div>

@@ -454,7 +454,7 @@ export default function App() {
         </Text>
       </View>
 
-      {loading && <ActivityIndicator size="small" color="#059669" style={{ marginVertical: 8 }} />}
+      {loading && <ActivityIndicator size="small" color="#1F7A3E" style={{ marginVertical: 8 }} />}
 
       {tab === 'surveys' && (
         <FlatList
@@ -573,7 +573,7 @@ const styles = StyleSheet.create({
   cardTitle: { fontSize: 15, fontWeight: '600', color: '#0F172A' },
   cardMeta: { fontSize: 12, color: '#64748B', marginTop: 4 },
   rowActions: { flexDirection: 'row', gap: 10, marginTop: 12 },
-  primaryBtn: { backgroundColor: '#059669', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, alignItems: 'center' },
+  primaryBtn: { backgroundColor: '#1F7A3E', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, alignItems: 'center' },
   primaryBtnText: { color: '#FFFFFF', fontWeight: '600', fontSize: 13 },
   secondaryBtn: { backgroundColor: '#F1F5F9', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, alignItems: 'center' },
   secondaryBtnText: { color: '#0F172A', fontWeight: '600', fontSize: 13 },
@@ -583,7 +583,7 @@ const styles = StyleSheet.create({
   tabBar: { flexDirection: 'row', borderTopWidth: 1, borderColor: '#E2E8F0', backgroundColor: '#FFFFFF', height: 60 },
   tabBtn: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   tabText: { fontSize: 12, color: '#64748B', fontWeight: '500' },
-  tabActive: { color: '#059669', fontWeight: '700' },
+  tabActive: { color: '#1F7A3E', fontWeight: '700' },
 });
 `;
 

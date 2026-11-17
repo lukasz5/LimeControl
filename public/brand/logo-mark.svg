@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <title>LimeControl</title>
+  <defs>
+    <linearGradient id="lc-lime" x1="40" y1="200" x2="200" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4CAF2A"/>
+      <stop offset="1" stop-color="#A3E635"/>
+    </linearGradient>
+    <radialGradient id="lc-knob" cx="104" cy="100" r="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2A8A4C"/>
+      <stop offset="1" stop-color="#0E3B22"/>
+    </radialGradient>
+  </defs>
+  <!-- Podziałka -->
+  <g stroke-linecap="round" stroke-width="5">
+    <g stroke="#7AC926">
+      <path d="M120 20v10" transform="rotate(-135 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-112.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-90 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-67.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-45 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-22.5 120 120)"/>
+      <path d="M120 16v14"/>
+      <path d="M120 20v10" transform="rotate(22.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(45 120 120)"/>
+    </g>
+    <g stroke="#1B5E36" stroke-opacity=".35">
+      <path d="M120 20v10" transform="rotate(67.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(90 120 120)"/>
+      <path d="M120 20v10" transform="rotate(112.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(135 120 120)"/>
+    </g>
+  </g>
+  <!-- Tor i wartość -->
+  <path d="M69.09 170.91A72 72 0 1 1 170.91 170.91" stroke="#1B5E36" stroke-width="22" stroke-linecap="round"/>
+  <path d="M69.09 170.91A72 72 0 1 1 182.35 84" stroke="url(#lc-lime)" stroke-width="22" stroke-linecap="round"/>
+  <!-- Pokrętło -->
+  <circle cx="120" cy="120" r="42" fill="url(#lc-knob)"/>
+  <circle cx="120" cy="120" r="41" stroke="#A3E635" stroke-opacity=".25" stroke-width="2"/>
+  <path d="M120 120L148.58 103.5" stroke="#A3E635" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="120" cy="120" r="6" fill="#A3E635"/>
+</svg>

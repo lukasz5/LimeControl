@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Database, Lock, ShieldCheck } from 'lucide-react';
+import { Database, Lock } from 'lucide-react';
+import { BrandMark } from './BrandLogo';
+import { AppFooter } from './AppFooter';
+import { LanguageSwitch } from './LanguageSwitch';
 import { signInWithGoogle } from '../firebase';
+import { t } from '../i18n';
 
 interface AuthGateProps {
   loading: boolean;
@@ -19,10 +23,10 @@ export const AuthGate: React.FC<AuthGateProps> = ({ loading, authError }) => {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (/popup-closed-by-user|cancelled-popup-request/i.test(msg)) {
-        setLocalError('Logowanie zostało anulowane przed ukończeniem.');
+        setLocalError(t('Logowanie zostało anulowane przed ukończeniem.'));
       } else if (/popup-blocked/i.test(msg)) {
         setLocalError(
-          'Przeglądarka zablokowała okno logowania Google. Zezwól na wyskakujące okna dla tej strony i spróbuj ponownie.'
+          t('Przeglądarka zablokowała okno logowania Google. Zezwól na wyskakujące okna dla tej strony i spróbuj ponownie.')
         );
       } else {
         setLocalError(msg);
@@ -35,17 +39,19 @@ export const AuthGate: React.FC<AuthGateProps> = ({ loading, authError }) => {
   const displayError = localError || authError;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-10">
+    <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-slate-50 dark:bg-slate-950 px-4 py-10">
       <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-7 sm:p-8 shadow-xl space-y-6">
         <div className="space-y-2 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
-            <ShieldCheck className="h-6 w-6" aria-hidden="true" />
-          </div>
-          <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            LimeControl
+          <BrandMark className="mx-auto h-16 w-16" />
+          <h1 className="font-display text-3xl tracking-tight">
+            <span className="font-medium text-emerald-600 dark:text-emerald-300">lime</span>
+            <span className="font-extrabold text-brand-ink dark:text-white">Control</span>
           </h1>
+          <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+            App for LimeSurvey
+          </p>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Zaloguj się kontem Google, aby bezpiecznie zarządzać instancjami LimeSurvey 3–7 oraz harmonogramami w bazie chmurowej.
+            {t('Zaloguj się kontem Google, aby bezpiecznie zarządzać instancjami LimeSurvey 3–7 oraz harmonogramami w bazie chmurowej.')}
           </p>
         </div>
 
@@ -53,13 +59,13 @@ export const AuthGate: React.FC<AuthGateProps> = ({ loading, authError }) => {
           <div className="flex items-start gap-2.5">
             <Database className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
             <span>
-              Profile serwerów zapisywane są w bazie <strong>Cloud Firestore</strong> przypisanej wyłącznie do Twojego konta — bez zostawiania danych w przeglądarce.
+              {t('Profile serwerów zapisywane są w bazie')}{' '}<strong>Cloud Firestore</strong>{' '}{t('przypisanej wyłącznie do Twojego konta — bez zostawiania danych w przeglądarce.')}
             </span>
           </div>
           <div className="flex items-start gap-2.5">
             <Lock className="h-4 w-4 text-sky-600 shrink-0 mt-0.5" aria-hidden="true" />
             <span>
-              Hasła do panelu LimeSurvey nie są zapisywane w bazie ani w pamięci lokalnej przeglądarki.
+              {t('Hasła do panelu LimeSurvey nie są zapisywane w bazie ani w pamięci lokalnej przeglądarki.')}
             </span>
           </div>
         </div>
@@ -90,13 +96,15 @@ export const AuthGate: React.FC<AuthGateProps> = ({ loading, authError }) => {
           </svg>
           <span>
             {loading
-              ? 'Sprawdzanie sesji...'
+              ? t('Sprawdzanie sesji...')
               : signingIn
-                ? 'Logowanie przez Google...'
-                : 'Zaloguj się przez Google'}
+                ? t('Logowanie przez Google...')
+                : t('Zaloguj się przez Google')}
           </span>
         </button>
       </div>
+      <AppFooter />
+      <LanguageSwitch />
     </div>
   );
 };

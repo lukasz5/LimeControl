@@ -9,3 +9,6 @@ coverage/
 
 # Firebase client config (local only)
 firebase-applet-config.json
+
+# vite-plugin-pwa dev service worker
+dev-dist/

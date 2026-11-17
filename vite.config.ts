@@ -18,7 +18,7 @@ export default defineConfig(() => {
           name: 'LimeControl — LimeSurvey Mobile RC2',
           short_name: 'LimeControl',
           description: 'Mobilna aplikacja PWA do zarządzania instancjami LimeSurvey przez API RemoteControl 2 z harmonogramem aktywacji i eksportem React Native.',
-          theme_color: '#059669',
+          theme_color: '#1b5e36',
           background_color: '#f8fafc',
           display: 'standalone',
           start_url: '/',

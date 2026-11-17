@@ -1,5 +1,6 @@
 import React from 'react';
 import type { SurveySummary } from '../types/limesurvey';
+import { t } from '../i18n';
 
 interface SurveySummaryRingProps {
   summary: SurveySummary | null;
@@ -21,7 +22,7 @@ export const SurveySummaryRing: React.FC<SurveySummaryRingProps> = ({
     return (
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Pobieranie statystyk (get_summary)...
+          {t('Pobieranie statystyk (get_summary)...')}
         </p>
       </div>
     );
@@ -60,10 +61,10 @@ export const SurveySummaryRing: React.FC<SurveySummaryRingProps> = ({
       <div className="flex items-center justify-between gap-4">
         <div>
           <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-            Podsumowanie odpowiedzi
+            {t('Podsumowanie odpowiedzi')}
           </h4>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-            Dane na żywo z metody get_summary
+            {t('Dane na żywo z metody get_summary')}
           </p>
         </div>
         <div className="relative flex h-16 w-16 shrink-0 items-center justify-center">
@@ -96,19 +97,19 @@ export const SurveySummaryRing: React.FC<SurveySummaryRingProps> = ({
 
       <div className="mt-4 grid grid-cols-3 gap-3 border-t border-slate-100 dark:border-slate-800 pt-4">
         <div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">Pełne</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400">{t('Pełne')}</div>
           <div className="mt-1 font-mono text-xl font-bold text-slate-900 dark:text-white tabular-nums">
             {completed}
           </div>
         </div>
         <div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">Niepełne</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400">{t('Niepełne')}</div>
           <div className="mt-1 font-mono text-xl font-bold text-slate-900 dark:text-white tabular-nums">
             {incomplete}
           </div>
         </div>
         <div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">Łącznie</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400">{t('Łącznie')}</div>
           <div className="mt-1 font-mono text-xl font-bold text-slate-900 dark:text-white tabular-nums">
             {fullTotal}
           </div>
@@ -118,16 +119,16 @@ export const SurveySummaryRing: React.FC<SurveySummaryRingProps> = ({
       {(summary.token_count !== undefined || tokenCount > 0) && (
         <div className="mt-4 border-t border-slate-100 dark:border-slate-800 pt-4">
           <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
-            Tokeny uczestników
+            {t('Tokeny uczestników')}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-700 dark:text-slate-300 font-mono tabular-nums">
-            <span>Wszystkie: {tokenCount}</span>
+            <span>{t('Wszystkie:')}{' '}{tokenCount}</span>
             <span aria-hidden="true" className="text-slate-300 dark:text-slate-700">·</span>
-            <span>Wysłane: {tokenSent}</span>
+            <span>{t('Wysłane:')}{' '}{tokenSent}</span>
             <span aria-hidden="true" className="text-slate-300 dark:text-slate-700">·</span>
-            <span>Ukończone: {tokenCompleted}</span>
+            <span>{t('Ukończone:')}{' '}{tokenCompleted}</span>
             <span aria-hidden="true" className="text-slate-300 dark:text-slate-700">·</span>
-            <span>Wypisane: {tokenOptedOut}</span>
+            <span>{t('Wypisane:')}{' '}{tokenOptedOut}</span>
           </div>
         </div>
       )}

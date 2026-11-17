@@ -1,5 +1,6 @@
 import { auth } from '../firebase';
 import type { LimeSurveyVersion, ScheduleJob } from '../types/limesurvey';
+import { t } from '../i18n';
 
 export interface CreateSchedulePayload {
   surveyId: number;
@@ -35,7 +36,7 @@ export async function fetchSchedules(): Promise<ScheduleJob[]> {
     headers: await getAuthHeaders(false),
   });
   if (!res.ok) {
-    throw new Error(`Błąd pobierania harmonogramu (HTTP ${res.status})`);
+    throw new Error(t('Błąd pobierania harmonogramu (HTTP {0})', res.status));
   }
   const data = (await res.json()) as { jobs: ScheduleJob[] };
   return Array.isArray(data.jobs) ? data.jobs : [];
@@ -51,7 +52,7 @@ export async function createSchedule(
   });
   const data = (await res.json()) as { job?: ScheduleJob; error?: string };
   if (!res.ok || !data.job) {
-    throw new Error(data.error || `Nie udało się zaplanować zadania (HTTP ${res.status})`);
+    throw new Error(data.error || t('Nie udało się zaplanować zadania (HTTP {0})', res.status));
   }
   return data.job;
 }
@@ -63,7 +64,7 @@ export async function runScheduleNow(jobId: string): Promise<ScheduleJob> {
   });
   const data = (await res.json()) as { job?: ScheduleJob; error?: string };
   if (!res.ok || !data.job) {
-    throw new Error(data.error || `Błąd uruchamiania zadania (HTTP ${res.status})`);
+    throw new Error(data.error || t('Błąd uruchamiania zadania (HTTP {0})', res.status));
   }
   return data.job;
 }
@@ -75,7 +76,7 @@ export async function cancelSchedule(jobId: string): Promise<ScheduleJob> {
   });
   const data = (await res.json()) as { job?: ScheduleJob; error?: string };
   if (!res.ok || !data.job) {
-    throw new Error(data.error || `Błąd anulowania zadania (HTTP ${res.status})`);
+    throw new Error(data.error || t('Błąd anulowania zadania (HTTP {0})', res.status));
   }
   return data.job;
 }
@@ -86,6 +87,6 @@ export async function deleteSchedule(jobId: string): Promise<void> {
     headers: await getAuthHeaders(false),
   });
   if (!res.ok) {
-    throw new Error(`Nie udało się usunąć zadania (HTTP ${res.status})`);
+    throw new Error(t('Nie udało się usunąć zadania (HTTP {0})', res.status));
   }
 }

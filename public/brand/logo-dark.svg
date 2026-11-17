@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 730 240" fill="none">
+  <title>LimeControl — app for LimeSurvey</title>
+  <defs>
+    <linearGradient id="lcdark-lime" x1="40" y1="200" x2="200" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4CAF2A"/>
+      <stop offset="1" stop-color="#A3E635"/>
+    </linearGradient>
+    <radialGradient id="lcdark-knob" cx="104" cy="100" r="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2A8A4C"/>
+      <stop offset="1" stop-color="#0E3B22"/>
+    </radialGradient>
+  </defs>
+  <!-- Podziałka -->
+  <g stroke-linecap="round" stroke-width="5">
+    <g stroke="#7AC926">
+      <path d="M120 20v10" transform="rotate(-135 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-112.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-90 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-67.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-45 120 120)"/>
+      <path d="M120 20v10" transform="rotate(-22.5 120 120)"/>
+      <path d="M120 16v14"/>
+      <path d="M120 20v10" transform="rotate(22.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(45 120 120)"/>
+    </g>
+    <g stroke="#1B5E36" stroke-opacity=".35">
+      <path d="M120 20v10" transform="rotate(67.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(90 120 120)"/>
+      <path d="M120 20v10" transform="rotate(112.5 120 120)"/>
+      <path d="M120 20v10" transform="rotate(135 120 120)"/>
+    </g>
+  </g>
+  <!-- Tor i wartość -->
+  <path d="M69.09 170.91A72 72 0 1 1 170.91 170.91" stroke="#1B5E36" stroke-width="22" stroke-linecap="round"/>
+  <path d="M69.09 170.91A72 72 0 1 1 182.35 84" stroke="url(#lcdark-lime)" stroke-width="22" stroke-linecap="round"/>
+  <!-- Pokrętło -->
+  <circle cx="120" cy="120" r="42" fill="url(#lcdark-knob)"/>
+  <circle cx="120" cy="120" r="41" stroke="#A3E635" stroke-opacity=".25" stroke-width="2"/>
+  <path d="M120 120L148.58 103.5" stroke="#A3E635" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="120" cy="120" r="6" fill="#A3E635"/>
+  <g font-family="'Plus Jakarta Sans', 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+    <text x="262" y="134" font-size="88" letter-spacing="-3"><tspan font-weight="500" fill="#A3E635">lime</tspan><tspan font-weight="800" fill="#F4FBE9">Control</tspan></text>
+    <text x="266" y="178" font-size="20" font-weight="700" letter-spacing="5.5" fill="#9FB3A5">APP FOR LIMESURVEY</text>
+  </g>
+</svg>
