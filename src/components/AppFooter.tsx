@@ -1,5 +1,5 @@
 import React from 'react';
-import { Coffee, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { BRAND } from '../config/brand';
 import { t } from '../i18n';
 
@@ -27,9 +27,8 @@ export const AppFooter: React.FC<{ className?: string }> = ({ className = '' }) 
         href={BRAND.supportUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-amber-300/70 dark:border-amber-500/40 bg-amber-50 dark:bg-amber-500/10 px-3.5 py-1.5 font-semibold text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-colors"
+        className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:underline underline-offset-2"
       >
-        <Coffee className="h-3.5 w-3.5" aria-hidden="true" />
         {t('Postaw mi kawę')}
       </a>
     )}
