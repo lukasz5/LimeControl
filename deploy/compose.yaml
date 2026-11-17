@@ -1,0 +1,60 @@
+# Production stack on sb (behind the shared Traefik on the external "web" network).
+# Image tags come from .env (written by deploy.sh): APP_IMAGE, SITE_IMAGE.
+name: limecontrol
+
+services:
+  app:
+    image: ${APP_IMAGE:?APP_IMAGE is required}
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - app-data:/app/data
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 384m
+    networks: [web]
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: web
+      traefik.http.routers.limecontrol-app.rule: Host(`app.limecontrol.eu`)
+      traefik.http.routers.limecontrol-app.entrypoints: websecure
+      traefik.http.routers.limecontrol-app.tls: "true"
+      traefik.http.routers.limecontrol-app.tls.certresolver: le
+      traefik.http.routers.limecontrol-app.service: limecontrol-app
+      traefik.http.services.limecontrol-app.loadbalancer.server.port: "8080"
+
+  site:
+    image: ${SITE_IMAGE:?SITE_IMAGE is required}
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 64m
+    networks: [web]
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: web
+      traefik.http.routers.limecontrol-site.rule: Host(`limecontrol.eu`) || Host(`www.limecontrol.eu`)
+      traefik.http.routers.limecontrol-site.entrypoints: websecure
+      traefik.http.routers.limecontrol-site.tls: "true"
+      traefik.http.routers.limecontrol-site.tls.certresolver: le
+      traefik.http.routers.limecontrol-site.middlewares: limecontrol-www
+      traefik.http.routers.limecontrol-site.service: limecontrol-site
+      traefik.http.middlewares.limecontrol-www.redirectregex.regex: '^https?://www\.limecontrol\.eu(.*)'
+      traefik.http.middlewares.limecontrol-www.redirectregex.replacement: 'https://limecontrol.eu$${1}'
+      traefik.http.middlewares.limecontrol-www.redirectregex.permanent: "true"
+      traefik.http.services.limecontrol-site.loadbalancer.server.port: "8080"
+
+volumes:
+  app-data:
+
+networks:
+  web:
+    external: true

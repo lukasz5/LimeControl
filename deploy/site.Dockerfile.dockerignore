@@ -1,0 +1,5 @@
+*
+!site/
+!deploy/nginx-site.conf
+site/README.md
+**/.DS_Store
