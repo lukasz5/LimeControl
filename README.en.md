@@ -10,19 +10,20 @@ The application lets you connect to multiple LimeSurvey servers, activate and cl
 
 ## Key Features
 
-### 1. Multi-Instance LimeSurvey Connections
-- Save multiple server profiles locally (`localStorage`) with automatic normalization of the `/index.php/admin/remotecontrol` endpoint.
+### 1. Google Sign-In, Cloud Firestore & Multi-Instance LimeSurvey
+- **Google Sign-In (Firebase Auth)** gate before accessing the dashboard, storing server profiles securely in **Cloud Firestore** rather than browser `localStorage`.
+- **Credential safety**: LimeSurvey passwords are never written to Firestore or `localStorage` (optional retention only keeps the password in active tab memory).
+- **LimeSurvey 3.x–7.x compatibility**: per-profile version selector (`Auto`, `LimeSurvey 7.x UTC`, `LimeSurvey 3–6`), machine-readable JSON-RPC error code parsing, and automatic UTC conversion for `startdate`/`expires`.
 - Quick **search and filtering** across saved profiles by name, URL, endpoint, username, or auth plugin, plus filtering by connection mode (`All`, `Direct`, `Relay`).
-- Support for custom authentication plugins (default: `Authdb`) and optional local password storage.
 - Default **direct browser JSON-RPC** requests, live RPC call trace with latency measurement, CORS error diagnostics, and an optional server relay mode (`/api/rpc-relay`).
 
-### 2. Surveys, Activation & Data Visualization
-- Browse, search, and filter surveys (`All`, `Active`, `Inactive`).
+### 2. Surveys, Activation, Fieldmap & Data Visualization
+- Browse, search, and filter surveys (`All`, `Active`, `Inactive`) with a per-row **Quick Actions** menu.
 - Instant survey activation (`activate_survey`) with optional simultaneous participant token table initialization (`activate_tokens`).
-- Close active surveys and configure availability windows (`startdate` and `expires`) via `set_survey_properties`.
+- Close active surveys and configure availability windows (`startdate` and `expires`) via `set_survey_properties` (with UTC handling for LimeSurvey 7).
 - Duplicate surveys (`copy_survey`).
-- Summary and **data visualization (`recharts`)** powered by `get_summary`: bar charts for response counts (completed, incomplete, total) and participant/token statuses (total, sent, completed, pending, opted out).
-- Export responses (`export_responses`) with Base64 decoding to download **CSV**, **Excel (.xls)**, and **JSON** files with an in-app preview.
+- Summary, **data visualization (`recharts`)**, and **two-survey side-by-side comparison chart** powered by `get_summary`.
+- Export responses (`export_responses`) to **CSV**, **Excel (.xls)**, and **JSON** alongside a **`get_fieldmap` column inspector** supporting both legacy SGQA and LimeSurvey 7 field identifiers.
 
 ### 3. Server-Side Activation Scheduler
 - Schedule automatic `activate_survey` execution for a specific date and time, running reliably even after closing the mobile app.
@@ -47,7 +48,7 @@ The application lets you connect to multiple LimeSurvey servers, activate and cl
 | :--- | :--- | :--- |
 | **Session & Instance** | `get_session_key`, `release_session_key`, `get_site_settings` | Authentication, session cleanup, and site name lookup |
 | **Surveys & Dates** | `list_surveys`, `get_survey_properties`, `set_survey_properties`, `activate_survey`, `copy_survey` | Survey listing, activation, `startdate`/`expires` updates, closing, and copying |
-| **Stats & Export** | `get_summary`, `export_responses` | Response/token summaries, charts, and CSV/XLS/JSON downloads |
+| **Stats & Export** | `get_summary`, `get_fieldmap`, `export_responses` | Response/token summaries, comparison charts, SGQA/LS 7 fieldmap inspection, and CSV/XLS/JSON downloads |
 | **Participants** | `activate_tokens`, `list_participants`, `add_participants`, `delete_participants`, `invite_participants`, `remind_participants` | Token table management and invitation/reminder delivery |
 | **Email Templates** | `get_language_properties`, `set_language_properties` | Reading, editing, and saving invitation and reminder subjects and bodies |
 
@@ -55,11 +56,60 @@ The application lets you connect to multiple LimeSurvey servers, activate and cl
 
 ## LimeSurvey Instance Setup
 
-To connect to your LimeSurvey server:
-1. Sign in to the LimeSurvey admin panel.
-2. Go to **Global Settings → Interfaces**.
-3. Enable the **JSON-RPC Interface** and save your settings.
-4. When connecting directly from the browser (PWA) to a server on another domain, make sure the HTTP server returns CORS headers (`Access-Control-Allow-Origin`). Otherwise, switch the profile to **Server Relay** mode or export the **React Native (Expo)** project.
+To connect **LimeControl** to your LimeSurvey server (versions **3.x / 5.x / 6.x / 7.x**):
+
+### 1. Enable the RemoteControl 2 (JSON-RPC) Interface
+1. Sign in to the LimeSurvey admin panel as a Superadministrator.
+2. Go to **Configuration → Global settings → Interfaces**.
+3. Set **RPC interface** to **JSON-RPC**.
+4. Optionally configure **Publish API** according to your security policy (JSON-RPC itself is enough for API calls) and click **Save**.
+5. The default endpoint path is:
+   - `https://your-instance.com/index.php/admin/remotecontrol` (when clean/pretty URLs are enabled), or
+   - `https://your-instance.com/index.php?r=admin/remotecontrol` (when URL rewriting is disabled).
+   - In the app, entering just the base URL (e.g. `https://your-instance.com`) automatically appends `/index.php/admin/remotecontrol`.
+
+### 2. User Permissions & Auth Plugin
+- The LimeSurvey account used in the connection profile needs permissions to:
+  - view, update, create, and activate surveys (**Surveys**: *View/Read*, *Update*, *Create*, *Activate*),
+  - manage participant token tables and send invitations (**Survey participants / Tokens**),
+  - export survey data (**Responses**: *Export*).
+- Keep the **Auth plugin** set to `Authdb` for standard LimeSurvey accounts, or enter the name of your configured plugin (such as `AuthLDAP`).
+
+### 3. Connection Mode (CORS & HTTPS)
+- **Direct Mode (Browser PWA)**:
+  - When the app runs over `https://...`, your LimeSurvey instance must also use **HTTPS** (browsers block Mixed Content).
+  - The HTTP server hosting LimeSurvey must return **CORS** headers for the app origin (including `OPTIONS` preflight requests):
+    ```apache
+    # Apache example (.htaccess or VirtualHost)
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Accept"
+    ```
+    ```nginx
+    # Nginx example
+    add_header Access-Control-Allow-Origin "*" always;
+    add_header Access-Control-Allow-Methods "POST, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "Content-Type, Accept" always;
+    ```
+- **Server Relay Mode (`/api/rpc-relay`)**:
+  - If you cannot modify CORS headers on your LimeSurvey server, switch the profile connection mode to **Server Relay** in the **Instances** tab so JSON-RPC calls are proxied through the Express backend.
+- **Native React Native (Expo) App**:
+  - The exported mobile project runs natively on iOS/Android, is not subject to browser CORS restrictions, and connects directly to any LimeSurvey server.
+
+### 4. LimeSurvey 7.x Specifics
+- Select **LimeSurvey 7.x (UTC dates + new error codes)** in the instance profile — the app automatically converts `startdate`/`expires` and scheduled activation dates to **UTC**, parses explicit RemoteControl 2 error codes, and lets you inspect refactored field identifiers via `get_fieldmap`.
+- In LimeSurvey 7.9+, you can enable built-in server-side API call logging in `application/config/config.php`:
+  ```php
+  'config' => array(
+      'rpc_log' => true,
+  )
+  ```
+  Logs are written to `tmp/runtime/remotecontrol.log` with passwords and session keys automatically obfuscated.
+
+### 5. Testing the Connection
+1. Sign in with Google, open the **Instances** tab, and create a server profile.
+2. Enter a profile name, LimeSurvey URL, username, and password.
+3. Click **Connect** — once authenticated, the app reads the instance name (`get_site_settings`) and loads your surveys. Any network or server errors can be inspected in the **RPC Log** panel.
 
 ---
 

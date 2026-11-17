@@ -1,0 +1,158 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile synchronized from Google Sign-In.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth user UID."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 120,
+          "description": "Display name from Google account."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 3,
+          "maxLength": 180,
+          "description": "Verified email address restricted to the profile owner."
+        },
+        "photoURL": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 500,
+          "description": "Optional avatar URL."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last update timestamp."
+        }
+      },
+      "required": ["uid", "email", "createdAt", "updatedAt"]
+    },
+    "LimeInstance": {
+      "title": "LimeInstance",
+      "description": "Saved LimeSurvey RemoteControl 2 server connection profile owned by a user (credentials excluded).",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Unique profile identifier."
+        },
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "User-friendly instance label."
+        },
+        "baseUrl": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Normalized LimeSurvey base URL."
+        },
+        "rpcEndpoint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Normalized RemoteControl 2 JSON-RPC endpoint URL."
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "LimeSurvey admin username."
+        },
+        "authPlugin": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Authentication plugin name (e.g. Authdb)."
+        },
+        "connectionMode": {
+          "type": "string",
+          "enum": ["direct", "relay"],
+          "description": "Browser direct JSON-RPC or server relay mode."
+        },
+        "limeVersion": {
+          "type": "string",
+          "enum": ["auto", "v7", "legacy"],
+          "description": "LimeSurvey version target for UTC date and error handling."
+        },
+        "siteName": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 160,
+          "description": "Cached site name returned by get_site_settings."
+        },
+        "lastConnectedAt": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 64,
+          "description": "ISO timestamp of last successful RPC connection."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last update timestamp."
+        }
+      },
+      "required": [
+        "id",
+        "ownerUid",
+        "name",
+        "baseUrl",
+        "rpcEndpoint",
+        "username",
+        "authPlugin",
+        "connectionMode",
+        "limeVersion",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Private user profile document keyed by Firebase Auth UID."
+    },
+    "/users/{userId}/instances/{instanceId}": {
+      "schema": {
+        "$ref": "#/entities/LimeInstance"
+      },
+      "description": "Saved LimeSurvey instance connection profiles belonging strictly to the owning user."
+    }
+  }
+}

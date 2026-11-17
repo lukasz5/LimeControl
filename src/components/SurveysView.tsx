@@ -21,12 +21,15 @@ import {
   copySurvey,
   exportResponses,
   formatLimeSurveyDateTime,
+  getFieldmap,
   getSummary,
   getSurveyProperties,
   setSurveyProperties,
+  shouldUseUtcDates,
 } from '../services/limeSurveyRpc';
 import type {
   ActiveSession,
+  FieldmapEntry,
   LimeSurveyItem,
   SurveyProperties,
   SurveySummary,
@@ -108,6 +111,8 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
   const [exportFormat, setExportFormat] = useState<'csv' | 'xls' | 'json'>('csv');
   const [exportStatus, setExportStatus] = useState<'all' | 'complete' | 'incomplete'>('all');
   const [exportPreview, setExportPreview] = useState<string | null>(null);
+  const [fieldmapPreview, setFieldmapPreview] = useState<FieldmapEntry[] | null>(null);
+  const [fieldmapLoading, setFieldmapLoading] = useState(false);
 
   // Copy survey state
   const [copyTitle, setCopyTitle] = useState('');
@@ -118,9 +123,13 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       if (filter === 'inactive' && s.active === 'Y') return false;
       if (search.trim()) {
         const q = search.trim().toLowerCase();
+        const normalizedIdQuery = q.replace(/^(#|sid:?)\s*/i, '');
+        const title = String(s.surveyls_title || '').toLowerCase();
+        const sidStr = String(s.sid);
         return (
-          s.surveyls_title.toLowerCase().includes(q) ||
-          String(s.sid).includes(q)
+          title.includes(q) ||
+          sidStr.includes(q) ||
+          (normalizedIdQuery.length > 0 && sidStr.includes(normalizedIdQuery))
         );
       }
       return true;
@@ -152,6 +161,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
     setActionMsg(null);
     setActionErr(null);
     setExportPreview(null);
+    setFieldmapPreview(null);
     setCopyTitle(`${selectedSurvey.surveyls_title} (Kopia)`);
     setStartDateInput(
       selectedSurvey.startdate
@@ -220,12 +230,13 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         ).catch(() => null);
       }
 
+      const useUtc = shouldUseUtcDates(activeSession.limeVersion);
       const propsToSave: Record<string, string> = {};
       if (startDateInput) {
-        propsToSave.startdate = formatLimeSurveyDateTime(startDateInput);
+        propsToSave.startdate = formatLimeSurveyDateTime(startDateInput, useUtc);
       }
       if (expiresDateInput) {
-        propsToSave.expires = formatLimeSurveyDateTime(expiresDateInput);
+        propsToSave.expires = formatLimeSurveyDateTime(expiresDateInput, useUtc);
       }
       if (Object.keys(propsToSave).length > 0) {
         await setSurveyProperties(
@@ -258,9 +269,14 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
     setActionErr(null);
     setActionMsg(null);
     try {
+      const useUtc = shouldUseUtcDates(activeSession.limeVersion);
       const propsToSave: Record<string, string | null> = {
-        startdate: startDateInput ? formatLimeSurveyDateTime(startDateInput) : null,
-        expires: expiresDateInput ? formatLimeSurveyDateTime(expiresDateInput) : null,
+        startdate: startDateInput
+          ? formatLimeSurveyDateTime(startDateInput, useUtc)
+          : null,
+        expires: expiresDateInput
+          ? formatLimeSurveyDateTime(expiresDateInput, useUtc)
+          : null,
       };
       await setSurveyProperties(
         activeSession.rpcEndpoint,
@@ -270,7 +286,11 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         activeSession.connectionMode
       );
       await onRefreshSurveys();
-      setActionMsg('Zaktualizowano daty startdate / expires w LimeSurvey.');
+      setActionMsg(
+        useUtc
+          ? 'Zaktualizowano daty startdate / expires (UTC dla LimeSurvey 7).'
+          : 'Zaktualizowano daty startdate / expires w LimeSurvey.'
+      );
       notify({
         type: 'success',
         title: 'Zaktualizowano harmonogram dat',
@@ -289,7 +309,9 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
     setActionErr(null);
     setActionMsg(null);
     try {
-      const nowFormatted = formatLimeSurveyDateTime(new Date().toISOString());
+      const useUtc = shouldUseUtcDates(activeSession.limeVersion);
+      const nowIso = new Date().toISOString();
+      const nowFormatted = formatLimeSurveyDateTime(nowIso, useUtc);
       await setSurveyProperties(
         activeSession.rpcEndpoint,
         activeSession.sessionKey,
@@ -297,10 +319,10 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         { expires: nowFormatted },
         activeSession.connectionMode
       );
-      setExpiresDateInput(nowFormatted.replace(' ', 'T').slice(0, 16));
+      setExpiresDateInput(formatLimeSurveyDateTime(nowIso, false).replace(' ', 'T').slice(0, 16));
       await onRefreshSurveys();
       setActionMsg(
-        `Zamknięto przyjmowanie odpowiedzi (ustawiono expires = ${nowFormatted}).`
+        `Zamknięto przyjmowanie odpowiedzi (ustawiono expires = ${nowFormatted}${useUtc ? ' UTC' : ''}).`
       );
       notify({
         type: 'info',
@@ -311,6 +333,27 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       setActionErr(err instanceof Error ? err.message : String(err));
     } finally {
       setBusyAction(false);
+    }
+  }
+
+  async function handleInspectFieldmap() {
+    if (!activeSession || !selectedSurvey) return;
+    setFieldmapLoading(true);
+    setActionErr(null);
+    try {
+      const map = await getFieldmap(
+        activeSession.rpcEndpoint,
+        activeSession.sessionKey,
+        selectedSurvey.sid,
+        properties?.language ? String(properties.language) : null,
+        activeSession.connectionMode
+      );
+      const entries = Object.values(map).slice(0, 20);
+      setFieldmapPreview(entries);
+    } catch (err) {
+      setActionErr(err instanceof Error ? err.message : String(err));
+    } finally {
+      setFieldmapLoading(false);
     }
   }
 
@@ -580,8 +623,15 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         )}
 
         <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-3">
-          <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-            Okno dostępności (set_survey_properties)
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Okno dostępności (set_survey_properties)
+            </div>
+            {activeSession.limeVersion === 'v7' && (
+              <span className="font-mono text-[11px] text-emerald-700 dark:text-emerald-400">
+                Tryb LS 7: zapis w UTC
+              </span>
+            )}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -661,17 +711,58 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
             </select>
           </div>
         </div>
-        <button
-          type="button"
-          disabled={busyAction || selectedSurvey.active !== 'Y'}
-          onClick={() => {
-            void handleExport();
-          }}
-          className="min-h-[44px] inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
-        >
-          <Download className="h-4 w-4" />
-          <span>Pobierz wyniki ({exportFormat.toUpperCase()})</span>
-        </button>
+        <div className="flex flex-wrap gap-2.5">
+          <button
+            type="button"
+            disabled={busyAction || selectedSurvey.active !== 'Y'}
+            onClick={() => {
+              void handleExport();
+            }}
+            className="min-h-[44px] inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+          >
+            <Download className="h-4 w-4" />
+            <span>Pobierz wyniki ({exportFormat.toUpperCase()})</span>
+          </button>
+
+          <button
+            type="button"
+            disabled={fieldmapLoading}
+            onClick={() => {
+              void handleInspectFieldmap();
+            }}
+            className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
+          >
+            <span>
+              {fieldmapLoading
+                ? 'Pobieranie pól...'
+                : 'Mapa pól (get_fieldmap)'}
+            </span>
+          </button>
+        </div>
+
+        {fieldmapPreview && (
+          <div className="rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 p-3 space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+              <span>Struktura kolumn odpowiedzi (pierwsze {fieldmapPreview.length})</span>
+              <span className="font-mono text-slate-500">SGQA / LS 7 Q-code</span>
+            </div>
+            <div className="max-h-40 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
+              {fieldmapPreview.map((entry, idx) => (
+                <div
+                  key={`${entry.fieldname}-${idx}`}
+                  className="py-1.5 flex items-center justify-between gap-3"
+                >
+                  <span className="font-mono text-emerald-700 dark:text-emerald-400 truncate">
+                    {entry.fieldname}
+                  </span>
+                  <span className="text-slate-500 dark:text-slate-400 truncate max-w-[60%]">
+                    {entry.title || entry.question || entry.type || '—'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {exportPreview && (
           <pre className="mt-2 rounded-xl bg-slate-50 dark:bg-slate-950 p-3 font-mono text-[11px] text-slate-700 dark:text-slate-300 overflow-x-auto border border-slate-100 dark:border-slate-800">
@@ -753,50 +844,75 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 max-w-md">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+            aria-hidden="true"
+          />
           <input
-            type="search"
+            type="text"
+            inputMode="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Szukaj po nazwie lub SID..."
-            className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-10 pr-4 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
+            aria-label="Szukaj ankiet po tytule lub ID"
+            placeholder="Szukaj po tytule lub ID (np. 123456)..."
+            className={`w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-10 ${
+              search ? 'pr-11' : 'pr-4'
+            } text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none`}
           />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              aria-label="Wyczyść wyszukiwanie"
+              className="absolute right-1 top-1/2 -translate-y-1/2 min-h-[38px] min-w-[38px] inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
         </div>
 
-        <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200 dark:border-slate-800 self-start">
-          <button
-            type="button"
-            onClick={() => setFilter('all')}
-            className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-              filter === 'all'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            Wszystkie
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('active')}
-            className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-              filter === 'active'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            Aktywne
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('inactive')}
-            className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-              filter === 'inactive'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            Nieaktywne
-          </button>
+        <div className="flex flex-wrap items-center gap-3 self-start">
+          {(search.trim() !== '' || filter !== 'all') && (
+            <span className="font-mono text-xs text-slate-500 dark:text-slate-400 tabular-nums">
+              Wyniki: {filteredSurveys.length} / {surveys.length}
+            </span>
+          )}
+
+          <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => setFilter('all')}
+              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
+                filter === 'all'
+                  ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400'
+              }`}
+            >
+              Wszystkie
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter('active')}
+              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
+                filter === 'active'
+                  ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400'
+              }`}
+            >
+              Aktywne
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter('inactive')}
+              className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
+                filter === 'inactive'
+                  ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400'
+              }`}
+            >
+              Nieaktywne
+            </button>
+          </div>
         </div>
       </div>
 
@@ -841,8 +957,22 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
         <div className="lg:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
           {filteredSurveys.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-              Brak ankiet pasujących do wybranych kryteriów.
+            <div className="p-8 text-center space-y-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Brak ankiet pasujących do wybranych kryteriów.
+              </p>
+              {(search.trim() !== '' || filter !== 'all') && surveys.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch('');
+                    setFilter('all');
+                  }}
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 px-3.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+                >
+                  Wyczyść filtry
+                </button>
+              )}
             </div>
           ) : (
             filteredSurveys.map((survey) => {

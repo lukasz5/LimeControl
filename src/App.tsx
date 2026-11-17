@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
+import type { User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   CalendarClock,
   ClipboardList,
+  LogOut,
   Moon,
   Server,
   Sun,
   Users,
 } from 'lucide-react';
+import { AuthGate } from './components/AuthGate';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { InstancesView } from './components/InstancesView';
 import {
   NotificationProvider,
@@ -17,6 +22,16 @@ import { ParticipantsView } from './components/ParticipantsView';
 import { PWAInstallButton } from './components/PWAInstallButton';
 import { ScheduleView } from './components/ScheduleView';
 import { SurveysView } from './components/SurveysView';
+import { auth, signOutUser } from './firebase';
+import {
+  deleteInstanceFromFirestore,
+  ensureUserProfile,
+  saveInstanceToFirestore,
+  subscribeUserInstances,
+  updateInstanceConnectionModeInFirestore,
+  updateInstanceLastConnectedInFirestore,
+  updateInstanceLimeVersionInFirestore,
+} from './services/firestoreInstances';
 import {
   getSessionKey,
   getSiteSettings,
@@ -32,23 +47,13 @@ import type {
   ConnectionMode,
   InstanceProfile,
   LimeSurveyItem,
+  LimeSurveyVersion,
   RpcTraceEntry,
   ScheduleJob,
 } from './types/limesurvey';
 
-const PROFILES_KEY = 'limecontrol_profiles_v1';
+const LEGACY_PROFILES_KEY = 'limecontrol_profiles_v1';
 const THEME_KEY = 'limecontrol_theme_v1';
-
-function loadStoredProfiles(): InstanceProfile[] {
-  try {
-    const raw = localStorage.getItem(PROFILES_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
 
 function AppContent() {
   const { notify } = useNotifications();
@@ -60,10 +65,12 @@ function AppContent() {
     }
   });
 
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
+
   const [tab, setTab] = useState<AppTab>('instances');
-  const [profiles, setProfiles] = useState<InstanceProfile[]>(() =>
-    loadStoredProfiles()
-  );
+  const [profiles, setProfiles] = useState<InstanceProfile[]>([]);
   const [activeSession, setActiveSession] = useState<ActiveSession | null>(
     null
   );
@@ -77,11 +84,21 @@ function AppContent() {
   const [rpcTraces, setRpcTraces] = useState<RpcTraceEntry[]>([]);
   const [preselectedSid, setPreselectedSid] = useState<number | null>(null);
 
+  const runtimePasswordsRef = useRef<Record<string, string>>({});
   const knownJobStatusesRef = useRef<Map<string, ScheduleJob['status']> | null>(
     null
   );
   const activeSessionRef = useRef<ActiveSession | null>(null);
   activeSessionRef.current = activeSession;
+
+  // Purge legacy localStorage profile storage so credentials/instances are never kept in browser storage
+  useEffect(() => {
+    try {
+      localStorage.removeItem(LEGACY_PROFILES_KEY);
+    } catch {
+      // Ignore storage errors
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -93,12 +110,62 @@ function AppContent() {
   }, [darkMode]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
-    } catch {
-      // Ignore storage errors
-    }
-  }, [profiles]);
+    let unsubscribeInstances: (() => void) | null = null;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (unsubscribeInstances) {
+        unsubscribeInstances();
+        unsubscribeInstances = null;
+      }
+
+      if (!user) {
+        setAuthUser(null);
+        setProfiles([]);
+        setActiveSession(null);
+        setSurveys([]);
+        runtimePasswordsRef.current = {};
+        knownJobStatusesRef.current = null;
+        setAuthLoading(false);
+        return;
+      }
+
+      setAuthUser(user);
+      setAuthError(null);
+      setAuthLoading(false);
+
+      void ensureUserProfile(user).catch((err) => {
+        setAuthError(err instanceof Error ? err.message : String(err));
+      });
+
+      unsubscribeInstances = subscribeUserInstances(
+        user.uid,
+        (cloudProfiles) => {
+          setProfiles(
+            cloudProfiles.map((item) => ({
+              ...item,
+              password: runtimePasswordsRef.current[item.id] || '',
+              savePassword: Boolean(runtimePasswordsRef.current[item.id]),
+            }))
+          );
+        },
+        (err) => {
+          notify({
+            type: 'error',
+            title: 'Błąd synchronizacji bazy danych',
+            message: err.message,
+            dedupeKey: 'firestore:sync',
+          });
+        }
+      );
+    });
+
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeInstances) {
+        unsubscribeInstances();
+      }
+    };
+  }, [notify]);
 
   useEffect(() => {
     return subscribeRpcTrace((entry) => {
@@ -126,6 +193,7 @@ function AppContent() {
   }, [notify]);
 
   useEffect(() => {
+    if (!authUser) return;
     let cancelled = false;
 
     const pollSchedules = async () => {
@@ -186,7 +254,7 @@ function AppContent() {
       cancelled = true;
       clearInterval(timer);
     };
-  }, [notify]);
+  }, [authUser, notify]);
 
   async function refreshSurveysForSession(session: ActiveSession) {
     setLoadingSurveys(true);
@@ -207,7 +275,11 @@ function AppContent() {
     profile: InstanceProfile,
     overridePassword?: string
   ) {
-    const pass = overridePassword ?? profile.password;
+    const pass =
+      overridePassword ??
+      profile.password ??
+      runtimePasswordsRef.current[profile.id] ??
+      '';
     setConnecting(true);
     setConnectionError(null);
 
@@ -219,6 +291,10 @@ function AppContent() {
         profile.authPlugin || 'Authdb',
         profile.connectionMode
       );
+
+      if (profile.savePassword) {
+        runtimePasswordsRef.current[profile.id] = pass;
+      }
 
       let sitename: string | undefined;
       try {
@@ -242,22 +318,20 @@ function AppContent() {
         username: profile.username,
         authPlugin: profile.authPlugin || 'Authdb',
         connectionMode: profile.connectionMode,
+        limeVersion: profile.limeVersion || 'auto',
         sessionKey: key,
         connectedAt: new Date().toISOString(),
       };
 
       setActiveSession(session);
-      setProfiles((prev) =>
-        prev.map((p) =>
-          p.id === profile.id
-            ? {
-                ...p,
-                lastConnectedAt: new Date().toISOString(),
-                siteName: sitename || p.siteName,
-              }
-            : p
-        )
-      );
+
+      if (authUser) {
+        void updateInstanceLastConnectedInFirestore(
+          authUser.uid,
+          profile.id,
+          sitename
+        ).catch(() => null);
+      }
 
       await refreshSurveysForSession(session);
       notify({
@@ -277,33 +351,65 @@ function AppContent() {
     }
   }
 
-  function handleSaveProfile(profile: InstanceProfile) {
+  async function handleSaveProfile(profile: InstanceProfile) {
+    if (!authUser) return;
+    if (profile.savePassword && profile.password) {
+      runtimePasswordsRef.current[profile.id] = profile.password;
+    } else {
+      delete runtimePasswordsRef.current[profile.id];
+    }
+
+    const saved = await saveInstanceToFirestore(authUser.uid, profile);
     setProfiles((prev) => {
-      const existing = prev.findIndex((p) => p.id === profile.id);
-      if (existing >= 0) {
-        const next = [...prev];
-        next[existing] = profile;
-        return next;
+      const exists = prev.some((p) => p.id === saved.id);
+      const hydrated: InstanceProfile = {
+        ...saved,
+        password: runtimePasswordsRef.current[saved.id] || '',
+        savePassword: Boolean(runtimePasswordsRef.current[saved.id]),
+      };
+      if (exists) {
+        return prev.map((p) => (p.id === saved.id ? hydrated : p));
       }
-      return [profile, ...prev];
+      return [hydrated, ...prev];
     });
   }
 
-  function handleDeleteProfile(profileId: string) {
-    setProfiles((prev) => prev.filter((p) => p.id !== profileId));
+  async function handleDeleteProfile(profileId: string) {
+    if (!authUser) return;
+    delete runtimePasswordsRef.current[profileId];
+    await deleteInstanceFromFirestore(authUser.uid, profileId);
     if (activeSession?.profileId === profileId) {
       setActiveSession(null);
       setSurveys([]);
     }
   }
 
-  function handleSwitchConnectionMode(
+  async function handleSwitchConnectionMode(
     profileId: string,
     mode: ConnectionMode
   ) {
-    setProfiles((prev) =>
-      prev.map((p) => (p.id === profileId ? { ...p, connectionMode: mode } : p))
+    if (!authUser) return;
+    await updateInstanceConnectionModeInFirestore(authUser.uid, profileId, mode);
+    if (activeSession?.profileId === profileId) {
+      setActiveSession((prev) =>
+        prev ? { ...prev, connectionMode: mode } : prev
+      );
+    }
+  }
+
+  async function handleSwitchLimeVersion(
+    profileId: string,
+    limeVersion: LimeSurveyVersion
+  ) {
+    if (!authUser) return;
+    await updateInstanceLimeVersionInFirestore(
+      authUser.uid,
+      profileId,
+      limeVersion
     );
+    if (activeSession?.profileId === profileId) {
+      setActiveSession((prev) => (prev ? { ...prev, limeVersion } : prev));
+    }
   }
 
   async function handleDisconnect() {
@@ -320,6 +426,21 @@ function AppContent() {
     }
     setActiveSession(null);
     setSurveys([]);
+  }
+
+  async function handleSignOut() {
+    await handleDisconnect();
+    runtimePasswordsRef.current = {};
+    await signOutUser();
+  }
+
+  if (authLoading || !authUser) {
+    return (
+      <>
+        <AuthGate loading={authLoading} authError={authError} />
+        <OfflineIndicator />
+      </>
+    );
   }
 
   const activeProfile =
@@ -343,9 +464,9 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
-      {/* Sticky Header: 3-zone contract on desktop, compact 52px App Bar on mobile */}
+      {/* Sticky Header: 3-zone contract on desktop, compact 54px App Bar on mobile */}
       <header className="sticky top-0 z-30 h-[54px] md:h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-8 px-4 sm:px-6">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6">
           <button
             type="button"
             onClick={() => setTab('surveys')}
@@ -381,8 +502,36 @@ function AppContent() {
             {activeNavTitle}
           </span>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <PWAInstallButton />
+
+            <div className="hidden lg:flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 px-2.5 py-1.5">
+              {authUser.photoURL && (
+                <img
+                  src={authUser.photoURL}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                  className="h-5 w-5 rounded-full object-cover"
+                />
+              )}
+              <span className="text-xs font-medium text-slate-700 dark:text-slate-300 max-w-[140px] truncate">
+                {authUser.email || authUser.displayName}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                void handleSignOut();
+              }}
+              aria-label="Wyloguj z konta Google"
+              title={`Wyloguj (${authUser.email || ''})`}
+              className="min-h-[44px] min-w-[44px] px-2.5 flex items-center justify-center gap-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs font-semibold"
+            >
+              <LogOut className="h-4 w-4" aria-hidden="true" />
+              <span className="hidden sm:inline">Wyloguj</span>
+            </button>
+
             <button
               type="button"
               onClick={() => setDarkMode((d) => !d)}
@@ -455,6 +604,7 @@ function AppContent() {
             onDeleteProfile={handleDeleteProfile}
             onDisconnect={handleDisconnect}
             onSwitchConnectionMode={handleSwitchConnectionMode}
+            onSwitchLimeVersion={handleSwitchLimeVersion}
             onClearTraces={() => setRpcTraces([])}
           />
         )}
@@ -497,8 +647,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <NotificationProvider>
-      <AppContent />
-    </NotificationProvider>
+    <ErrorBoundary>
+      <NotificationProvider>
+        <AppContent />
+      </NotificationProvider>
+    </ErrorBoundary>
   );
 }

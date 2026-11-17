@@ -27,6 +27,7 @@ import type {
   ActiveSession,
   ConnectionMode,
   InstanceProfile,
+  LimeSurveyVersion,
   RpcTraceEntry,
 } from '../types/limesurvey';
 
@@ -37,10 +38,11 @@ interface InstancesViewProps {
   connectionError: { message: string; isCors: boolean } | null;
   rpcTraces: RpcTraceEntry[];
   onConnectProfile: (profile: InstanceProfile, overridePassword?: string) => Promise<void>;
-  onSaveProfile: (profile: InstanceProfile) => void;
-  onDeleteProfile: (profileId: string) => void;
+  onSaveProfile: (profile: InstanceProfile) => Promise<void>;
+  onDeleteProfile: (profileId: string) => Promise<void>;
   onDisconnect: () => Promise<void>;
-  onSwitchConnectionMode: (profileId: string, mode: ConnectionMode) => void;
+  onSwitchConnectionMode: (profileId: string, mode: ConnectionMode) => Promise<void>;
+  onSwitchLimeVersion: (profileId: string, version: LimeSurveyVersion) => Promise<void>;
   onClearTraces: () => void;
 }
 
@@ -57,6 +59,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
   onDeleteProfile,
   onDisconnect,
   onSwitchConnectionMode,
+  onSwitchLimeVersion,
   onClearTraces,
 }) => {
   const [subPanel, setSubPanel] = useState<SubPanel>('connections');
@@ -65,8 +68,9 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authPlugin, setAuthPlugin] = useState('Authdb');
-  const [savePassword, setSavePassword] = useState(true);
+  const [savePassword, setSavePassword] = useState(false);
   const [connectionMode, setConnectionMode] = useState<ConnectionMode>('direct');
+  const [limeVersion, setLimeVersion] = useState<LimeSurveyVersion>('auto');
   const [formError, setFormError] = useState<string | null>(null);
 
   const [promptProfile, setPromptProfile] = useState<InstanceProfile | null>(null);
@@ -127,9 +131,10 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
         savePassword,
         authPlugin: authPlugin.trim() || 'Authdb',
         connectionMode,
+        limeVersion,
       };
 
-      onSaveProfile(profile);
+      await onSaveProfile(profile);
       await onConnectProfile(profile, password);
       setName('');
       setBaseUrl('');
@@ -232,7 +237,13 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                       Użytkownik: {activeSession.username} · Tryb:{' '}
                       {activeSession.connectionMode === 'direct'
                         ? 'Bezpośredni JSON-RPC'
-                        : 'Przekaźnik serwerowy'}
+                        : 'Przekaźnik serwerowy'}{' '}
+                      · Wersja:{' '}
+                      {activeSession.limeVersion === 'v7'
+                        ? 'LimeSurvey 7.x (UTC)'
+                        : activeSession.limeVersion === 'legacy'
+                          ? 'LimeSurvey 3–6'
+                          : 'Automatyczna'}
                     </p>
                   </div>
                   <button
@@ -413,17 +424,37 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                           <span aria-hidden="true">·</span>
                           <button
                             type="button"
-                            onClick={() =>
-                              onSwitchConnectionMode(
+                            onClick={() => {
+                              void onSwitchConnectionMode(
                                 profile.id,
                                 profile.connectionMode === 'direct' ? 'relay' : 'direct'
-                              )
-                            }
+                              );
+                            }}
                             className="underline decoration-slate-300 dark:decoration-slate-700 hover:text-slate-900 dark:hover:text-white"
                           >
                             {profile.connectionMode === 'direct'
                               ? 'Tryb: Bezpośredni JSON-RPC (zmień)'
                               : 'Tryb: Przekaźnik CORS (zmień)'}
+                          </button>
+                          <span aria-hidden="true">·</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const nextVer: LimeSurveyVersion =
+                                profile.limeVersion === 'auto'
+                                  ? 'v7'
+                                  : profile.limeVersion === 'v7'
+                                    ? 'legacy'
+                                    : 'auto';
+                              void onSwitchLimeVersion(profile.id, nextVer);
+                            }}
+                            className="underline decoration-slate-300 dark:decoration-slate-700 hover:text-slate-900 dark:hover:text-white"
+                          >
+                            {profile.limeVersion === 'v7'
+                              ? 'Wersja: LS 7.x UTC (zmień)'
+                              : profile.limeVersion === 'legacy'
+                                ? 'Wersja: LS 3–6 (zmień)'
+                                : 'Wersja: Auto (zmień)'}
                           </button>
                         </div>
                       </div>
@@ -446,7 +477,9 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                         </button>
                         <button
                           type="button"
-                          onClick={() => onDeleteProfile(profile.id)}
+                          onClick={() => {
+                            void onDeleteProfile(profile.id);
+                          }}
                           aria-label={`Usuń profil ${profile.name}`}
                           className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-rose-600 hover:border-rose-200 dark:hover:border-rose-900"
                         >
@@ -469,7 +502,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                 Dodaj instancję LimeSurvey
               </h3>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Obsługuje LimeSurvey 3.x, 5.x oraz 6.x z włączonym interfejsem JSON-RPC.
+                Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się w Cloud Firestore (bez haseł).
               </p>
             </div>
 
@@ -567,6 +600,21 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                 </div>
               </div>
 
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Wersja serwera LimeSurvey
+                </label>
+                <select
+                  value={limeVersion}
+                  onChange={(e) => setLimeVersion(e.target.value as LimeSurveyVersion)}
+                  className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 text-xs font-medium text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
+                >
+                  <option value="auto">Automatyczna (zgodna z RC2)</option>
+                  <option value="v7">LimeSurvey 7.x (daty UTC + nowe kody błędów)</option>
+                  <option value="legacy">LimeSurvey 3.x–6.x (czas lokalny serwera)</option>
+                </select>
+              </div>
+
               <label className="flex min-h-[44px] items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                 <input
                   type="checkbox"
@@ -574,7 +622,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                   onChange={(e) => setSavePassword(e.target.checked)}
                   className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                 />
-                <span>Zapamiętaj hasło lokalnie w tej przeglądarce</span>
+                <span>Zapamiętaj hasło tylko w pamięci tej sesji (nie jest zapisywane w bazie ani w przeglądarce)</span>
               </label>
             </div>
 

@@ -1,0 +1,183 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'email', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'email', 'photoURL', 'createdAt', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 180
+        && (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 120))
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidLimeInstance(data) {
+      return data.keys().hasAll([
+          'id',
+          'ownerUid',
+          'name',
+          'baseUrl',
+          'rpcEndpoint',
+          'username',
+          'authPlugin',
+          'connectionMode',
+          'limeVersion',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'ownerUid',
+          'name',
+          'baseUrl',
+          'rpcEndpoint',
+          'username',
+          'authPlugin',
+          'connectionMode',
+          'limeVersion',
+          'siteName',
+          'lastConnectedAt',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidId(data.id)
+        && isValidId(data.ownerUid)
+        && data.ownerUid == request.auth.uid
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+        && data.baseUrl is string && data.baseUrl.size() >= 1 && data.baseUrl.size() <= 500
+        && data.rpcEndpoint is string && data.rpcEndpoint.size() >= 1 && data.rpcEndpoint.size() <= 500
+        && data.username is string && data.username.size() >= 1 && data.username.size() <= 120
+        && data.authPlugin is string && data.authPlugin.size() >= 1 && data.authPlugin.size() <= 80
+        && data.connectionMode in ['direct', 'relay']
+        && data.limeVersion in ['auto', 'v7', 'legacy']
+        && (!('siteName' in data) || (data.siteName is string && data.siteName.size() <= 160))
+        && (!('lastConnectedAt' in data) || (data.lastConnectedAt is string && data.lastConnectedAt.size() <= 64))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow get: if isVerifiedUser() && isOwner(userId) && isValidId(userId);
+      allow list: if false;
+
+      allow create: if isVerifiedUser()
+        && isOwner(userId)
+        && isValidId(userId)
+        && isValidUserProfile(incoming())
+        && incoming().uid == userId
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isVerifiedUser()
+        && isOwner(userId)
+        && isValidId(userId)
+        && isValidUserProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName',
+          'email',
+          'photoURL',
+          'updatedAt'
+        ]);
+
+      allow delete: if false;
+
+      match /instances/{instanceId} {
+        allow get: if isVerifiedUser()
+          && isOwner(userId)
+          && isValidId(userId)
+          && isValidId(instanceId);
+
+        allow list: if isVerifiedUser()
+          && isOwner(userId)
+          && resource.data.ownerUid == request.auth.uid;
+
+        allow create: if isVerifiedUser()
+          && isOwner(userId)
+          && isValidId(userId)
+          && isValidId(instanceId)
+          && isValidLimeInstance(incoming())
+          && incoming().id == instanceId
+          && incoming().ownerUid == userId
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+
+        allow update: if isVerifiedUser()
+          && isOwner(userId)
+          && isValidId(userId)
+          && isValidId(instanceId)
+          && isValidLimeInstance(incoming())
+          && incoming().id == existing().id
+          && incoming().ownerUid == existing().ownerUid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'connectionMode',
+              'updatedAt'
+            ])
+            || incoming().diff(existing()).affectedKeys().hasOnly([
+              'limeVersion',
+              'updatedAt'
+            ])
+            || incoming().diff(existing()).affectedKeys().hasOnly([
+              'lastConnectedAt',
+              'siteName',
+              'updatedAt'
+            ])
+            || incoming().diff(existing()).affectedKeys().hasOnly([
+              'name',
+              'baseUrl',
+              'rpcEndpoint',
+              'username',
+              'authPlugin',
+              'connectionMode',
+              'limeVersion',
+              'siteName',
+              'lastConnectedAt',
+              'updatedAt'
+            ])
+          );
+
+        allow delete: if isVerifiedUser()
+          && isOwner(userId)
+          && isValidId(userId)
+          && isValidId(instanceId);
+      }
+    }
+  }
+}

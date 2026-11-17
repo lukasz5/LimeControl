@@ -1,6 +1,8 @@
 import type {
   ConnectionMode,
+  FieldmapEntry,
   LimeSurveyItem,
+  LimeSurveyVersion,
   ParticipantItem,
   RpcTraceEntry,
   SurveyLanguageProperties,
@@ -11,12 +13,21 @@ import type {
 export class LimeSurveyRpcError extends Error {
   readonly isCorsOrNetwork: boolean;
   readonly rpcStatus?: string;
+  readonly rpcCode?: string | number;
 
-  constructor(message: string, options?: { isCorsOrNetwork?: boolean; rpcStatus?: string }) {
+  constructor(
+    message: string,
+    options?: {
+      isCorsOrNetwork?: boolean;
+      rpcStatus?: string;
+      rpcCode?: string | number;
+    }
+  ) {
     super(message);
     this.name = 'LimeSurveyRpcError';
     this.isCorsOrNetwork = Boolean(options?.isCorsOrNetwork);
     this.rpcStatus = options?.rpcStatus;
+    this.rpcCode = options?.rpcCode;
   }
 }
 
@@ -50,26 +61,54 @@ export function normalizeRpcEndpoint(rawUrl: string): {
   };
 }
 
-export function formatLimeSurveyDateTime(localDateTime: string): string {
+export function shouldUseUtcDates(limeVersion?: LimeSurveyVersion): boolean {
+  return limeVersion === 'v7';
+}
+
+export function formatLimeSurveyDateTime(
+  localDateTime: string,
+  useUtc = false
+): string {
   if (!localDateTime) return '';
   const date = new Date(localDateTime);
   if (Number.isNaN(date.getTime())) return localDateTime;
   const pad = (n: number) => String(n).padStart(2, '0');
+  if (useUtc) {
+    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:00`;
+  }
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:00`;
 }
 
-function extractStatusError(result: unknown): string | null {
-  if (
-    result &&
-    typeof result === 'object' &&
-    'status' in result &&
-    typeof (result as { status: unknown }).status === 'string'
-  ) {
-    const status = (result as { status: string }).status;
-    if (status.toUpperCase() !== 'OK') {
-      return status;
-    }
+function extractStatusError(
+  result: unknown
+): { message: string; code?: string | number } | null {
+  if (!result || typeof result !== 'object') {
+    return null;
   }
+
+  const record = result as Record<string, unknown>;
+  const rawCode =
+    typeof record.error_code === 'string' || typeof record.error_code === 'number'
+      ? record.error_code
+      : typeof record.code === 'string' || typeof record.code === 'number'
+        ? record.code
+        : undefined;
+
+  if (typeof record.status === 'string' && record.status.toUpperCase() !== 'OK') {
+    const message =
+      rawCode !== undefined
+        ? `[Kod ${rawCode}] ${record.status}`
+        : record.status;
+    return { message, code: rawCode };
+  }
+
+  if (rawCode !== undefined && typeof record.message === 'string') {
+    return {
+      message: `[Kod ${rawCode}] ${record.message}`,
+      code: rawCode,
+    };
+  }
+
   return null;
 }
 
@@ -153,14 +192,21 @@ export async function callLimeSurveyRpc<T = unknown>(
 
     const payload = (await response.json()) as {
       result?: T;
-      error?: { message?: string } | string | null;
+      error?: { message?: string; code?: number | string } | string | null;
     };
 
     if (payload.error) {
-      const errMsg =
-        typeof payload.error === 'string'
-          ? payload.error
-          : payload.error.message || JSON.stringify(payload.error);
+      let errMsg: string;
+      let errCode: string | number | undefined;
+      if (typeof payload.error === 'string') {
+        errMsg = payload.error;
+      } else {
+        errCode = payload.error.code;
+        const baseText =
+          payload.error.message || JSON.stringify(payload.error);
+        errMsg =
+          errCode !== undefined ? `[RPC ${errCode}] ${baseText}` : baseText;
+      }
       emitTrace({
         id: `${Date.now()}_${requestId}`,
         method,
@@ -171,7 +217,7 @@ export async function callLimeSurveyRpc<T = unknown>(
         summary: errMsg,
         timestamp: new Date().toISOString(),
       });
-      throw new LimeSurveyRpcError(errMsg);
+      throw new LimeSurveyRpcError(errMsg, { rpcCode: errCode });
     }
 
     const statusError = extractStatusError(payload.result);
@@ -183,10 +229,13 @@ export async function callLimeSurveyRpc<T = unknown>(
         mode,
         ok: false,
         durationMs,
-        summary: `LimeSurvey: ${statusError}`,
+        summary: `LimeSurvey: ${statusError.message}`,
         timestamp: new Date().toISOString(),
       });
-      throw new LimeSurveyRpcError(statusError, { rpcStatus: statusError });
+      throw new LimeSurveyRpcError(statusError.message, {
+        rpcStatus: statusError.message,
+        rpcCode: statusError.code,
+      });
     }
 
     emitTrace({
@@ -404,6 +453,25 @@ export async function getSummary(
     [sessionKey, surveyId, statName],
     mode
   );
+}
+
+export async function getFieldmap(
+  rpcEndpoint: string,
+  sessionKey: string,
+  surveyId: number,
+  language: string | null = null,
+  mode: ConnectionMode = 'direct'
+): Promise<Record<string, FieldmapEntry>> {
+  const params: unknown[] = language
+    ? [sessionKey, surveyId, language]
+    : [sessionKey, surveyId];
+  const result = await callLimeSurveyRpc<Record<string, FieldmapEntry>>(
+    rpcEndpoint,
+    'get_fieldmap',
+    params,
+    mode
+  );
+  return result && typeof result === 'object' ? result : {};
 }
 
 export async function activateTokens(

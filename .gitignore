@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Firebase client config (local only)
+firebase-applet-config.json

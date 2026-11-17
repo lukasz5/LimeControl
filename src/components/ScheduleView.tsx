@@ -140,6 +140,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
         username: activeSession.username,
         password,
         authPlugin: activeSession.authPlugin || 'Authdb',
+        limeVersion: activeSession.limeVersion || 'auto',
         scheduledAt: scheduledDate.toISOString(),
         activateTokens,
         startdateAt: null,

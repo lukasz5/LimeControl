@@ -1,4 +1,5 @@
-import type { ScheduleJob } from '../types/limesurvey';
+import { auth } from '../firebase';
+import type { LimeSurveyVersion, ScheduleJob } from '../types/limesurvey';
 
 export interface CreateSchedulePayload {
   surveyId: number;
@@ -8,6 +9,7 @@ export interface CreateSchedulePayload {
   username: string;
   password: string;
   authPlugin: string;
+  limeVersion: LimeSurveyVersion;
   scheduledAt: string;
   activateTokens: boolean;
   startdateAt: string | null;
@@ -15,8 +17,23 @@ export interface CreateSchedulePayload {
   clearCredentialsAfterRun: boolean;
 }
 
+async function getAuthHeaders(includeJson = false): Promise<HeadersInit> {
+  const headers: Record<string, string> = {};
+  if (includeJson) {
+    headers['Content-Type'] = 'application/json';
+  }
+  const user = auth.currentUser;
+  if (user) {
+    const token = await user.getIdToken();
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 export async function fetchSchedules(): Promise<ScheduleJob[]> {
-  const res = await fetch('/api/schedules');
+  const res = await fetch('/api/schedules', {
+    headers: await getAuthHeaders(false),
+  });
   if (!res.ok) {
     throw new Error(`Błąd pobierania harmonogramu (HTTP ${res.status})`);
   }
@@ -29,7 +46,7 @@ export async function createSchedule(
 ): Promise<ScheduleJob> {
   const res = await fetch('/api/schedules', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: await getAuthHeaders(true),
     body: JSON.stringify(payload),
   });
   const data = (await res.json()) as { job?: ScheduleJob; error?: string };
@@ -42,6 +59,7 @@ export async function createSchedule(
 export async function runScheduleNow(jobId: string): Promise<ScheduleJob> {
   const res = await fetch(`/api/schedules/${encodeURIComponent(jobId)}/run-now`, {
     method: 'POST',
+    headers: await getAuthHeaders(false),
   });
   const data = (await res.json()) as { job?: ScheduleJob; error?: string };
   if (!res.ok || !data.job) {
@@ -53,6 +71,7 @@ export async function runScheduleNow(jobId: string): Promise<ScheduleJob> {
 export async function cancelSchedule(jobId: string): Promise<ScheduleJob> {
   const res = await fetch(`/api/schedules/${encodeURIComponent(jobId)}/cancel`, {
     method: 'PATCH',
+    headers: await getAuthHeaders(false),
   });
   const data = (await res.json()) as { job?: ScheduleJob; error?: string };
   if (!res.ok || !data.job) {
@@ -64,6 +83,7 @@ export async function cancelSchedule(jobId: string): Promise<ScheduleJob> {
 export async function deleteSchedule(jobId: string): Promise<void> {
   const res = await fetch(`/api/schedules/${encodeURIComponent(jobId)}`, {
     method: 'DELETE',
+    headers: await getAuthHeaders(false),
   });
   if (!res.ok) {
     throw new Error(`Nie udało się usunąć zadania (HTTP ${res.status})`);

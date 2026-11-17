@@ -11,6 +11,70 @@ const PORT = Number(process.env.PORT || 3000);
 const DATA_DIR = path.resolve(__dirname, 'data');
 const SCHEDULES_FILE = path.join(DATA_DIR, 'schedules.json');
 
+const FIREBASE_CONFIG_FILE = path.resolve(__dirname, 'firebase-applet-config.json');
+
+function readFirebaseApiKey(): string {
+  try {
+    if (!fs.existsSync(FIREBASE_CONFIG_FILE)) return '';
+    const parsed = JSON.parse(fs.readFileSync(FIREBASE_CONFIG_FILE, 'utf-8')) as {
+      apiKey?: string;
+    };
+    return typeof parsed.apiKey === 'string' ? parsed.apiKey : '';
+  } catch {
+    return '';
+  }
+}
+
+const FIREBASE_API_KEY = readFirebaseApiKey();
+const verifiedTokenCache = new Map<string, { uid: string; expiresAt: number }>();
+
+async function verifyBearerUser(req: express.Request): Promise<string | null> {
+  if (!FIREBASE_API_KEY) return null;
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+  const idToken = authHeader.slice('Bearer '.length).trim();
+  if (!idToken) return null;
+
+  const cached = verifiedTokenCache.get(idToken);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.uid;
+  }
+
+  try {
+    const resp = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_API_KEY)}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken }),
+      }
+    );
+    if (!resp.ok) {
+      return null;
+    }
+    const data = (await resp.json()) as {
+      users?: Array<{ localId?: string; emailVerified?: boolean }>;
+    };
+    const user = data.users?.[0];
+    if (!user?.localId) {
+      return null;
+    }
+    verifiedTokenCache.set(idToken, {
+      uid: user.localId,
+      expiresAt: Date.now() + 120_000,
+    });
+    if (verifiedTokenCache.size > 200) {
+      const oldestKey = verifiedTokenCache.keys().next().value;
+      if (oldestKey) verifiedTokenCache.delete(oldestKey);
+    }
+    return user.localId;
+  } catch {
+    return null;
+  }
+}
+
 interface ScheduleStepLog {
   step: string;
   ok: boolean;
@@ -20,6 +84,7 @@ interface ScheduleStepLog {
 
 interface StoredScheduleJob {
   id: string;
+  ownerUid?: string;
   surveyId: number;
   surveyTitle: string;
   instanceName: string;
@@ -27,6 +92,7 @@ interface StoredScheduleJob {
   username: string;
   password: string;
   authPlugin: string;
+  limeVersion?: 'auto' | 'v7' | 'legacy';
   scheduledAt: string;
   activateTokens: boolean;
   startdateAt: string | null;
@@ -67,12 +133,14 @@ function writeJobs(jobs: StoredScheduleJob[]): void {
 function sanitizeJobForClient(job: StoredScheduleJob) {
   return {
     id: job.id,
+    ownerUid: job.ownerUid,
     surveyId: job.surveyId,
     surveyTitle: job.surveyTitle,
     instanceName: job.instanceName,
     rpcEndpoint: job.rpcEndpoint,
     username: job.username,
     authPlugin: job.authPlugin,
+    limeVersion: job.limeVersion || 'auto',
     hasPassword: Boolean(job.password),
     scheduledAt: job.scheduledAt,
     activateTokens: job.activateTokens,
@@ -87,12 +155,15 @@ function sanitizeJobForClient(job: StoredScheduleJob) {
   };
 }
 
-function formatLimeSurveyDate(isoString: string): string {
+function formatLimeSurveyDate(isoString: string, useUtc = false): string {
   const date = new Date(isoString);
   if (Number.isNaN(date.getTime())) {
     return isoString;
   }
   const pad = (n: number) => String(n).padStart(2, '0');
+  if (useUtc) {
+    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}`;
+  }
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
@@ -128,7 +199,9 @@ async function callLimeSurveyRpc(
     const errText =
       typeof data.error === 'string'
         ? data.error
-        : data.error.message || JSON.stringify(data.error);
+        : data.error.code !== undefined
+          ? `[RPC ${data.error.code}] ${data.error.message || JSON.stringify(data.error)}`
+          : data.error.message || JSON.stringify(data.error);
     throw new Error(`RPC Error: ${errText}`);
   }
 
@@ -136,16 +209,24 @@ async function callLimeSurveyRpc(
 }
 
 function isLimeSurveyStatusError(result: unknown): string | null {
-  if (
-    result &&
-    typeof result === 'object' &&
-    'status' in result &&
-    typeof (result as { status: unknown }).status === 'string'
-  ) {
-    const statusText = (result as { status: string }).status;
-    if (statusText.toUpperCase() !== 'OK') {
-      return statusText;
-    }
+  if (!result || typeof result !== 'object') {
+    return null;
+  }
+  const record = result as Record<string, unknown>;
+  const rawCode =
+    typeof record.error_code === 'string' || typeof record.error_code === 'number'
+      ? record.error_code
+      : typeof record.code === 'string' || typeof record.code === 'number'
+        ? record.code
+        : undefined;
+
+  if (typeof record.status === 'string' && record.status.toUpperCase() !== 'OK') {
+    return rawCode !== undefined
+      ? `[Kod ${rawCode}] ${record.status}`
+      : record.status;
+  }
+  if (rawCode !== undefined && typeof record.message === 'string') {
+    return `[Kod ${rawCode}] ${record.message}`;
   }
   return null;
 }
@@ -257,12 +338,13 @@ async function executeScheduleJob(jobId: string): Promise<StoredScheduleJob | nu
       }
     }
 
+    const useUtcDates = job.limeVersion === 'v7';
     const propsToUpdate: Record<string, string> = {};
     if (job.startdateAt) {
-      propsToUpdate.startdate = formatLimeSurveyDate(job.startdateAt);
+      propsToUpdate.startdate = formatLimeSurveyDate(job.startdateAt, useUtcDates);
     }
     if (job.expiresAt) {
-      propsToUpdate.expires = formatLimeSurveyDate(job.expiresAt);
+      propsToUpdate.expires = formatLimeSurveyDate(job.expiresAt, useUtcDates);
     }
 
     if (Object.keys(propsToUpdate).length > 0) {
@@ -367,16 +449,29 @@ async function startServer(): Promise<void> {
     res.json({ ok: true, now: new Date().toISOString() });
   });
 
-  // Schedule CRUD endpoints for automated activate_survey execution
-  app.get('/api/schedules', (_req, res) => {
-    const jobs = readJobs().sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+  // Schedule CRUD endpoints for automated activate_survey execution (authenticated per Firebase user)
+  app.get('/api/schedules', async (req, res) => {
+    const uid = await verifyBearerUser(req);
+    if (!uid) {
+      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
+      return;
+    }
+    const jobs = readJobs()
+      .filter((j) => j.ownerUid === uid)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
     res.json({ jobs: jobs.map(sanitizeJobForClient) });
   });
 
-  app.post('/api/schedules', (req, res) => {
+  app.post('/api/schedules', async (req, res) => {
+    const uid = await verifyBearerUser(req);
+    if (!uid) {
+      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
+      return;
+    }
+
     const body = req.body as Partial<StoredScheduleJob>;
     if (
       !body.surveyId ||
@@ -398,8 +493,14 @@ async function startServer(): Promise<void> {
       return;
     }
 
+    const limeVersion =
+      body.limeVersion === 'v7' || body.limeVersion === 'legacy'
+        ? body.limeVersion
+        : 'auto';
+
     const newJob: StoredScheduleJob = {
       id: `job_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      ownerUid: uid,
       surveyId: Number(body.surveyId),
       surveyTitle: String(body.surveyTitle || `Ankieta #${body.surveyId}`),
       instanceName: String(body.instanceName || body.rpcEndpoint),
@@ -407,6 +508,7 @@ async function startServer(): Promise<void> {
       username: String(body.username),
       password: String(body.password),
       authPlugin: String(body.authPlugin || 'Authdb'),
+      limeVersion,
       scheduledAt: scheduledDate.toISOString(),
       activateTokens: Boolean(body.activateTokens),
       startdateAt: body.startdateAt ? String(body.startdateAt) : null,
@@ -430,9 +532,15 @@ async function startServer(): Promise<void> {
   });
 
   app.post('/api/schedules/:id/run-now', async (req, res) => {
+    const uid = await verifyBearerUser(req);
+    if (!uid) {
+      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
+      return;
+    }
+
     const { id } = req.params;
     const jobs = readJobs();
-    const existing = jobs.find((j) => j.id === id);
+    const existing = jobs.find((j) => j.id === id && j.ownerUid === uid);
     if (!existing) {
       res.status(404).json({ error: 'Nie znaleziono zadania harmonogramu.' });
       return;
@@ -449,10 +557,16 @@ async function startServer(): Promise<void> {
     res.json({ job: sanitizeJobForClient(updated) });
   });
 
-  app.patch('/api/schedules/:id/cancel', (req, res) => {
+  app.patch('/api/schedules/:id/cancel', async (req, res) => {
+    const uid = await verifyBearerUser(req);
+    if (!uid) {
+      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
+      return;
+    }
+
     const { id } = req.params;
     const jobs = readJobs();
-    const job = jobs.find((j) => j.id === id);
+    const job = jobs.find((j) => j.id === id && j.ownerUid === uid);
     if (!job) {
       res.status(404).json({ error: 'Nie znaleziono zadania harmonogramu.' });
       return;
@@ -470,14 +584,21 @@ async function startServer(): Promise<void> {
     res.json({ job: sanitizeJobForClient(job) });
   });
 
-  app.delete('/api/schedules/:id', (req, res) => {
+  app.delete('/api/schedules/:id', async (req, res) => {
+    const uid = await verifyBearerUser(req);
+    if (!uid) {
+      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
+      return;
+    }
+
     const { id } = req.params;
     const jobs = readJobs();
-    const filtered = jobs.filter((j) => j.id !== id);
-    if (filtered.length === jobs.length) {
+    const target = jobs.find((j) => j.id === id && j.ownerUid === uid);
+    if (!target) {
       res.status(404).json({ error: 'Nie znaleziono zadania.' });
       return;
     }
+    const filtered = jobs.filter((j) => j.id !== id);
     writeJobs(filtered);
     res.json({ ok: true });
   });

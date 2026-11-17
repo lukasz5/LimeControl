@@ -1,15 +1,20 @@
 export type ConnectionMode = 'direct' | 'relay';
 
+export type LimeSurveyVersion = 'auto' | 'v7' | 'legacy';
+
 export interface InstanceProfile {
   id: string;
+  ownerUid?: string;
   name: string;
   baseUrl: string;
   rpcEndpoint: string;
   username: string;
-  password: string;
-  savePassword: boolean;
+  /** Runtime-only memory password (never stored in localStorage or Firestore). */
+  password?: string;
+  savePassword?: boolean;
   authPlugin: string;
   connectionMode: ConnectionMode;
+  limeVersion: LimeSurveyVersion;
   lastConnectedAt?: string;
   siteName?: string;
 }
@@ -21,6 +26,7 @@ export interface ActiveSession {
   username: string;
   authPlugin: string;
   connectionMode: ConnectionMode;
+  limeVersion: LimeSurveyVersion;
   sessionKey: string;
   connectedAt: string;
   siteSettings?: Record<string, unknown>;
@@ -80,6 +86,16 @@ export interface SurveySummary {
   [key: string]: unknown;
 }
 
+export interface FieldmapEntry {
+  fieldname: string;
+  type?: string;
+  title?: string;
+  question?: string;
+  gid?: number | string;
+  qid?: number | string;
+  [key: string]: unknown;
+}
+
 export interface ParticipantItem {
   tid: number | string;
   token: string;
@@ -109,12 +125,14 @@ export interface ScheduleStepLog {
 
 export interface ScheduleJob {
   id: string;
+  ownerUid?: string;
   surveyId: number;
   surveyTitle: string;
   instanceName: string;
   rpcEndpoint: string;
   username: string;
   authPlugin: string;
+  limeVersion?: LimeSurveyVersion;
   hasPassword: boolean;
   scheduledAt: string;
   activateTokens: boolean;
