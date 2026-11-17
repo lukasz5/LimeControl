@@ -1,10 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import {
   AlertTriangle,
-  Check,
-  Code2,
-  Copy,
-  Download,
   ExternalLink,
   KeyRound,
   LogOut,
@@ -12,6 +8,7 @@ import {
   Search,
   Server,
   ShieldCheck,
+  Smartphone,
   Terminal,
   Trash2,
 } from 'lucide-react';
@@ -19,10 +16,8 @@ import {
   LimeSurveyRpcError,
   normalizeRpcEndpoint,
 } from '../services/limeSurveyRpc';
-import {
-  downloadReactNativeZip,
-  generateReactNativeProject,
-} from '../services/reactNativeExporter';
+import { BRAND } from '../config/brand';
+import { PWAInstallButton } from './PWAInstallButton';
 import type {
   ActiveSession,
   ConnectionMode,
@@ -47,7 +42,7 @@ interface InstancesViewProps {
   onClearTraces: () => void;
 }
 
-type SubPanel = 'connections' | 'react-native' | 'rpc-log';
+type SubPanel = 'connections' | 'mobile-app' | 'rpc-log';
 
 export const InstancesView: React.FC<InstancesViewProps> = ({
   profiles,
@@ -96,22 +91,6 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
     });
   }, [profiles, profileSearch, profileModeFilter]);
 
-  // React Native Exporter state
-  const rnFiles = useMemo(
-    () =>
-      generateReactNativeProject(
-        profiles,
-        typeof window !== 'undefined' ? window.location.origin : ''
-      ),
-    [profiles]
-  );
-  const [selectedRnFile, setSelectedRnFile] = useState<string>('App.tsx');
-  const [copiedPath, setCopiedPath] = useState<string | null>(null);
-  const [downloadingZip, setDownloadingZip] = useState(false);
-
-  const activeRnFile =
-    rnFiles.find((f) => f.path === selectedRnFile) || rnFiles[0];
-
   async function handleCreateAndConnect(e: React.FormEvent) {
     e.preventDefault();
     setFormError(null);
@@ -150,33 +129,15 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
     }
   }
 
-  async function handleCopyFile(path: string, content: string) {
-    await navigator.clipboard.writeText(content);
-    setCopiedPath(path);
-    setTimeout(() => setCopiedPath(null), 2000);
-  }
-
-  async function handleDownloadZip() {
-    setDownloadingZip(true);
-    try {
-      await downloadReactNativeZip(
-        profiles,
-        typeof window !== 'undefined' ? window.location.origin : ''
-      );
-    } finally {
-      setDownloadingZip(false);
-    }
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-            {t('Instancje LimeSurvey i kod React Native')}
+            {t('Instancje LimeSurvey')}
           </h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            {t('Łącz się bezpośrednio przez JSON-RPC z dowolnym serwerem lub wyeksportuj projekt Expo.')}
+            {t('Łącz się bezpośrednio przez JSON-RPC z dowolnym serwerem LimeSurvey.')}
           </p>
         </div>
 
@@ -192,12 +153,12 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => setSubPanel('react-native')}
-            className={`min-h-[40px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${subPanel === 'react-native'
+            onClick={() => setSubPanel('mobile-app')}
+            className={`min-h-[40px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${subPanel === 'mobile-app'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
           >
-            {t('Eksport React Native')}
+            {t('Aplikacja mobilna')}
           </button>
           <button
             type="button"
@@ -285,7 +246,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                         <strong>{t('Przekaźnik serwerowy')}</strong>{' '}{t('(poniżej na karcie profilu), aby połączyć się z poziomu serwera aplikacji.')}
                       </li>
                       <li>
-                        {t('Lub wyeksportować gotowy projekt')}{' '}<strong>React Native</strong>{' '}{t('w zakładce obok — aplikacja natywna na iOS/Android nie podlega CORS.')}
+                        {t('Lub użyć')}{' '}<strong>{t('aplikacji mobilnej')}</strong>{' '}{t('LimeControl (zakładka obok) — aplikacja natywna na iOS/Android nie podlega CORS.')}
                       </li>
                     </ul>
                   </div>
@@ -636,80 +597,49 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
         </div>
       )}
 
-      {subPanel === 'react-native' && (
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
-          <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-                <Code2 className="h-4 w-4" aria-hidden="true" />
-                <span>{t('Generator natywnej aplikacji mobilnej')}</span>
-              </div>
-              <h3 className="mt-1 text-base font-bold text-slate-900 dark:text-white">
-                {t('Projekt React Native (Expo + TypeScript)')}
-              </h3>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                {t('Zawiera zapisane profile instancji, natywnego klienta JSON-RPC bez blokad CORS oraz integrację z harmonogramem serwera.')}
-              </p>
-            </div>
-
-            <button
-              type="button"
-              disabled={downloadingZip}
-              onClick={() => {
-                void handleDownloadZip();
-              }}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 whitespace-nowrap shrink-0"
-            >
-              <Download className="h-4 w-4" aria-hidden="true" />
-              <span>{downloadingZip ? t('Pakowanie ZIP...') : t('Pobierz projekt ZIP')}</span>
-            </button>
+      {subPanel === 'mobile-app' && (
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6">
+          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+            <Smartphone className="h-4 w-4" aria-hidden="true" />
+            <span>{t('Oficjalna aplikacja mobilna')}</span>
           </div>
+          <h3 className="mt-1 text-base font-bold text-slate-900 dark:text-white">
+            {t('LimeControl na iOS i Androida')}
+          </h3>
+          <p className="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
+            {t('Natywna aplikacja jest bezpłatna i łączy się z serwerami LimeSurvey bez ograniczeń CORS przeglądarki. Pobierz ją ze sklepu lub zainstaluj wersję PWA na ekranie głównym.')}
+          </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12">
-            <div className="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-100 dark:border-slate-800 p-3 flex lg:flex-col gap-1.5 overflow-x-auto">
-              {rnFiles.map((file) => (
-                <button
-                  key={file.path}
-                  type="button"
-                  onClick={() => setSelectedRnFile(file.path)}
-                  className={`min-h-[44px] rounded-xl px-3.5 py-2 text-left font-mono text-xs transition-colors whitespace-nowrap shrink-0 ${activeRnFile.path === file.path
-                      ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 font-semibold'
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60'}`}
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            {[
+              { label: 'App Store', url: BRAND.appStoreUrl },
+              { label: 'Google Play', url: BRAND.playStoreUrl },
+            ].map((store) =>
+              store.url ? (
+                <a
+                  key={store.label}
+                  href={store.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-slate-900 dark:bg-white px-4 py-2.5 text-xs font-semibold text-white dark:text-slate-900 hover:opacity-90"
                 >
-                  {file.path}
-                </button>
-              ))}
-            </div>
-
-            <div className="lg:col-span-8 flex flex-col">
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40">
-                <span className="font-mono text-xs font-medium text-slate-700 dark:text-slate-300">
-                  {activeRnFile.path}
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  <span>{store.label}</span>
+                </a>
+              ) : (
+                <span
+                  key={store.label}
+                  aria-disabled="true"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 px-4 py-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400"
+                >
+                  <span>{store.label}</span>
+                  <span className="rounded-md bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[10px] uppercase tracking-wide">
+                    {t('Wkrótce')}
+                  </span>
                 </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    void handleCopyFile(activeRnFile.path, activeRnFile.content);
-                  }}
-                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-3 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200/70 dark:hover:bg-slate-800"
-                >
-                  {copiedPath === activeRnFile.path ? (
-                    <>
-                      <Check className="h-3.5 w-3.5 text-emerald-600" />
-                      <span>{t('Skopiowano')}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3.5 w-3.5" />
-                      <span>{t('Kopiuj kod')}</span>
-                    </>
-                  )}
-                </button>
-              </div>
-              <pre className="p-4 text-xs font-mono text-slate-800 dark:text-slate-200 overflow-x-auto max-h-[460px] leading-relaxed bg-slate-50/40 dark:bg-slate-950/70">
-                <code>{activeRnFile.content}</code>
-              </pre>
-            </div>
+              )
+            )}
+            <PWAInstallButton />
           </div>
         </div>
       )}

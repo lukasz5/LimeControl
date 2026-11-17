@@ -2,7 +2,7 @@
 
 > 🇬🇧 [English version (README.en.md)](./README.en.md)
 
-Mobilna aplikacja **Progressive Web App (PWA)** oraz **eksporter projektu React Native (Expo)** umożliwiające zarządzanie dowolną instancją **LimeSurvey** za pomocą oficjalnego interfejsu **RemoteControl 2 API** (`remotecontrol_handle` JSON-RPC).
+Mobilna aplikacja **Progressive Web App (PWA)** (oraz oficjalna aplikacja na iOS i Androida) umożliwiająca zarządzanie dowolną instancją **LimeSurvey** za pomocą oficjalnego interfejsu **RemoteControl 2 API** (`remotecontrol_handle` JSON-RPC).
 
 Aplikacja pozwala łączyć się z wieloma serwerami LimeSurvey, aktywować i zamykać ankiety, planować automatyczne uruchamianie ankiet po stronie serwera, analizować statystyki na wykresach, zarządzać uczestnikami (tokenami) wraz z edycją szablonów wiadomości e-mail oraz eksportować wyniki.
 
@@ -35,10 +35,10 @@ Aplikacja pozwala łączyć się z wieloma serwerami LimeSurvey, aktywować i za
 - Lista uczestników (`list_participants`) z filtrem tokenów niewykorzystanych oraz dodawaniem i usuwaniem respondentów (`add_participants`, `delete_participants`).
 - **Edytor szablonów wiadomości e-mail** (`get_language_properties`, `set_language_properties`) dla zaproszeń i przypomnień z przełącznikiem języków ankiety, szybkim wstawianiem zmiennych (`{FIRSTNAME}`, `{LASTNAME}`, `{EMAIL}`, `{TOKEN}`, `{SURVEYURL}`, `{OPTOUTURL}`, `{SURVEYNAME}`), podglądem wiadomości z podstawionymi danymi oraz akcją zapisu i natychmiastowej wysyłki (`invite_participants`, `remind_participants`).
 
-### 5. System powiadomień, PWA i eksport React Native
+### 5. System powiadomień, PWA i aplikacja mobilna
 - **Powiadomienia wewnątrz aplikacji**: toasty informujące w czasie rzeczywistym o zakończeniu lub błędzie zaplanowanych zadań harmonogramu oraz o błędach komunikacji z API LimeSurvey.
 - **PWA**: manifest aplikacji, ikony `192x192`, `512x512`, `maskable` oraz `apple-touch-icon.png`, obsługa trybu offline (`OfflineIndicator`) i przycisk instalacji w interfejsie (`PWAInstallButton`).
-- **Eksporter React Native (Expo)**: generuje gotowy projekt TypeScript (`App.tsx`, klient `limeSurveyRpc.ts`, magazyn `AsyncStorage`, `package.json`, `app.json`) do pobrania jako archiwum ZIP — w aplikacji natywnej zapytania nie podlegają ograniczeniom CORS przeglądarki.
+- **Oficjalna aplikacja mobilna**: zakładka *Instancje → Aplikacja mobilna* kieruje do bezpłatnej aplikacji LimeControl w App Store i Google Play (linki ustawiane przez `VITE_APP_STORE_URL` i `VITE_PLAY_STORE_URL`). W aplikacji natywnej zapytania nie podlegają ograniczeniom CORS przeglądarki.
 
 ---
 
@@ -93,8 +93,8 @@ Aby połączyć aplikację **LimeControl** z własnym serwerem LimeSurvey (wersj
     ```
 - **Tryb przekaźnika serwerowego (`/api/rpc-relay`)**:
   - Jeśli nie masz dostępu do konfiguracji nagłówków CORS na serwerze LimeSurvey, w formularzu profilu w zakładce **Instancje** wybierz tryb **Przekaźnik serwerowy**. Zapytania JSON-RPC zostaną przekazane przez lokalny backend Express.
-- **Aplikacja natywna React Native (Expo)**:
-  - Wyeksportowany projekt mobilny uruchamiany na iOS/Androidzie nie podlega ograniczeniom CORS przeglądarki i łączy się bezpośrednio z każdym serwerem LimeSurvey.
+- **Oficjalna aplikacja mobilna LimeControl**:
+  - Aplikacja na iOS/Androida (App Store, Google Play) nie podlega ograniczeniom CORS przeglądarki i łączy się bezpośrednio z każdym serwerem LimeSurvey.
 
 ### 4. Specyfika LimeSurvey 7.x
 - W formularzu profilu wybierz wersję **LimeSurvey 7.x (daty UTC + nowe kody błędów)** — aplikacja automatycznie przeliczy daty `startdate`/`expires` oraz zadania harmonogramu do formatu **UTC**, obsłuży nowe kody błędów RemoteControl 2 i umożliwi podgląd nowej struktury pól przez `get_fieldmap`.
