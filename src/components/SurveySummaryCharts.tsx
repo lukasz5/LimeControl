@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { BarChart3, GitCompareArrows } from 'lucide-react';
 import type { SurveySummary } from '../types/limesurvey';
+import { t } from '../i18n';
 
 interface SurveySummaryChartsProps {
   surveyTitle?: string;
@@ -74,10 +75,10 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
         <div className="flex items-center gap-2 text-slate-900 dark:text-white">
           <BarChart3 className="h-4 w-4 text-slate-400" aria-hidden="true" />
-          <h4 className="text-sm font-bold">Wizualizacja statystyk (get_summary)</h4>
+          <h4 className="text-sm font-bold">{t('Wizualizacja statystyk (get_summary)')}</h4>
         </div>
         <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-          Wykresy odpowiedzi i statusów uczestników są dostępne po aktywowaniu ankiety w LimeSurvey.
+          {t('Wykresy odpowiedzi i statusów uczestników są dostępne po aktywowaniu ankiety w LimeSurvey.')}
         </p>
       </div>
     );
@@ -88,10 +89,10 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
         <div className="flex items-center gap-2 text-slate-900 dark:text-white">
           <BarChart3 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
-          <h4 className="text-sm font-bold">Wizualizacja statystyk (get_summary)</h4>
+          <h4 className="text-sm font-bold">{t('Wizualizacja statystyk (get_summary)')}</h4>
         </div>
         <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-          Ładowanie danych do wykresu...
+          {t('Ładowanie danych do wykresu...')}
         </p>
       </div>
     );
@@ -106,9 +107,9 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
   const fullResponses = toNum(summary.full_responses) || completed + incomplete;
 
   const responseData: ChartDatum[] = [
-    { name: 'Pełne', value: completed, color: '#059669' },
-    { name: 'Niepełne', value: incomplete, color: '#D97706' },
-    { name: 'Łącznie', value: fullResponses, color: '#475569' },
+    { name: t('Pełne'), value: completed, color: '#1F7A3E' },
+    { name: t('Niepełne'), value: incomplete, color: '#D97706' },
+    { name: t('Łącznie'), value: fullResponses, color: '#475569' },
   ];
 
   const hasTokens = summary.token_count !== undefined;
@@ -124,17 +125,17 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
 
   const participantData: ChartDatum[] = hasTokens
     ? [
-        { name: 'Łącznie', value: tokenCount, color: '#334155' },
-        { name: 'Wysłane', value: tokenSent, color: '#0284C7' },
-        { name: 'Ukończone', value: tokenCompleted, color: '#059669' },
-        { name: 'Oczekujące', value: tokenPending, color: '#D97706' },
-        { name: 'Wypisane', value: tokenOptedOut, color: '#E11D48' },
+        { name: t('Łącznie'), value: tokenCount, color: '#334155' },
+        { name: t('Wysłane'), value: tokenSent, color: '#0284C7' },
+        { name: t('Ukończone'), value: tokenCompleted, color: '#1F7A3E' },
+        { name: t('Oczekujące'), value: tokenPending, color: '#D97706' },
+        { name: t('Wypisane'), value: tokenOptedOut, color: '#E11D48' },
       ]
     : [];
 
   return (
     <section
-      aria-label="Wizualizacja statystyk ankiety"
+      aria-label={t('Wizualizacja statystyk ankiety')}
       className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -142,7 +143,7 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
           <div className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
             <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-              Wizualizacja statystyk
+              {t('Wizualizacja statystyk')}
             </h4>
           </div>
           {surveyTitle && (
@@ -154,7 +155,7 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
-            Źródło: get_summary
+            {t('Źródło: get_summary')}
           </span>
           {onCompareWithAnother && (
             <button
@@ -163,7 +164,7 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
               className="min-h-[36px] inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
             >
               <GitCompareArrows className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>Porównaj</span>
+              <span>{t('Porównaj')}</span>
             </button>
           )}
         </div>
@@ -175,10 +176,10 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-slate-700 dark:text-slate-300">
-              Liczba odpowiedzi
+              {t('Liczba odpowiedzi')}
             </span>
             <span className="font-mono text-slate-500 dark:text-slate-400 tabular-nums">
-              Suma: {fullResponses}
+              {t('Suma:')}{' '}{fullResponses}
             </span>
           </div>
           <div className="h-48 w-full">
@@ -222,11 +223,11 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-slate-700 dark:text-slate-300">
-              Status uczestników
+              {t('Status uczestników')}
             </span>
             {hasTokens && (
               <span className="font-mono text-slate-500 dark:text-slate-400 tabular-nums">
-                Tokeny: {tokenCount}
+                {t('Tokeny:')}{' '}{tokenCount}
               </span>
             )}
           </div>
@@ -274,7 +275,7 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
             </div>
           ) : (
             <div className="flex h-48 items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 p-4 text-center text-xs text-slate-500 dark:text-slate-400">
-              Ankieta jest otwarta — tabela uczestników (tokenów) nie została aktywowana.
+              {t('Ankieta jest otwarta — tabela uczestników (tokenów) nie została aktywowana.')}
             </div>
           )}
         </div>

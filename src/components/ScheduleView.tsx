@@ -21,6 +21,7 @@ import type {
   ScheduleJob,
 } from '../types/limesurvey';
 import { useNotifications } from './NotificationProvider';
+import { locale, t } from '../i18n';
 
 interface ScheduleViewProps {
   activeSession: ActiveSession | null;
@@ -107,26 +108,26 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     setSuccessMsg(null);
 
     if (!activeSession) {
-      setError('Najpierw połącz się z instancją LimeSurvey w zakładce Instancje.');
+      setError(t('Najpierw połącz się z instancją LimeSurvey w zakładce Instancje.'));
       return;
     }
 
     const sid = Number(surveyIdInput);
     if (!sid || Number.isNaN(sid)) {
-      setError('Wybierz ankietę lub wpisz prawidłowe ID ankiety (SID).');
+      setError(t('Wybierz ankietę lub wpisz prawidłowe ID ankiety (SID).'));
       return;
     }
 
     if (!password) {
       setError(
-        'Podaj hasło administratora — harmonogram serwera potrzebuje go, aby uwierzytelnić sesję o zaplanowanej godzinie.'
+        t('Podaj hasło administratora — harmonogram serwera potrzebuje go, aby uwierzytelnić sesję o zaplanowanej godzinie.')
       );
       return;
     }
 
     const scheduledDate = new Date(scheduledAt);
     if (Number.isNaN(scheduledDate.getTime())) {
-      setError('Podaj prawidłową datę i godzinę aktywacji.');
+      setError(t('Podaj prawidłową datę i godzinę aktywacji.'));
       return;
     }
 
@@ -134,7 +135,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     try {
       const job = await createSchedule({
         surveyId: sid,
-        surveyTitle: selectedSurvey?.surveyls_title || `Ankieta #${sid}`,
+        surveyTitle: selectedSurvey?.surveyls_title || t('Ankieta #{0}', sid),
         instanceName: activeSession.profileName,
         rpcEndpoint: activeSession.rpcEndpoint,
         username: activeSession.username,
@@ -150,12 +151,12 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
 
       setJobs((prev) => [job, ...prev]);
       setSuccessMsg(
-        `Zaplanowano automatyczne wywołanie activate_survey dla ankiety #${sid}.`
+        t('Zaplanowano automatyczne wywołanie activate_survey dla ankiety #{0}.', sid)
       );
       notify({
         type: 'info',
-        title: 'Dodano zadanie do harmonogramu',
-        message: `Aktywacja ankiety #${sid} zaplanowana na ${scheduledDate.toLocaleString('pl-PL')}.`,
+        title: t('Dodano zadanie do harmonogramu'),
+        message: t('Aktywacja ankiety #{0} zaplanowana na {1}.', sid, scheduledDate.toLocaleString(locale())),
         dedupeKey: `schedule:create:${job.id}`,
       });
     } catch (err) {
@@ -163,7 +164,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       setError(msg);
       notify({
         type: 'error',
-        title: 'Błąd planowania harmonogramu',
+        title: t('Błąd planowania harmonogramu'),
         message: msg,
       });
     } finally {
@@ -180,14 +181,14 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       if (updated.status === 'completed') {
         notify({
           type: 'success',
-          title: 'Zadanie wykonane pomyślnie',
-          message: `Ankieta #${updated.surveyId} (${updated.surveyTitle}) została aktywowana.`,
+          title: t('Zadanie wykonane pomyślnie'),
+          message: t('Ankieta #{0} ({1}) została aktywowana.', updated.surveyId, updated.surveyTitle),
           dedupeKey: `job:${updated.id}:completed`,
         });
       } else if (updated.status === 'failed') {
         notify({
           type: 'error',
-          title: `Błąd wykonania zadania (#${updated.surveyId})`,
+          title: t('Błąd wykonania zadania (#{0})', updated.surveyId),
           message: updated.resultMessage,
           dedupeKey: `job:${updated.id}:failed`,
         });
@@ -198,7 +199,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       setError(msg);
       notify({
         type: 'error',
-        title: 'Błąd uruchamiania zadania',
+        title: t('Błąd uruchamiania zadania'),
         message: msg,
       });
     } finally {
@@ -214,15 +215,15 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       setJobs((prev) => prev.map((j) => (j.id === jobId ? updated : j)));
       notify({
         type: 'info',
-        title: 'Anulowano zadanie harmonogramu',
-        message: `Ankieta #${updated.surveyId} nie zostanie automatycznie aktywowana.`,
+        title: t('Anulowano zadanie harmonogramu'),
+        message: t('Ankieta #{0} nie zostanie automatycznie aktywowana.', updated.surveyId),
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(msg);
       notify({
         type: 'error',
-        title: 'Błąd anulowania zadania',
+        title: t('Błąd anulowania zadania'),
         message: msg,
       });
     } finally {
@@ -249,7 +250,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     switch (status) {
       case 'scheduled':
         return {
-          label: 'Zaplanowane',
+          label: t('Zaplanowane'),
           className: 'text-amber-700 dark:text-amber-400',
         };
       case 'running':
@@ -259,17 +260,17 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
         };
       case 'completed':
         return {
-          label: 'Zakończone',
+          label: t('Zakończone'),
           className: 'text-emerald-700 dark:text-emerald-400',
         };
       case 'failed':
         return {
-          label: 'Błąd',
+          label: t('Błąd'),
           className: 'text-rose-700 dark:text-rose-400',
         };
       case 'cancelled':
         return {
-          label: 'Anulowane',
+          label: t('Anulowane'),
           className: 'text-slate-500 dark:text-slate-400',
         };
     }
@@ -280,10 +281,10 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-            Harmonogram aktywowania ankiet
+            {t('Harmonogram aktywowania ankiet')}
           </h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Serwer automatycznie wywoła <code className="font-mono">activate_survey</code> o wybranej godzinie — nawet po zamknięciu aplikacji na telefonie.
+            {t('Serwer automatycznie wywoła')}{' '}<code className="font-mono">activate_survey</code>{' '}{t('o wybranej godzinie — nawet po zamknięciu aplikacji na telefonie.')}
           </p>
         </div>
 
@@ -295,7 +296,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 self-start"
         >
           <RefreshCw className={`h-4 w-4 ${loadingJobs ? 'animate-spin' : ''}`} />
-          <span>Odśwież listę</span>
+          <span>{t('Odśwież listę')}</span>
         </button>
       </div>
 
@@ -319,30 +320,30 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           <div className="flex items-center gap-2">
             <CalendarClock className="h-5 w-5 text-emerald-600" aria-hidden="true" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Nowe zadanie aktywacji
+              {t('Nowe zadanie aktywacji')}
             </h3>
           </div>
 
           {!activeSession && (
             <div className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/70 dark:bg-amber-950/30 p-3 text-xs text-amber-900 dark:text-amber-200">
-              Połącz się z instancją LimeSurvey, aby wybrać ankietę z listy i zaplanować zadanie.
+              {t('Połącz się z instancją LimeSurvey, aby wybrać ankietę z listy i zaplanować zadanie.')}
             </div>
           )}
 
           {surveys.length > 0 && (
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Wybierz ankietę ({inactiveSurveys.length} nieaktywnych)
+                {t('Wybierz ankietę (')}{inactiveSurveys.length}{' '}{t('nieaktywnych)')}
               </label>
               <select
                 value={surveyIdInput}
                 onChange={(e) => setSurveyIdInput(e.target.value)}
                 className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 text-xs font-medium text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
               >
-                <option value="">-- Wybierz ankietę --</option>
+                <option value="">{t('-- Wybierz ankietę --')}</option>
                 {surveys.map((s) => (
                   <option key={s.sid} value={String(s.sid)}>
-                    #{s.sid} · {s.surveyls_title} ({s.active === 'Y' ? 'Aktywna' : 'Nieaktywna'})
+                    #{s.sid} · {s.surveyls_title} ({s.active === 'Y' ? t('Aktywna') : t('Nieaktywna')})
                   </option>
                 ))}
               </select>
@@ -351,14 +352,14 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              ID ankiety (SID)
+              {t('ID ankiety (SID)')}
             </label>
             <input
               type="number"
               required
               value={surveyIdInput}
               onChange={(e) => setSurveyIdInput(e.target.value)}
-              placeholder="np. 482910"
+              placeholder={t('np. 482910')}
               className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 font-mono text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
             />
           </div>
@@ -366,7 +367,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Data i godzina aktywacji
+                {t('Data i godzina aktywacji')}
               </label>
               <input
                 type="datetime-local"
@@ -379,7 +380,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Auto-wygaśnięcie (opcjonalne)
+                {t('Auto-wygaśnięcie (opcjonalne)')}
               </label>
               <input
                 type="datetime-local"
@@ -392,14 +393,14 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Hasło konta LimeSurvey dla zadania
+              {t('Hasło konta LimeSurvey dla zadania')}
             </label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Hasło sesji RPC"
+              placeholder={t('Hasło sesji RPC')}
               className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
             />
           </div>
@@ -412,7 +413,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                 onChange={(e) => setActivateTokens(e.target.checked)}
                 className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
               />
-              <span>Uruchom także tabelę uczestników (activate_tokens)</span>
+              <span>{t('Uruchom także tabelę uczestników (activate_tokens)')}</span>
             </label>
 
             <label className="flex min-h-[44px] items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
@@ -422,7 +423,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                 onChange={(e) => setClearCreds(e.target.checked)}
                 className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
               />
-              <span>Usuń hasło z kolejki natychmiast po wykonaniu zadania</span>
+              <span>{t('Usuń hasło z kolejki natychmiast po wykonaniu zadania')}</span>
             </label>
           </div>
 
@@ -431,23 +432,23 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
             disabled={submitting || !activeSession}
             className="w-full min-h-[48px] rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
           >
-            {submitting ? 'Zapisywanie...' : 'Zaplanuj aktywację na serwerze'}
+            {submitting ? 'Zapisywanie...' : t('Zaplanuj aktywację na serwerze')}
           </button>
         </form>
 
         <div className="lg:col-span-7 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
           <div className="px-5 py-4 flex items-center justify-between">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-              Kolejka zadań serwera ({jobs.length})
+              {t('Kolejka zadań serwera (')}{jobs.length})
             </h3>
             <span className="text-xs text-slate-500 dark:text-slate-400">
-              Cykl sprawdzania: co 15 s
+              {t('Cykl sprawdzania: co 15 s')}
             </span>
           </div>
 
           {jobs.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-              Brak zaplanowanych zadań aktywacji. Utwórz pierwsze zadanie w formularzu obok.
+              {t('Brak zaplanowanych zadań aktywacji. Utwórz pierwsze zadanie w formularzu obok.')}
             </div>
           ) : (
             jobs.map((job) => {
@@ -474,9 +475,9 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                         {job.surveyTitle}
                       </h4>
                       <p className="font-mono text-xs text-slate-600 dark:text-slate-300 tabular-nums">
-                        Start: {new Date(job.scheduledAt).toLocaleString('pl-PL')}
+                        {t('Start:')}{' '}{new Date(job.scheduledAt).toLocaleString(locale())}
                         {job.expiresAt
-                          ? ` · Koniec: ${new Date(job.expiresAt).toLocaleString('pl-PL')}`
+                          ? ` · ${t('Koniec:')} ${new Date(job.expiresAt).toLocaleString(locale())}`
                           : ''}
                       </p>
                       <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -496,7 +497,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                             className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 whitespace-nowrap shrink-0"
                           >
                             <Play className="h-3.5 w-3.5" />
-                            <span>Uruchom teraz</span>
+                            <span>{t('Uruchom teraz')}</span>
                           </button>
                           <button
                             type="button"
@@ -506,7 +507,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                             }}
                             className="min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 px-3 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap shrink-0"
                           >
-                            Anuluj
+                            {t('Anuluj')}
                           </button>
                         </>
                       )}
@@ -517,7 +518,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                           onClick={() => {
                             void handleDelete(job.id);
                           }}
-                          aria-label="Usuń zadanie z historii"
+                          aria-label={t('Usuń zadanie z historii')}
                           className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-rose-600"
                         >
                           <Trash2 className="h-4 w-4" />

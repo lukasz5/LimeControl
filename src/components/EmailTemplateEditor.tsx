@@ -17,6 +17,7 @@ import type {
   LimeSurveyItem,
   ParticipantItem,
 } from '../types/limesurvey';
+import { t, useLang } from '../i18n';
 
 interface EmailTemplateEditorProps {
   activeSession: ActiveSession;
@@ -138,7 +139,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
       );
 
       setSurveyTitle(
-        String(langProps.surveyls_title || survey?.surveyls_title || `Ankieta #${surveyId}`)
+        String(langProps.surveyls_title || survey?.surveyls_title || t('Ankieta #{0}', surveyId))
       );
       setInviteSubj(String(langProps.surveyls_email_invite_subj ?? ''));
       setInviteBody(String(langProps.surveyls_email_invite ?? ''));
@@ -151,7 +152,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
       setError(
         err instanceof Error
           ? err.message
-          : 'Nie udało się pobrać szablonów wiadomości e-mail z LimeSurvey.'
+          : t('Nie udało się pobrać szablonów wiadomości e-mail z LimeSurvey.')
       );
     } finally {
       setLoading(false);
@@ -195,6 +196,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
     });
   }
 
+  const lang = useLang();
   const previewData = useMemo(() => {
     const first =
       sampleParticipant?.participant_info?.firstname ||
@@ -222,15 +224,15 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
         .replace(/\{LASTNAME\}/gi, last)
         .replace(/\{EMAIL\}/gi, email)
         .replace(/\{TOKEN\}/gi, token)
-        .replace(/\{SURVEYNAME\}/gi, surveyTitle || `Ankieta #${surveyId}`)
+        .replace(/\{SURVEYNAME\}/gi, surveyTitle || t('Ankieta #{0}', surveyId))
         .replace(/\{SURVEYURL\}/gi, surveyUrl)
         .replace(/\{OPTOUTURL\}/gi, optoutUrl)
         .replace(/\{ADMINNAME\}/gi, activeSession.username);
 
     return {
       recipientLabel: `${first} ${last} <${email}>`,
-      subject: replaceTokens(currentSubj || '(brak tematu)'),
-      htmlBody: formatPreviewBody(replaceTokens(currentBody || '(pusta treść)')),
+      subject: replaceTokens(currentSubj || t('(brak tematu)')),
+      htmlBody: formatPreviewBody(replaceTokens(currentBody || t('(pusta treść)'))),
     };
   }, [
     sampleParticipant,
@@ -240,6 +242,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
     surveyTitle,
     currentSubj,
     currentBody,
+    lang,
   ]);
 
   async function saveTemplateOnly(): Promise<boolean> {
@@ -267,16 +270,14 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
         activeSession.connectionMode
       );
       setStatusMsg(
-        `Zapisano szablon ${
-          templateKind === 'invite' ? 'zaproszenia' : 'przypomnienia'
-        } w LimeSurvey (${selectedLang || 'język bazowy'}).`
+        t('Zapisano szablon {0} w LimeSurvey ({1}).', templateKind === 'invite' ? t('zaproszenia') : t('przypomnienia'), selectedLang || t('język bazowy'))
       );
       return true;
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : 'Nie udało się zapisać szablonu w LimeSurvey.'
+          : t('Nie udało się zapisać szablonu w LimeSurvey.')
       );
       return false;
     } finally {
@@ -301,11 +302,11 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
           <div className="flex items-center gap-2">
             <Mail className="h-4 w-4 text-emerald-600" aria-hidden="true" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Edytor szablonów wiadomości e-mail
+              {t('Edytor szablonów wiadomości e-mail')}
             </h3>
           </div>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-            Pobierz, edytuj i podejrzyj treść przed wysyłką (metody{' '}
+            {t('Pobierz, edytuj i podejrzyj treść przed wysyłką (metody')}{' '}
             <code className="font-mono">get_language_properties</code> /{' '}
             <code className="font-mono">set_language_properties</code>).
           </p>
@@ -320,12 +321,12 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
                 setSelectedLang(nextLang);
                 void loadTemplates(nextLang);
               }}
-              aria-label="Język szablonu"
+              aria-label={t('Język szablonu')}
               className="min-h-[40px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 font-mono text-xs font-semibold text-slate-900 dark:text-white"
             >
               {languages.map((lang) => (
                 <option key={lang} value={lang}>
-                  Język: {lang}
+                  {t('Język:')}{' '}{lang}
                 </option>
               ))}
             </select>
@@ -340,7 +341,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
             className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 px-3 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
           >
             <RotateCcw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Pobierz z serwera</span>
+            <span>{t('Pobierz z serwera')}</span>
           </button>
         </div>
       </div>
@@ -350,24 +351,20 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
           <button
             type="button"
             onClick={() => setTemplateKind('invite')}
-            className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-              templateKind === 'invite'
+            className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${templateKind === 'invite'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
+                : 'text-slate-600 dark:text-slate-400'}`}
           >
-            Zaproszenie (invite)
+            {t('Zaproszenie (invite)')}
           </button>
           <button
             type="button"
             onClick={() => setTemplateKind('remind')}
-            className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-              templateKind === 'remind'
+            className={`min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${templateKind === 'remind'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
+                : 'text-slate-600 dark:text-slate-400'}`}
           >
-            Przypomnienie (remind)
+            {t('Przypomnienie (remind)')}
           </button>
         </div>
 
@@ -375,26 +372,22 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
           <button
             type="button"
             onClick={() => setMode('edit')}
-            className={`inline-flex items-center gap-1.5 min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-              mode === 'edit'
+            className={`inline-flex items-center gap-1.5 min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${mode === 'edit'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
+                : 'text-slate-600 dark:text-slate-400'}`}
           >
             <Pencil className="h-3.5 w-3.5" />
-            <span>Edycja</span>
+            <span>{t('Edycja')}</span>
           </button>
           <button
             type="button"
             onClick={() => setMode('preview')}
-            className={`inline-flex items-center gap-1.5 min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-              mode === 'preview'
+            className={`inline-flex items-center gap-1.5 min-h-[38px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap ${mode === 'preview'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
+                : 'text-slate-600 dark:text-slate-400'}`}
           >
             <Eye className="h-3.5 w-3.5" />
-            <span>Podgląd wiadomości</span>
+            <span>{t('Podgląd wiadomości')}</span>
           </button>
         </div>
       </div>
@@ -413,19 +406,19 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
 
       {loading ? (
         <div className="py-10 text-center text-xs text-slate-500 dark:text-slate-400">
-          Wczytywanie szablonów z instancji LimeSurvey...
+          {t('Wczytywanie szablonów z instancji LimeSurvey...')}
         </div>
       ) : mode === 'edit' ? (
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Temat wiadomości ({templateKind === 'invite' ? 'surveyls_email_invite_subj' : 'surveyls_email_remind_subj'})
+              {t('Temat wiadomości (')}{templateKind === 'invite' ? 'surveyls_email_invite_subj' : 'surveyls_email_remind_subj'})
             </label>
             <input
               type="text"
               value={currentSubj}
               onChange={(e) => setCurrentSubj(e.target.value)}
-              placeholder="Zaproszenie do udziału w badaniu: {SURVEYNAME}"
+              placeholder={t('Zaproszenie do udziału w badaniu: {SURVEYNAME}')}
               className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
             />
           </div>
@@ -433,10 +426,10 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Wstaw zmienne LimeSurvey
+                {t('Wstaw zmienne LimeSurvey')}
               </label>
               <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                Dotknij, aby wstawić w miejscu kursora
+                {t('Dotknij, aby wstawić w miejscu kursora')}
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -447,7 +440,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
                   onClick={() => insertPlaceholder(p.token)}
                   className="min-h-[36px] rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-2.5 font-mono text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors"
                 >
-                  {p.token} · {p.label}
+                  {p.token} · {t(p.label)}
                 </button>
               ))}
             </div>
@@ -455,14 +448,14 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Treść wiadomości ({templateKind === 'invite' ? 'surveyls_email_invite' : 'surveyls_email_remind'})
+              {t('Treść wiadomości (')}{templateKind === 'invite' ? 'surveyls_email_invite' : 'surveyls_email_remind'})
             </label>
             <textarea
               ref={bodyTextareaRef}
               rows={9}
               value={currentBody}
               onChange={(e) => setCurrentBody(e.target.value)}
-              placeholder="Szanowny/a {FIRSTNAME} {LASTNAME}, zapraszamy do wypełnienia ankiety: {SURVEYURL}"
+              placeholder={t('Szanowny/a {FIRSTNAME} {LASTNAME}, zapraszamy do wypełnienia ankiety: {SURVEYURL}')}
               className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-3.5 font-mono text-xs leading-relaxed text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
             />
           </div>
@@ -471,13 +464,13 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
         <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 overflow-hidden">
           <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 space-y-1 bg-white dark:bg-slate-900">
             <div className="text-xs text-slate-500 dark:text-slate-400">
-              Przykładowy odbiorca:{' '}
+              {t('Przykładowy odbiorca:')}{' '}
               <span className="font-mono text-slate-800 dark:text-slate-200">
                 {previewData.recipientLabel}
               </span>
             </div>
             <div className="text-sm font-bold text-slate-900 dark:text-white">
-              Temat: {previewData.subject}
+              {t('Temat:')}{' '}{previewData.subject}
             </div>
           </div>
           <div
@@ -497,7 +490,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
           className="min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
         >
           <Save className="h-4 w-4" />
-          <span>{saving ? 'Zapisywanie...' : 'Zapisz szablon w LimeSurvey'}</span>
+          <span>{saving ? 'Zapisywanie...' : t('Zapisz szablon w LimeSurvey')}</span>
         </button>
 
         <button
@@ -511,16 +504,18 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
           <Send className="h-4 w-4" />
           <span>
             {templateKind === 'invite'
-              ? `Zapisz i wyślij zaproszenia (${
+              ? t(
+                  'Zapisz i wyślij zaproszenia ({0})',
                   selectedTidsCount > 0
-                    ? `zaznaczeni: ${selectedTidsCount}`
-                    : 'kwalifikujący się'
-                })`
-              : `Zapisz i wyślij przypomnienia (${
+                    ? t('zaznaczeni: {0}', selectedTidsCount)
+                    : t('kwalifikujący się')
+                )
+              : t(
+                  'Zapisz i wyślij przypomnienia ({0})',
                   selectedTidsCount > 0
-                    ? `zaznaczeni: ${selectedTidsCount}`
-                    : 'oczekujący'
-                })`}
+                    ? t('zaznaczeni: {0}', selectedTidsCount)
+                    : t('oczekujący')
+                )}
           </span>
         </button>
       </div>

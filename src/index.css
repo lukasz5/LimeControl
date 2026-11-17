@@ -1,6 +1,27 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Paleta marki LimeControl — nadpisuje skalę `emerald`, więc wszystkie
+   istniejące klasy emerald-* dziedziczą kolory brandu. */
+@theme {
+  --color-emerald-50: #f4fbe9;
+  --color-emerald-100: #e6f7cc;
+  --color-emerald-200: #cbeea0;
+  --color-emerald-300: #a3e635;
+  --color-emerald-400: #8bd42c;
+  --color-emerald-500: #4caf2a;
+  --color-emerald-600: #1f7a3e;
+  --color-emerald-700: #1b5e36;
+  --color-emerald-800: #154d2c;
+  --color-emerald-900: #0f3b22;
+  --color-emerald-950: #0a2615;
+
+  --color-brand-lime: #a3e635;
+  --color-brand-green: #4caf2a;
+  --color-brand-forest: #1b5e36;
+  --color-brand-ink: #0f2a1a;
+}
+
 @layer base {
   :root {
     --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;

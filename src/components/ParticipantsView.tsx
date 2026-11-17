@@ -25,6 +25,7 @@ import type {
   SurveySummary,
 } from '../types/limesurvey';
 import { EmailTemplateEditor } from './EmailTemplateEditor';
+import { t } from '../i18n';
 
 interface ParticipantsViewProps {
   activeSession: ActiveSession | null;
@@ -134,7 +135,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         activeSession.connectionMode
       );
       setTokensMissing(false);
-      setFeedback('Tabela uczestników (tokenów) została pomyślnie aktywowana.');
+      setFeedback(t('Tabela uczestników (tokenów) została pomyślnie aktywowana.'));
       await loadParticipantsData(Number(selectedSid));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -167,7 +168,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
       setFirstName('');
       setLastName('');
       setEmail('');
-      setFeedback('Dodano uczestnika i wygenerowano token.');
+      setFeedback(t('Dodano uczestnika i wygenerowano token.'));
       await loadParticipantsData(Number(selectedSid));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -189,7 +190,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         tids,
         activeSession.connectionMode
       );
-      setFeedback(`Wysłano zaproszenia: ${JSON.stringify(result)}`);
+      setFeedback(t('Wysłano zaproszenia: {0}', JSON.stringify(result)));
       await loadParticipantsData(Number(selectedSid));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -211,7 +212,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         tids,
         activeSession.connectionMode
       );
-      setFeedback(`Wysłano przypomnienia: ${JSON.stringify(result)}`);
+      setFeedback(t('Wysłano przypomnienia: {0}', JSON.stringify(result)));
       await loadParticipantsData(Number(selectedSid));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -232,7 +233,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         tids,
         activeSession.connectionMode
       );
-      setFeedback(`Usunięto ${tids.length} uczestników.`);
+      setFeedback(t('Usunięto {0} uczestników.', tids.length));
       await loadParticipantsData(Number(selectedSid));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -252,17 +253,17 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 text-center space-y-3">
         <Users className="mx-auto h-9 w-9 text-slate-400" aria-hidden="true" />
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-          Zarządzanie uczestnikami wymaga aktywnej sesji
+          {t('Zarządzanie uczestnikami wymaga aktywnej sesji')}
         </h2>
         <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-          Połącz się z instancją LimeSurvey, aby przeglądać tokeny, dodawać respondentów i wysyłać zaproszenia.
+          {t('Połącz się z instancją LimeSurvey, aby przeglądać tokeny, dodawać respondentów i wysyłać zaproszenia.')}
         </p>
         <button
           type="button"
           onClick={onGoToInstances}
           className="inline-flex min-h-[44px] items-center rounded-xl bg-emerald-600 px-5 text-xs font-semibold text-white hover:bg-emerald-700"
         >
-          Przejdź do połączeń
+          {t('Przejdź do połączeń')}
         </button>
       </div>
     );
@@ -273,11 +274,11 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex-1 max-w-xl">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-            Uczestnicy i tokeny
+            {t('Uczestnicy i tokeny')}
           </h2>
           <div className="mt-3">
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Ankieta docelowa
+              {t('Ankieta docelowa')}
             </label>
             <select
               value={selectedSid}
@@ -298,24 +299,20 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
             <button
               type="button"
               onClick={() => setSubTab('list')}
-              className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-                subTab === 'list'
+              className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${subTab === 'list'
                   ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
+                  : 'text-slate-600 dark:text-slate-400'}`}
             >
-              Lista ({participants.length})
+              {t('Lista (')}{participants.length})
             </button>
             <button
               type="button"
               onClick={() => setSubTab('email-template')}
-              className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-                subTab === 'email-template'
+              className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${subTab === 'email-template'
                   ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
+                  : 'text-slate-600 dark:text-slate-400'}`}
             >
-              Szablon e-mail
+              {t('Szablon e-mail')}
             </button>
           </div>
 
@@ -324,24 +321,20 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
               <button
                 type="button"
                 onClick={() => setUnusedOnly(false)}
-                className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-                  !unusedOnly
+                className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${!unusedOnly
                     ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400'
-                }`}
+                    : 'text-slate-600 dark:text-slate-400'}`}
               >
-                Wszyscy
+                {t('Wszyscy')}
               </button>
               <button
                 type="button"
                 onClick={() => setUnusedOnly(true)}
-                className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-                  unusedOnly
+                className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${unusedOnly
                     ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400'
-                }`}
+                    : 'text-slate-600 dark:text-slate-400'}`}
               >
-                Niewykorzystane
+                {t('Niewykorzystane')}
               </button>
             </div>
           )}
@@ -351,7 +344,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
             onClick={() => {
               if (selectedSid) void loadParticipantsData(Number(selectedSid));
             }}
-            aria-label="Odśwież uczestników"
+            aria-label={t('Odśwież uczestników')}
             className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -362,25 +355,25 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
       {summary && summary.token_count !== undefined && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
-            <div className="text-xs text-slate-500 dark:text-slate-400">Tokeny łącznie</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{t('Tokeny łącznie')}</div>
             <div className="mt-1 font-mono text-xl font-bold text-slate-900 dark:text-white tabular-nums">
               {summary.token_count ?? 0}
             </div>
           </div>
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
-            <div className="text-xs text-slate-500 dark:text-slate-400">Wysłane</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{t('Wysłane')}</div>
             <div className="mt-1 font-mono text-xl font-bold text-slate-900 dark:text-white tabular-nums">
               {summary.token_sent ?? 0}
             </div>
           </div>
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
-            <div className="text-xs text-slate-500 dark:text-slate-400">Ukończone</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{t('Ukończone')}</div>
             <div className="mt-1 font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
               {summary.token_completed ?? 0}
             </div>
           </div>
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
-            <div className="text-xs text-slate-500 dark:text-slate-400">Wypisane</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{t('Wypisane')}</div>
             <div className="mt-1 font-mono text-xl font-bold text-slate-900 dark:text-white tabular-nums">
               {summary.token_opted_out ?? 0}
             </div>
@@ -418,10 +411,10 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
       ) : tokensMissing ? (
         <div className="rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/70 dark:bg-amber-950/30 p-6 space-y-3">
           <h3 className="text-base font-bold text-slate-900 dark:text-white">
-            Tabela uczestników nie jest jeszcze aktywna
+            {t('Tabela uczestników nie jest jeszcze aktywna')}
           </h3>
           <p className="text-xs text-slate-600 dark:text-slate-300 max-w-xl">
-            Wybrana ankieta nie ma zainicjalizowanej tabeli tokenów w LimeSurvey. Możesz utworzyć ją jednym kliknięciem poprzez <code className="font-mono">activate_tokens</code>.
+            {t('Wybrana ankieta nie ma zainicjalizowanej tabeli tokenów w LimeSurvey. Możesz utworzyć ją jednym kliknięciem poprzez')}{' '}<code className="font-mono">activate_tokens</code>.
           </p>
           <button
             type="button"
@@ -431,7 +424,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
             }}
             className="min-h-[44px] rounded-xl bg-emerald-600 px-5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
           >
-            {submitting ? 'Aktywowanie...' : 'Aktywuj tabelę uczestników (activate_tokens)'}
+            {submitting ? 'Aktywowanie...' : t('Aktywuj tabelę uczestników (activate_tokens)')}
           </button>
         </div>
       ) : (
@@ -443,13 +436,13 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
             <div className="flex items-center gap-2">
               <UserPlus className="h-4 w-4 text-emerald-600" aria-hidden="true" />
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                Dodaj uczestnika (add_participants)
+                {t('Dodaj uczestnika (add_participants)')}
               </h3>
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Adres e-mail
+                {t('Adres e-mail')}
               </label>
               <input
                 type="email"
@@ -464,7 +457,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Imię
+                  {t('Imię')}
                 </label>
                 <input
                   type="text"
@@ -476,7 +469,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Nazwisko
+                  {t('Nazwisko')}
                 </label>
                 <input
                   type="text"
@@ -493,12 +486,12 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
               disabled={submitting || !selectedSid}
               className="w-full min-h-[44px] rounded-xl bg-emerald-600 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
             >
-              Dodaj i wygeneruj token
+              {t('Dodaj i wygeneruj token')}
             </button>
 
             <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
               <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Akcje zbiorcze ({selectedTids.length > 0 ? `zaznaczono ${selectedTids.length}` : 'wszyscy kwalifikujący się'})
+                {t('Akcje zbiorcze (')}{selectedTids.length > 0 ? t('zaznaczono {0}', selectedTids.length) : t('wszyscy kwalifikujący się')})
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <button
@@ -510,7 +503,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                   className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 px-3 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
                 >
                   <Mail className="h-3.5 w-3.5" />
-                  <span>Zaproś</span>
+                  <span>{t('Zaproś')}</span>
                 </button>
                 <button
                   type="button"
@@ -521,7 +514,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                   className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 px-3 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
                 >
                   <BellRing className="h-3.5 w-3.5" />
-                  <span>Przypomnij</span>
+                  <span>{t('Przypomnij')}</span>
                 </button>
               </div>
               <button
@@ -531,7 +524,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                 className="w-full inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/60 dark:bg-emerald-950/30 px-3 text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100/70 dark:hover:bg-emerald-950/50 disabled:opacity-50"
               >
                 <FileEdit className="h-3.5 w-3.5" />
-                <span>Edytuj i podejrzyj szablon e-mail</span>
+                <span>{t('Edytuj i podejrzyj szablon e-mail')}</span>
               </button>
               {selectedTids.length > 0 && (
                 <button
@@ -543,7 +536,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                   className="w-full inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 text-xs font-semibold text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
-                  <span>Usuń zaznaczonych ({selectedTids.length})</span>
+                  <span>{t('Usuń zaznaczonych (')}{selectedTids.length})</span>
                 </button>
               )}
             </div>
@@ -552,16 +545,16 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
           <div className="lg:col-span-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
             <div className="px-5 py-4 flex items-center justify-between">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                Lista uczestników ({participants.length})
+                {t('Lista uczestników (')}{participants.length})
               </h3>
               <span className="text-xs text-slate-500 dark:text-slate-400">
-                Limit strony: 100 rekordów
+                {t('Limit strony: 100 rekordów')}
               </span>
             </div>
 
             {participants.length === 0 ? (
               <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-                Brak uczestników na liście. Dodaj pierwszego uczestnika w formularzu obok.
+                {t('Brak uczestników na liście. Dodaj pierwszego uczestnika w formularzu obok.')}
               </div>
             ) : (
               participants.map((p) => {
@@ -573,7 +566,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                     p.participant_info?.lastname || p.lastname,
                   ]
                     .filter(Boolean)
-                    .join(' ') || 'Bez nazwy';
+                    .join(' ') || t('Bez nazwy');
                 const mail = p.participant_info?.email || p.email || '—';
                 const isCompleted = p.completed && p.completed !== 'N';
                 const isSent = p.sent && p.sent !== 'N';
@@ -587,11 +580,9 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
                       <span
-                        className={`h-5 w-5 rounded-md border flex items-center justify-center shrink-0 ${
-                          checked
+                        className={`h-5 w-5 rounded-md border flex items-center justify-center shrink-0 ${checked
                             ? 'bg-emerald-600 border-emerald-600 text-white'
-                            : 'border-slate-300 dark:border-slate-700'
-                        }`}
+                            : 'border-slate-300 dark:border-slate-700'}`}
                       >
                         {checked && <Check className="h-3.5 w-3.5" />}
                       </span>
@@ -605,12 +596,12 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                         <div className="mt-1 flex flex-wrap items-center gap-x-2 text-[11px] font-mono text-slate-500 dark:text-slate-400 tabular-nums">
                           <span>TID {p.tid}</span>
                           <span aria-hidden="true">·</span>
-                          <span>Token: {p.token || '—'}</span>
+                          <span>{t('Token:')}{' '}{p.token || '—'}</span>
                           <span aria-hidden="true">·</span>
-                          <span>{isSent ? `Wysłano: ${p.sent}` : 'Niewysłano'}</span>
+                          <span>{isSent ? t('Wysłano: {0}', p.sent) : t('Niewysłano')}</span>
                           <span aria-hidden="true">·</span>
                           <span className={isCompleted ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : ''}>
-                            {isCompleted ? `Ukończono: ${p.completed}` : 'Oczekuje'}
+                            {isCompleted ? t('Ukończono: {0}', p.completed) : t('Oczekuje')}
                           </span>
                         </div>
                       </div>

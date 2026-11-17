@@ -9,3 +9,9 @@ coverage/
 
 # Firebase client config (local only)
 firebase-applet-config.json
+
+# vite-plugin-pwa dev service worker
+dev-dist/
+
+# Motywy LimeSurvey — katalog roboczy builda (paczki trafiają do site/szablony)
+limesurvey-themes/dist/

@@ -9,6 +9,7 @@ import type {
   SurveyProperties,
   SurveySummary,
 } from '../types/limesurvey';
+import { t } from '../i18n';
 
 export class LimeSurveyRpcError extends Error {
   readonly isCorsOrNetwork: boolean;
@@ -37,7 +38,7 @@ export function normalizeRpcEndpoint(rawUrl: string): {
 } {
   let trimmed = rawUrl.trim();
   if (!trimmed) {
-    throw new LimeSurveyRpcError('Podaj adres URL instancji LimeSurvey.');
+    throw new LimeSurveyRpcError(t('Podaj adres URL instancji LimeSurvey.'));
   }
   if (!/^https?:\/\//i.test(trimmed)) {
     trimmed = `https://${trimmed}`;
@@ -170,7 +171,7 @@ export async function callLimeSurveyRpc<T = unknown>(
     const durationMs = Math.round(performance.now() - startedAt);
 
     if (!response.ok) {
-      let msg = `Serwer odpowiedział kodem HTTP ${response.status}`;
+      let msg = t('Serwer odpowiedział kodem HTTP {0}', response.status);
       try {
         const errJson = (await response.json()) as { error?: string };
         if (errJson?.error) msg = errJson.error;
@@ -260,7 +261,7 @@ export async function callLimeSurveyRpc<T = unknown>(
       (err instanceof Error &&
         /failed to fetch|networkerror|load failed|cors/i.test(err.message));
     const msg = isNetwork
-      ? 'Połączenie zablokowane przez przeglądarkę (najczęściej brak nagłówków CORS na serwerze LimeSurvey lub błędny URL).'
+      ? t('Połączenie zablokowane przez przeglądarkę (najczęściej brak nagłówków CORS na serwerze LimeSurvey lub błędny URL).')
       : err instanceof Error
         ? err.message
         : String(err);
@@ -295,7 +296,7 @@ export async function getSessionKey(
     mode
   );
   if (typeof result !== 'string' || !result) {
-    throw new LimeSurveyRpcError('Serwer nie zwrócił prawidłowego klucza sesji.');
+    throw new LimeSurveyRpcError(t('Serwer nie zwrócił prawidłowego klucza sesji.'));
   }
   return result;
 }
@@ -607,7 +608,7 @@ export async function exportResponses(
   );
 
   if (typeof base64 !== 'string') {
-    throw new LimeSurveyRpcError('Nieoczekiwany format odpowiedzi z export_responses.');
+    throw new LimeSurveyRpcError(t('Nieoczekiwany format odpowiedzi z export_responses.'));
   }
 
   const binaryStr = atob(base64);

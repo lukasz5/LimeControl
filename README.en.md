@@ -2,7 +2,7 @@
 
 > 🇵🇱 [Wersja polska (README.md)](./README.md)
 
-A mobile **Progressive Web App (PWA)** and **React Native (Expo) project exporter** for managing any **LimeSurvey** instance through the official **RemoteControl 2 API** (`remotecontrol_handle` JSON-RPC).
+A mobile **Progressive Web App (PWA)** (plus an official iOS and Android app) for managing any **LimeSurvey** instance through the official **RemoteControl 2 API** (`remotecontrol_handle` JSON-RPC).
 
 The application lets you connect to multiple LimeSurvey servers, activate and close surveys, schedule automated server-side survey activation, inspect response statistics with charts, manage participants (tokens) with an email template editor, and export survey results.
 
@@ -35,10 +35,10 @@ The application lets you connect to multiple LimeSurvey servers, activate and cl
 - Participant list (`list_participants`) with unused-token filtering plus adding and deleting respondents (`add_participants`, `delete_participants`).
 - **Email template editor** (`get_language_properties`, `set_language_properties`) for invitations and reminders with survey language switching, quick placeholder insertion (`{FIRSTNAME}`, `{LASTNAME}`, `{EMAIL}`, `{TOKEN}`, `{SURVEYURL}`, `{OPTOUTURL}`, `{SURVEYNAME}`), live message preview with sample data, and Save + Send actions (`invite_participants`, `remind_participants`).
 
-### 5. In-App Notifications, PWA & React Native Export
+### 5. In-App Notifications, PWA & Mobile App
 - **In-app notifications**: real-time toasts informing you about completed or failed scheduled jobs as well as LimeSurvey API communication errors.
 - **PWA**: Web App Manifest, `192x192`, `512x512`, `maskable`, and `apple-touch-icon.png` icons, offline indicator (`OfflineIndicator`), and an in-app install prompt (`PWAInstallButton`).
-- **React Native (Expo) Exporter**: generates a ready-to-run TypeScript project (`App.tsx`, `limeSurveyRpc.ts` client, `AsyncStorage` profile store, `package.json`, `app.json`) downloadable as a ZIP archive — native mobile requests are not restricted by browser CORS rules.
+- **Official mobile app**: the *Instances → Mobile app* tab links to the free LimeControl app on the App Store and Google Play (links set via `VITE_APP_STORE_URL` and `VITE_PLAY_STORE_URL`). Native requests are not restricted by browser CORS rules.
 
 ---
 
@@ -93,8 +93,8 @@ To connect **LimeControl** to your LimeSurvey server (versions **3.x / 5.x / 6.x
     ```
 - **Server Relay Mode (`/api/rpc-relay`)**:
   - If you cannot modify CORS headers on your LimeSurvey server, switch the profile connection mode to **Server Relay** in the **Instances** tab so JSON-RPC calls are proxied through the Express backend.
-- **Native React Native (Expo) App**:
-  - The exported mobile project runs natively on iOS/Android, is not subject to browser CORS restrictions, and connects directly to any LimeSurvey server.
+- **Official LimeControl mobile app**:
+  - The iOS/Android app (App Store, Google Play) is not subject to browser CORS restrictions and connects directly to any LimeSurvey server.
 
 ### 4. LimeSurvey 7.x Specifics
 - Select **LimeSurvey 7.x (UTC dates + new error codes)** in the instance profile — the app automatically converts `startdate`/`expires` and scheduled activation dates to **UTC**, parses explicit RemoteControl 2 error codes, and lets you inspect refactored field identifiers via `get_fieldmap`.

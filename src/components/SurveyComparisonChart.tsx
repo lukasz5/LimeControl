@@ -21,6 +21,7 @@ import type {
   LimeSurveyItem,
   SurveySummary,
 } from '../types/limesurvey';
+import { t } from '../i18n';
 
 interface SurveyComparisonChartProps {
   activeSession: ActiveSession;
@@ -79,7 +80,7 @@ const ComparisonTooltip: React.FC<ComparisonTooltipProps> = ({
         <div className="flex items-center justify-between gap-4">
           <span className="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
             <span className="h-2.5 w-2.5 rounded-sm bg-emerald-600 inline-block" />
-            <span>Ankieta A (#{surveyAId})</span>
+            <span>{t('Ankieta A (#')}{surveyAId})</span>
           </span>
           <span className="font-mono font-bold text-slate-900 dark:text-white tabular-nums">
             {row.a}
@@ -88,14 +89,14 @@ const ComparisonTooltip: React.FC<ComparisonTooltipProps> = ({
         <div className="flex items-center justify-between gap-4">
           <span className="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
             <span className="h-2.5 w-2.5 rounded-sm bg-sky-600 inline-block" />
-            <span>Ankieta B (#{surveyBId})</span>
+            <span>{t('Ankieta B (#')}{surveyBId})</span>
           </span>
           <span className="font-mono font-bold text-slate-900 dark:text-white tabular-nums">
             {row.b}
           </span>
         </div>
         <div className="pt-1 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4 text-[11px]">
-          <span className="text-slate-500 dark:text-slate-400">Różnica (A − B)</span>
+          <span className="text-slate-500 dark:text-slate-400">{t('Różnica (A − B)')}</span>
           <span className="font-mono font-semibold text-slate-700 dark:text-slate-200 tabular-nums">
             {diffText}
           </span>
@@ -189,7 +190,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
       if (survey.active !== 'Y') {
         return {
           summary: null,
-          error: `Ankieta #${survey.sid} jest nieaktywna — metoda get_summary działa wyłącznie dla aktywnych ankiet.`,
+          error: t('Ankieta #{0} jest nieaktywna — metoda get_summary działa wyłącznie dla aktywnych ankiet.', survey.sid),
         };
       }
       try {
@@ -207,7 +208,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
           error:
             err instanceof Error
               ? err.message
-              : `Nie udało się pobrać statystyk ankiety #${survey.sid}.`,
+              : t('Nie udało się pobrać statystyk ankiety #{0}.', survey.sid),
         };
       }
     };
@@ -272,17 +273,17 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
     const tokPendB = Math.max(0, tokCountB - tokCompB - tokOptB - tokInvB);
 
     const responseRows: ComparisonRow[] = [
-      { metric: 'Pełne', fullLabel: 'Pełne odpowiedzi', a: compA, b: compB },
-      { metric: 'Niepełne', fullLabel: 'Niepełne odpowiedzi', a: incA, b: incB },
-      { metric: 'Łącznie', fullLabel: 'Łącznie odpowiedzi', a: fullA, b: fullB },
+      { metric: t('Pełne'), fullLabel: t('Pełne odpowiedzi'), a: compA, b: compB },
+      { metric: t('Niepełne'), fullLabel: t('Niepełne odpowiedzi'), a: incA, b: incB },
+      { metric: t('Łącznie'), fullLabel: t('Łącznie odpowiedzi'), a: fullA, b: fullB },
     ];
 
     const tokenRows: ComparisonRow[] = [
-      { metric: 'Tokeny', fullLabel: 'Tokeny łącznie', a: tokCountA, b: tokCountB },
-      { metric: 'Wysłane', fullLabel: 'Zaproszenia wysłane', a: tokSentA, b: tokSentB },
-      { metric: 'Ukończ. tok.', fullLabel: 'Ukończone przez token', a: tokCompA, b: tokCompB },
-      { metric: 'Oczekujące', fullLabel: 'Oczekujące tokeny', a: tokPendA, b: tokPendB },
-      { metric: 'Wypisane', fullLabel: 'Wypisani uczestnicy', a: tokOptA, b: tokOptB },
+      { metric: t('Tokeny'), fullLabel: t('Tokeny łącznie'), a: tokCountA, b: tokCountB },
+      { metric: t('Wysłane'), fullLabel: t('Zaproszenia wysłane'), a: tokSentA, b: tokSentB },
+      { metric: t('Ukończ. tok.'), fullLabel: t('Ukończone przez token'), a: tokCompA, b: tokCompB },
+      { metric: t('Oczekujące'), fullLabel: t('Oczekujące tokeny'), a: tokPendA, b: tokPendB },
+      { metric: t('Wypisane'), fullLabel: t('Wypisani uczestnicy'), a: tokOptA, b: tokOptB },
     ];
 
     let rows: ComparisonRow[] = [];
@@ -307,7 +308,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
 
   return (
     <section
-      aria-label="Porównanie statystyk dwóch ankiet"
+      aria-label={t('Porównanie statystyk dwóch ankiet')}
       className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-5"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -315,11 +316,11 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
           <div className="flex items-center gap-2">
             <GitCompareArrows className="h-4 w-4 text-emerald-600" aria-hidden="true" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Porównanie statystyk dwóch ankiet
+              {t('Porównanie statystyk dwóch ankiet')}
             </h3>
           </div>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-            Zestawienie danych z get_summary obok siebie na jednym wykresie zbiorczym
+            {t('Zestawienie danych z get_summary obok siebie na jednym wykresie zbiorczym')}
           </p>
         </div>
 
@@ -331,14 +332,14 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 px-3 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Odśwież</span>
+            <span>{t('Odśwież')}</span>
           </button>
 
           {onClose && (
             <button
               type="button"
               onClick={onClose}
-              aria-label="Zamknij porównanie ankiet"
+              aria-label={t('Zamknij porównanie ankiet')}
               className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               <X className="h-4 w-4" />
@@ -355,7 +356,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
             className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
           >
             <span className="h-2.5 w-2.5 rounded-sm bg-emerald-600 inline-block shrink-0" />
-            <span>Ankieta A (seria zielona)</span>
+            <span>{t('Ankieta A (seria zielona)')}</span>
           </label>
           <select
             id="compare-survey-a"
@@ -365,8 +366,8 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
           >
             {surveys.map((s) => (
               <option key={s.sid} value={s.sid}>
-                SID {s.sid} · {truncateLabel(s.surveyls_title || `Ankieta #${s.sid}`, 42)}{' '}
-                ({s.active === 'Y' ? 'Aktywna' : 'Nieaktywna'})
+                SID {s.sid} · {truncateLabel(s.surveyls_title || t('Ankieta #{0}', s.sid), 42)}{' '}
+                ({s.active === 'Y' ? t('Aktywna') : t('Nieaktywna')})
               </option>
             ))}
           </select>
@@ -375,8 +376,8 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
         <button
           type="button"
           onClick={handleSwap}
-          aria-label="Zamień wybrane ankiety miejscami"
-          title="Zamień miejscami"
+          aria-label={t('Zamień wybrane ankiety miejscami')}
+          title={t('Zamień miejscami')}
           className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 self-end justify-self-start md:justify-self-center"
         >
           <ArrowLeftRight className="h-4 w-4" />
@@ -388,7 +389,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
             className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
           >
             <span className="h-2.5 w-2.5 rounded-sm bg-sky-600 inline-block shrink-0" />
-            <span>Ankieta B (seria niebieska)</span>
+            <span>{t('Ankieta B (seria niebieska)')}</span>
           </label>
           <select
             id="compare-survey-b"
@@ -398,8 +399,8 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
           >
             {surveys.map((s) => (
               <option key={s.sid} value={s.sid}>
-                SID {s.sid} · {truncateLabel(s.surveyls_title || `Ankieta #${s.sid}`, 42)}{' '}
-                ({s.active === 'Y' ? 'Aktywna' : 'Nieaktywna'})
+                SID {s.sid} · {truncateLabel(s.surveyls_title || t('Ankieta #{0}', s.sid), 42)}{' '}
+                ({s.active === 'Y' ? t('Aktywna') : t('Nieaktywna')})
               </option>
             ))}
           </select>
@@ -412,35 +413,29 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
           <button
             type="button"
             onClick={() => setMetricScope('all')}
-            className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-              metricScope === 'all'
+            className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${metricScope === 'all'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
+                : 'text-slate-600 dark:text-slate-400'}`}
           >
-            Wszystkie
+            {t('Wszystkie')}
           </button>
           <button
             type="button"
             onClick={() => setMetricScope('responses')}
-            className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-              metricScope === 'responses'
+            className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${metricScope === 'responses'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
+                : 'text-slate-600 dark:text-slate-400'}`}
           >
-            Odpowiedzi
+            {t('Odpowiedzi')}
           </button>
           <button
             type="button"
             onClick={() => setMetricScope('tokens')}
-            className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${
-              metricScope === 'tokens'
+            className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-colors whitespace-nowrap ${metricScope === 'tokens'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400'
-            }`}
+                : 'text-slate-600 dark:text-slate-400'}`}
           >
-            Uczestnicy
+            {t('Uczestnicy')}
           </button>
         </div>
 
@@ -452,7 +447,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
                 #{surveyA.sid}
               </span>
               <span className="font-medium truncate max-w-[180px]">
-                {surveyA.surveyls_title || `Ankieta #${surveyA.sid}`}
+                {surveyA.surveyls_title || t('Ankieta #{0}', surveyA.sid)}
               </span>
             </div>
           )}
@@ -463,7 +458,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
                 #{surveyB.sid}
               </span>
               <span className="font-medium truncate max-w-[180px]">
-                {surveyB.surveyls_title || `Ankieta #${surveyB.sid}`}
+                {surveyB.surveyls_title || t('Ankieta #{0}', surveyB.sid)}
               </span>
             </div>
           )}
@@ -477,7 +472,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
             <div className="flex items-start gap-2">
               <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
               <span>
-                <strong>Ankieta A:</strong> {errorA}
+                <strong>{t('Ankieta A:')}</strong> {errorA}
               </span>
             </div>
           )}
@@ -485,7 +480,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
             <div className="flex items-start gap-2">
               <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
               <span>
-                <strong>Ankieta B:</strong> {errorB}
+                <strong>{t('Ankieta B:')}</strong> {errorB}
               </span>
             </div>
           )}
@@ -495,11 +490,11 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
       {/* Wykres zbiorczy */}
       {loading ? (
         <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 text-xs text-slate-500 dark:text-slate-400">
-          Pobieranie statystyk z get_summary dla obu ankiet...
+          {t('Pobieranie statystyk z get_summary dla obu ankiet...')}
         </div>
       ) : chartRows.length === 0 ? (
         <div className="flex h-52 items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 p-4 text-center text-xs text-slate-500 dark:text-slate-400">
-          Żadna z wybranych ankiet nie ma aktywowanej tabeli uczestników (tokenów). Przełącz widok na „Odpowiedzi” lub „Wszystkie”.
+          {t('Żadna z wybranych ankiet nie ma aktywowanej tabeli uczestników (tokenów). Przełącz widok na „Odpowiedzi” lub „Wszystkie”.')}
         </div>
       ) : (
         <div className="space-y-4">
@@ -540,14 +535,14 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
                   }
                 />
                 <Bar
-                  name={`Ankieta A (#${surveyAId})`}
+                  name={t('Ankieta A (#{0})', surveyAId)}
                   dataKey="a"
-                  fill="#059669"
+                  fill="#1F7A3E"
                   radius={[6, 6, 0, 0]}
                   maxBarSize={32}
                 />
                 <Bar
-                  name={`Ankieta B (#${surveyBId})`}
+                  name={t('Ankieta B (#{0})', surveyBId)}
                   dataKey="b"
                   fill="#0284C7"
                   radius={[6, 6, 0, 0]}
@@ -562,7 +557,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 dark:bg-slate-950/70 text-[11px] text-slate-500 dark:text-slate-400">
                 <tr>
-                  <th className="px-3 py-2 font-semibold">Metryka</th>
+                  <th className="px-3 py-2 font-semibold">{t('Metryka')}</th>
                   <th className="px-3 py-2 font-semibold text-right font-mono">
                     A (#{surveyAId})
                   </th>
@@ -570,7 +565,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
                     B (#{surveyBId})
                   </th>
                   <th className="px-3 py-2 font-semibold text-right font-mono">
-                    Różnica
+                    {t('Różnica')}
                   </th>
                 </tr>
               </thead>
@@ -598,7 +593,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
                 {(completionRateA !== null || completionRateB !== null) && (
                   <tr className="bg-slate-50/60 dark:bg-slate-950/40">
                     <td className="px-3 py-2 font-medium text-slate-700 dark:text-slate-200">
-                      Udział pełnych odpowiedzi
+                      {t('Udział pełnych odpowiedzi')}
                     </td>
                     <td className="px-3 py-2 text-right font-mono font-semibold text-emerald-700 dark:text-emerald-400 tabular-nums">
                       {completionRateA !== null ? `${completionRateA}%` : '—'}

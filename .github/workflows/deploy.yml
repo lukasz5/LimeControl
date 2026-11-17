@@ -1,0 +1,98 @@
+name: Deploy (sb)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://app.limecontrol.eu
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Write Firebase web config
+        env:
+          FIREBASE_CONFIG_JSON: ${{ secrets.FIREBASE_CONFIG_JSON }}
+        run: |
+          if [ -z "$FIREBASE_CONFIG_JSON" ]; then
+            echo "::error::Secret FIREBASE_CONFIG_JSON is not set"; exit 1
+          fi
+          printf '%s' "$FIREBASE_CONFIG_JSON" > firebase-applet-config.json
+          jq -e '.apiKey and .projectId' firebase-applet-config.json >/dev/null
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build app image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          load: true
+          tags: limecontrol-app:${{ github.sha }}
+          build-args: |
+            VITE_SUPPORT_URL=${{ vars.VITE_SUPPORT_URL }}
+            VITE_APP_STORE_URL=${{ vars.VITE_APP_STORE_URL }}
+            VITE_PLAY_STORE_URL=${{ vars.VITE_PLAY_STORE_URL }}
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
+
+      - name: Build site image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: deploy/site.Dockerfile
+          load: true
+          tags: limecontrol-site:${{ github.sha }}
+          cache-from: type=gha,scope=site
+          cache-to: type=gha,mode=max,scope=site
+
+      - name: Smoke-test images locally
+        run: |
+          docker run -d --name app -p 18080:8080 limecontrol-app:${{ github.sha }}
+          docker run -d --name site -p 18081:8080 limecontrol-site:${{ github.sha }}
+          for i in $(seq 1 20); do
+            curl -fsS http://127.0.0.1:18080/api/health && break; sleep 1
+          done
+          curl -fsS http://127.0.0.1:18080/api/health
+          curl -fsS http://127.0.0.1:18080/ | grep -q '<div id="root"'
+          curl -fsS http://127.0.0.1:18081/ | grep -q 'LimeControl'
+          docker rm -f app site
+
+      - name: Configure SSH
+        env:
+          SB_SSH_KEY: ${{ secrets.SB_SSH_KEY }}
+          SB_KNOWN_HOSTS: ${{ secrets.SB_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SB_SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "$SB_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<'EOF'
+          Host sb
+            HostName 57.128.252.130
+            User lukasz
+            IdentityFile ~/.ssh/id_deploy
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+            ServerAliveInterval 30
+          EOF
+
+      - name: Ship and deploy
+        run: |
+          mkdir bundle
+          cp deploy/compose.yaml bundle/compose.yaml
+          docker save -o bundle/images.tar \
+            limecontrol-app:${{ github.sha }} limecontrol-site:${{ github.sha }}
+          tar czf - -C bundle compose.yaml images.tar | ssh sb "deploy ${{ github.sha }}"

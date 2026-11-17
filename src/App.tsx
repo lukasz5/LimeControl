@@ -51,11 +51,17 @@ import type {
   RpcTraceEntry,
   ScheduleJob,
 } from './types/limesurvey';
+import { BrandLogo } from './components/BrandLogo';
+import { AppFooter } from './components/AppFooter';
+import { LanguageSwitch } from './components/LanguageSwitch';
+import { t, useLang } from './i18n';
 
 const LEGACY_PROFILES_KEY = 'limecontrol_profiles_v1';
 const THEME_KEY = 'limecontrol_theme_v1';
 
 function AppContent() {
+  // Subskrypcja języka: zmiana PL/EN przerenderowuje całe drzewo widoków.
+  useLang();
   const { notify } = useNotifications();
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     try {
@@ -151,7 +157,7 @@ function AppContent() {
         (err) => {
           notify({
             type: 'error',
-            title: 'Błąd synchronizacji bazy danych',
+            title: t('Błąd synchronizacji bazy danych'),
             message: err.message,
             dedupeKey: 'firestore:sync',
           });
@@ -181,9 +187,9 @@ function AppContent() {
         if (!isExpectedProbe) {
           notify({
             type: 'error',
-            title: `Błąd komunikacji z API (${entry.method})`,
+            title: t('Błąd komunikacji z API ({0})', entry.method),
             message: entry.summary,
-            actionLabel: 'Log RPC',
+            actionLabel: t('Log RPC'),
             onAction: () => setTab('instances'),
             dedupeKey: `rpc:${entry.method}:${entry.summary}`,
           });
@@ -216,18 +222,18 @@ function AppContent() {
               shouldRefreshSurveys = true;
               notify({
                 type: 'success',
-                title: 'Zaplanowana aktywacja zakończona',
-                message: `Ankieta #${job.surveyId} (${job.surveyTitle}) została pomyślnie aktywowana.`,
-                actionLabel: 'Harmonogram',
+                title: t('Zaplanowana aktywacja zakończona'),
+                message: t('Ankieta #{0} ({1}) została pomyślnie aktywowana.', job.surveyId, job.surveyTitle),
+                actionLabel: t('Harmonogram'),
                 onAction: () => setTab('schedule'),
                 dedupeKey: `job:${job.id}:completed`,
               });
             } else if (transitionedFromActive && job.status === 'failed') {
               notify({
                 type: 'error',
-                title: `Błąd zadania harmonogramu (#${job.surveyId})`,
+                title: t('Błąd zadania harmonogramu (#{0})', job.surveyId),
                 message: job.resultMessage,
-                actionLabel: 'Szczegóły',
+                actionLabel: t('Szczegóły'),
                 onAction: () => setTab('schedule'),
                 dedupeKey: `job:${job.id}:failed`,
               });
@@ -336,8 +342,8 @@ function AppContent() {
       await refreshSurveysForSession(session);
       notify({
         type: 'success',
-        title: 'Połączono z instancją LimeSurvey',
-        message: `${session.profileName} · użytkownik ${session.username}`,
+        title: t('Połączono z instancją LimeSurvey'),
+        message: t('{0} · użytkownik {1}', session.profileName, session.username),
         dedupeKey: `connect:${session.profileId}`,
       });
       setTab('surveys');
@@ -453,10 +459,10 @@ function AppContent() {
     label: string;
     icon: typeof ClipboardList;
   }> = [
-    { id: 'surveys', label: 'Ankiety', icon: ClipboardList },
-    { id: 'schedule', label: 'Harmonogram', icon: CalendarClock },
-    { id: 'participants', label: 'Uczestnicy', icon: Users },
-    { id: 'instances', label: 'Instancje', icon: Server },
+    { id: 'surveys', label: t('Ankiety'), icon: ClipboardList },
+    { id: 'schedule', label: t('Harmonogram'), icon: CalendarClock },
+    { id: 'participants', label: t('Uczestnicy'), icon: Users },
+    { id: 'instances', label: t('Instancje'), icon: Server },
   ];
 
   const activeNavTitle =
@@ -470,13 +476,14 @@ function AppContent() {
           <button
             type="button"
             onClick={() => setTab('surveys')}
-            className="font-display text-lg font-extrabold tracking-tight text-slate-900 dark:text-white whitespace-nowrap shrink-0"
+            aria-label={t('LimeControl — strona główna')}
+            className="whitespace-nowrap shrink-0"
           >
-            LimeControl
+            <BrandLogo compact markClassName="h-7 w-7 md:h-8 md:w-8" />
           </button>
 
           <nav
-            aria-label="Nawigacja główna"
+            aria-label={t('Nawigacja główna')}
             className="hidden md:flex items-center gap-7 text-sm font-medium"
           >
             {navItems.map((item) => {
@@ -486,11 +493,9 @@ function AppContent() {
                   key={item.id}
                   type="button"
                   onClick={() => setTab(item.id)}
-                  className={`py-2 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
-                    active
+                  className={`py-2 transition-colors whitespace-nowrap shrink-0 border-b-2 ${active
                       ? 'border-emerald-600 text-slate-900 dark:text-white font-semibold'
-                      : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
+                      : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
                 >
                   {item.label}
                 </button>
@@ -504,6 +509,7 @@ function AppContent() {
 
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <PWAInstallButton />
+            <LanguageSwitch />
 
             <div className="hidden lg:flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 px-2.5 py-1.5">
               {authUser.photoURL && (
@@ -524,19 +530,19 @@ function AppContent() {
               onClick={() => {
                 void handleSignOut();
               }}
-              aria-label="Wyloguj z konta Google"
-              title={`Wyloguj (${authUser.email || ''})`}
+              aria-label={t('Wyloguj z konta Google')}
+              title={t('Wyloguj ({0})', authUser.email || '')}
               className="min-h-[44px] min-w-[44px] px-2.5 flex items-center justify-center gap-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs font-semibold"
             >
               <LogOut className="h-4 w-4" aria-hidden="true" />
-              <span className="hidden sm:inline">Wyloguj</span>
+              <span className="hidden sm:inline">{t('Wyloguj')}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setDarkMode((d) => !d)}
               aria-label={
-                darkMode ? 'Przełącz na tryb jasny' : 'Przełącz na tryb ciemny'
+                darkMode ? t('Przełącz na tryb jasny') : t('Przełącz na tryb ciemny')
               }
               className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
@@ -608,11 +614,12 @@ function AppContent() {
             onClearTraces={() => setRpcTraces([])}
           />
         )}
+        <AppFooter className="mt-12 border-t border-slate-200 dark:border-slate-800 pt-6" />
       </main>
 
       {/* Mobile Fixed Bottom Tab Bar (Thumb Zone) */}
       <nav
-        aria-label="Dolna nawigacja mobilna"
+        aria-label={t('Dolna nawigacja mobilna')}
         className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pb-safe"
       >
         <div className="grid grid-cols-4 h-16 items-center">
@@ -624,11 +631,9 @@ function AppContent() {
                 key={item.id}
                 type="button"
                 onClick={() => setTab(item.id)}
-                className={`flex flex-col items-center justify-center min-h-[48px] transition-colors ${
-                  active
+                className={`flex flex-col items-center justify-center min-h-[48px] transition-colors ${active
                     ? 'text-emerald-600 dark:text-emerald-400'
-                    : 'text-slate-500 dark:text-slate-400'
-                }`}
+                    : 'text-slate-500 dark:text-slate-400'}`}
               >
                 <Icon className="h-5 w-5" strokeWidth={active ? 2.4 : 1.8} />
                 <span className="mt-1 text-[11px] font-semibold tracking-tight whitespace-nowrap">

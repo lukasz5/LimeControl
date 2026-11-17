@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { AlertTriangle, CheckCircle2, Info, X } from 'lucide-react';
+import { t } from '../i18n';
 
 export type NotificationType = 'success' | 'error' | 'info';
 
@@ -132,7 +133,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
 
       <div
         aria-live="polite"
-        aria-label="Powiadomienia aplikacji"
+        aria-label={t('Powiadomienia aplikacji')}
         className="pointer-events-none fixed bottom-20 left-4 right-4 z-50 flex flex-col gap-2 sm:bottom-6 sm:left-auto sm:right-6 sm:w-96"
       >
         <AnimatePresence initial={false}>
@@ -197,7 +198,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
                   <button
                     type="button"
                     onClick={() => dismiss(item.id)}
-                    aria-label="Zamknij powiadomienie"
+                    aria-label={t('Zamknij powiadomienie')}
                     className="min-h-[36px] min-w-[36px] -mr-1 -mt-1 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
                   >
                     <X className="h-4 w-4" />
