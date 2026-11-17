@@ -168,13 +168,33 @@ html body .question-title-container {
 }
 /* Gwiazdka zaraz za treścią pytania (także gdy tekst łamie się na telefonie).
    Oryginalna ikona LS ma aria-hidden; czytniki dostają tekst „(pytanie obowiązkowe)” z lc-a11y.js. */
+html body .question-title-container { flex-wrap: wrap; column-gap: .6rem; row-gap: .35rem; }
 html body .question-title-container > .asterisk { display: none !important; }
-html body .question-title-container > .question-text { flex: 1 1 auto; }
+html body .question-title-container > .question-text { order: 1; flex: 0 1 auto; min-width: 0; }
 html body .question-container.mandatory .ls-label-question::after {
   content: "\00a0*";
   color: var(--lc-danger);
   font-weight: 700;
 }
+/* LS 7 dodaje widoczną plakietkę „Wymagane” — pokazujemy ją za treścią pytania zamiast gwiazdki */
+html body .question-title-container > .ls-question-mandatory {
+  order: 2;
+  align-self: center;
+  display: inline-block;
+  white-space: nowrap;
+  -webkit-hyphens: none; hyphens: none;
+  margin: 0 !important;
+  padding: .1rem .55rem !important;
+  border: 1px solid var(--lc-danger);
+  border-radius: 999px;
+  background: var(--lc-danger-bg) !important;
+  color: var(--lc-danger) !important;
+  font-family: var(--lc-font);
+  font-size: .8rem !important;
+  font-weight: 600;
+  line-height: 1.5;
+}
+html body .question-container.mandatory:has(.question-title-container > .ls-question-mandatory) .ls-label-question::after { content: none; }
 
 /* Puste bloki powitania / prywatności nie tworzą dziury nad pierwszą grupą */
 html body .survey-welcome:empty { display: none; }

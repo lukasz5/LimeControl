@@ -1,7 +1,20 @@
 {
   "version": "1.0.0",
   "extends": "fruity_twentythree",
-  "lsMin": "6.0",
+  "variants": [
+    {
+      "id": "ls7",
+      "label": "7.x",
+      "compat": "7.0",
+      "testedOn": "7.10.0"
+    },
+    {
+      "id": "ls6",
+      "label": "6.x",
+      "compat": "6.0",
+      "testedOn": "6.15.12"
+    }
+  ],
   "themes": [
     {
       "id": "medical",
@@ -9,7 +22,11 @@
       "label": "Medical",
       "summary": "Spokojny turkus, większa czcionka i wyraźne pola — dla ankiet pacjentów, przychodni i badań klinicznych.",
       "description": "Motyw dla ankiet medycznych: spokojna paleta turkusowo-niebieska, tekst bazowy 18 px, duże pola wyboru. Zgodny z WCAG 2.2 AA.",
-      "useCases": ["Satysfakcja pacjentów", "Wywiad przed wizytą", "Badania kliniczne (PROM)"],
+      "useCases": [
+        "Satysfakcja pacjentów",
+        "Wywiad przed wizytą",
+        "Badania kliniczne (PROM)"
+      ],
       "tokens": {
         "primary": "#0A6378",
         "primaryHover": "#084E5F",
@@ -41,7 +58,11 @@
       "label": "Professional",
       "summary": "Granat, szeryfowe nagłówki i oszczędna forma — dla badań B2B, HR i ewaluacji w organizacjach.",
       "description": "Motyw biznesowy: granatowa paleta, nagłówki szeryfowe, wąskie zaokrąglenia. Zgodny z WCAG 2.2 AA.",
-      "useCases": ["Badania pracownicze (eNPS)", "Ankiety B2B", "Ewaluacja szkoleń"],
+      "useCases": [
+        "Badania pracownicze (eNPS)",
+        "Ankiety B2B",
+        "Ewaluacja szkoleń"
+      ],
       "tokens": {
         "primary": "#1F3A5F",
         "primaryHover": "#152A46",
@@ -73,7 +94,11 @@
       "label": "Social",
       "summary": "Ciepły fiolet, miękkie kształty i przyciski-pigułki — dla społeczności, NGO i badań opinii.",
       "description": "Motyw społecznościowy: ciepły fiolet, duże zaokrąglenia, przyjazny charakter. Zgodny z WCAG 2.2 AA.",
-      "useCases": ["Konsultacje społeczne", "Ankiety NGO i wolontariat", "Opinie członków społeczności"],
+      "useCases": [
+        "Konsultacje społeczne",
+        "Ankiety NGO i wolontariat",
+        "Opinie członków społeczności"
+      ],
       "tokens": {
         "primary": "#6B2FA8",
         "primaryHover": "#55238A",
@@ -105,7 +130,11 @@
       "label": "Marketing",
       "summary": "Mocna magenta, pogrubione nagłówki i kontrastowe CTA — dla badań marki, produktu i NPS.",
       "description": "Motyw marketingowy: wyrazista magenta, mocna typografia, kontrastowe przyciski. Zgodny z WCAG 2.2 AA.",
-      "useCases": ["NPS i satysfakcja klienta", "Testy koncepcji produktu", "Badania marki"],
+      "useCases": [
+        "NPS i satysfakcja klienta",
+        "Testy koncepcji produktu",
+        "Badania marki"
+      ],
       "tokens": {
         "primary": "#B0245A",
         "primaryHover": "#8E1C48",
@@ -137,7 +166,11 @@
       "label": "Eco",
       "summary": "Leśna zieleń na papierowym tle — dla badań środowiskowych, ESG, rolnictwa i turystyki.",
       "description": "Motyw ekologiczny: leśna zieleń, ciepłe papierowe tło, naturalne zaokrąglenia. Zgodny z WCAG 2.2 AA.",
-      "useCases": ["Badania ESG i CSR", "Konsultacje środowiskowe", "Turystyka i rolnictwo"],
+      "useCases": [
+        "Badania ESG i CSR",
+        "Konsultacje środowiskowe",
+        "Turystyka i rolnictwo"
+      ],
       "tokens": {
         "primary": "#2D6636",
         "primaryHover": "#22502A",
@@ -169,7 +202,11 @@
       "label": "Minimalist",
       "summary": "Czerń, biel i dużo przestrzeni — bez cieni i ozdobników. Neutralny dla każdego badania.",
       "description": "Motyw minimalistyczny: czerń i biel, cienkie linie, brak cieni, maksymalny kontrast. Zgodny z WCAG 2.2 AA (tekst AAA).",
-      "useCases": ["Badania akademickie", "Ankiety wewnętrzne", "Formularze bez brandingu"],
+      "useCases": [
+        "Badania akademickie",
+        "Ankiety wewnętrzne",
+        "Formularze bez brandingu"
+      ],
       "tokens": {
         "primary": "#111111",
         "primaryHover": "#333333",

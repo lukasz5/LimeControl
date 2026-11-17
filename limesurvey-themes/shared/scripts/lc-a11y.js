@@ -54,7 +54,9 @@
       var mandatory = q.classList.contains('mandatory') || !!q.querySelector('.asterisk');
       if (mandatory) {
         var star = q.querySelector('.asterisk');
-        if (star && !q.querySelector('.lc-required-text')) {
+        // LS 7 ma już widoczny tekst „Wymagane” — wtedy nie dublujemy komunikatu.
+        var hasVisibleLabel = !!q.querySelector('.question-title-container > .ls-question-mandatory');
+        if (star && !hasVisibleLabel && !q.querySelector('.lc-required-text')) {
           star.setAttribute('aria-hidden', 'true');
           var sr = document.createElement('span');
           sr.className = 'lc-sr-only lc-required-text';
@@ -86,7 +88,17 @@
       document.body.dataset.lcErrorFocused = '1';
       var heading = firstError.querySelector('.question-title-container') || firstError;
       if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
-      setTimeout(function () { heading.focus(); }, 60);
+      // Gdy LS pokazuje komunikat w oknie (opcja „Pokaż okna wyskakujące”), fokus należy do okna —
+      // przenosimy go na pytanie dopiero po jego zamknięciu.
+      setTimeout(function () {
+        var modal = document.querySelector('.modal.show, .modal.in');
+        if (modal) {
+          modal.addEventListener('hidden.bs.modal', function () { heading.focus(); }, { once: true });
+          if (window.jQuery) window.jQuery(modal).one('hidden.bs.modal', function () { heading.focus(); });
+        } else {
+          heading.focus();
+        }
+      }, 400);
     }
   }
 
