@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=1" />
+  <link rel="stylesheet" href="/assets/style.css?v=2" />
 
   <script type="application/ld+json">
   {
@@ -51,9 +51,10 @@
       </button>
       <ul class="nav-links" id="nav-links">
         <li><a href="#funkcje">Funkcje</a></li>
-        <li><a href="#jak-to-dziala">Jak to działa</a></li>
-        <li><a href="#bezpieczenstwo">Bezpieczeństwo</a></li>
+        <li><a href="/szablony.html">Motywy ankiet</a></li>
         <li><a href="/docs.html">Dokumentacja</a></li>
+        <li><a href="/#hosting">Hosting LimeSurvey</a></li>
+        <li><a class="nav-gh" href="https://github.com/lukasz5/LimeControl" target="_blank" rel="noopener" aria-label="Kod źródłowy LimeControl na GitHubie"><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a></li>
         <li><a class="btn btn-primary btn-sm" href="https://app.limecontrol.eu">Otwórz aplikację</a></li>
       </ul>
     </div>
@@ -247,8 +248,54 @@
       </div>
     </section>
 
+    <!-- HOSTING LIMESURVEY -->
+    <section id="hosting">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Wdrożenie i hosting</span>
+          <h2>Nie masz jeszcze serwera LimeSurvey? Uruchomimy go dla Ciebie</h2>
+          <p>Możesz postawić LimeSurvey samodzielnie z naszego otwartego zestawu Docker albo zlecić nam wdrożenie i utrzymanie instancji — gotowej do pracy z LimeControl od pierwszego dnia.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <article class="card host-card">
+            <span class="tag">Open source · samodzielnie</span>
+            <h3>Gotowy stack Docker na GitHubie</h3>
+            <p>Zestaw do uruchomienia LimeSurvey 7 na serwerze Ubuntu jednym skryptem <code>install.sh</code>.</p>
+            <ul>
+              <li>HTTPS z Let's Encrypt (Traefik), TLS 1.2+, HSTS</li>
+              <li>MariaDB w sieci wewnętrznej, bez portów na zewnątrz</li>
+              <li>Kontenery tylko do odczytu, sekrety poza obrazem</li>
+              <li>Limity logowania i opcjonalna lista IP dla panelu</li>
+              <li>Codzienny backup bazy, plików i kluczy oraz skrypt odtwarzania</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="https://github.com/lukasz5/LimeControl/tree/main/limesurvey-stack" target="_blank" rel="noopener">Instrukcja na GitHubie</a>
+            </div>
+          </article>
+
+          <article class="card host-card featured">
+            <span class="tag">Usługa · strefabadan.pl</span>
+            <h3>Wdrożenie i hosting zarządzany</h3>
+            <p>Zajmiemy się instalacją, konfiguracją i utrzymaniem LimeSurvey — na Twoim serwerze albo na naszym.</p>
+            <ul>
+              <li>Instalacja na Twojej infrastrukturze lub hosting po naszej stronie</li>
+              <li>Własna domena, certyfikat SSL i skonfigurowana poczta SMTP</li>
+              <li>Włączone API RemoteControl 2 i CORS pod LimeControl</li>
+              <li>Aktualizacje LimeSurvey, monitoring i kopie zapasowe</li>
+              <li>Motywy ankiet WCAG 2.2 AA i pomoc przy migracji ankiet</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://strefabadan.pl#contact" rel="noopener">Zapytaj o wycenę</a>
+              <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=Wdro%C5%BCenie%20LimeSurvey">info@strefabadan.pl</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- FAQ -->
-    <section id="faq">
+    <section id="faq" class="section-soft">
       <div class="container">
         <div class="section-head center">
           <span class="eyebrow">FAQ</span>
@@ -258,6 +305,14 @@
           <details>
             <summary>Czy LimeControl jest darmowy?</summary>
             <p>Tak. Aplikacja jest bezpłatna. Jeśli Ci się przydaje, możesz wesprzeć jej rozwój linkiem „Postaw mi kawę” w stopce.</p>
+          </details>
+          <details>
+            <summary>Nie mam własnego LimeSurvey. Pomożecie go uruchomić?</summary>
+            <p>Tak. Możesz skorzystać z naszego <a href="https://github.com/lukasz5/LimeControl/tree/main/limesurvey-stack" target="_blank" rel="noopener">otwartego stacka Docker</a> albo zlecić nam <a href="#hosting">wdrożenie i hosting instancji LimeSurvey</a> — z HTTPS, kopiami zapasowymi i API gotowym pod LimeControl.</p>
+          </details>
+          <details>
+            <summary>Czy kod LimeControl jest otwarty?</summary>
+            <p>Tak. Kod aplikacji, strony, motywów ankiet i stacka LimeSurvey jest na <a href="https://github.com/lukasz5/LimeControl" target="_blank" rel="noopener">GitHubie</a>. Zgłoszenia błędów i propozycje zmian są mile widziane.</p>
           </details>
           <details>
             <summary>Czy muszę instalować wtyczkę w LimeSurvey?</summary>
@@ -308,6 +363,8 @@
         <li><a href="/docs.html">Dokumentacja</a></li>
         <li><a href="/docs.html#bezpieczenstwo">Prywatność</a></li>
         <li><a href="https://app.limecontrol.eu">Aplikacja</a></li>
+        <li><a href="/#hosting">Hosting LimeSurvey</a></li>
+        <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
         <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
       </ul>
       <a class="coffee" href="https://www.paypal.com/biz/profile/strefabadan" target="_blank" rel="noopener noreferrer">Postaw mi kawę</a>
