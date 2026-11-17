@@ -1,0 +1,270 @@
+{
+  "version": "1.0.0",
+  "lsMin": "6.0",
+  "themes": [
+    {
+      "id": "medical",
+      "title": "LimeControl Medical",
+      "label": "Medical",
+      "summary": "Spokojny turkus, większa czcionka i wyraźne pola — dla ankiet pacjentów, przychodni i badań klinicznych.",
+      "description": "Motyw dla ankiet medycznych: spokojna paleta turkusowo-niebieska, tekst bazowy 18 px, duże pola wyboru. Zgodny z WCAG 2.2 AA.",
+      "useCases": [
+        "Satysfakcja pacjentów",
+        "Wywiad przed wizytą",
+        "Badania kliniczne (PROM)"
+      ],
+      "tokens": {
+        "primary": "#0A6378",
+        "primaryHover": "#084E5F",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F3F8FA",
+        "surface": "#FFFFFF",
+        "text": "#14262E",
+        "muted": "#455A63",
+        "border": "#6A8995",
+        "borderSoft": "#D3E2E8",
+        "accent": "#E3F2F6",
+        "headerBg": "#0A6378",
+        "headerText": "#FFFFFF",
+        "focus": "#0A6378",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "10px",
+        "radiusBtn": "10px",
+        "shadow": "0 1px 2px rgba(20,38,46,.06), 0 4px 16px rgba(20,38,46,.05)",
+        "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "headingWeight": "650",
+        "baseSize": "1.125rem"
+      },
+      "zip": "lc_medical.zip",
+      "report": {
+        "id": "medical",
+        "size": 12156,
+        "minText": 5.75,
+        "btn": 6.84,
+        "body": 15.6
+      }
+    },
+    {
+      "id": "professional",
+      "title": "LimeControl Professional",
+      "label": "Professional",
+      "summary": "Granat, szeryfowe nagłówki i oszczędna forma — dla badań B2B, HR i ewaluacji w organizacjach.",
+      "description": "Motyw biznesowy: granatowa paleta, nagłówki szeryfowe, wąskie zaokrąglenia. Zgodny z WCAG 2.2 AA.",
+      "useCases": [
+        "Badania pracownicze (eNPS)",
+        "Ankiety B2B",
+        "Ewaluacja szkoleń"
+      ],
+      "tokens": {
+        "primary": "#1F3A5F",
+        "primaryHover": "#152A46",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F3F4F6",
+        "surface": "#FFFFFF",
+        "text": "#1A1D22",
+        "muted": "#4A5260",
+        "border": "#7A8494",
+        "borderSoft": "#DADDE3",
+        "accent": "#E7ECF3",
+        "headerBg": "#1F3A5F",
+        "headerText": "#FFFFFF",
+        "focus": "#1F3A5F",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "4px",
+        "radiusBtn": "4px",
+        "shadow": "0 1px 2px rgba(26,29,34,.08)",
+        "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "fontHeading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "headingWeight": "700",
+        "baseSize": "1.0625rem"
+      },
+      "zip": "lc_professional.zip",
+      "report": {
+        "id": "professional",
+        "size": 12157,
+        "minText": 5.75,
+        "btn": 11.48,
+        "body": 16.9
+      }
+    },
+    {
+      "id": "social",
+      "title": "LimeControl Social",
+      "label": "Social",
+      "summary": "Ciepły fiolet, miękkie kształty i przyciski-pigułki — dla społeczności, NGO i badań opinii.",
+      "description": "Motyw społecznościowy: ciepły fiolet, duże zaokrąglenia, przyjazny charakter. Zgodny z WCAG 2.2 AA.",
+      "useCases": [
+        "Konsultacje społeczne",
+        "Ankiety NGO i wolontariat",
+        "Opinie członków społeczności"
+      ],
+      "tokens": {
+        "primary": "#6B2FA8",
+        "primaryHover": "#55238A",
+        "onPrimary": "#FFFFFF",
+        "bg": "#FAF6FE",
+        "surface": "#FFFFFF",
+        "text": "#231A2E",
+        "muted": "#56496A",
+        "border": "#8A74A6",
+        "borderSoft": "#E6DCF2",
+        "accent": "#F1E7FB",
+        "headerBg": "#6B2FA8",
+        "headerText": "#FFFFFF",
+        "focus": "#6B2FA8",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "18px",
+        "radiusBtn": "999px",
+        "shadow": "0 2px 6px rgba(35,26,46,.06), 0 10px 28px rgba(107,47,168,.07)",
+        "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "fontHeading": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "headingWeight": "700",
+        "baseSize": "1.0625rem"
+      },
+      "zip": "lc_social.zip",
+      "report": {
+        "id": "social",
+        "size": 12143,
+        "minText": 5.75,
+        "btn": 8.09,
+        "body": 16.68
+      }
+    },
+    {
+      "id": "marketing",
+      "title": "LimeControl Marketing",
+      "label": "Marketing",
+      "summary": "Mocna magenta, pogrubione nagłówki i kontrastowe CTA — dla badań marki, produktu i NPS.",
+      "description": "Motyw marketingowy: wyrazista magenta, mocna typografia, kontrastowe przyciski. Zgodny z WCAG 2.2 AA.",
+      "useCases": [
+        "NPS i satysfakcja klienta",
+        "Testy koncepcji produktu",
+        "Badania marki"
+      ],
+      "tokens": {
+        "primary": "#B0245A",
+        "primaryHover": "#8E1C48",
+        "onPrimary": "#FFFFFF",
+        "bg": "#FFF7F4",
+        "surface": "#FFFFFF",
+        "text": "#1F161A",
+        "muted": "#5A4A50",
+        "border": "#9A7682",
+        "borderSoft": "#F1DDE2",
+        "accent": "#FCE8EF",
+        "headerBg": "#1F161A",
+        "headerText": "#FFFFFF",
+        "focus": "#B0245A",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "12px",
+        "radiusBtn": "12px",
+        "shadow": "0 2px 4px rgba(31,22,26,.06), 0 12px 32px rgba(176,36,90,.08)",
+        "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "fontHeading": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "headingWeight": "800",
+        "baseSize": "1.0625rem"
+      },
+      "zip": "lc_marketing.zip",
+      "report": {
+        "id": "marketing",
+        "size": 12117,
+        "minText": 5.75,
+        "btn": 6.47,
+        "body": 17.68
+      }
+    },
+    {
+      "id": "eco",
+      "title": "LimeControl Eco",
+      "label": "Eco",
+      "summary": "Leśna zieleń na papierowym tle — dla badań środowiskowych, ESG, rolnictwa i turystyki.",
+      "description": "Motyw ekologiczny: leśna zieleń, ciepłe papierowe tło, naturalne zaokrąglenia. Zgodny z WCAG 2.2 AA.",
+      "useCases": [
+        "Badania ESG i CSR",
+        "Konsultacje środowiskowe",
+        "Turystyka i rolnictwo"
+      ],
+      "tokens": {
+        "primary": "#2D6636",
+        "primaryHover": "#22502A",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F5F2E9",
+        "surface": "#FFFDF8",
+        "text": "#1E2A1F",
+        "muted": "#4B574A",
+        "border": "#7A846C",
+        "borderSoft": "#E2DDCD",
+        "accent": "#E8F0E2",
+        "headerBg": "#2D6636",
+        "headerText": "#FFFFFF",
+        "focus": "#2D6636",
+        "danger": "#A8251A",
+        "dangerBg": "#FBEAE6",
+        "radius": "14px",
+        "radiusBtn": "14px",
+        "shadow": "0 1px 3px rgba(30,42,31,.07)",
+        "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "fontHeading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "headingWeight": "700",
+        "baseSize": "1.0625rem"
+      },
+      "zip": "lc_eco.zip",
+      "report": {
+        "id": "eco",
+        "size": 12147,
+        "minText": 6.12,
+        "btn": 6.85,
+        "body": 14.69
+      }
+    },
+    {
+      "id": "minimalist",
+      "title": "LimeControl Minimalist",
+      "label": "Minimalist",
+      "summary": "Czerń, biel i dużo przestrzeni — bez cieni i ozdobników. Neutralny dla każdego badania.",
+      "description": "Motyw minimalistyczny: czerń i biel, cienkie linie, brak cieni, maksymalny kontrast. Zgodny z WCAG 2.2 AA (tekst AAA).",
+      "useCases": [
+        "Badania akademickie",
+        "Ankiety wewnętrzne",
+        "Formularze bez brandingu"
+      ],
+      "tokens": {
+        "primary": "#111111",
+        "primaryHover": "#333333",
+        "onPrimary": "#FFFFFF",
+        "bg": "#FFFFFF",
+        "surface": "#FFFFFF",
+        "text": "#111111",
+        "muted": "#505050",
+        "border": "#767676",
+        "borderSoft": "#E2E2E2",
+        "accent": "#F2F2F2",
+        "headerBg": "#FFFFFF",
+        "headerText": "#111111",
+        "focus": "#0050B3",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "2px",
+        "radiusBtn": "2px",
+        "shadow": "none",
+        "font": "\"Helvetica Neue\", Helvetica, Arial, system-ui, sans-serif",
+        "fontHeading": "\"Helvetica Neue\", Helvetica, Arial, system-ui, sans-serif",
+        "headingWeight": "600",
+        "baseSize": "1.0625rem"
+      },
+      "zip": "lc_minimalist.zip",
+      "report": {
+        "id": "minimalist",
+        "size": 12056,
+        "minText": 5.75,
+        "btn": 18.88,
+        "body": 18.88
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+/*!
+ * LimeControl Minimalist — tokeny motywu (lc-theme.css)
+ * Zmień wartości poniżej, aby dopasować motyw do marki.
+ * Po zmianie kolorów sprawdź kontrast (min. 4.5:1 dla tekstu, 3:1 dla obramowań).
+ */
+:root {
+  --lc-primary: #111111;
+  --lc-primary-rgb: 17, 17, 17;
+  --lc-primary-hover: #333333;
+  --lc-on-primary: #FFFFFF;
+  --lc-bg: #FFFFFF;
+  --lc-surface: #FFFFFF;
+  --lc-text: #111111;
+  --lc-muted: #505050;
+  --lc-border: #767676;
+  --lc-border-soft: #E2E2E2;
+  --lc-accent: #F2F2F2;
+  --lc-header-bg: #FFFFFF;
+  --lc-header-text: #111111;
+  --lc-header-border: #E2E2E2;
+  --lc-focus: #0050B3;
+  --lc-danger: #B42318;
+  --lc-danger-bg: #FDECEA;
+  --lc-radius: 2px;
+  --lc-radius-btn: 2px;
+  --lc-shadow: none;
+  --lc-font: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --lc-font-heading: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --lc-heading-weight: 600;
+  --lc-base-size: 1.0625rem;
+}

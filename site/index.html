@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LimeControl — aplikacja do zarządzania LimeSurvey z telefonu</title>
+  <meta name="description" content="LimeControl to darmowa aplikacja PWA dla LimeSurvey (RemoteControl 2). Aktywuj ankiety, planuj harmonogram, zarządzaj uczestnikami, analizuj wyniki i eksportuj odpowiedzi — z wielu instancji, z telefonu." />
+  <link rel="canonical" href="https://limecontrol.eu/" />
+  <meta name="theme-color" content="#1b5e36" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://limecontrol.eu/" />
+  <meta property="og:title" content="LimeControl — LimeSurvey w Twojej kieszeni" />
+  <meta property="og:description" content="Aktywacja ankiet, harmonogram, uczestnicy, statystyki i eksport wyników dla wielu instancji LimeSurvey 3.x–7.x." />
+  <meta property="og:locale" content="pl_PL" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/style.css?v=1" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "LimeControl",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web, iOS, Android",
+    "url": "https://limecontrol.eu/",
+    "description": "Aplikacja PWA do zarządzania instancjami LimeSurvey przez API RemoteControl 2.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "author": { "@type": "Organization", "name": "strefabadan.pl", "url": "https://strefabadan.pl" }
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Przejdź do treści</a>
+
+  <header class="nav">
+    <div class="container">
+      <a class="nav-logo" href="/" aria-label="LimeControl — strona główna">
+        <img class="logo-light" src="/assets/logo.svg" alt="LimeControl" width="104" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg" alt="LimeControl" width="104" height="34" />
+      </a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#funkcje">Funkcje</a></li>
+        <li><a href="#jak-to-dziala">Jak to działa</a></li>
+        <li><a href="#bezpieczenstwo">Bezpieczeństwo</a></li>
+        <li><a href="/docs.html">Dokumentacja</a></li>
+        <li><a class="btn btn-primary btn-sm" href="https://app.limecontrol.eu">Otwórz aplikację</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div>
+          <span class="eyebrow">App for LimeSurvey</span>
+          <h1>Twoje ankiety LimeSurvey. <span class="lime">Pod kontrolą</span>, z&nbsp;telefonu.</h1>
+          <p class="lead">LimeControl łączy się z dowolną instancją LimeSurvey przez oficjalne API RemoteControl&nbsp;2. Aktywuj i zamykaj ankiety, zaplanuj start badania, wysyłaj zaproszenia i sprawdzaj wyniki — bez logowania do panelu administratora.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="https://app.limecontrol.eu">
+              Uruchom LimeControl
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="/docs.html#szybki-start">Szybki start</a>
+          </div>
+          <ul class="hero-meta">
+            <li>Darmowa</li>
+            <li>LimeSurvey 3.x – 7.x</li>
+            <li>Instalacja jako PWA</li>
+            <li>Wiele serwerów</li>
+          </ul>
+        </div>
+
+        <!-- Makieta ekranu aplikacji -->
+        <div class="phone" aria-hidden="true">
+          <div class="screen">
+            <div class="screen-top">
+              <div class="row"><small>Badania Uczelnia · LS 7.1</small><span class="pill pill-live">● połączono</span></div>
+              <div class="row" style="margin-top:8px"><strong>Ankiety</strong><small>12 aktywnych</small></div>
+            </div>
+            <div class="screen-body">
+              <div class="stats">
+                <div><b>1 284</b><span>odpowiedzi</span></div>
+                <div><b>76%</b><span>kompletnych</span></div>
+                <div><b>412</b><span>tokenów</span></div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Satysfakcja studentów 2026</span><span class="pill pill-on">Aktywna</span></div>
+                <div class="s">#482913 · do 30.11.2026</div>
+                <div class="bar"><i style="width:76%"></i></div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Ewaluacja szkolenia BHP</span><span class="pill pill-sched">Start 08:00</span></div>
+                <div class="s">#219034 · harmonogram serwera</div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Badanie pilotażowe Q4</span><span class="pill pill-off">Nieaktywna</span></div>
+                <div class="s">#771205 · 0 odpowiedzi</div>
+              </div>
+            </div>
+            <div class="tabbar">
+              <div class="on"><i></i>Ankiety</div>
+              <div><i></i>Harmonogram</div>
+              <div><i></i>Uczestnicy</div>
+              <div><i></i>Instancje</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KOMPATYBILNOŚĆ -->
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="compat">
+          <div><b>3.x – 7.x</b><span>wersje LimeSurvey, w tym daty UTC w&nbsp;LS&nbsp;7</span></div>
+          <div><b>20+</b><span>metod API RemoteControl&nbsp;2</span></div>
+          <div><b>CSV · XLS · JSON</b><span>eksport odpowiedzi</span></div>
+          <div><b>PWA + iOS + Android</b><span>przeglądarka i aplikacja mobilna</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNKCJE -->
+    <section id="funkcje" class="section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Funkcje</span>
+          <h2>Wszystko, czego potrzebujesz w terenie i&nbsp;w&nbsp;biegu</h2>
+          <p>Najczęstsze operacje na ankietach — dostępne w kilku dotknięciach, na każdym urządzeniu.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></svg></div>
+            <h3>Wiele instancji LimeSurvey</h3>
+            <p>Zapisz profile wszystkich serwerów i przełączaj się między nimi jednym dotknięciem. Profile synchronizują się w chmurze po zalogowaniu kontem Google.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3>Aktywacja i zamykanie ankiet</h3>
+            <p>Aktywuj ankietę razem z tabelą tokenów, ustaw daty <code>startdate</code> i <code>expires</code>, zamknij badanie lub skopiuj ankietę.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v3l2 1"/></svg></div>
+            <h3>Harmonogram po stronie serwera</h3>
+            <p>Zaplanuj aktywację na konkretny dzień i godzinę. Zadanie wykona się na serwerze — nawet gdy telefon jest wyłączony.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+            <h3>Statystyki i porównania</h3>
+            <p>Podsumowanie odpowiedzi i tokenów na wykresach oraz porównanie dwóch ankiet obok siebie — wszystko z <code>get_summary</code>.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div>
+            <h3>Uczestnicy i zaproszenia</h3>
+            <p>Dodawaj i usuwaj respondentów, edytuj szablony e-maili z podglądem na żywo i wysyłaj zaproszenia oraz przypomnienia.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
+            <h3>Eksport wyników</h3>
+            <p>Pobierz odpowiedzi do CSV, Excela lub JSON i sprawdź identyfikatory kolumn (SGQA i LS&nbsp;7) w inspektorze <code>get_fieldmap</code>.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></div>
+            <h3>Powiadomienia</h3>
+            <p>Komunikaty o wykonanych i nieudanych zadaniach harmonogramu oraz czytelne błędy API z kodami RemoteControl&nbsp;2.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div>
+            <h3>Dziennik RPC i diagnostyka</h3>
+            <p>Podgląd każdego wywołania JSON-RPC z czasem odpowiedzi, diagnostyka CORS i opcjonalny tryb przekaźnika serwerowego.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+            <h3>PWA i aplikacja mobilna</h3>
+            <p>Zainstaluj aplikację na ekranie głównym albo pobierz bezpłatną aplikację LimeControl na iOS i Androida.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- JAK TO DZIAŁA -->
+    <section id="jak-to-dziala">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Jak to działa</span>
+          <h2>Gotowe w czterech krokach</h2>
+          <p>Nie instalujesz niczego na serwerze LimeSurvey — wystarczy włączone API JSON-RPC.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Włącz API w LimeSurvey</h3>
+            <p><em>Konfiguracja → Ustawienia globalne → Interfejsy</em> i wybierz <strong>JSON-RPC</strong>.</p>
+          </li>
+          <li>
+            <h3>Zaloguj się</h3>
+            <p>Otwórz LimeControl i zaloguj się kontem Google, aby zapisywać profile serwerów.</p>
+          </li>
+          <li>
+            <h3>Dodaj instancję</h3>
+            <p>Podaj adres LimeSurvey, login i hasło. Ścieżka do API uzupełni się automatycznie.</p>
+          </li>
+          <li>
+            <h3>Zarządzaj</h3>
+            <p>Aktywuj ankiety, planuj starty, wysyłaj zaproszenia i pobieraj wyniki.</p>
+          </li>
+        </ol>
+        <p style="margin-top:28px"><a href="/docs.html#konfiguracja-limesurvey">Szczegółowa instrukcja konfiguracji →</a></p>
+      </div>
+    </section>
+
+    <!-- BEZPIECZEŃSTWO -->
+    <section id="bezpieczenstwo" class="section-soft">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">Bezpieczeństwo i prywatność</span>
+          <h2>Twoje hasła zostają przy Tobie</h2>
+          <p class="muted">W trybie bezpośrednim LimeControl rozmawia z Twoim serwerem prosto z przeglądarki — dane ankiet nie przechodzą przez nasze serwery, a hasła do LimeSurvey nie są nigdzie zapisywane.</p>
+          <a class="btn btn-ghost" href="/docs.html#bezpieczenstwo">Jak chronimy dane</a>
+        </div>
+        <ul class="checklist">
+          <li><span><strong>Hasła LimeSurvey nigdy nie trafiają do chmury</strong> — ani do Firestore, ani do <code>localStorage</code>. Opcjonalnie są trzymane tylko w pamięci otwartej karty.</span></li>
+          <li><span><strong>Bezpośrednie połączenie</strong> przeglądarka → Twój serwer przez HTTPS. Przekaźnik serwerowy włączasz tylko, gdy go potrzebujesz.</span></li>
+          <li><span><strong>Profile przypisane do konta</strong> — reguły Firestore pozwalają czytać je wyłącznie właścicielowi.</span></li>
+          <li><span><strong>Harmonogram usuwa hasło</strong> z zadania zaraz po jego wykonaniu lub anulowaniu.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow">FAQ</span>
+          <h2>Najczęstsze pytania</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Czy LimeControl jest darmowy?</summary>
+            <p>Tak. Aplikacja jest bezpłatna. Jeśli Ci się przydaje, możesz wesprzeć jej rozwój przyciskiem „Postaw mi kawę”.</p>
+          </details>
+          <details>
+            <summary>Czy muszę instalować wtyczkę w LimeSurvey?</summary>
+            <p>Nie. LimeControl korzysta z wbudowanego API RemoteControl 2. Wystarczy włączyć interfejs JSON-RPC w ustawieniach globalnych.</p>
+          </details>
+          <details>
+            <summary>Działa z LimeSurvey Cloud i z własnym serwerem?</summary>
+            <p>Tak — z każdą instancją 3.x–7.x, która ma włączone JSON-RPC i jest dostępna przez HTTPS. Dla serwerów bez nagłówków CORS jest tryb przekaźnika serwerowego.</p>
+          </details>
+          <details>
+            <summary>Widzę błąd CORS. Co zrobić?</summary>
+            <p>Dodaj nagłówki CORS na serwerze LimeSurvey albo przełącz profil w tryb „Przekaźnik serwerowy”. <a href="/docs.html#cors">Instrukcja z przykładami dla Apache i Nginx</a>.</p>
+          </details>
+          <details>
+            <summary>Jak zainstalować aplikację na telefonie?</summary>
+            <p>Na Androidzie użyj przycisku „Zainstaluj PWA” w aplikacji lub menu Chrome → „Dodaj do ekranu głównego”. Na iPhonie w Safari wybierz „Udostępnij” → „Do ekranu początkowego”.</p>
+          </details>
+          <details>
+            <summary>Jakie uprawnienia musi mieć konto LimeSurvey?</summary>
+            <p>Odczyt, edycja, tworzenie i aktywacja ankiet, zarządzanie uczestnikami oraz eksport odpowiedzi. <a href="/docs.html#uprawnienia">Pełna lista uprawnień</a>.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="cta">
+          <h2>Zacznij zarządzać ankietami z telefonu</h2>
+          <p>Otwórz LimeControl w przeglądarce, dodaj swoją instancję LimeSurvey i zainstaluj aplikację na ekranie głównym.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="https://app.limecontrol.eu">Otwórz aplikację</a>
+            <a class="btn btn-ghost" href="/docs.html">Przeczytaj dokumentację</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <a href="/" aria-label="LimeControl">
+        <img class="logo-light" src="/assets/logo.svg" alt="LimeControl" width="86" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg" alt="LimeControl" width="86" height="28" />
+      </a>
+      <ul class="footer-links">
+        <li><a href="/docs.html">Dokumentacja</a></li>
+        <li><a href="/docs.html#bezpieczenstwo">Prywatność</a></li>
+        <li><a href="https://app.limecontrol.eu">Aplikacja</a></li>
+        <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
+      </ul>
+      <a class="coffee" href="https://www.paypal.com/biz/profile/strefabadan" target="_blank" rel="noopener noreferrer">☕ Postaw mi kawę</a>
+    </div>
+    <div class="container" style="margin-top:20px">
+      <p style="margin:0">© <span id="year">2026</span> LimeControl · Made with ♥ by <a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a>. LimeSurvey jest znakiem towarowym LimeSurvey GmbH; LimeControl nie jest z nią powiązany.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/site.js?v=1" defer></script>
+</body>
+</html>
