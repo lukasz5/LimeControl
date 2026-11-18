@@ -18,11 +18,16 @@ export const CONTACT_EMAIL = 'info@strefabadan.pl';
 export const SUPPORT_URL = 'https://www.paypal.com/biz/profile/strefabadan';
 /** Cennik platformy StrefaAnkiet (abonament i usługi dodatkowe). */
 export const STREFAANKIET_PRICING_URL = 'https://strefaankiet.pl/#cena';
-/** Linki do sklepów z aplikacją mobilną; puste = „wkrótce”. */
-export const APP_STORE_URL = '';
-export const PLAY_STORE_URL = '';
+/** Strony aplikacji mobilnej w sklepach (App Store: „LimeControl – Surveys”, Google Play: „LimeControl”). */
+export const APP_STORE_URL = 'https://apps.apple.com/app/id6836539897';
+export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=eu.limecontrol.app';
+/**
+ * true, gdy aplikacja jest już opublikowana w obu sklepach. Do tego czasu przyciski sklepów
+ * pokazują „wkrótce” i nie prowadzą pod adresy, które jeszcze nie działają.
+ */
+export const STORES_LIVE = false;
 /** Podbij po zmianie site/assets/style.css lub site.js (nagłówki cache: 7 dni). */
-export const ASSET_VERSION = '3';
+export const ASSET_VERSION = '4';
 
 export const LANGS = ['pl', 'en'];
 
@@ -135,6 +140,7 @@ ${alternates}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/style.css?v=${ASSET_VERSION}" />
+  <script>document.documentElement.classList.add('js')</script>
 ${jsonLd ? `\n  <script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2).replace(/^/gm, '  ')}\n  </script>` : ''}${extraHead}
 </head>`;
 }

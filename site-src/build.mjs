@@ -32,9 +32,9 @@ import { fileURLToPath } from 'node:url';
 import { build as buildThemes } from '../limesurvey-themes/build.mjs';
 import { build as buildTemplates } from '../survey-templates/build.mjs';
 import {
-  APP_STORE_URL, APP_URL, AUTHOR_URL, CONTACT_EMAIL, GITHUB_URL, LANGS, PLAY_STORE_URL, PLUGINS_URL, ROUTES, STACK_URL,
-  STREFAANKIET_PRICING_URL, STREFAANKIET_URL, SUPPORT_URL,
-  absolute, layout, outputPath,
+  APP_STORE_URL, APP_URL, ASSET_VERSION, AUTHOR_URL, CONTACT_EMAIL, GITHUB_URL, LANGS, PLAY_STORE_URL, PLUGINS_URL, ROUTES, STACK_URL,
+  STORES_LIVE, STREFAANKIET_PRICING_URL, STREFAANKIET_URL, SUPPORT_URL,
+  absolute, esc, layout, outputPath,
 } from './chrome.mjs';
 import { renderPluginsPage } from './pages/plugins.mjs';
 import { renderTemplatesPage } from './pages/templates.mjs';
@@ -57,13 +57,13 @@ const themes = buildThemes();
 const templates = buildTemplates();
 
 /**
- * Zdanie o dostępności aplikacji mobilnej: linki do sklepów, gdy APP_STORE_URL / PLAY_STORE_URL
- * są ustawione w chrome.mjs, a do tego czasu — informacja o publikacji i budowaniu ze źródeł.
+ * Zdanie o dostępności aplikacji mobilnej: linki do sklepów, gdy STORES_LIVE w chrome.mjs jest
+ * włączone, a do tego czasu — informacja o publikacji i budowaniu ze źródeł.
  */
 function mobileAvailability(lang) {
-  const stores = [['App Store', APP_STORE_URL], ['Google Play', PLAY_STORE_URL]].filter(([, url]) => url);
-  if (stores.length) {
-    const links = stores.map(([name, url]) => `<a href="${url}" target="_blank" rel="noopener">${name}</a>`).join(lang === 'pl' ? ' i ' : ' and ');
+  if (STORES_LIVE) {
+    const links = [['App Store', APP_STORE_URL], ['Google Play', PLAY_STORE_URL]]
+      .map(([name, url]) => `<a href="${url}" target="_blank" rel="noopener">${name}</a>`).join(lang === 'pl' ? ' i ' : ' and ');
     return lang === 'pl' ? `Pobierz ją bezpłatnie: ${links}.` : `Get it for free: ${links}.`;
   }
   const readme = `${GITHUB_URL}/blob/main/mobile/${lang === 'pl' ? 'README.md' : 'README.en.md'}`;
@@ -72,10 +72,86 @@ function mobileAvailability(lang) {
     : `The app is waiting to be published on the App Store and Google Play. Until then you can build it from source (<a href="${readme}" target="_blank" rel="noopener">instructions</a>) or use the PWA.`;
 }
 
+const APPLE_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>';
+const PLAY_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#00d7fe" d="M1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087z"/><path fill="#ffce00" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594z"/><path fill="#00f076" d="M13.544 10.989l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179z"/><path fill="#ff3a44" d="M13.544 13.056l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54z"/></svg>';
+
+/** Przyciski „Pobierz z App Store / Google Play” (przed publikacją: „wkrótce”, bez linku). */
+function storeButtons(lang) {
+  const t = lang === 'pl'
+    ? { soon: 'Wkrótce w', badge: 'wkrótce', label: 'Aplikacja mobilna' }
+    : { soon: 'Coming soon to', badge: 'soon', label: 'Mobile app' };
+  const stores = [
+    ['App Store', APP_STORE_URL, APPLE_LOGO, lang === 'pl' ? 'Pobierz z' : 'Download on the'],
+    ['Google Play', PLAY_STORE_URL, PLAY_LOGO, lang === 'pl' ? 'Pobierz z' : 'Get it on'],
+  ];
+  const items = stores.map(([name, url, logo, get]) => STORES_LIVE
+    ? `<a class="store-btn" href="${url}" target="_blank" rel="noopener">${logo}<span><small>${get}</small><b>${name}</b></span></a>`
+    : `<span class="store-btn is-soon" aria-label="${esc(`${name} — ${t.badge}`)}">${logo}<span><small>${t.soon}</small><b>${name}</b></span><em>${t.badge}</em></span>`);
+  return `<div class="store-buttons" role="group" aria-label="${t.label}">${items.join('')}</div>`;
+}
+
+/** Ekrany aplikacji (site/assets/screens/<lang>/ — generuje je site-src/screens.mjs). */
+const SCREEN_CAPTIONS = {
+  pl: {
+    surveys: ['Ankiety i statystyki', 'Liczba odpowiedzi i stan uczestników wybranej ankiety na wykresach.'],
+    summary: ['Szczegóły ankiety', 'Podsumowanie odpowiedzi, odsetek ukończonych i tokeny — na żywo z serwera.'],
+    list: ['Lista ankiet', 'Wszystkie ankiety instancji z filtrem aktywnych i nieaktywnych.'],
+    'link-qr': ['Link, QR i tryb CAPI', 'Udostępnij link, pokaż kod QR i uruchom pętlę wywiadów na tablecie.'],
+    templates: ['Biblioteka szablonów', 'Gotowe kwestionariusze PL/EN importowane jednym dotknięciem.'],
+    participants: ['Uczestnicy i tokeny', 'Dodawaj respondentów, wysyłaj zaproszenia i przypomnienia.'],
+    instances: ['Wiele instancji', 'Profile serwerów LimeSurvey i dziennik wywołań RPC.'],
+  },
+  en: {
+    surveys: ['Surveys and statistics', 'Response counts and participant status of the selected survey in charts.'],
+    summary: ['Survey details', 'Response summary, completion rate and tokens — live from the server.'],
+    list: ['Survey list', 'Every survey on the instance, filtered by active and inactive.'],
+    'link-qr': ['Link, QR and CAPI mode', 'Share the link, show a QR code and run back-to-back interviews on a tablet.'],
+    templates: ['Template library', 'Ready-made PL/EN questionnaires imported with one tap.'],
+    participants: ['Participants and tokens', 'Add respondents and send invitations and reminders.'],
+    instances: ['Many instances', 'LimeSurvey server profiles and the RPC call log.'],
+  },
+};
+const screenSrc = (lang, name) => `/assets/screens/${lang}/${name}.webp?v=${ASSET_VERSION}`;
+
+/** Telefon w hero: prawdziwe ekrany aplikacji przenikające się co kilka sekund. */
+function heroDevice(lang) {
+  const shots = ['surveys', 'list', 'templates'];
+  const label = lang === 'pl' ? 'Aplikacja LimeControl na telefonie: ' : 'The LimeControl app on a phone: ';
+  const imgs = shots.map((name, i) => `<img src="${screenSrc(lang, name)}" alt="${i ? '' : esc(label + SCREEN_CAPTIONS[lang][name][0])}" width="640" height="1391"${i ? ' loading="lazy" aria-hidden="true"' : ' fetchpriority="high"'} />`).join('\n              ');
+  const chips = lang === 'pl'
+    ? ['<b>+23</b> nowe odpowiedzi', '<span class="dot"></span> Ankieta aktywna']
+    : ['<b>+23</b> new responses', '<span class="dot"></span> Survey active'];
+  return `<div class="device-stage">
+          <div class="device device-phone">
+            <span class="device-island" aria-hidden="true"></span>
+            <div class="device-screen device-slides">
+              ${imgs}
+            </div>
+          </div>
+          <div class="float-chip chip-a" aria-hidden="true">${chips[0]}</div>
+          <div class="float-chip chip-b" aria-hidden="true">${chips[1]}</div>
+        </div>`;
+}
+
+/** Galeria „Zobacz aplikację”: przewijany rząd telefonów z podpisami. */
+function screenGallery(lang) {
+  return Object.entries(SCREEN_CAPTIONS[lang]).map(([name, [title, text]]) => `<figure class="shot">
+            <div class="device device-phone device-sm">
+              <span class="device-island" aria-hidden="true"></span>
+              <div class="device-screen"><img src="${screenSrc(lang, name)}" alt="${esc(title)}" width="640" height="1391" loading="lazy" decoding="async" /></div>
+            </div>
+            <figcaption><strong>${title}</strong>${text}</figcaption>
+          </figure>`).join('\n          ');
+}
+
 /** Wartości znaczników {{…}} dostępnych w pages/*.html. */
 function tokens(lang) {
   return {
     MOBILE_AVAILABILITY: mobileAvailability(lang),
+    STORE_BUTTONS: storeButtons(lang),
+    HERO_DEVICE: heroDevice(lang),
+    SCREEN_GALLERY: screenGallery(lang),
+    IPAD_SCREEN: screenSrc(lang, 'ipad-surveys'),
     APP_URL,
     GITHUB_URL,
     STACK_URL,
