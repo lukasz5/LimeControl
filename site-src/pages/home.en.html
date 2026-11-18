@@ -35,6 +35,7 @@
             </a>
             <a class="btn btn-ghost" href="{{docs}}#quick-start">Quick start</a>
           </div>
+          {{STORE_BUTTONS}}
           <ul class="hero-meta">
             <li>Free and open source</li>
             <li>LimeSurvey 3.x – 7.x</li>
@@ -43,41 +44,7 @@
           </ul>
         </div>
 
-        <!-- App screen mock-up -->
-        <div class="phone" aria-hidden="true">
-          <div class="screen">
-            <div class="screen-top">
-              <div class="row"><small>University Research · LS 7.1</small><span class="pill pill-live">● connected</span></div>
-              <div class="row" style="margin-top:8px"><strong>Surveys</strong><small>12 active</small></div>
-            </div>
-            <div class="screen-body">
-              <div class="stats">
-                <div><b>1,284</b><span>responses</span></div>
-                <div><b>76%</b><span>complete</span></div>
-                <div><b>412</b><span>tokens</span></div>
-              </div>
-              <div class="card-mini">
-                <div class="row"><span class="t">Student satisfaction 2026</span><span class="pill pill-on">Active</span></div>
-                <div class="s">#482913 · until 30 Nov 2026</div>
-                <div class="bar"><i style="width:76%"></i></div>
-              </div>
-              <div class="card-mini">
-                <div class="row"><span class="t">Safety training evaluation</span><span class="pill pill-sched">Starts 08:00</span></div>
-                <div class="s">#219034 · server schedule</div>
-              </div>
-              <div class="card-mini">
-                <div class="row"><span class="t">Q4 pilot study</span><span class="pill pill-off">Inactive</span></div>
-                <div class="s">#771205 · 0 responses</div>
-              </div>
-            </div>
-            <div class="tabbar">
-              <div class="on"><i></i>Surveys</div>
-              <div><i></i>Schedule</div>
-              <div><i></i>Participants</div>
-              <div><i></i>Instances</div>
-            </div>
-          </div>
-        </div>
+        {{HERO_DEVICE}}
       </div>
     </section>
 
@@ -89,6 +56,38 @@
           <div><b>{{THEME_COUNT}} themes</b><span>WCAG 2.2 AA for LimeSurvey 6 and&nbsp;7</span></div>
           <div><b>{{TEMPLATE_COUNT}} templates</b><span>surveys in English and Polish</span></div>
           <div><b>PWA + Docker</b><span>in the cloud or on your own server</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APP: real screens -->
+    <section id="app" class="section-soft app-showcase">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">See the app</span>
+          <h2>Real LimeControl screens</h2>
+          <p>This is the app on iPhone and Android — with data from the demo instance. It works the same in the browser and as a PWA.</p>
+        </div>
+      </div>
+      <div class="shots-wrap">
+        <div class="shots" tabindex="0" role="region" aria-label="App screen gallery (scrolls horizontally)">
+          {{SCREEN_GALLERY}}
+        </div>
+        <div class="shots-nav container">
+          <button type="button" class="shots-btn" data-dir="-1" aria-label="Previous screens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button type="button" class="shots-btn" data-dir="1" aria-label="Next screens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="container split tablet-split">
+        <div class="device device-tablet">
+          <div class="device-screen"><img src="{{IPAD_SCREEN}}" alt="LimeControl on iPad: survey list with statistics" width="1400" height="1867" loading="lazy" decoding="async" /></div>
+        </div>
+        <div>
+          <span class="eyebrow">iPhone, iPad and Android</span>
+          <h2>On your phone, tablet and in the browser</h2>
+          <p class="muted">The free mobile app connects straight to your server — no account, no sign-up and no middleman. Server profiles stay on the device, passwords are never stored and exports go to the system share sheet.</p>
+          {{STORE_BUTTONS}}
+          <p class="muted small-note">Rather not install anything? <a href="{{APP_URL}}">Open LimeControl in the browser</a> and add it to your home screen as a PWA.</p>
         </div>
       </div>
     </section>
