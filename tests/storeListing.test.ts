@@ -45,7 +45,8 @@ test('Google Play: pola mieszczą się w limitach znaków w obu językach', () =
 test('nazwa, podtytuł i słowa kluczowe nie używają znaku towarowego LimeSurvey', () => {
   for (const locale of IOS_LOCALES) {
     for (const field of BRAND_FIELDS_IOS) assert.doesNotMatch(read('ios', locale, `${field}.txt`), /lime\s*survey/i, `ios/${locale}/${field}.txt`);
-    assert.equal(read('ios', locale, 'name.txt'), 'LimeControl');
+    // „LimeControl” jest w App Store zajęte — nazwa z dopiskiem, ale zawsze zaczyna się od marki
+    assert.equal(read('ios', locale, 'name.txt'), { 'en-US': 'LimeControl – Surveys', pl: 'LimeControl – Ankiety' }[locale]);
   }
   for (const locale of ANDROID_LOCALES) {
     for (const field of BRAND_FIELDS_ANDROID) assert.doesNotMatch(read('android', locale, `${field}.txt`), /lime\s*survey/i, `android/${locale}/${field}.txt`);
