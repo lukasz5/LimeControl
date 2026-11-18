@@ -1,0 +1,150 @@
+# LimeControl — wydania aplikacji mobilnej w App Store i Google Play.
+#
+# Uruchamiaj z katalogu mobile/ (opis krok po kroku: mobile/README.md):
+#
+#   fastlane ios metadata        opisy i zrzuty ekranu  → App Store Connect
+#   fastlane ios beta            build wydania          → TestFlight
+#   fastlane android metadata    opisy, grafiki, zrzuty → Google Play
+#   fastlane android internal    build wydania (AAB)    → testy wewnętrzne (wersja robocza)
+#
+# Żadne polecenie nie wysyła aplikacji do recenzji i nie publikuje jej użytkownikom —
+# to zawsze osobna, ręczna decyzja w App Store Connect lub Google Play Console.
+#
+# Dane dostępowe wyłącznie w zmiennych środowiskowych (nigdy w repozytorium):
+#
+#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH   klucz API App Store Connect (plik .p8)
+#   APPLE_TEAM_ID                             identyfikator zespołu Apple Developer
+#   SUPPLY_JSON_KEY                           klucz konta usługi Google Play (plik .json)
+#   LIMECONTROL_BUILD                         numer builda (iOS) / versionCode (Android)
+
+require "json"
+require "shellwords"
+
+skip_docs
+opt_out_usage
+
+MOBILE_DIR = File.expand_path("..", __dir__)
+REPO_ROOT = File.expand_path("..", MOBILE_DIR)
+IOS_PROJECT = File.join(MOBILE_DIR, "ios", "App", "App.xcodeproj")
+ANDROID_DIR = File.join(MOBILE_DIR, "android")
+ANDROID_BUNDLE = File.join(ANDROID_DIR, "app", "build", "outputs", "bundle", "release", "app-release.aab")
+
+# Wersja widoczna w sklepach — zawsze ta z package.json (mobile/scripts/sync-version.mjs).
+def app_version
+  JSON.parse(File.read(File.join(REPO_ROOT, "package.json"))).fetch("version")
+end
+
+def required_env(name)
+  value = ENV[name].to_s.strip
+  UI.user_error!("Brak zmiennej środowiskowej #{name} — patrz mobile/README.md") if value.empty?
+  value
+end
+
+# Numer builda musi rosnąć przy każdej wysyłce do sklepu, dlatego podajesz go jawnie.
+def build_number
+  value = required_env("LIMECONTROL_BUILD")
+  UI.user_error!("LIMECONTROL_BUILD musi być dodatnią liczbą całkowitą") unless value.match?(/\A[1-9]\d{0,8}\z/)
+  value
+end
+
+# Paczka web (dist-mobile/) i synchronizacja projektów natywnych.
+def build_web_bundle
+  Dir.chdir(REPO_ROOT) { sh("npm run build:mobile") }
+end
+
+platform :ios do
+  private_lane :api_key do
+    app_store_connect_api_key(
+      key_id: required_env("ASC_KEY_ID"),
+      issuer_id: required_env("ASC_ISSUER_ID"),
+      key_filepath: File.expand_path(required_env("ASC_KEY_PATH")),
+      in_house: false
+    )
+  end
+
+  desc "Wyślij opisy i zrzuty ekranu do App Store Connect (bez builda i bez wysyłki do recenzji)"
+  lane :metadata do
+    upload_to_app_store(
+      api_key: api_key,
+      app_version: app_version,
+      metadata_path: File.join(__dir__, "metadata", "ios"),
+      screenshots_path: File.join(__dir__, "screenshots"),
+      overwrite_screenshots: true,
+      skip_binary_upload: true,
+      submit_for_review: false,
+      automatic_release: false,
+      precheck_include_in_app_purchases: false,
+      force: true
+    )
+  end
+
+  desc "Zbuduj wydanie i wyślij je do TestFlight (podpis automatyczny przez klucz API)"
+  lane :beta do
+    build = build_number
+    team = required_env("APPLE_TEAM_ID")
+    key = api_key
+    auth = [
+      "-allowProvisioningUpdates",
+      "-authenticationKeyPath", File.expand_path(required_env("ASC_KEY_PATH")).shellescape,
+      "-authenticationKeyID", required_env("ASC_KEY_ID"),
+      "-authenticationKeyIssuerID", required_env("ASC_ISSUER_ID")
+    ].join(" ")
+
+    build_web_bundle
+    build_app(
+      project: IOS_PROJECT,
+      scheme: "App",
+      configuration: "Release",
+      clean: true,
+      output_directory: File.join(MOBILE_DIR, "build", "ios"),
+      output_name: "LimeControl.ipa",
+      export_method: "app-store",
+      export_options: { signingStyle: "automatic", teamID: team },
+      xcargs: "#{auth} DEVELOPMENT_TEAM=#{team} CURRENT_PROJECT_VERSION=#{build}",
+      export_xcargs: auth
+    )
+    upload_to_testflight(api_key: key, skip_waiting_for_build_processing: true)
+    UI.success("Build #{app_version} (#{build}) wysłany do TestFlight. Wysyłka do recenzji: ręcznie w App Store Connect.")
+  end
+end
+
+platform :android do
+  desc "Wyślij opisy, grafiki i zrzuty ekranu do Google Play (bez paczki aplikacji)"
+  lane :metadata do
+    required_env("SUPPLY_JSON_KEY")
+    upload_to_play_store(
+      metadata_path: File.join(__dir__, "metadata", "android"),
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_changelogs: true
+    )
+  end
+
+  desc "Zbuduj podpisaną paczkę AAB i wyślij ją jako wersję roboczą na ścieżkę testów wewnętrznych"
+  lane :internal do
+    build = build_number
+    required_env("SUPPLY_JSON_KEY")
+    unless File.exist?(File.join(ANDROID_DIR, "keystore.properties"))
+      UI.user_error!("Brak mobile/android/keystore.properties — bez niego paczka nie będzie podpisana (patrz mobile/README.md)")
+    end
+
+    build_web_bundle
+    gradle(
+      project_dir: ANDROID_DIR,
+      task: "bundle",
+      build_type: "Release",
+      properties: { "limecontrolVersionCode" => build }
+    )
+    upload_to_play_store(
+      track: "internal",
+      release_status: "draft",
+      aab: ANDROID_BUNDLE,
+      version_name: "#{app_version} (#{build})",
+      metadata_path: File.join(__dir__, "metadata", "android"),
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+    UI.success("Paczka #{app_version} (#{build}) czeka jako wersja robocza w testach wewnętrznych Google Play.")
+  end
+end

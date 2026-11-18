@@ -1,0 +1,28 @@
+LimeControl to darmowa aplikacja do zarządzania ankietami na własnym serwerze ankiet — bez logowania do panelu administratora. Współpracuje z serwerami LimeSurvey 3.x–7.x przez oficjalne API RemoteControl 2.
+
+CO MOŻESZ ZROBIĆ
+• Aktywuj i zamykaj ankiety, ustawiaj daty rozpoczęcia i zakończenia, kopiuj ankiety.
+• Importuj gotowe kwestionariusze z biblioteki 12 szablonów po polsku i angielsku: NPS, CSAT, zaangażowanie pracowników, ewaluacje, wywiady CATI i CAPI.
+• Sprawdzaj podsumowanie odpowiedzi i uczestników na wykresach i porównuj dwie ankiety.
+• Zarządzaj uczestnikami: dodawaj respondentów, wysyłaj zaproszenia i przypomnienia, edytuj treść e-maili z podglądem.
+• Eksportuj odpowiedzi do CSV, Excela lub JSON — zapisz plik na urządzeniu albo udostępnij go dalej.
+• Udostępniaj link do ankiety, pokaż kod QR i zmieniaj motyw ankiety.
+• Tryb CAPI: prowadź wywiady na tablecie lub telefonie — po zakończeniu ankieta sama zaczyna kolejny wywiad.
+• Obsługuj wiele serwerów i przełączaj się między nimi jednym dotknięciem.
+• Podgląd postępu realizacji CATI i CAPI z platformy StrefaAnkiet (beta, tylko odczyt).
+
+PRYWATNOŚĆ
+• Bez konta i bez rejestracji. Profile serwerów są zapisane tylko na Twoim urządzeniu.
+• Hasła do serwera nie są zapisywane.
+• Aplikacja łączy się bezpośrednio z Twoim serwerem. Nie zbieramy żadnych danych, nie ma reklam ani śledzenia.
+
+WYMAGANIA
+• Serwer LimeSurvey 3.x, 5.x, 6.x lub 7.x z włączonym interfejsem JSON-RPC, dostępny przez HTTPS.
+• Konto na tym serwerze z uprawnieniami do ankiet.
+
+OPCJONALNIE
+• Połącz aplikację z własnym serwerem LimeControl, aby planować aktywacje, zaproszenia i przypomnienia — zadania wykonują się nawet wtedy, gdy telefon jest wyłączony.
+
+LimeControl jest otwartym oprogramowaniem. Kod źródłowy, dokumentacja, motywy i szablony ankiet: https://limecontrol.eu
+
+LimeSurvey jest zastrzeżonym znakiem towarowym LimeSurvey GmbH. LimeControl jest niezależnym projektem i nie jest powiązany z LimeSurvey GmbH.
