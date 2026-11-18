@@ -170,21 +170,24 @@ jobs:
           done
           APP=http://127.0.0.1:18080
           SITE=http://127.0.0.1:18081
+          # Download first, then search: `curl | grep -q` fails under pipefail when grep exits early.
+          has() { local body; body="$(curl -fsS "${@:2}")"; grep -q -- "$1" <<<"$body"; }
 
           curl -fsS "$APP/api/health"
-          curl -fsS "$APP/api/config" | grep -q '"authMode":"local"'
-          curl -fsS "$APP/" | grep -q '<div id="root"'
-          curl -fsS "$APP/szablony-ankiet/catalog.json" | grep -q '"templates"'
+          has '"authMode":"local"' "$APP/api/config"
+          has '<div id="root"' "$APP/"
+          has '"templates"' "$APP/szablony-ankiet/catalog.json"
 
           # The API is closed without the access key and open with it.
           test "$(curl -s -o /dev/null -w '%{http_code}' "$APP/api/schedules")" = 401
           test "$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $CI_ACCESS_KEY" "$APP/api/schedules")" = 200
           test "$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{"endpoint":"http://127.0.0.1/","method":"get_session_key"}' "$APP/api/rpc-relay")" = 401
 
-          curl -fsS "$SITE/" | grep -q '<html lang="pl">'
-          curl -fsS "$SITE/en/" | grep -q '<html lang="en">'
-          curl -fsS "$SITE/en/docs" | grep -q 'id="strefaankiet"'
-          curl -fsSI "$SITE/ankiety/pobierz/nps-klienta.lss" | grep -qi 'content-disposition: attachment'
+          has '<html lang="pl">' "$SITE/"
+          has '<html lang="en">' "$SITE/en/"
+          has 'id="strefaankiet"' "$SITE/en/docs"
+          headers="$(curl -fsSI "$SITE/ankiety/pobierz/nps-klienta.lss")"
+          grep -qi 'content-disposition: attachment' <<<"$headers"
 
           docker logs app | tail -n 20
           docker rm -f app site
