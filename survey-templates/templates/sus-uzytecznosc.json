@@ -1,0 +1,71 @@
+{
+  "id": "sus-uzytecznosc",
+  "order": 90,
+  "category": "research",
+  "modes": ["cawi"],
+  "theme": "minimalist",
+  "minutes": 3,
+  "languages": ["pl", "en"],
+  "title": ["SUS — skala użyteczności systemu", "SUS — System Usability Scale"],
+  "summary": ["Standardowy kwestionariusz System Usability Scale (10 stwierdzeń, skala 1–5). Wynik 0–100 jest wyliczany automatycznie do pola SUSSCORE.", "The standard System Usability Scale questionnaire (10 statements, a 1–5 scale). The 0–100 score is computed automatically into the SUSSCORE field."],
+  "description": ["Ocena użyteczności systemu lub aplikacji. Zajmie około 3 minut.", "A usability rating of a system or application. It takes about 3 minutes."],
+  "welcome": ["Odpowiedz na podstawie swoich doświadczeń z systemem. Zaznacz pierwszą odpowiedź, która przychodzi Ci na myśl.", "Answer based on your experience with the system. Select the first answer that comes to mind."],
+  "end": ["Dziękujemy za ocenę.", "Thank you for your rating."],
+  "groups": [
+    {
+      "title": ["Ocena systemu", "Rating the system"],
+      "description": ["Kwestionariusz System Usability Scale (SUS), John Brooke, 1986.", "System Usability Scale (SUS) questionnaire, John Brooke, 1986."],
+      "questions": [
+        {
+          "code": "SUS",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile zgadzasz się z poniższymi stwierdzeniami?", "How much do you agree with the following statements?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Myślę, że chciał(a)bym często korzystać z tego systemu.", "I think that I would like to use this system frequently."] },
+            { "code": "Q02", "text": ["System wydał mi się niepotrzebnie skomplikowany.", "I found the system unnecessarily complex."] },
+            { "code": "Q03", "text": ["System był łatwy w użyciu.", "I thought the system was easy to use."] },
+            { "code": "Q04", "text": ["Myślę, że potrzebował(a)bym pomocy osoby technicznej, aby korzystać z tego systemu.", "I think that I would need the support of a technical person to be able to use this system."] },
+            { "code": "Q05", "text": ["Poszczególne funkcje systemu były dobrze ze sobą zintegrowane.", "I found the various functions in this system were well integrated."] },
+            { "code": "Q06", "text": ["W systemie było zbyt wiele niespójności.", "I thought there was too much inconsistency in this system."] },
+            { "code": "Q07", "text": ["Sądzę, że większość osób bardzo szybko nauczy się korzystać z tego systemu.", "I would imagine that most people would learn to use this system very quickly."] },
+            { "code": "Q08", "text": ["Korzystanie z systemu było bardzo uciążliwe.", "I found the system very cumbersome to use."] },
+            { "code": "Q09", "text": ["Czułem(-am) się bardzo pewnie, korzystając z systemu.", "I felt very confident using the system."] },
+            { "code": "Q10", "text": ["Musiał(a)bym nauczyć się wielu rzeczy, zanim zaczął(-ęła)bym sprawnie korzystać z tego systemu.", "I needed to learn a lot of things before I could get going with this system."] }
+          ],
+          "options": "@agree5"
+        },
+        {
+          "code": "SUSSCORE",
+          "type": "equation",
+          "attributes": {
+            "hidden": "1"
+          },
+          "text": ["{((SUS_Q01.NAOK - 1) + (5 - SUS_Q02.NAOK) + (SUS_Q03.NAOK - 1) + (5 - SUS_Q04.NAOK) + (SUS_Q05.NAOK - 1) + (5 - SUS_Q06.NAOK) + (SUS_Q07.NAOK - 1) + (5 - SUS_Q08.NAOK) + (SUS_Q09.NAOK - 1) + (5 - SUS_Q10.NAOK)) * 2.5}", "{((SUS_Q01.NAOK - 1) + (5 - SUS_Q02.NAOK) + (SUS_Q03.NAOK - 1) + (5 - SUS_Q04.NAOK) + (SUS_Q05.NAOK - 1) + (5 - SUS_Q06.NAOK) + (SUS_Q07.NAOK - 1) + (5 - SUS_Q08.NAOK) + (SUS_Q09.NAOK - 1) + (5 - SUS_Q10.NAOK)) * 2.5}"]
+        }
+      ]
+    },
+    {
+      "title": ["Twoje doświadczenia", "Your experience"],
+      "questions": [
+        {
+          "code": "FREQ",
+          "type": "radio",
+          "text": ["Jak często korzystasz z tego systemu?", "How often do you use this system?"],
+          "options": [
+            { "code": "1", "text": ["Codziennie", "Every day"] },
+            { "code": "2", "text": ["Kilka razy w tygodniu", "A few times a week"] },
+            { "code": "3", "text": ["Kilka razy w miesiącu", "A few times a month"] },
+            { "code": "4", "text": ["Rzadziej", "Less often"] },
+            { "code": "5", "text": ["To był mój pierwszy raz", "This was my first time"] }
+          ]
+        },
+        {
+          "code": "PAIN",
+          "type": "longtext",
+          "text": ["Co najbardziej utrudniało Ci korzystanie z systemu?", "What made the system hardest to use?"]
+        }
+      ]
+    }
+  ]
+}

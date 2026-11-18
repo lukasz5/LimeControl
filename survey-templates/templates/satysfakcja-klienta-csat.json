@@ -1,0 +1,89 @@
+{
+  "id": "satysfakcja-klienta-csat",
+  "order": 20,
+  "category": "customer-satisfaction",
+  "modes": ["cawi"],
+  "theme": "professional",
+  "minutes": 3,
+  "languages": ["pl", "en"],
+  "title": ["Satysfakcja po kontakcie z obsługą (CSAT)", "Customer service satisfaction (CSAT)"],
+  "summary": ["Ankieta po zgłoszeniu lub rozmowie z obsługą: CSAT 1–5, wysiłek klienta (CES), rozwiązanie sprawy przy pierwszym kontakcie i ocena czterech aspektów obsługi.", "A post-contact survey: CSAT 1–5, customer effort (CES), first-contact resolution and a rating of four service aspects."],
+  "description": ["Chcemy wiedzieć, jak oceniasz ostatni kontakt z naszą obsługą. Ankieta zajmie około 3 minut.", "We would like to know how you rate your recent contact with our support team. The survey takes about 3 minutes."],
+  "welcome": ["Twoja opinia pomoże nam lepiej obsługiwać kolejne zgłoszenia.", "Your feedback will help us handle future requests better."],
+  "end": ["Dziękujemy za poświęcony czas i szczere odpowiedzi.", "Thank you for your time and honest answers."],
+  "groups": [
+    {
+      "title": ["Ostatni kontakt", "Your recent contact"],
+      "questions": [
+        {
+          "code": "CHANNEL",
+          "type": "radio",
+          "other": true,
+          "text": ["W jaki sposób kontaktowałeś(-aś) się z nami ostatnio?", "How did you contact us most recently?"],
+          "options": [
+            { "code": "1", "text": ["Telefon", "Phone"] },
+            { "code": "2", "text": ["E-mail", "Email"] },
+            { "code": "3", "text": ["Czat", "Chat"] },
+            { "code": "4", "text": ["Formularz na stronie", "Website form"] },
+            { "code": "5", "text": ["Wizyta osobista", "In person"] }
+          ]
+        },
+        {
+          "code": "CSAT",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak ogólnie oceniasz ten kontakt?", "Overall, how satisfied are you with this contact?"],
+          "options": "@satisfaction5"
+        },
+        {
+          "code": "CES",
+          "type": "radio",
+          "text": ["Załatwienie mojej sprawy było łatwe.", "It was easy to get my issue handled."],
+          "help": ["Zaznacz, na ile zgadzasz się z tym stwierdzeniem.", "Indicate how much you agree with this statement."],
+          "options": "@agree5"
+        },
+        {
+          "code": "RESOLVED",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Czy Twoja sprawa została rozwiązana?", "Was your issue resolved?"],
+          "options": [
+            { "code": "1", "text": ["Tak, przy pierwszym kontakcie", "Yes, on first contact"] },
+            { "code": "2", "text": ["Tak, ale po kilku kontaktach", "Yes, but it took several contacts"] },
+            { "code": "3", "text": ["Jeszcze nie — sprawa jest w toku", "Not yet — it is still in progress"] },
+            { "code": "4", "text": ["Nie", "No"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Szczegóły obsługi", "Service details"],
+      "questions": [
+        {
+          "code": "ASPECTS",
+          "type": "array",
+          "text": ["Jak oceniasz poszczególne elementy obsługi?", "How do you rate each aspect of the service?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Czas oczekiwania na odpowiedź", "Waiting time for a response"] },
+            { "code": "Q02", "text": ["Uprzejmość i zaangażowanie", "Courtesy and commitment"] },
+            { "code": "Q03", "text": ["Kompetencje konsultanta", "Agent's competence"] },
+            { "code": "Q04", "text": ["Jasność przekazanych informacji", "Clarity of the information provided"] }
+          ],
+          "options": "@quality5"
+        },
+        {
+          "code": "IMPROVE",
+          "type": "longtext",
+          "relevance": "CSAT.NAOK <= 3",
+          "text": ["Co poszło nie tak i co powinniśmy poprawić?", "What went wrong and what should we improve?"]
+        },
+        {
+          "code": "PRAISE",
+          "type": "longtext",
+          "relevance": "CSAT.NAOK >= 4",
+          "text": ["Co szczególnie Ci się spodobało?", "What did you particularly like?"]
+        }
+      ]
+    }
+  ]
+}

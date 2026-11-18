@@ -1,0 +1,486 @@
+<!--meta
+{
+  "title": "LimeControl — app, themes and survey templates for LimeSurvey",
+  "description": "Free, open-source tools for LimeSurvey 3.x–7.x: a PWA for managing surveys from your phone, {{THEME_COUNT}} WCAG 2.2 AA themes, {{TEMPLATE_COUNT}} survey templates in English and Polish, CATI/CAPI plugins and Docker deployments. Only the services are paid: a StrefaAnkiet account and hosting.",
+  "ogTitle": "LimeControl — LimeSurvey in your pocket",
+  "ogDescription": "An app, themes, survey templates and deployments for LimeSurvey 3.x–7.x. Free and open source.",
+  "jsonLd": {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "LimeControl",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://limecontrol.eu/en/",
+    "softwareVersion": "{{VERSION}}",
+    "inLanguage": ["en", "pl"],
+    "license": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
+    "description": "An open-source toolkit for LimeSurvey: a PWA for managing surveys through the RemoteControl 2 API, WCAG 2.2 AA themes, survey templates and Docker deployments.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "author": { "@type": "Organization", "name": "strefabadan.pl", "url": "https://strefabadan.pl" }
+  }
+}
+-->
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div>
+          <span class="eyebrow">Free and open source</span>
+          <h1>Your LimeSurvey surveys. <span class="lime">Under control</span>, from your phone.</h1>
+          <p class="lead">LimeControl is a set of free, open-source tools for LimeSurvey: an app that manages surveys through the official RemoteControl&nbsp;2 API, WCAG themes, ready-made survey templates, plugins and Docker deployments. Activate surveys, schedule mailings and check results — without logging in to the admin panel.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="{{APP_URL}}">
+              Launch LimeControl
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="{{docs}}#quick-start">Quick start</a>
+          </div>
+          <ul class="hero-meta">
+            <li>Free and open source</li>
+            <li>LimeSurvey 3.x – 7.x</li>
+            <li>PWA or your own server</li>
+            <li>English and Polish</li>
+          </ul>
+        </div>
+
+        <!-- App screen mock-up -->
+        <div class="phone" aria-hidden="true">
+          <div class="screen">
+            <div class="screen-top">
+              <div class="row"><small>University Research · LS 7.1</small><span class="pill pill-live">● connected</span></div>
+              <div class="row" style="margin-top:8px"><strong>Surveys</strong><small>12 active</small></div>
+            </div>
+            <div class="screen-body">
+              <div class="stats">
+                <div><b>1,284</b><span>responses</span></div>
+                <div><b>76%</b><span>complete</span></div>
+                <div><b>412</b><span>tokens</span></div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Student satisfaction 2026</span><span class="pill pill-on">Active</span></div>
+                <div class="s">#482913 · until 30 Nov 2026</div>
+                <div class="bar"><i style="width:76%"></i></div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Safety training evaluation</span><span class="pill pill-sched">Starts 08:00</span></div>
+                <div class="s">#219034 · server schedule</div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Q4 pilot study</span><span class="pill pill-off">Inactive</span></div>
+                <div class="s">#771205 · 0 responses</div>
+              </div>
+            </div>
+            <div class="tabbar">
+              <div class="on"><i></i>Surveys</div>
+              <div><i></i>Schedule</div>
+              <div><i></i>Participants</div>
+              <div><i></i>Instances</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IN NUMBERS -->
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="compat">
+          <div><b>3.x – 7.x</b><span>LimeSurvey versions, including UTC dates in LS&nbsp;7</span></div>
+          <div><b>{{THEME_COUNT}} themes</b><span>WCAG 2.2 AA for LimeSurvey 6 and&nbsp;7</span></div>
+          <div><b>{{TEMPLATE_COUNT}} templates</b><span>surveys in English and Polish</span></div>
+          <div><b>PWA + Docker</b><span>in the cloud or on your own server</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ECOSYSTEM -->
+    <section id="ecosystem" class="section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Ecosystem</span>
+          <h2>Everything you need to run research in LimeSurvey</h2>
+          <p>Each piece works on its own; together they make a complete workshop — from installing the server, through the look and content of a survey, to fieldwork and results.</p>
+        </div>
+
+        <div class="grid grid-3 eco">
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+            <h3>The LimeControl app</h3>
+            <p>A PWA for phone and desktop: survey activation, scheduling, participants, statistics and response export across many LimeSurvey instances.</p>
+            <a class="card-link" href="#features">See the features →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 1 0 0 20c1.7 0 2.5-1.2 2-2.5-.6-1.6.4-3 2-3H18a4 4 0 0 0 4-4c0-5.5-4.5-10.5-10-10.5z"/></svg></div>
+            <h3>Survey themes</h3>
+            <p>{{THEME_COUNT}} WCAG 2.2 AA themes for LimeSurvey 6 and 7 — from medical to minimalist, plus CATI and CAPI interviewer themes with keyboard shortcuts.</p>
+            <a class="card-link" href="{{themes}}">Download the themes →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h7M9 11h5"/></svg></div>
+            <h3>Survey templates</h3>
+            <p>{{TEMPLATE_COUNT}} ready-made questionnaires in English and Polish: NPS, CSAT, employee engagement, evaluations, SUS, and CATI and CAPI interview skeletons.</p>
+            <a class="card-link" href="{{templates}}">Browse the templates →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></div>
+            <h3>StrefaAnkiet plugins</h3>
+            <p>Free plugins that connect LimeSurvey to the StrefaAnkiet platform: mailing through Amazon SES, VoIP telephony for CATI, interviewer fieldwork and analysis. Only the platform account and services are paid.</p>
+            <a class="card-link" href="{{plugins}}">Discover the plugins →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="M3.3 7L12 12l8.7-5M12 22V12"/></svg></div>
+            <h3>Deployments</h3>
+            <p>Docker kits: a hardened LimeSurvey 7 with HTTPS and backups, and LimeControl on your own server — with no external services.</p>
+            <a class="card-link" href="#hosting">See the deployments →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+            <h3>Open source</h3>
+            <p>The app, the themes, the plugins and the deployment kits are open source, and the survey templates are released under CC0. Issues and pull requests are welcome.</p>
+            <a class="card-link" href="{{GITHUB_URL}}" target="_blank" rel="noopener">Repository on GitHub →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">App features</span>
+          <h2>Everything you need in the field and on the go</h2>
+          <p>The most common survey operations — a few taps away, on any device.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></svg></div>
+            <h3>Many LimeSurvey instances</h3>
+            <p>Save a profile for every server and switch between them with one tap. Profiles sync in the cloud once you sign in with a Google account.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3>Activating and closing surveys</h3>
+            <p>Activate a survey together with its token table, set the <code>startdate</code> and <code>expires</code> dates, close a study or copy a survey.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v3l2 1"/></svg></div>
+            <h3>Server-side scheduler</h3>
+            <p>Schedule an activation, a survey closing, an invitation mailing or recurring reminders. The job runs on the server — even when your phone is off.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 7v6M9 10h6"/></svg></div>
+            <h3>Survey template library</h3>
+            <p>Import a ready-made questionnaire into the connected instance with one tap — from NPS to a CATI interview skeleton. You get an inactive survey you can change freely.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20v.01M17 20h3v-3"/></svg></div>
+            <h3>Link, QR code and theme</h3>
+            <p>Copy or share the survey link, show a QR code for a poster or a slide, and set the survey theme — without opening the admin panel.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M11 18h2M9 7h6M9 11h6"/></svg></div>
+            <h3>CAPI mode</h3>
+            <p>Start an interview on a tablet or phone and switch on the interview loop: when one interview ends, the survey starts the next, empty one by itself.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div>
+            <h3>Participants and invitations</h3>
+            <p>Add and remove respondents, edit email templates with a live preview, and send invitations and reminders — right away or from the scheduler.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+            <h3>Statistics and comparisons</h3>
+            <p>A summary of responses and tokens in charts, and two surveys compared side by side — all from <code>get_summary</code>.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
+            <h3>Response export</h3>
+            <p>Download responses as CSV, Excel or JSON and look up column identifiers (SGQA and LS&nbsp;7) in the <code>get_fieldmap</code> inspector.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div>
+            <h3>Notifications and RPC log</h3>
+            <p>Messages about completed and failed jobs, a view of every JSON-RPC call with its response time, CORS diagnostics and readable API errors.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+            <h3>PWA and mobile app</h3>
+            <p>Install the app on your home screen with one tap. A free LimeControl app for iOS and Android is on its way.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <h3>Your own server, no cloud</h3>
+            <p>Run LimeControl in a Docker container and sign in with an access key — no Google account, and the relay and scheduler work inside your network.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">How it works</span>
+          <h2>Ready in four steps</h2>
+          <p>You install nothing on the LimeSurvey server — an enabled JSON-RPC API is all it takes.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Enable the API in LimeSurvey</h3>
+            <p><em>Configuration → Global settings → Interfaces</em> and choose <strong>JSON-RPC</strong>.</p>
+          </li>
+          <li>
+            <h3>Sign in</h3>
+            <p>Open LimeControl and sign in with a Google account. On your own installation an access key is enough.</p>
+          </li>
+          <li>
+            <h3>Add an instance</h3>
+            <p>Enter the LimeSurvey address, user name and password. The API path is filled in automatically.</p>
+          </li>
+          <li>
+            <h3>Manage</h3>
+            <p>Activate surveys, import templates, schedule mailings and download results.</p>
+          </li>
+        </ol>
+        <p style="margin-top:28px"><a href="{{docs}}#limesurvey-setup">Detailed setup instructions →</a></p>
+      </div>
+    </section>
+
+    <!-- CATI / CAPI -->
+    <section id="cati-capi">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">CATI and CAPI</span>
+          <h2>Telephone and face-to-face interviews in LimeSurvey</h2>
+          <p class="muted">The free LimeControl tools get a survey ready for an interviewer: a comfortable theme, a ready-made interview skeleton and an “interview after interview” mode. When a study needs assignments, a call queue, telephony and quotas, you add the free plugins and a StrefaAnkiet platform account — and follow fieldwork progress in the app.</p>
+          <div class="hero-cta" style="margin-bottom:0">
+            <a class="btn btn-primary" href="{{plugins}}">Free StrefaAnkiet plugins</a>
+            <a class="btn btn-ghost" href="{{docs}}#interviews">How to run interviews</a>
+          </div>
+        </div>
+        <ul class="checklist">
+          <li><span><strong>CATI theme</strong> — a layout for an interviewer at a computer: answers with the <kbd>1</kbd>–<kbd>9</kbd> keys, next page with <kbd>Ctrl</kbd>+<kbd>Enter</kbd>, navigation always at hand.</span></li>
+          <li><span><strong>CAPI theme</strong> — large touch targets and clear typography for a tablet or phone in the field.</span></li>
+          <li><span><strong>Interview skeletons</strong> — the “CATI interview” (call outcome, callback time, interviewer note) and “CAPI interview” templates, in English and Polish.</span></li>
+          <li><span><strong>Interview loop</strong> — the app sets the survey up so that it starts the next interview by itself when one ends; the link and QR code for the interviewer are at hand.</span></li>
+          <li><span><strong>Fieldwork status from StrefaAnkiet</strong> — completed interviews, interviewer assignments and the call queue next to the survey, read-only (beta).</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FREE AND PAID -->
+    <section id="free-and-paid" class="section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Free and paid</span>
+          <h2>Free tools, paid services</h2>
+          <p>We develop LimeControl as free, open-source software for every LimeSurvey user. It is funded by services — the StrefaAnkiet account, deployment and hosting — that is, by the things that cannot be handed out as code.</p>
+        </div>
+        <div class="grid grid-2">
+          <article class="card host-card">
+            <span class="tag">Always free</span>
+            <h3>Software</h3>
+            <p>No limit on surveys, instances or users — and the code is open.</p>
+            <ul>
+              <li>The LimeControl app: in the browser, as a PWA and on your own server</li>
+              <li>{{THEME_COUNT}} survey themes and {{TEMPLATE_COUNT}} survey templates</li>
+              <li>StrefaAnkiet plugins for LimeSurvey</li>
+              <li>Docker kits for LimeSurvey and LimeControl</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="{{GITHUB_URL}}" target="_blank" rel="noopener">Code on GitHub</a>
+            </div>
+          </article>
+
+          <article class="card host-card featured">
+            <span class="tag">StrefaAnkiet account</span>
+            <h3>Services for research</h3>
+            <p>A platform subscription and services billed by usage — for when a study needs infrastructure and a team.</p>
+            <ul>
+              <li><strong>Managed Amazon SES</strong> — mailing from your own domain without configuring AWS</li>
+              <li><strong>VoIP telephony</strong> — an in-browser phone and a VoIP server for CATI interviews</li>
+              <li><strong>Fieldwork</strong> — interviewer assignments and an app that works offline</li>
+              <li><strong>Analysis and reports</strong> — data versions, R, PDF and DOCX, team work</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-primary" href="{{STREFAANKIET_PRICING_URL}}" rel="noopener">StrefaAnkiet pricing</a>
+              <a class="btn btn-ghost" href="{{plugins}}">How it connects</a>
+            </div>
+          </article>
+        </div>
+        <p class="muted" style="margin:22px 0 0">Need a server? <a href="#hosting">We deploy and maintain survey servers</a> built on LimeSurvey software — a separate, optional service.</p>
+      </div>
+    </section>
+
+    <!-- DEPLOYMENT AND HOSTING -->
+    <section id="hosting">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Hosting and deployment</span>
+          <h2>Host it all yourself or leave it to us</h2>
+          <p>You can run your own survey server and LimeControl yourself from open Docker kits. Or let us deploy and maintain a survey server for you — ready for work from day one.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card host-card">
+            <span class="tag">Open source · survey server</span>
+            <h3>A ready-made Docker stack on GitHub</h3>
+            <p>A kit for bringing up your own survey server (LimeSurvey 7) on Ubuntu with a single <code>install.sh</code> script.</p>
+            <ul>
+              <li>HTTPS with Let's Encrypt (Traefik), TLS 1.2+, HSTS</li>
+              <li>MariaDB on an internal network, no ports exposed</li>
+              <li>Read-only containers, secrets kept out of the image</li>
+              <li>Login rate limits and an optional IP allow-list for the admin panel</li>
+              <li>Daily backup of the database, files and keys, plus a restore script</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="{{STACK_URL}}" target="_blank" rel="noopener">Instructions on GitHub</a>
+            </div>
+          </article>
+
+          <article class="card host-card">
+            <span class="tag">Open source · LimeControl</span>
+            <h3>LimeControl on your own server</h3>
+            <p>The app in a Docker container — no Google account and no external services.</p>
+            <ul>
+              <li>Sign-in with an access key, profiles saved in the browser</li>
+              <li>The scheduler and the relay run in your container</li>
+              <li>Scheduled-job passwords encrypted on disk</li>
+              <li>Shares Traefik and certificates with the LimeSurvey stack</li>
+              <li>A read-only container with no extra privileges</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="{{docs}}#self-hosting">Installation guide</a>
+            </div>
+          </article>
+
+          <article class="card host-card featured">
+            <span class="tag">Service · strefabadan.pl</span>
+            <h3>Survey server deployment and maintenance</h3>
+            <p>Installation, configuration and maintenance of a survey server (built on the LimeSurvey engine) — on your infrastructure or on ours.</p>
+            <ul>
+              <li>Installation on your infrastructure or hosting on our side</li>
+              <li>Your own domain, an SSL certificate and configured SMTP mail</li>
+              <li>The RemoteControl 2 API and CORS enabled for LimeControl</li>
+              <li>Software updates, monitoring and backups</li>
+              <li>Themes, survey templates and help with migrating studies</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://strefabadan.pl#contact" rel="noopener">Ask for a quote</a>
+              <a class="btn btn-ghost" href="mailto:{{CONTACT_EMAIL}}?subject=Survey%20server%20deployment">{{CONTACT_EMAIL}}</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security" class="section-soft">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">Security and privacy</span>
+          <h2>Your passwords stay with you</h2>
+          <p class="muted">In direct mode LimeControl talks to your server straight from the browser — survey data does not pass through our servers, and LimeSurvey passwords are not saved in the profiles.</p>
+          <a class="btn btn-ghost" href="{{docs}}#security">How we protect data</a>
+        </div>
+        <ul class="checklist">
+          <li><span><strong>LimeSurvey passwords never reach the cloud</strong> — neither Firestore nor <code>localStorage</code>. Optionally they are kept only in the memory of the open tab.</span></li>
+          <li><span><strong>A direct connection</strong> from the browser to your server over HTTPS. You switch the server relay on only when you need it.</span></li>
+          <li><span><strong>The relay is for signed-in users only</strong> — with a request limit and, in the public service, internal network addresses blocked.</span></li>
+          <li><span><strong>The scheduler encrypts the job password</strong> (AES-256-GCM) and removes it as soon as the job has run or been cancelled.</span></li>
+          <li><span><strong>The code is open</strong> — you can review it or run the app on your own server.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow">FAQ</span>
+          <h2>Frequently asked questions</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Is LimeControl free?</summary>
+            <p>Yes. The app, the themes, the survey templates, the plugins and the deployment kits are free of charge — with no limit on surveys or instances. If you find them useful, you can support their development with the “Buy me a coffee” link in the footer.</p>
+          </details>
+          <details>
+            <summary>So what is paid?</summary>
+            <p>Services. A <a href="{{plugins}}">StrefaAnkiet account</a> provides what software alone cannot: managed mailing through Amazon SES, VoIP telephony for CATI interviews, interviewers in the field, and analysis and reports. Separately we offer <a href="#hosting">survey server deployment and maintenance</a>. The free tools work without any of these services.</p>
+          </details>
+          <details>
+            <summary>Is LimeControl open source?</summary>
+            <p>Yes. The code of the app, the survey themes and the deployment kits is on <a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a> under GPL-2.0-or-later, and the survey templates are released under CC0. The StrefaAnkiet plugins for LimeSurvey are open source too. Bug reports and pull requests are welcome. The content and design of this website are not part of the open-source code.</p>
+          </details>
+          <details>
+            <summary>Can I run LimeControl on my own server?</summary>
+            <p>Yes. The Docker kit in the <code>deploy/selfhost</code> directory runs the app without a Google account and without Firebase — you sign in with an access key and the server profiles stay in the browser. <a href="{{docs}}#self-hosting">Installation guide</a>.</p>
+          </details>
+          <details>
+            <summary>I don't have a LimeSurvey server. Can you help me set one up?</summary>
+            <p>Yes. You can use our <a href="{{STACK_URL}}" target="_blank" rel="noopener">open Docker stack</a> or let us handle <a href="#hosting">the deployment and maintenance of a survey environment</a> based on LimeSurvey software — with HTTPS, backups and an API ready for LimeControl.</p>
+          </details>
+          <details>
+            <summary>Do I need to install a plugin in LimeSurvey?</summary>
+            <p>No. LimeControl uses the built-in RemoteControl 2 API — just enable the JSON-RPC interface in the global settings. The survey themes and the StrefaAnkiet plugins are optional.</p>
+          </details>
+          <details>
+            <summary>Does it work with LimeSurvey Cloud and with a self-hosted server?</summary>
+            <p>Yes — with any 3.x–7.x instance that has JSON-RPC enabled and is reachable over HTTPS. For servers without CORS headers there is a server relay mode.</p>
+          </details>
+          <details>
+            <summary>Does LimeControl support CATI and CAPI studies?</summary>
+            <p>The free tools cover interviewer themes, interview skeletons, the CAPI interview loop in the app and the <a href="{{plugins}}">StrefaAnkiet plugins</a>. Interviewer assignments, a call queue, VoIP telephony and quotas across modes are provided by a paid StrefaAnkiet platform account.</p>
+          </details>
+          <details>
+            <summary>How do I import a survey template?</summary>
+            <p>In the app, open the Surveys tab and choose “Template library” — the import creates an inactive survey in the connected instance. You can also <a href="{{templates}}">download the <code>.lss</code> files from the website</a> and import them in the LimeSurvey admin panel.</p>
+          </details>
+          <details>
+            <summary>I see a CORS error. What should I do?</summary>
+            <p>Add CORS headers on the LimeSurvey server or switch the profile to “Server relay” mode. <a href="{{docs}}#cors">Instructions with examples for Apache and Nginx</a>.</p>
+          </details>
+          <details>
+            <summary>How do I install the app on my phone?</summary>
+            <p>On Android use the “Install PWA” button in the app or the Chrome menu → “Add to Home screen”. On an iPhone, in Safari choose “Share” → “Add to Home Screen”. An app for the App Store and Google Play is on its way.</p>
+          </details>
+          <details>
+            <summary>What permissions does the LimeSurvey account need?</summary>
+            <p>Reading, editing, creating and activating surveys, managing participants and exporting responses. <a href="{{docs}}#permissions">The full list of permissions</a>.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="cta">
+          <h2>Start managing surveys from your phone</h2>
+          <p>Open LimeControl in your browser, add your LimeSurvey instance and install the app on your home screen.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="{{APP_URL}}">Open the app</a>
+            <a class="btn btn-ghost" href="{{docs}}">Read the documentation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>

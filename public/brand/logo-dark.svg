@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 730 240" fill="none">
-  <title>LimeControl — app for LimeSurvey</title>
+  <title>LimeControl — survey control app</title>
   <defs>
     <linearGradient id="lcdark-lime" x1="40" y1="200" x2="200" y2="40" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#4CAF2A"/>
@@ -40,6 +40,6 @@
   <circle cx="120" cy="120" r="6" fill="#A3E635"/>
   <g font-family="'Plus Jakarta Sans', 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
     <text x="262" y="134" font-size="88" letter-spacing="-3"><tspan font-weight="500" fill="#A3E635">lime</tspan><tspan font-weight="800" fill="#F4FBE9">Control</tspan></text>
-    <text x="266" y="178" font-size="20" font-weight="700" letter-spacing="5.5" fill="#9FB3A5">APP FOR LIMESURVEY</text>
+    <text x="266" y="178" font-size="20" font-weight="700" letter-spacing="5.5" fill="#9FB3A5">SURVEY CONTROL APP</text>
   </g>
 </svg>

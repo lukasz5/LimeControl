@@ -15,3 +15,25 @@ dev-dist/
 
 # Motywy LimeSurvey — katalog roboczy builda (paczki trafiają do site/szablony)
 limesurvey-themes/dist/
+
+# Dane serwera: kolejka harmonogramu, klucz dostępu i klucz szyfrujący — nigdy do repozytorium
+/data/
+
+# Aplikacja mobilna: paczka web (`npm run build:mobile` kopiuje ją do projektów natywnych)
+dist-mobile/
+
+# Aplikacja mobilna: pliki wydania generowane lokalnie
+mobile/build/
+mobile/fastlane/report.xml
+mobile/fastlane/Preview.html
+# Zrzuty ekranu do sklepów odtworzysz poleceniem `node mobile/store/screenshots.mjs`
+mobile/fastlane/screenshots/
+mobile/fastlane/metadata/android/*/images/*Screenshots/
+
+# Klucze i certyfikaty do sklepów — nigdy do repozytorium
+*.p8
+*.p12
+*.mobileprovision
+*.jks
+*.keystore
+keystore.properties

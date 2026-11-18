@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Download, Share, X } from 'lucide-react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { isNativeApp } from '../platform';
 import { t } from '../i18n';
 
 export const PWAInstallButton: React.FC = () => {
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
   const [showGuide, setShowGuide] = useState(false);
 
-  if (isInstalled) {
+  // Aplikacja mobilna jest już zainstalowana — bez przycisku i bez instrukcji „Dodaj do ekranu”.
+  if (isInstalled || isNativeApp()) {
     return null;
   }
 

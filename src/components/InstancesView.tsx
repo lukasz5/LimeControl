@@ -16,6 +16,9 @@ import {
   LimeSurveyRpcError,
   normalizeRpcEndpoint,
 } from '../services/limeSurveyRpc';
+import { getBackend } from '../backend';
+import { isNativeApp } from '../platform';
+import { ServerConnectionCard } from './ServerConnection';
 import { BRAND } from '../config/brand';
 import { PWAInstallButton } from './PWAInstallButton';
 import type {
@@ -40,9 +43,11 @@ interface InstancesViewProps {
   onSwitchConnectionMode: (profileId: string, mode: ConnectionMode) => Promise<void>;
   onSwitchLimeVersion: (profileId: string, version: LimeSurveyVersion) => Promise<void>;
   onClearTraces: () => void;
+  /** Aplikacja mobilna: otwórz od razu panel połączenia z serwerem LimeControl. */
+  openServerPanel?: boolean;
 }
 
-type SubPanel = 'connections' | 'mobile-app' | 'rpc-log';
+type SubPanel = 'connections' | 'mobile-app' | 'server' | 'rpc-log';
 
 export const InstancesView: React.FC<InstancesViewProps> = ({
   profiles,
@@ -57,8 +62,12 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
   onSwitchConnectionMode,
   onSwitchLimeVersion,
   onClearTraces,
+  openServerPanel = false,
 }) => {
-  const [subPanel, setSubPanel] = useState<SubPanel>('connections');
+  const native = isNativeApp();
+  // Przekaźnik działa na serwerze LimeControl — w aplikacji mobilnej bez serwera go nie ma (i nie jest potrzebny).
+  const relayAvailable = getBackend().mode !== 'device';
+  const [subPanel, setSubPanel] = useState<SubPanel>(native && openServerPanel ? 'server' : 'connections');
   const [name, setName] = useState('');
   const [baseUrl, setBaseUrl] = useState('');
   const [username, setUsername] = useState('');
@@ -153,12 +162,12 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => setSubPanel('mobile-app')}
-            className={`min-h-[40px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${subPanel === 'mobile-app'
+            onClick={() => setSubPanel(native ? 'server' : 'mobile-app')}
+            className={`min-h-[40px] rounded-lg px-3.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${subPanel === (native ? 'server' : 'mobile-app')
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
           >
-            {t('Aplikacja mobilna')}
+            {native ? t('Serwer') : t('Aplikacja mobilna')}
           </button>
           <button
             type="button"
@@ -284,6 +293,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                       />
                     </div>
 
+                    {relayAvailable && (
                     <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-950 p-1 border border-slate-200 dark:border-slate-800 self-start shrink-0">
                       <button
                         type="button"
@@ -313,6 +323,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                         {t('Przekaźnik')}
                       </button>
                     </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -370,21 +381,25 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                           <span>{t('Login:')}{' '}{profile.username}</span>
                           <span aria-hidden="true">·</span>
                           <span>{t('Plugin:')}{' '}{profile.authPlugin || 'Authdb'}</span>
-                          <span aria-hidden="true">·</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              void onSwitchConnectionMode(
-                                profile.id,
-                                profile.connectionMode === 'direct' ? 'relay' : 'direct'
-                              );
-                            }}
-                            className="underline decoration-slate-300 dark:decoration-slate-700 hover:text-slate-900 dark:hover:text-white"
-                          >
-                            {profile.connectionMode === 'direct'
-                              ? t('Tryb: Bezpośredni JSON-RPC (zmień)')
-                              : t('Tryb: Przekaźnik CORS (zmień)')}
-                          </button>
+                          {relayAvailable && (
+                            <>
+                              <span aria-hidden="true">·</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  void onSwitchConnectionMode(
+                                    profile.id,
+                                    profile.connectionMode === 'direct' ? 'relay' : 'direct'
+                                  );
+                                }}
+                                className="underline decoration-slate-300 dark:decoration-slate-700 hover:text-slate-900 dark:hover:text-white"
+                              >
+                                {profile.connectionMode === 'direct'
+                                  ? t('Tryb: Bezpośredni JSON-RPC (zmień)')
+                                  : t('Tryb: Przekaźnik CORS (zmień)')}
+                              </button>
+                            </>
+                          )}
                           <span aria-hidden="true">·</span>
                           <button
                             type="button"
@@ -451,7 +466,11 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                 {t('Dodaj instancję LimeSurvey')}
               </h3>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                {t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się w Cloud Firestore (bez haseł).')}
+                {native
+                  ? t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się na tym urządzeniu (bez haseł).')
+                  : getBackend().mode === 'local'
+                    ? t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się w tej przeglądarce (bez haseł).')
+                    : t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się w Cloud Firestore (bez haseł).')}
               </p>
             </div>
 
@@ -481,10 +500,14 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                 </label>
                 <input
                   type="text"
+                  inputMode="url"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   required
                   value={baseUrl}
                   onChange={(e) => setBaseUrl(e.target.value)}
-                  placeholder="https://twoje-ankiety.pl"
+                  placeholder={t('https://twoje-ankiety.pl')}
                   className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 font-mono text-xs text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
                 />
                 <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
@@ -499,6 +522,10 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                   </label>
                   <input
                     type="text"
+                    autoComplete="username"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -528,12 +555,16 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                   </label>
                   <input
                     type="text"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                     value={authPlugin}
                     onChange={(e) => setAuthPlugin(e.target.value)}
                     placeholder="Authdb"
                     className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 font-mono text-xs text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
                   />
                 </div>
+                {relayAvailable && (
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     {t('Tryb połączenia')}
@@ -547,6 +578,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                     <option value="relay">{t('Przekaźnik serwerowy (obejście CORS)')}</option>
                   </select>
                 </div>
+                )}
               </div>
 
               <div>
@@ -571,7 +603,11 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                   onChange={(e) => setSavePassword(e.target.checked)}
                   className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                 />
-                <span>{t('Zapamiętaj hasło tylko w pamięci tej sesji (nie jest zapisywane w bazie ani w przeglądarce)')}</span>
+                <span>
+                  {native
+                    ? t('Zapamiętaj hasło tylko do zamknięcia aplikacji (nie jest zapisywane na urządzeniu)')
+                    : t('Zapamiętaj hasło tylko w pamięci tej sesji (nie jest zapisywane w bazie ani w przeglądarce)')}
+                </span>
               </label>
             </div>
 
@@ -597,6 +633,8 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
         </div>
       )}
 
+      {subPanel === 'server' && <ServerConnectionCard />}
+
       {subPanel === 'mobile-app' && (
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6">
           <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
@@ -607,7 +645,9 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
             {t('LimeControl na iOS i Androida')}
           </h3>
           <p className="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-            {t('Natywna aplikacja jest bezpłatna i łączy się z serwerami LimeSurvey bez ograniczeń CORS przeglądarki. Pobierz ją ze sklepu lub zainstaluj wersję PWA na ekranie głównym.')}
+            {BRAND.appStoreUrl || BRAND.playStoreUrl
+              ? t('Natywna aplikacja jest bezpłatna i łączy się z serwerami LimeSurvey bez ograniczeń CORS przeglądarki. Pobierz ją ze sklepu lub zainstaluj wersję PWA na ekranie głównym.')
+              : t('Natywna aplikacja na iOS i Androida jest w przygotowaniu — będzie bezpłatna i połączy się z serwerami LimeSurvey bez ograniczeń CORS przeglądarki. Do czasu publikacji w sklepach zainstaluj wersję PWA na ekranie głównym.')}
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -707,7 +747,18 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
 
       {promptProfile && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
-          <div className="w-full max-w-md rounded-t-3xl sm:rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
+          {/* Formularz: klawisz „Przejdź” na klawiaturze telefonu zatwierdza hasło, gdy przyciski są zasłonięte. */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!promptPassword || connecting) return;
+              const target = promptProfile;
+              const pass = promptPassword;
+              setPromptProfile(null);
+              void onConnectProfile(target, pass);
+            }}
+            className="w-full max-w-md rounded-t-3xl sm:rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl border border-slate-200 dark:border-slate-800 space-y-4"
+          >
             <div className="mx-auto h-1.5 w-10 rounded-full bg-slate-300 dark:bg-slate-700 sm:hidden" />
             <div className="flex items-center gap-2.5">
               <KeyRound className="h-5 w-5 text-emerald-600" />
@@ -722,6 +773,8 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
             <input
               type="password"
               autoFocus
+              autoComplete="current-password"
+              enterKeyHint="go"
               value={promptPassword}
               onChange={(e) => setPromptPassword(e.target.value)}
               placeholder={t('Hasło LimeSurvey')}
@@ -730,26 +783,22 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
             <div className="flex gap-2">
               <button
                 type="button"
+                data-back-close
                 onClick={() => setPromptProfile(null)}
                 className="flex-1 min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
               >
                 {t('Anuluj')}
               </button>
               <button
-                type="button"
+                type="submit"
                 disabled={!promptPassword || connecting}
-                onClick={async () => {
-                  const target = promptProfile;
-                  const pass = promptPassword;
-                  setPromptProfile(null);
-                  await onConnectProfile(target, pass);
-                }}
                 className="flex-1 min-h-[44px] rounded-xl bg-emerald-600 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
               >
                 {t('Połącz')}
               </button>
             </div>
-          </div>
+            <div className="pb-safe sm:hidden" />
+          </form>
         </div>
       )}
     </div>

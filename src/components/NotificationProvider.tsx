@@ -134,7 +134,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       <div
         aria-live="polite"
         aria-label={t('Powiadomienia aplikacji')}
-        className="pointer-events-none fixed bottom-20 left-4 right-4 z-50 flex flex-col gap-2 sm:bottom-6 sm:left-auto sm:right-6 sm:w-96"
+        className="pointer-events-none fixed above-bottom-nav left-4 right-4 z-50 flex flex-col gap-2 sm:left-auto sm:right-6 sm:w-96"
       >
         <AnimatePresence initial={false}>
           {items.map((item) => {

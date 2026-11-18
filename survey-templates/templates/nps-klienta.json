@@ -1,0 +1,90 @@
+{
+  "id": "nps-klienta",
+  "order": 10,
+  "category": "customer-satisfaction",
+  "modes": ["cawi"],
+  "theme": "marketing",
+  "minutes": 2,
+  "languages": ["pl", "en"],
+  "title": ["NPS — lojalność klientów", "NPS — customer loyalty"],
+  "summary": ["Klasyczne badanie Net Promoter Score: ocena 0–10, pytanie o powód dopasowane do oceny, wyliczany segment (promotor, pasywny, krytyk) i zgoda na kontakt.", "Classic Net Promoter Score survey: a 0–10 rating, a follow-up question matched to the score, a computed segment (promoter, passive, detractor) and consent to be contacted."],
+  "description": ["Krótka ankieta o tym, czy polecił(a)byś nas innym. Zajmie około 2 minut.", "A short survey about whether you would recommend us to others. It takes about 2 minutes."],
+  "welcome": ["Dziękujemy, że chcesz podzielić się opinią. Twoje odpowiedzi pomogą nam poprawić jakość obsługi.", "Thank you for sharing your opinion. Your answers will help us improve our service."],
+  "end": ["Dziękujemy za wypełnienie ankiety. Twoja opinia jest dla nas ważna.", "Thank you for completing the survey. Your opinion matters to us."],
+  "groups": [
+    {
+      "title": ["Twoja opinia", "Your opinion"],
+      "questions": [
+        {
+          "code": "NPS",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile prawdopodobne jest, że polecisz nas znajomym lub współpracownikom?", "How likely are you to recommend us to a friend or colleague?"],
+          "help": ["0 — zdecydowanie nie polecę, 10 — zdecydowanie polecę.", "0 — not at all likely, 10 — extremely likely."],
+          "subquestions": [
+            { "code": "SQ001", "text": ["Prawdopodobieństwo polecenia", "Likelihood to recommend"] }
+          ],
+          "options": "@nps11"
+        },
+        {
+          "code": "NPSSEG",
+          "type": "equation",
+          "attributes": {
+            "hidden": "1"
+          },
+          "text": ["{if(NPS_SQ001.NAOK >= 9, \"promotor\", if(NPS_SQ001.NAOK >= 7, \"pasywny\", \"krytyk\"))}", "{if(NPS_SQ001.NAOK >= 9, \"promoter\", if(NPS_SQ001.NAOK >= 7, \"passive\", \"detractor\"))}"]
+        },
+        {
+          "code": "WHYLOW",
+          "type": "longtext",
+          "relevance": "NPS_SQ001.NAOK <= 6",
+          "text": ["Co powinniśmy poprawić, aby Twoja ocena była wyższa?", "What should we improve to earn a higher score from you?"]
+        },
+        {
+          "code": "WHYMID",
+          "type": "longtext",
+          "relevance": "NPS_SQ001.NAOK >= 7 and NPS_SQ001.NAOK <= 8",
+          "text": ["Czego zabrakło, aby ocena była najwyższa?", "What was missing for the highest score?"]
+        },
+        {
+          "code": "WHYHIGH",
+          "type": "longtext",
+          "relevance": "NPS_SQ001.NAOK >= 9",
+          "text": ["Co cenisz u nas najbardziej?", "What do you value most about us?"]
+        },
+        {
+          "code": "DRIVER",
+          "type": "radio",
+          "other": true,
+          "text": ["Co miało największy wpływ na Twoją ocenę?", "What influenced your score the most?"],
+          "options": [
+            { "code": "1", "text": ["Jakość produktu lub usługi", "Product or service quality"] },
+            { "code": "2", "text": ["Obsługa klienta", "Customer service"] },
+            { "code": "3", "text": ["Cena", "Price"] },
+            { "code": "4", "text": ["Łatwość korzystania", "Ease of use"] },
+            { "code": "5", "text": ["Terminowość", "Timeliness"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Kontakt", "Contact"],
+      "questions": [
+        {
+          "code": "CONTACT",
+          "type": "yesno",
+          "text": ["Czy możemy skontaktować się z Tobą w sprawie Twojej opinii?", "May we contact you about your feedback?"]
+        },
+        {
+          "code": "EMAIL",
+          "type": "text",
+          "relevance": "CONTACT.NAOK == \"Y\"",
+          "mandatory": true,
+          "preg": "/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/",
+          "text": ["Adres e-mail do kontaktu", "Contact email address"],
+          "help": ["Użyjemy go wyłącznie do odpowiedzi na Twoją opinię.", "We will use it only to follow up on your feedback."]
+        }
+      ]
+    }
+  ]
+}

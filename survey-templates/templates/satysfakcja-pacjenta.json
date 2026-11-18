@@ -1,0 +1,114 @@
+{
+  "id": "satysfakcja-pacjenta",
+  "order": 80,
+  "category": "health",
+  "modes": ["cawi", "capi"],
+  "theme": "medical",
+  "minutes": 5,
+  "languages": ["pl", "en"],
+  "title": ["Satysfakcja pacjenta po wizycie", "Patient satisfaction after a visit"],
+  "summary": ["Ankieta po wizycie w placówce medycznej: rejestracja i czas oczekiwania, komunikacja z lekarzem, warunki w placówce, ocena ogólna i gotowość do polecenia. Bez danych o stanie zdrowia.", "A post-visit survey for healthcare providers: registration and waiting time, communication with the doctor, the facility, overall rating and likelihood to recommend. No health data collected."],
+  "description": ["Ankieta dotyczy Twojej ostatniej wizyty. Jest anonimowa i zajmie około 5 minut.", "This survey is about your most recent visit. It is anonymous and takes about 5 minutes."],
+  "welcome": ["Nie pytamy o stan zdrowia ani dane osobowe. Twoje odpowiedzi pomogą nam poprawić jakość opieki.", "We do not ask about your health or personal data. Your answers will help us improve the quality of care."],
+  "end": ["Dziękujemy za wypełnienie ankiety. Życzymy zdrowia!", "Thank you for completing the survey. We wish you good health!"],
+  "groups": [
+    {
+      "title": ["Przed wizytą", "Before the visit"],
+      "questions": [
+        {
+          "code": "VISITTYPE",
+          "type": "radio",
+          "text": ["Czego dotyczyła Twoja wizyta?", "What kind of visit was it?"],
+          "options": [
+            { "code": "1", "text": ["Wizyta u lekarza pierwszego kontaktu", "A visit to a general practitioner"] },
+            { "code": "2", "text": ["Wizyta u specjalisty", "A visit to a specialist"] },
+            { "code": "3", "text": ["Badanie diagnostyczne", "A diagnostic test"] },
+            { "code": "4", "text": ["Zabieg", "A procedure"] },
+            { "code": "5", "text": ["Teleporada", "A remote consultation"] }
+          ]
+        },
+        {
+          "code": "REG",
+          "type": "array",
+          "text": ["Jak oceniasz rejestrację i przygotowanie wizyty?", "How do you rate registration and preparation for the visit?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Łatwość umówienia wizyty", "Ease of booking the appointment"] },
+            { "code": "Q02", "text": ["Uprzejmość pracowników rejestracji", "Courtesy of reception staff"] },
+            { "code": "Q03", "text": ["Informacje otrzymane przed wizytą", "Information received before the visit"] }
+          ],
+          "options": "@quality5na"
+        },
+        {
+          "code": "WAIT",
+          "type": "radio",
+          "text": ["Jak długo po wyznaczonej godzinie czekałeś(-aś) na przyjęcie?", "How long after the scheduled time did you wait to be seen?"],
+          "options": [
+            { "code": "1", "text": ["Przyjęto mnie o czasie", "I was seen on time"] },
+            { "code": "2", "text": ["Do 15 minut", "Up to 15 minutes"] },
+            { "code": "3", "text": ["15–30 minut", "15–30 minutes"] },
+            { "code": "4", "text": ["30–60 minut", "30–60 minutes"] },
+            { "code": "5", "text": ["Ponad godzinę", "More than an hour"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Opieka podczas wizyty", "Care during the visit"],
+      "questions": [
+        {
+          "code": "CARE",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile zgadzasz się z poniższymi stwierdzeniami?", "How much do you agree with the following statements?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Lekarz słuchał mnie uważnie.", "The doctor listened to me carefully."] },
+            { "code": "Q02", "text": ["Otrzymałem(-am) zrozumiałe wyjaśnienia.", "I received explanations I could understand."] },
+            { "code": "Q03", "text": ["Miałem(-am) wystarczająco dużo czasu na pytania.", "I had enough time to ask questions."] },
+            { "code": "Q04", "text": ["Uszanowano moją prywatność i godność.", "My privacy and dignity were respected."] },
+            { "code": "Q05", "text": ["Wiem, co robić po wizycie (zalecenia, leki, kontrola).", "I know what to do after the visit (recommendations, medication, follow-up)."] }
+          ],
+          "options": "@agree5"
+        },
+        {
+          "code": "FACILITY",
+          "type": "array",
+          "text": ["Jak oceniasz warunki w placówce?", "How do you rate the facility?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Czystość", "Cleanliness"] },
+            { "code": "Q02", "text": ["Oznakowanie i dostępność", "Signage and accessibility"] },
+            { "code": "Q03", "text": ["Komfort poczekalni", "Comfort of the waiting area"] }
+          ],
+          "options": "@quality5"
+        }
+      ]
+    },
+    {
+      "title": ["Podsumowanie", "Summary"],
+      "questions": [
+        {
+          "code": "OVERALL",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak ogólnie oceniasz wizytę?", "Overall, how satisfied are you with the visit?"],
+          "options": "@satisfaction5"
+        },
+        {
+          "code": "RECOMMEND",
+          "type": "array",
+          "text": ["Na ile prawdopodobne jest, że polecisz naszą placówkę rodzinie lub znajomym?", "How likely are you to recommend our facility to family or friends?"],
+          "help": ["0 — zdecydowanie nie polecę, 10 — zdecydowanie polecę.", "0 — not at all likely, 10 — extremely likely."],
+          "subquestions": [
+            { "code": "SQ001", "text": ["Prawdopodobieństwo polecenia", "Likelihood to recommend"] }
+          ],
+          "options": "@nps11"
+        },
+        {
+          "code": "COMMENT",
+          "type": "longtext",
+          "text": ["Co moglibyśmy zrobić lepiej?", "What could we do better?"],
+          "help": ["Prosimy nie podawać danych osobowych ani informacji o stanie zdrowia.", "Please do not include personal data or health information."]
+        }
+      ]
+    }
+  ]
+}

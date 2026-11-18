@@ -10,7 +10,8 @@ import {
   getDocFromServer,
   getFirestore,
 } from 'firebase/firestore';
-import firebaseConfig from '../firebase-applet-config.json';
+// Alias z vite.config.ts: plik firebase-applet-config.json, a gdy go nie ma (build własnej instalacji) — pusty zamiennik.
+import firebaseConfig from '#firebase-config';
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);

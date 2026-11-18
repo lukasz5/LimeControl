@@ -1,0 +1,44 @@
+# LimeControl — self-hosted installation without Firebase (sign-in with an access key).
+#
+#   cp .env.example .env        # set LIMECONTROL_ACCESS_KEY
+#   docker compose up -d --build
+#
+# The app listens on 127.0.0.1:${LIMECONTROL_PORT}. Put it behind your reverse proxy with HTTPS,
+# or use compose.with-stack.yaml to plug it into the Traefik of limesurvey-stack.
+name: limecontrol
+
+services:
+  app:
+    build:
+      context: ../..
+      args:
+        # Builds the app without any Firebase configuration.
+        VITE_AUTH_MODE: local
+    image: limecontrol-app:selfhost
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    environment:
+      AUTH_MODE: local
+      # At least 16 characters. Leave empty to have a key generated on first start
+      # (printed once in `docker compose logs app`, stored in the data volume).
+      LIMECONTROL_ACCESS_KEY: ${LIMECONTROL_ACCESS_KEY:-}
+      # Optional: key material for encrypting scheduled-job passwords. Empty = a key file in the data volume.
+      LIMECONTROL_SECRET: ${LIMECONTROL_SECRET:-}
+      # 1 = the server relay and the scheduler may connect to private addresses (LimeSurvey in your LAN
+      # or on the same Docker network). Keep 0 when the app is reachable from the internet and
+      # LimeSurvey has a public address.
+      RELAY_ALLOW_PRIVATE: ${RELAY_ALLOW_PRIVATE:-1}
+    volumes:
+      - app-data:/app/data
+    ports:
+      - "127.0.0.1:${LIMECONTROL_PORT:-8080}:8080"
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 384m
+
+volumes:
+  app-data:

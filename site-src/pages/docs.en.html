@@ -1,0 +1,479 @@
+<!--meta
+{
+  "title": "LimeControl documentation — setup, features and self-hosting",
+  "description": "A guide to LimeControl: enabling the RemoteControl 2 API in LimeSurvey, connection modes, the survey template library, the scheduler, participants, the CATI/CAPI mode, the StrefaAnkiet connector and running the app on your own server.",
+  "ogTitle": "LimeControl documentation",
+  "ogDescription": "LimeSurvey setup, app features, CATI/CAPI interviews and running LimeControl on your own server."
+}
+-->
+  <div class="container docs">
+    <nav class="docs-nav" aria-label="Table of contents">
+      <p>Getting started</p>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#install">Installing on a phone</a></li>
+      </ul>
+      <p>Setup</p>
+      <ul>
+        <li><a href="#limesurvey-setup">Enabling the API</a></li>
+        <li><a href="#permissions">Account permissions</a></li>
+        <li><a href="#connection-modes">Connection modes</a></li>
+        <li><a href="#cors">CORS and HTTPS</a></li>
+        <li><a href="#limesurvey-7">LimeSurvey 7.x</a></li>
+      </ul>
+      <p>Features</p>
+      <ul>
+        <li><a href="#instances">Instances</a></li>
+        <li><a href="#surveys">Surveys</a></li>
+        <li><a href="#template-library">Template library</a></li>
+        <li><a href="#survey-tools">Link, QR code and theme</a></li>
+        <li><a href="#interviews">CATI and CAPI interviews</a></li>
+        <li><a href="#statistics">Statistics and export</a></li>
+        <li><a href="#scheduler">Scheduler</a></li>
+        <li><a href="#participants">Participants and emails</a></li>
+        <li><a href="#strefaankiet">StrefaAnkiet connector</a></li>
+        <li><a href="#mobile-app">Mobile app</a></li>
+      </ul>
+      <p>Deployment</p>
+      <ul>
+        <li><a href="#self-hosting">LimeControl on your own server</a></li>
+        <li><a href="#own-limesurvey">Your own LimeSurvey instance</a></li>
+      </ul>
+      <p>Reference</p>
+      <ul>
+        <li><a href="#api-methods">API methods</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+        <li><a href="#open-source">Open source</a></li>
+      </ul>
+    </nav>
+
+    <main id="main" class="prose">
+      <section id="introduction">
+        <span class="eyebrow">Documentation</span>
+        <h1>LimeControl — the guide</h1>
+        <p class="lead-docs">LimeControl is a PWA for managing LimeSurvey instances through the official <strong>RemoteControl 2</strong> API (JSON-RPC, <code>remotecontrol_handle</code>). It runs in the browser on a phone or a computer, can be installed on the home screen or run on your own server. The same code also runs as a <a href="#mobile-app">mobile app</a> for iOS and Android — with no account and no CORS restrictions.</p>
+        <div class="callout">
+          <p><strong>Requirements:</strong> LimeSurvey 3.x, 5.x, 6.x or 7.x with the JSON-RPC interface enabled, and a LimeSurvey account with the right permissions. In the <a href="{{APP_URL}}">app.limecontrol.eu</a> service you sign in with a Google account; a <a href="#self-hosting">self-hosted installation</a> uses an access key.</p>
+        </div>
+        <p>The app is part of an open-source toolkit that also includes <a href="{{themes}}">survey themes</a>, <a href="{{templates}}">survey templates</a> and <a href="#own-limesurvey">deployment kits</a>. App version described in this guide: <strong>{{VERSION}}</strong>.</p>
+      </section>
+
+      <section id="quick-start">
+        <h2>Quick start</h2>
+        <ol>
+          <li>In the LimeSurvey admin panel enable the <strong>JSON-RPC</strong> interface (<a href="#limesurvey-setup">instructions</a>).</li>
+          <li>Open <a href="{{APP_URL}}">app.limecontrol.eu</a> and sign in with a Google account.</li>
+          <li>On the <strong>Instances</strong> tab add a profile: a name, the server address (for example <code>https://surveys.yourcompany.com</code> is enough), the user name and the password.</li>
+          <li>Click <strong>Connect</strong>. The app fetches the instance name and the list of surveys.</li>
+          <li>Go to the <strong>Surveys</strong> tab. If the instance is empty, import your first survey from the <a href="#template-library">template library</a>.</li>
+        </ol>
+        <p>If you get a connection error, check the <strong>RPC log</strong> panel and the <a href="#cors">CORS and HTTPS</a> section.</p>
+      </section>
+
+      <section id="install">
+        <h2>Installing on a phone</h2>
+        <p>LimeControl is a progressive web app — it installs without an app store and updates itself.</p>
+        <ul>
+          <li><strong>Android (Chrome, Edge):</strong> the <em>Install PWA</em> button in the app, or the browser menu → <em>Add to Home screen</em>.</li>
+          <li><strong>iPhone / iPad (Safari):</strong> <em>Share</em> → <em>Add to Home Screen</em>.</li>
+          <li><strong>Desktop (Chrome, Edge):</strong> the install icon in the address bar.</li>
+        </ul>
+        <p>When the device goes offline, the app shows an offline indicator. Survey operations need access to the LimeSurvey server.</p>
+        <p>You can switch the interface language (English or Polish) in the app header; the choice is remembered on the device.</p>
+      </section>
+
+      <section id="limesurvey-setup">
+        <h2>Enabling the API in LimeSurvey</h2>
+        <ol>
+          <li>Log in to the LimeSurvey admin panel as a superadministrator.</li>
+          <li>Go to <strong>Configuration → Global settings → Interfaces</strong>.</li>
+          <li>In the <strong>RPC interface enabled</strong> field choose <strong>JSON-RPC</strong>.</li>
+          <li>The <strong>Publish API on /admin/remotecontrol</strong> option is not required — set it according to your security policy. Click <strong>Save</strong>.</li>
+        </ol>
+        <p>The default API address:</p>
+<pre><span class="c"># friendly URLs enabled</span>
+https://your-instance.com/index.php/admin/remotecontrol
+
+<span class="c"># friendly URLs disabled</span>
+https://your-instance.com/index.php?r=admin/remotecontrol</pre>
+        <p>In the app the base address is enough — the <code>/index.php/admin/remotecontrol</code> path is added automatically.</p>
+      </section>
+
+      <section id="permissions">
+        <h2>LimeSurvey account permissions</h2>
+        <p>The account used in a connection profile should have these permissions:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Area</th><th>Permissions</th><th>Used for</th></tr></thead>
+            <tbody>
+              <tr><td>Surveys</td><td>View/Read, Update, Create, Activate</td><td>Listing, activation, dates, closing, copying, template import, changing the theme</td></tr>
+              <tr><td>Participants / tokens</td><td>Management</td><td>Token table, invitations, reminders</td></tr>
+              <tr><td>Responses</td><td>Export</td><td>Downloading results as CSV / XLS / JSON</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Authentication plugin:</strong> leave <code>Authdb</code> for ordinary LimeSurvey accounts or enter the name of the plugin you use, for example <code>AuthLDAP</code>.</p>
+        <div class="callout"><p>Good practice: create a separate LimeSurvey account just for LimeControl, with permissions limited to the surveys it needs.</p></div>
+      </section>
+
+      <section id="connection-modes">
+        <h2>Connection modes</h2>
+        <p>Each instance profile has its own connection mode:</p>
+        <h3>Direct (default)</h3>
+        <p>The browser sends JSON-RPC requests straight to the LimeSurvey server. No data passes through the LimeControl servers. It requires HTTPS and <a href="#cors">CORS</a> headers on the LimeSurvey side.</p>
+        <h3>Server relay</h3>
+        <p>When you cannot change the LimeSurvey server configuration, choose <strong>Server relay (CORS workaround)</strong> in the profile. Requests then go to <code>/api/rpc-relay</code> on the app server and from there to LimeSurvey.</p>
+        <ul>
+          <li>The relay works for signed-in users only and has a request limit.</li>
+          <li>It connects over HTTP/HTTPS only, does not follow redirects and, in the public service, rejects internal network addresses (<code>localhost</code>, <code>10.x</code>, <code>192.168.x</code> and so on).</li>
+          <li>On a <a href="#self-hosting">self-hosted installation</a> private addresses are allowed by default — LimeSurvey may live on the same network.</li>
+        </ul>
+        <div class="callout warn"><p>In relay mode the user name, the password and the survey data pass through the app server (they are not stored there). Use it only when direct mode is not possible.</p></div>
+        <h3>Native app</h3>
+        <p>The LimeControl <a href="#mobile-app">mobile app</a> connects to the server through the system's native networking layer, so it is not subject to CORS restrictions and needs no relay.</p>
+      </section>
+
+      <section id="cors">
+        <h2>CORS and HTTPS</h2>
+        <p>The app runs over HTTPS, so the LimeSurvey server has to be reachable over <strong>HTTPS</strong> as well — browsers block requests to <code>http://</code> addresses (<em>mixed content</em>).</p>
+        <p>The server also has to return CORS headers, including for <code>OPTIONS</code> preflight requests. Instead of <code>*</code> you can enter the specific app domain.</p>
+        <h3>Apache (.htaccess or VirtualHost)</h3>
+<pre>Header always set Access-Control-Allow-Origin <span class="k">"https://app.limecontrol.eu"</span>
+Header always set Access-Control-Allow-Methods "POST, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Accept"</pre>
+        <h3>Nginx</h3>
+<pre>add_header Access-Control-Allow-Origin <span class="k">"https://app.limecontrol.eu"</span> always;
+add_header Access-Control-Allow-Methods "POST, OPTIONS" always;
+add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
+        <p>If you have no access to the server configuration, use the <a href="#connection-modes">server relay</a> mode.</p>
+      </section>
+
+      <section id="limesurvey-7">
+        <h2>LimeSurvey 7.x</h2>
+        <p>In the profile form choose the version <strong>LimeSurvey 7.x (UTC dates + new error codes)</strong> (the <strong>Automatic</strong> option keeps the default RC2 behaviour). The app then:</p>
+        <ul>
+          <li>converts the <code>startdate</code> and <code>expires</code> dates and the scheduler times to UTC,</li>
+          <li>recognises the new RemoteControl 2 error codes and shows readable messages,</li>
+          <li>handles the new field identifiers in the <code>get_fieldmap</code> inspector.</li>
+        </ul>
+        <p>In LimeSurvey 7.9+ you can enable a server-side log of API calls in <code>application/config/config.php</code>:</p>
+<pre>'config' =&gt; array(
+    <span class="k">'rpc_log'</span> =&gt; true,
+)</pre>
+        <p>The log goes to <code>tmp/runtime/remotecontrol.log</code>; passwords and session keys are masked in it.</p>
+      </section>
+
+      <section id="instances">
+        <h2>Instances</h2>
+        <p>The <strong>Instances</strong> tab keeps the LimeSurvey server profiles. In the app.limecontrol.eu service the profiles are stored in the cloud (Cloud Firestore) and tied to your Google account, so they are available on every device. On a self-hosted installation the profiles stay in the browser.</p>
+        <ul>
+          <li>Search and filter profiles by name, address, user or login plugin, and by connection mode (<em>All</em>, <em>Direct</em>, <em>Relay</em>).</li>
+          <li>A LimeSurvey version setting for each profile.</li>
+          <li><strong>RPC log</strong> — a list of API calls with response times and error diagnosis (for example CORS).</li>
+        </ul>
+      </section>
+
+      <section id="surveys">
+        <h2>Surveys</h2>
+        <p>A survey list with search and an <em>All / Active / Inactive</em> filter. The quick-action menu next to each survey lets you:</p>
+        <ul>
+          <li><strong>Activate</strong> a survey (<code>activate_survey</code>), optionally together with its token table (<code>activate_tokens</code>).</li>
+          <li><strong>Set the availability window</strong> — the start and end dates (<code>set_survey_properties</code>).</li>
+          <li><strong>Close</strong> an active survey.</li>
+          <li><strong>Copy</strong> a survey (<code>copy_survey</code>).</li>
+          <li>Jump to the schedule or the participants of the selected survey.</li>
+        </ul>
+        <p>The survey details also hold the <a href="#survey-tools">Link, CAPI mode and theme</a> and <a href="#strefaankiet">CATI / CAPI fieldwork</a> cards.</p>
+      </section>
+
+      <section id="template-library">
+        <h2>Survey template library</h2>
+        <p>The <strong>Template library</strong> button on the Surveys tab opens a list of ready-made questionnaires — the same ones you can download from the <a href="{{templates}}">Survey templates</a> page. Every template comes with English and Polish language versions, conditional logic and the invitation and reminder texts.</p>
+        <ol>
+          <li>Connect to an instance and open <strong>Surveys → Template library</strong>.</li>
+          <li>Narrow the list down by category. Each template shows its fieldwork modes (CAWI, CATI, CAPI), the number of questions, the estimated completion time and the suggested theme.</li>
+          <li>Click <strong>Import</strong>. The app sends the <code>.lss</code> structure file with the <code>import_survey</code> method; a new, <strong>inactive</strong> survey appears in the instance and is selected in the list straight away.</li>
+          <li>Adjust the questions in the LimeSurvey admin panel, then activate the survey in the app.</li>
+        </ol>
+        <ul>
+          <li>The templates are bundled with the app, so the library also works on a self-hosted installation without internet access.</li>
+          <li>Before importing, the app checks the file's SHA-256 checksum against the template catalogue.</li>
+          <li>A template points to a LimeControl theme (for example <code>lc_professional</code>). If the theme is not installed, LimeSurvey uses its default theme — you can change it later in the <a href="#survey-tools">Link, CAPI mode and theme</a> card.</li>
+          <li>The account needs the permission to create surveys.</li>
+        </ul>
+        <div class="callout"><p>The templates are released under CC0 1.0 — you may change and use them freely, including commercially.</p></div>
+      </section>
+
+      <section id="survey-tools">
+        <h2>Link, QR code and theme</h2>
+        <p>The <strong>Link, CAPI mode and theme</strong> card in the survey details gathers the things you would normally open the admin panel for.</p>
+        <h3>Link for respondents</h3>
+        <ul>
+          <li>The public address of the survey in the chosen language — with the <strong>Copy link</strong>, <strong>Share</strong> (the system share sheet on a phone) and <strong>Open</strong> buttons.</li>
+          <li>The <strong>QR code</strong> is generated in the browser; the address is not sent to any external service. Scan it with a phone or put a screenshot on a poster or a slide.</li>
+          <li>For an inactive survey the app reminds you that the link starts working after activation.</li>
+        </ul>
+        <h3>Survey theme</h3>
+        <p>Choose one of the <a href="{{themes}}">LimeControl themes</a> and click <strong>Save theme</strong>. The app sets the <code>template</code> property and reads it back immediately — if the theme is not installed on the server, you get a message naming the theme the survey actually uses.</p>
+        <p>The themes have to be installed in LimeSurvey first: <em>Configuration → Themes</em>, the <strong>Upload &amp; install</strong> button (<a href="{{themes}}#install">instructions</a>).</p>
+      </section>
+
+      <section id="interviews">
+        <h2>CATI and CAPI interviews</h2>
+        <p>LimeControl helps you get a survey ready for an interviewer — on the phone (CATI) or in the field (CAPI). The questionnaire and the responses stay in LimeSurvey.</p>
+        <h3>CAPI mode in the app</h3>
+        <ul>
+          <li><strong>Start an interview</strong> opens the survey with the <code>newtest=Y</code> parameter, so always as a new, empty interview — without the previous respondent's answers.</li>
+          <li><strong>Switch on the interview loop</strong> sets automatic redirection in the survey (<code>autoredirect</code>) and the end URL of every language version so that the survey starts the next interview by itself when one ends. Handy for an interviewer and for a kiosk-style station.</li>
+          <li>The same button switches the loop off; the app then restores the ordinary end of the survey.</li>
+        </ul>
+        <div class="callout warn"><p>CAPI mode in the app needs an internet connection — the interview takes place in the LimeSurvey survey. Offline work is provided by the interviewer app of the StrefaAnkiet platform, which the <a href="{{plugins}}">free plugins</a> connect to LimeSurvey.</p></div>
+        <h3>Interviewer themes</h3>
+        <ul>
+          <li><strong>LimeControl CATI</strong> — a wide layout for a computer screen and keyboard shortcuts: <kbd>1</kbd>–<kbd>9</kbd> and <kbd>0</kbd> select the consecutive answers, <kbd>Ctrl</kbd>+<kbd>Enter</kbd> goes to the next page, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd> goes back. The shortcuts can be turned off with the switch next to the navigation.</li>
+          <li><strong>LimeControl CAPI</strong> — a larger font and touch targets at least 56&nbsp;px high, with the navigation stuck to the bottom of the screen.</li>
+          <li>In every LimeControl theme a question with the CSS class <code>lc-interviewer</code> is marked as text to read out or a field completed by the interviewer (<a href="{{themes}}#interviewer-mode">about the interviewer mode</a>).</li>
+        </ul>
+        <h3>Interview skeletons</h3>
+        <p>The <a href="#template-library">template library</a> has two skeletons ready to build on:</p>
+        <ul>
+          <li><strong>CATI interview</strong> — an opening script, the call outcome (interview, callback, refusal), consent, a question block, demographics and interviewer notes. It includes participant fields (phone, contact status, callback time, note), which the app creates together with the participant table (<a href="#participants">Participants</a>).</li>
+          <li><strong>CAPI interview</strong> — interview details (interviewer, sampling point, place), consent and screening, a question block with a ranking, demographics and the interviewer's post-interview observations.</li>
+        </ul>
+        <p>Interviewer assignments, a call queue, VoIP telephony, callbacks and quotas across modes are provided by the StrefaAnkiet platform. The <a href="{{plugins}}">free plugins</a> connect it to LimeSurvey, and the fieldwork status shows up in the <a href="#strefaankiet">CATI / CAPI fieldwork</a> card.</p>
+      </section>
+
+      <section id="statistics">
+        <h2>Statistics and export</h2>
+        <p>Each survey has a summary of responses and tokens (<code>get_summary</code>) with charts, and <strong>two surveys can be compared</strong> side by side.</p>
+        <p>Responses are exported (<code>export_responses</code>) to:</p>
+        <ul>
+          <li><strong>CSV</strong> — for spreadsheets and analysis tools,</li>
+          <li><strong>Excel (.xls)</strong>,</li>
+          <li><strong>JSON</strong> — for further processing.</li>
+        </ul>
+        <p>The <strong>column inspector</strong> (<code>get_fieldmap</code>) shows what the fields are called in the export — both in the older SGQA format and in the new LimeSurvey 7 format.</p>
+      </section>
+
+      <section id="scheduler">
+        <h2>Scheduler</h2>
+        <p>Schedule an operation for a chosen day and time. The job is run by the app server, so it works even after you close the app on your phone.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Operation</th><th>What the server does</th></tr></thead>
+            <tbody>
+              <tr><td>Activate the survey</td><td><code>activate_survey</code>, optionally <code>activate_tokens</code> and the start and end dates (<code>set_survey_properties</code>)</td></tr>
+              <tr><td>Close the survey</td><td>sets the <code>expires</code> end date to the moment the job runs</td></tr>
+              <tr><td>Send invitations</td><td><code>invite_participants</code> — to participants who have not received an invitation yet</td></tr>
+              <tr><td>Send reminders</td><td><code>remind_participants</code> — to invited participants who have not completed the survey</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Every job starts with <code>get_session_key</code> and ends with <code>release_session_key</code>:</p>
+<pre>get_session_key
+  → activate_survey        <span class="c"># or set_survey_properties / invite_participants / remind_participants</span>
+  → activate_tokens        <span class="c"># optional, on activation</span>
+  → set_survey_properties  <span class="c"># optional: startdate, expires</span>
+  → release_session_key</pre>
+        <h3>Invitations and reminders</h3>
+        <ul>
+          <li>The survey has to be active and have a participant table. LimeSurvey sends messages in batches — the server repeats the call until the queue is empty.</li>
+          <li>For reminders you can set the <strong>minimum number of days since the last message</strong> and the <strong>maximum number of reminders per person</strong>.</li>
+          <li><strong>Repeat every (days)</strong> and <strong>Number of repeats</strong> create a series of reminders: after a successful run the server queues the next job.</li>
+          <li>If no message went out at all (for example because of a wrong SMTP configuration in LimeSurvey), the job ends with an error, not a “success”.</li>
+        </ul>
+        <h3>How the queue works</h3>
+        <ul>
+          <li>The queue is checked every 15 seconds.</li>
+          <li>Each job has a detailed log of its RPC steps.</li>
+          <li><strong>Run now</strong> executes a job immediately — useful for testing.</li>
+          <li>A scheduled job can be cancelled or removed from the history.</li>
+          <li>The password needed to log in is stored in the queue encrypted (AES-256-GCM) and removed once the job has run or been cancelled. A reminder series keeps it until the last repeat.</li>
+          <li>The time is saved together with the time zone of your device; for LimeSurvey 7.x profiles dates are sent to the server in UTC.</li>
+        </ul>
+        <p>An in-app notification tells you the result of a job (success or error).</p>
+      </section>
+
+      <section id="participants">
+        <h2>Participants and email templates</h2>
+        <h3>Participants (tokens)</h3>
+        <ul>
+          <li>Initialise the token table with one tap (<code>activate_tokens</code>).</li>
+          <li>If the survey defines extra participant fields — like the “CATI interview” template — tick <strong>Create the fields from the template</strong> and the app creates them together with the table.</li>
+          <li>A participant list with a filter for unused tokens.</li>
+          <li>Adding and removing respondents.</li>
+        </ul>
+        <h3>Template editor</h3>
+        <p>Edit the subject and body of the invitation and the reminder for each survey language. The editor previews the message with sample data and inserts placeholders quickly:</p>
+        <p><code>{FIRSTNAME}</code> <code>{LASTNAME}</code> <code>{EMAIL}</code> <code>{TOKEN}</code> <code>{SURVEYURL}</code> <code>{OPTOUTURL}</code> <code>{SURVEYNAME}</code></p>
+        <p>The <strong>Save and send invitations</strong> and <strong>Save and send reminders</strong> buttons save the template and send the invitations (<code>invite_participants</code>) or reminders (<code>remind_participants</code>) straight away. Afterwards the app shows how many messages went out, how many failed and how many are still waiting. To send at a specific time, use the <a href="#scheduler">scheduler</a>.</p>
+        <div class="callout warn"><p>Emails are sent using the mail configuration of your LimeSurvey server. Check it in LimeSurvey before the first mailing.</p></div>
+      </section>
+
+      <section id="strefaankiet">
+        <h2>StrefaAnkiet connector <small class="muted">(beta)</small></h2>
+        <p>If a survey is linked to a study on the <a href="{{STREFAANKIET_URL}}" rel="noopener">StrefaAnkiet</a> platform (through the <a href="{{plugins}}">free plugins for LimeSurvey</a>), the <strong>CATI / CAPI fieldwork</strong> card in the survey details shows the fieldwork status — without opening the platform panel. The connector and the plugins are free of charge; you need a StrefaAnkiet account, which is a paid service.</p>
+        <ol>
+          <li>In StrefaAnkiet create an access key with the <code>fieldwork.read</code> and <code>cati.read</code> scopes: <em>Settings → Integration centre → External application access</em>.</li>
+          <li>In LimeControl open the survey, expand the <strong>CATI / CAPI fieldwork</strong> card and enter the platform address (for example <code>https://app.example.com</code>) and the key.</li>
+          <li>Click <strong>Connect and find the study</strong>. The app looks up the study linked to the survey ID (SID). If it finds none, enter the project and study numbers by hand.</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Mode</th><th>What the app shows</th></tr></thead>
+            <tbody>
+              <tr><td>CAPI</td><td>Interviews confirmed in LimeSurvey, interviews from the interviewer app, interviewer assignments and their progress against the target, fieldwork blockers</td></tr>
+              <tr><td>CATI</td><td>The number of cases in the queue, unassigned cases and cases that need attention</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li><strong>Read-only.</strong> The connector changes nothing in the study. Requests pass through the app server (<code>/api/strefaankiet</code>), which lets through only read requests to a short list of the platform's API addresses.</li>
+          <li><strong>The key stays with you.</strong> It is kept only in the memory of the open tab and disappears when you close it; the server neither stores nor logs it. The browser remembers only the platform address and the link between the survey and the study.</li>
+          <li>The assignment list requires a key with the study coordinator role.</li>
+        </ul>
+        <div class="callout"><p>The connector is in beta: it has been checked against the platform's API, but not in every study set-up. Please report feedback in the <a href="{{GITHUB_URL}}/issues" target="_blank" rel="noopener">GitHub issues</a>.</p></div>
+      </section>
+
+      <section id="mobile-app">
+        <h2>Mobile app</h2>
+        <p>LimeControl for iOS (iPhone and iPad) and Android is the same app in a native shell — free and open source. {{MOBILE_AVAILABILITY}}</p>
+        <ul>
+          <li><strong>No account.</strong> You do not sign in with a Google account or an access key. Server profiles are stored on the device only, and the app never stores LimeSurvey passwords.</li>
+          <li><strong>Direct connection.</strong> The app connects to the LimeSurvey server from the device, without CORS headers and without the relay.</li>
+          <li><strong>Sharing and export.</strong> The survey link and the result files go to the system share sheet — save them on the device or send them on.</li>
+          <li><strong>Encryption.</strong> On Android the server has to be reachable over HTTPS. On iOS an unencrypted connection is allowed only to addresses on the local network.</li>
+          <li><strong>Theme.</strong> The app follows the system's light or dark appearance until you pick one with the switch in the header.</li>
+        </ul>
+        <h3>The scheduler in the mobile app</h3>
+        <p>Scheduled jobs are run by a server, and the mobile app has none of its own. If you run a <a href="#self-hosting">self-hosted LimeControl</a>, connect it on the <strong>Instances → Server</strong> tab: enter the server address, then the access key. The <strong>Schedule</strong> tab then works as in the browser, and jobs run even when the phone is off. Instance profiles still stay on the device.</p>
+        <p>The app.limecontrol.eu service (Google sign-in) is not supported in the mobile app yet.</p>
+      </section>
+
+      <section id="self-hosting">
+        <h2>LimeControl on your own server</h2>
+        <p>You can run the app yourself in a Docker container — without a Google account and without Firebase. You sign in with an <strong>access key</strong>, the instance profiles are saved in the browser, and the scheduler and the relay run in your container.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>The app.limecontrol.eu service</th><th>Self-hosted installation</th></tr></thead>
+            <tbody>
+              <tr><td>Sign-in</td><td>Google account</td><td>access key</td></tr>
+              <tr><td>Instance profiles</td><td>Cloud Firestore, synced between devices</td><td>browser storage, without passwords</td></tr>
+              <tr><td>Scheduler</td><td>the service's server</td><td>your container, passwords encrypted in the data volume</td></tr>
+              <tr><td>RPC relay</td><td>public addresses only</td><td>private networks too</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Quick start</h3>
+<pre>git clone {{GITHUB_URL}}.git
+cd LimeControl/deploy/selfhost
+cp .env.example .env
+<span class="c"># enter your own key (min. 16 characters), e.g. the output of: openssl rand -base64 24</span>
+nano .env
+docker compose up -d --build</pre>
+        <p>The app runs at <code>http://127.0.0.1:8080</code>. If you leave <code>LIMECONTROL_ACCESS_KEY</code> empty, a key is generated on first start — read it with <code>docker compose logs app</code>. Then publish the app through your reverse proxy with a TLS certificate.</p>
+        <div class="callout warn"><p>Outside <code>localhost</code> use <strong>HTTPS</strong>. Without it the browser will not install the PWA, and the access key and passwords would travel in clear text.</p></div>
+        <h3>Next to the LimeSurvey stack</h3>
+        <p>If LimeSurvey runs from the <a href="{{STACK_URL}}" target="_blank" rel="noopener"><code>limesurvey-stack</code></a> kit, LimeControl can use the same Traefik and Let's Encrypt certificates:</p>
+<pre><span class="c"># in .env set LIMECONTROL_DOMAIN, and STACK_NAME if you renamed the stack</span>
+docker compose -f compose.yaml -f compose.with-stack.yaml up -d --build</pre>
+        <p>In LimeControl add an instance with the address <code>http://limesurvey:8080</code> and the <strong>Server relay</strong> mode — the requests then stay inside the Docker network. If <em>Force HTTPS</em> is switched on in LimeSurvey, use the public <code>https://</code> address of the instance.</p>
+        <h3>Environment variables</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>AUTH_MODE</code></td><td><code>local</code> in the kit</td><td><code>local</code> (access key) or <code>firebase</code> (requires a <code>firebase-applet-config.json</code> file)</td></tr>
+              <tr><td><code>LIMECONTROL_ACCESS_KEY</code></td><td>generated</td><td>the sign-in key, at least 16 characters</td></tr>
+              <tr><td><code>LIMECONTROL_SECRET</code></td><td>the <code>data/secret.key</code> file</td><td>key material for encrypting scheduled-job passwords</td></tr>
+              <tr><td><code>RELAY_ALLOW_PRIVATE</code></td><td><code>1</code></td><td>whether the relay and the scheduler may connect to private addresses and <code>localhost</code></td></tr>
+              <tr><td><code>PORT</code></td><td><code>8080</code></td><td>the port the container listens on</td></tr>
+              <tr><td><code>DATA_DIR</code></td><td><code>data</code></td><td>the data directory (scheduler queue, keys)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>There is one access key for the whole installation — this mode is meant for one person or a trusted team. Updating, backups and running without Docker are described in the <a href="{{GITHUB_URL}}/blob/main/deploy/selfhost/README.en.md" target="_blank" rel="noopener">kit's README</a>.</p>
+      </section>
+
+      <section id="own-limesurvey">
+        <h2>Your own LimeSurvey instance</h2>
+        <p>If you do not have a LimeSurvey server yet, use the ready-made, hardened Docker stack: <a href="{{STACK_URL}}" target="_blank" rel="noopener"><code>limesurvey-stack</code></a> (LimeSurvey 7, PHP 8.3, MariaDB 11.4, Traefik with Let's Encrypt, daily backup).</p>
+<pre>git clone {{STACK_URL}}.git
+cd limesurvey-stack
+sudo ./install.sh</pre>
+        <p>After installing, enable JSON-RPC (<a href="#limesurvey-setup">Enabling the API</a>) and add the instance in LimeControl. The installer walks you through the configuration in the terminal, and running <code>sudo ./install.sh</code> again opens a management menu (backup, restore, logs, updates). Details are in the stack's README.</p>
+        <p>Would you rather have someone do it for you? <a href="{{home}}#hosting">We deploy and maintain survey servers</a> built on LimeSurvey software — write to <a href="mailto:{{CONTACT_EMAIL}}?subject=Survey%20server%20deployment">{{CONTACT_EMAIL}}</a> or get in touch through <a href="https://strefabadan.pl#contact" rel="noopener">strefabadan.pl</a>.</p>
+      </section>
+
+      <section id="api-methods">
+        <h2>Supported API methods</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Area</th><th>Methods</th><th>Used for</th></tr></thead>
+            <tbody>
+              <tr><td>Session</td><td><code>get_session_key</code>, <code>release_session_key</code>, <code>get_site_settings</code></td><td>Logging in, closing the session, the instance name</td></tr>
+              <tr><td>Surveys</td><td><code>list_surveys</code>, <code>get_survey_properties</code>, <code>set_survey_properties</code>, <code>activate_survey</code>, <code>copy_survey</code>, <code>import_survey</code></td><td>Listing, activation, dates, closing, copying, template import, theme, interview loop</td></tr>
+              <tr><td>Statistics and export</td><td><code>get_summary</code>, <code>get_fieldmap</code>, <code>export_responses</code></td><td>Summaries, comparisons, column inspector, export</td></tr>
+              <tr><td>Participants</td><td><code>activate_tokens</code>, <code>list_participants</code>, <code>add_participants</code>, <code>delete_participants</code>, <code>invite_participants</code>, <code>remind_participants</code></td><td>Token table, participant fields, invitations, reminders</td></tr>
+              <tr><td>Survey texts</td><td><code>get_language_properties</code>, <code>set_language_properties</code></td><td>Invitation and reminder texts, the survey end URL</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="security">
+        <h2>Security and privacy</h2>
+        <ul>
+          <li><strong>Google sign-in</strong> (Firebase Authentication) protects access to your profiles; on a self-hosted installation an access key with a limit on sign-in attempts plays that role.</li>
+          <li><strong>Server profiles</strong> are stored in Cloud Firestore; the database rules allow only the account owner to read and change them. On a self-hosted installation the profiles stay in the browser.</li>
+          <li><strong>LimeSurvey passwords are not stored</strong> in Firestore or in <code>localStorage</code>. The “Remember the password for this session only” option keeps them solely in the memory of the open tab.</li>
+          <li><strong>Direct mode</strong> — survey data goes straight from the LimeSurvey server to your browser.</li>
+          <li><strong>The relay and the StrefaAnkiet connector</strong> require sign-in, have request limits, connect over HTTP/HTTPS only, do not follow redirects and pin the checked IP address (protection against SSRF and DNS rebinding).</li>
+          <li><strong>Scheduler</strong> — the password needed to run a job is encrypted (AES-256-GCM) and kept on the app server only until the job has run or been cancelled.</li>
+        </ul>
+        <p>The <a href="{{privacy}}">privacy policy</a> describes what data we process and why. Please report a security vulnerability privately — the <a href="{{GITHUB_URL}}/blob/main/SECURITY.md" target="_blank" rel="noopener">SECURITY.md</a> file in the repository explains how.</p>
+      </section>
+
+      <section id="troubleshooting">
+        <h2>Troubleshooting</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Symptom</th><th>Cause and fix</th></tr></thead>
+            <tbody>
+              <tr><td>CORS error / <em>Failed to fetch</em></td><td>No CORS headers on the LimeSurvey server. Add them (<a href="#cors">examples</a>) or switch the profile to the server relay.</td></tr>
+              <tr><td><em>Mixed content</em> blocked</td><td>The LimeSurvey server runs over <code>http://</code>. Enable HTTPS on the server.</td></tr>
+              <tr><td><em>Invalid user name or password</em></td><td>Check the user name, the password and the authentication plugin (<code>Authdb</code>, <code>AuthLDAP</code>).</td></tr>
+              <tr><td>404 or an HTML response instead of JSON</td><td>The JSON-RPC interface is disabled or the API address is different — enter the full path with <code>?r=admin/remotecontrol</code>.</td></tr>
+              <tr><td><em>No permission</em></td><td>The account lacks the required <a href="#permissions">permissions</a> for that survey.</td></tr>
+              <tr><td>Dates shifted by a few hours</td><td>Set the LimeSurvey 7.x version in the profile (dates in UTC) or check the server time zone.</td></tr>
+              <tr><td>The relay rejects the server address</td><td>In the public service the relay does not connect to internal network addresses. Use direct mode or a <a href="#self-hosting">self-hosted installation</a>.</td></tr>
+              <tr><td>The survey uses a different theme than the one chosen</td><td>The theme is not installed in LimeSurvey. Upload the theme ZIP file (<a href="{{themes}}#install">instructions</a>) and save the theme again.</td></tr>
+              <tr><td>Invitations are not going out</td><td>Check that the survey is active, has a participant table and that mail is configured correctly in LimeSurvey. The error details are in the scheduled job's log.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The details of every call are in the <strong>RPC log</strong> panel on the Instances tab.</p>
+      </section>
+
+      <section id="open-source">
+        <h2>Open source</h2>
+        <p>What is open source: the LimeControl app with its server, the survey themes, the deployment kits and the StrefaAnkiet plugins for LimeSurvey. The app, the themes and the survey templates live in the <a href="{{GITHUB_URL}}" target="_blank" rel="noopener">lukasz5/LimeControl</a> repository, and the hardened LimeSurvey on Docker in the <a href="{{STACK_URL}}" target="_blank" rel="noopener">limesurvey-stack</a> repository.</p>
+        <ul>
+          <li><strong>Licences:</strong> the app, the themes and the deployment kits — GPL-2.0-or-later (the themes inherit from Fruity TwentyThree © LimeSurvey GmbH); the survey templates — CC0 1.0.</li>
+          <li><strong>What is not open source:</strong> the content and design of this website, and the LimeControl name and logo. The services are paid too — the StrefaAnkiet account and hosting (<a href="{{home}}#free-and-paid">free and paid</a>).</li>
+          <li><strong>Issues and ideas:</strong> <a href="{{GITHUB_URL}}/issues" target="_blank" rel="noopener">GitHub Issues</a>. The <a href="{{GITHUB_URL}}/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a> file describes how to contribute.</li>
+          <li><strong>Change history:</strong> <a href="{{GITHUB_URL}}/blob/main/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG.md</a>.</li>
+        </ul>
+      </section>
+
+      <div class="cta" style="margin-top:8px">
+        <h2>Ready to start?</h2>
+        <p>Add your first LimeSurvey instance in a few minutes.</p>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="{{APP_URL}}">Open the app</a>
+        </div>
+      </div>
+    </main>
+  </div>

@@ -139,7 +139,8 @@ export const SurveySummaryCharts: React.FC<SurveySummaryChartsProps> = ({
       className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <div>
+        {/* min-w-0 + max-w-full: długi tytuł ankiety skraca się, zamiast wychodzić poza kartę na telefonie */}
+        <div className="min-w-0 max-w-full">
           <div className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
             <h4 className="text-sm font-bold text-slate-900 dark:text-white">

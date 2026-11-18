@@ -1,17 +1,41 @@
 {
-  "name": "react-example",
+  "name": "limecontrol",
+  "version": "1.1.0",
+  "description": "LimeControl — open-source app, survey themes, survey templates and deployment tooling for LimeSurvey (RemoteControl 2).",
   "private": true,
-  "version": "0.0.0",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://limecontrol.eu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukasz5/LimeControl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lukasz5/LimeControl/issues"
+  },
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
     "start": "node server.ts",
     "build": "vite build",
+    "build:mobile": "node mobile/scripts/sync-version.mjs && VITE_PLATFORM=native vite build && cap sync",
+    "build:themes": "node limesurvey-themes/build.mjs",
+    "build:templates": "node survey-templates/build.mjs",
+    "build:site": "node site-src/build.mjs",
+    "check:site": "node site-src/check.mjs",
     "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "clean": "rm -rf dist dist-mobile server.js",
+    "lint": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts survey-templates/test/*.test.mjs"
   },
   "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/ios": "^8.6.2",
+    "@capacitor/preferences": "^8.0.1",
+    "@capacitor/share": "^8.0.3",
+    "@capacitor/status-bar": "^8.0.4",
     "@firebase/eslint-plugin-security-rules": "^0.0.2",
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.3.3",
@@ -22,6 +46,7 @@
     "firebase": "^13.4.0",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
+    "qrcode-generator": "^2.0.4",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "recharts": "^3.10.1",
@@ -29,6 +54,8 @@
     "vite-plugin-pwa": "^2.0.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.6.2",
+    "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
@@ -36,7 +63,6 @@
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.21.0",
-    "typescript": "^7.0.2",
-    "@types/express": "^4.17.21"
+    "typescript": "^7.0.2"
   }
 }

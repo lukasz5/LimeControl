@@ -1,0 +1,431 @@
+{
+  "version": "1.0.0",
+  "testedOn": [
+    "6.15.12",
+    "7.10.0"
+  ],
+  "categories": [
+    {
+      "id": "customer-satisfaction",
+      "label": {
+        "pl": "Satysfakcja klienta",
+        "en": "Customer satisfaction"
+      }
+    },
+    {
+      "id": "hr",
+      "label": {
+        "pl": "HR i pracownicy",
+        "en": "HR & employees"
+      }
+    },
+    {
+      "id": "events",
+      "label": {
+        "pl": "Wydarzenia i szkolenia",
+        "en": "Events & training"
+      }
+    },
+    {
+      "id": "education",
+      "label": {
+        "pl": "Edukacja",
+        "en": "Education"
+      }
+    },
+    {
+      "id": "health",
+      "label": {
+        "pl": "Zdrowie",
+        "en": "Health"
+      }
+    },
+    {
+      "id": "research",
+      "label": {
+        "pl": "Badania i UX",
+        "en": "Research & UX"
+      }
+    },
+    {
+      "id": "fieldwork",
+      "label": {
+        "pl": "CATI i CAPI",
+        "en": "CATI & CAPI"
+      }
+    }
+  ],
+  "themes": [
+    {
+      "id": "lc_medical",
+      "label": "Medical"
+    },
+    {
+      "id": "lc_professional",
+      "label": "Professional"
+    },
+    {
+      "id": "lc_social",
+      "label": "Social"
+    },
+    {
+      "id": "lc_marketing",
+      "label": "Marketing"
+    },
+    {
+      "id": "lc_eco",
+      "label": "Eco"
+    },
+    {
+      "id": "lc_minimalist",
+      "label": "Minimalist"
+    },
+    {
+      "id": "lc_cati",
+      "label": "CATI"
+    },
+    {
+      "id": "lc_capi",
+      "label": "CAPI"
+    }
+  ],
+  "templates": [
+    {
+      "id": "nps-klienta",
+      "file": "nps-klienta.lss",
+      "bytes": 33491,
+      "sha256": "d7e6fe86074e71f71e0b26ed064c353d04f1b6c320acab70ca705d8e1853f33c",
+      "category": "customer-satisfaction",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_marketing",
+      "minutes": 2,
+      "groups": 2,
+      "questions": 7,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "NPS — lojalność klientów",
+        "en": "NPS — customer loyalty"
+      },
+      "summary": {
+        "pl": "Klasyczne badanie Net Promoter Score: ocena 0–10, pytanie o powód dopasowane do oceny, wyliczany segment (promotor, pasywny, krytyk) i zgoda na kontakt.",
+        "en": "Classic Net Promoter Score survey: a 0–10 rating, a follow-up question matched to the score, a computed segment (promoter, passive, detractor) and consent to be contacted."
+      },
+      "preview": true
+    },
+    {
+      "id": "satysfakcja-klienta-csat",
+      "file": "satysfakcja-klienta-csat.lss",
+      "bytes": 39458,
+      "sha256": "a6d750ade8387d413e3e99471330752278c4e794e18864397fec51616f8cb676",
+      "category": "customer-satisfaction",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_professional",
+      "minutes": 3,
+      "groups": 2,
+      "questions": 7,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Satysfakcja po kontakcie z obsługą (CSAT)",
+        "en": "Customer service satisfaction (CSAT)"
+      },
+      "summary": {
+        "pl": "Ankieta po zgłoszeniu lub rozmowie z obsługą: CSAT 1–5, wysiłek klienta (CES), rozwiązanie sprawy przy pierwszym kontakcie i ocena czterech aspektów obsługi.",
+        "en": "A post-contact survey: CSAT 1–5, customer effort (CES), first-contact resolution and a rating of four service aspects."
+      },
+      "preview": true
+    },
+    {
+      "id": "zaangazowanie-pracownikow",
+      "file": "zaangazowanie-pracownikow.lss",
+      "bytes": 62015,
+      "sha256": "aa836819d62896ce3380f77861c9478161c436185ddc7760a6e06e355bb73ec7",
+      "category": "hr",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_professional",
+      "minutes": 8,
+      "groups": 5,
+      "questions": 8,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Zaangażowanie pracowników i eNPS",
+        "en": "Employee engagement and eNPS"
+      },
+      "summary": {
+        "pl": "Badanie zaangażowania: 17 stwierdzeń w trzech obszarach (praca, przełożony i zespół, organizacja), eNPS, dwa pytania otwarte i opcjonalna metryczka.",
+        "en": "An engagement survey: 17 statements in three areas (the job, manager and team, the organisation), eNPS, two open questions and optional demographics."
+      },
+      "preview": true
+    },
+    {
+      "id": "exit-interview",
+      "file": "exit-interview.lss",
+      "bytes": 49746,
+      "sha256": "72126211d4f222da0c6880a691d5bd803ecaff1b77d6644b61ff4e6f9d9645b8",
+      "category": "hr",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_professional",
+      "minutes": 6,
+      "groups": 3,
+      "questions": 8,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Ankieta wyjściowa (exit interview)",
+        "en": "Exit interview survey"
+      },
+      "summary": {
+        "pl": "Ankieta dla odchodzących pracowników: powody odejścia, co mogło zatrzymać, ocena sześciu obszarów pracy oraz gotowość do polecenia i powrotu.",
+        "en": "A survey for departing employees: reasons for leaving, what could have changed the decision, a rating of six job areas and willingness to recommend and return."
+      },
+      "preview": true
+    },
+    {
+      "id": "ewaluacja-szkolenia",
+      "file": "ewaluacja-szkolenia.lss",
+      "bytes": 56053,
+      "sha256": "db20066e7d021a942e59c97b0f806eb31231f2d073c0678ba0772c342269fff5",
+      "category": "events",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_professional",
+      "minutes": 4,
+      "groups": 3,
+      "questions": 8,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Ewaluacja szkolenia",
+        "en": "Training evaluation"
+      },
+      "summary": {
+        "pl": "Ankieta po szkoleniu: ocena ogólna, realizacja celów, prowadzący, organizacja, gotowość do polecenia (NPS) i propozycje kolejnych tematów.",
+        "en": "A post-training survey: overall rating, objectives, the trainer, organisation, likelihood to recommend (NPS) and suggestions for future topics."
+      },
+      "preview": true
+    },
+    {
+      "id": "ocena-wydarzenia",
+      "file": "ocena-wydarzenia.lss",
+      "bytes": 45025,
+      "sha256": "e097054543f5488f2f5be055d0f84aa125d561ff069dd107a4b4e32d3824a254",
+      "category": "events",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_social",
+      "minutes": 4,
+      "groups": 2,
+      "questions": 7,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Ocena wydarzenia lub konferencji",
+        "en": "Event or conference feedback"
+      },
+      "summary": {
+        "pl": "Ankieta dla uczestników wydarzenia: satysfakcja, spełnienie oczekiwań, ocena sześciu elementów, źródło informacji i chęć udziału w kolejnej edycji.",
+        "en": "A survey for event attendees: satisfaction, expectations, a rating of six elements, how they heard about the event and intention to attend again."
+      },
+      "preview": true
+    },
+    {
+      "id": "ocena-zajec",
+      "file": "ocena-zajec.lss",
+      "bytes": 45597,
+      "sha256": "77a51bd73da351ec00fcf839f4699260ebe29b08690cb600f2b8583e69003072",
+      "category": "education",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_minimalist",
+      "minutes": 5,
+      "groups": 3,
+      "questions": 7,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Ocena zajęć dydaktycznych",
+        "en": "Course evaluation"
+      },
+      "summary": {
+        "pl": "Studencka ocena zajęć: organizacja kursu, praca prowadzącego, nakład pracy i frekwencja oraz dwa pytania otwarte.",
+        "en": "A student course evaluation: course organisation, the instructor, workload and attendance, plus two open questions."
+      },
+      "preview": true
+    },
+    {
+      "id": "satysfakcja-pacjenta",
+      "file": "satysfakcja-pacjenta.lss",
+      "bytes": 59687,
+      "sha256": "f0bd098d73740dce09a4d0e01a5293c44668279403bbd112f891f626252c2859",
+      "category": "health",
+      "modes": [
+        "cawi",
+        "capi"
+      ],
+      "theme": "lc_medical",
+      "minutes": 5,
+      "groups": 3,
+      "questions": 8,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Satysfakcja pacjenta po wizycie",
+        "en": "Patient satisfaction after a visit"
+      },
+      "summary": {
+        "pl": "Ankieta po wizycie w placówce medycznej: rejestracja i czas oczekiwania, komunikacja z lekarzem, warunki w placówce, ocena ogólna i gotowość do polecenia. Bez danych o stanie zdrowia.",
+        "en": "A post-visit survey for healthcare providers: registration and waiting time, communication with the doctor, the facility, overall rating and likelihood to recommend. No health data collected."
+      },
+      "preview": true
+    },
+    {
+      "id": "sus-uzytecznosc",
+      "file": "sus-uzytecznosc.lss",
+      "bytes": 36862,
+      "sha256": "66c2a125cc54360aa7a346325966aa736cabd59168494ba650cd10f1bf69d568",
+      "category": "research",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_minimalist",
+      "minutes": 3,
+      "groups": 2,
+      "questions": 3,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "SUS — skala użyteczności systemu",
+        "en": "SUS — System Usability Scale"
+      },
+      "summary": {
+        "pl": "Standardowy kwestionariusz System Usability Scale (10 stwierdzeń, skala 1–5). Wynik 0–100 jest wyliczany automatycznie do pola SUSSCORE.",
+        "en": "The standard System Usability Scale questionnaire (10 statements, a 1–5 scale). The 0–100 score is computed automatically into the SUSSCORE field."
+      },
+      "preview": true
+    },
+    {
+      "id": "test-koncepcji-produktu",
+      "file": "test-koncepcji-produktu.lss",
+      "bytes": 46848,
+      "sha256": "c3cfd03c130bca02274776aa3828de7d6bfe5691429f1b47f81453fbc8c147e7",
+      "category": "research",
+      "modes": [
+        "cawi"
+      ],
+      "theme": "lc_marketing",
+      "minutes": 6,
+      "groups": 3,
+      "questions": 12,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Test koncepcji produktu",
+        "en": "Product concept test"
+      },
+      "summary": {
+        "pl": "Badanie nowej koncepcji: atrakcyjność, unikalność, dopasowanie do potrzeb, intencja zakupu oraz cztery pytania cenowe metodą Van Westendorpa (PSM).",
+        "en": "A new concept study: appeal, uniqueness, relevance, purchase intent and four pricing questions using the Van Westendorp method (PSM)."
+      },
+      "preview": true
+    },
+    {
+      "id": "wywiad-cati",
+      "file": "wywiad-cati.lss",
+      "bytes": 74435,
+      "sha256": "dc084d9f5049c50059b1b385006cdbd19434b852699be00703c0e1383e1b12d9",
+      "category": "fieldwork",
+      "modes": [
+        "cati"
+      ],
+      "theme": "lc_cati",
+      "minutes": 8,
+      "groups": 5,
+      "questions": 15,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 4,
+      "title": {
+        "pl": "Wywiad telefoniczny CATI — skrypt z wynikiem kontaktu",
+        "en": "CATI telephone interview — script with call outcome"
+      },
+      "summary": {
+        "pl": "Szkielet wywiadu telefonicznego: skrypt powitania, wynik kontaktu (rozmowa, oddzwonienie, odmowa), zgoda, blok pytań, metryczka i notatki ankietera. Zawiera pola uczestnika: telefon, status kontaktu, termin oddzwonienia, notatka.",
+        "en": "A telephone interview skeleton: opening script, call outcome (interview, callback, refusal), consent, a question block, demographics and interviewer notes. Includes participant fields: phone, contact status, callback time, note."
+      },
+      "preview": true
+    },
+    {
+      "id": "wywiad-capi",
+      "file": "wywiad-capi.lss",
+      "bytes": 64426,
+      "sha256": "8aa1b39336a43120d78e7a580175c2377e71340713334be7ce5767be30210f42",
+      "category": "fieldwork",
+      "modes": [
+        "capi"
+      ],
+      "theme": "lc_capi",
+      "minutes": 10,
+      "groups": 5,
+      "questions": 16,
+      "languages": [
+        "pl",
+        "en"
+      ],
+      "tokenAttributes": 0,
+      "title": {
+        "pl": "Wywiad bezpośredni CAPI — badanie terenowe",
+        "en": "CAPI face-to-face interview — field study"
+      },
+      "summary": {
+        "pl": "Szkielet wywiadu terenowego na tablecie: dane wywiadu (ankieter, punkt, miejsce), zgoda, kwalifikacja, blok pytań z kartami odpowiedzi i rankingiem, metryczka oraz obserwacje ankietera po wywiadzie.",
+        "en": "A tablet field interview skeleton: interview details (interviewer, sampling point, place), consent, screening, a question block with show cards and ranking, demographics and post-interview observations."
+      },
+      "preview": true
+    }
+  ]
+}

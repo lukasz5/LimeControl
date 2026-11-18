@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>LimeControl — App for LimeSurvey</title>
+    <title>LimeControl — survey control app</title>
     <meta
       name="description"
-      content="Mobilna aplikacja PWA i eksporter projektu React Native dla API LimeSurvey RemoteControl 2 z harmonogramem aktywacji ankiet, statystykami, uczestnikami i eksportem odpowiedzi."
+      content="Aplikacja PWA dla LimeSurvey (API RemoteControl 2): aktywacja ankiet, biblioteka szablonów, harmonogram, uczestnicy, statystyki i eksport odpowiedzi — z wielu instancji, z telefonu."
     />
-    <meta property="og:title" content="LimeControl — LimeSurvey Mobile RC2" />
+    <meta property="og:title" content="LimeControl — survey control app" />
     <meta
       property="og:description"
       content="Zarządzaj wieloma instancjami LimeSurvey z telefonu: aktywuj ankiety, planuj harmonogram, obsługuj tokeny i eksportuj wyniki."
@@ -28,9 +28,25 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <!-- Ekran startowy do czasu załadowania aplikacji: logo na tle motywu zamiast pustej strony. -->
+    <style>
+      html { background: #f8fafc; }
+      html.dark { background: #020617; }
+      #boot { position: fixed; inset: 0; display: grid; place-items: center; }
+    </style>
+    <script>
+      // Motyw przed startem aplikacji: wybór użytkownika, a w aplikacji mobilnej — motyw systemu.
+      try {
+        var theme = localStorage.getItem('limecontrol_theme_v1');
+        var cap = window.Capacitor;
+        var nativeApp = Boolean(window.CapacitorCustomPlatform) || Boolean(cap && cap.isNativePlatform && cap.isNativePlatform());
+        var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (theme === 'dark' || (!theme && nativeApp && systemDark)) document.documentElement.classList.add('dark');
+      } catch (e) {}
+    </script>
   </head>
   <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-emerald-500/20 selection:text-emerald-900 dark:selection:text-emerald-200">
-    <div id="root"></div>
+    <div id="root"><div id="boot" aria-hidden="true"><img src="/icon.svg" width="72" height="72" alt="" /></div></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

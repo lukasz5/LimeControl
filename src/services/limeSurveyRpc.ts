@@ -9,6 +9,9 @@ import type {
   SurveyProperties,
   SurveySummary,
 } from '../types/limesurvey';
+import { authHeaders } from '../backend';
+import { apiUrl } from '../backend/apiBase';
+import { isNativeApp } from '../platform';
 import { t } from '../i18n';
 
 export class LimeSurveyRpcError extends Error {
@@ -80,14 +83,21 @@ export function formatLimeSurveyDateTime(
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:00`;
 }
 
+/** Metody wysyłające e-maile zwracają w polu status postęp („3 left to send”), a nie błąd. */
+const MAIL_METHODS = new Set(['invite_participants', 'remind_participants', 'mail_registered_participants']);
+
 function extractStatusError(
-  result: unknown
+  result: unknown,
+  method?: string
 ): { message: string; code?: string | number } | null {
   if (!result || typeof result !== 'object') {
     return null;
   }
 
   const record = result as Record<string, unknown>;
+  if (method && MAIL_METHODS.has(method) && typeof record.status === 'string' && /^\d+ left to send$/i.test(record.status)) {
+    return null;
+  }
   const rawCode =
     typeof record.error_code === 'string' || typeof record.error_code === 'number'
       ? record.error_code
@@ -154,11 +164,12 @@ export async function callLimeSurveyRpc<T = unknown>(
               id: requestId,
             }),
           })
-        : await fetch('/api/rpc-relay', {
+        : await fetch(apiUrl('/api/rpc-relay'), {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               Accept: 'application/json',
+              ...(await authHeaders()),
             },
             body: JSON.stringify({
               endpoint: rpcEndpoint,
@@ -221,7 +232,7 @@ export async function callLimeSurveyRpc<T = unknown>(
       throw new LimeSurveyRpcError(errMsg, { rpcCode: errCode });
     }
 
-    const statusError = extractStatusError(payload.result);
+    const statusError = extractStatusError(payload.result, method);
     if (statusError) {
       emitTrace({
         id: `${Date.now()}_${requestId}`,
@@ -260,11 +271,18 @@ export async function callLimeSurveyRpc<T = unknown>(
       err instanceof TypeError ||
       (err instanceof Error &&
         /failed to fetch|networkerror|load failed|cors/i.test(err.message));
-    const msg = isNetwork
-      ? t('Połączenie zablokowane przez przeglądarkę (najczęściej brak nagłówków CORS na serwerze LimeSurvey lub błędny URL).')
-      : err instanceof Error
-        ? err.message
-        : String(err);
+    const detail = err instanceof Error ? err.message : String(err);
+    // Aplikacja mobilna łączy się natywnie — CORS jej nie dotyczy, więc pokazujemy rzeczywistą przyczynę.
+    // iOS i Android blokują nieszyfrowane http:// (iOS dopuszcza je tylko w sieci lokalnej).
+    const cleartextBlocked =
+      isNativeApp() && /^http:\/\//i.test(rpcEndpoint) && /cleartext|transport security|secure connection|-1022/i.test(detail);
+    const msg = cleartextBlocked
+      ? t('System zablokował nieszyfrowane połączenie (http://). Użyj adresu https:// — aplikacja mobilna łączy się bez szyfrowania tylko z serwerami w sieci lokalnej.')
+      : isNativeApp()
+      ? t('Nie udało się połączyć z serwerem: {0}', detail)
+      : isNetwork
+        ? t('Połączenie zablokowane przez przeglądarkę (najczęściej brak nagłówków CORS na serwerze LimeSurvey lub błędny URL).')
+        : detail;
 
     emitTrace({
       id: `${Date.now()}_${requestId}`,
@@ -277,7 +295,7 @@ export async function callLimeSurveyRpc<T = unknown>(
       timestamp: new Date().toISOString(),
     });
 
-    throw new LimeSurveyRpcError(msg, { isCorsOrNetwork: isNetwork });
+    throw new LimeSurveyRpcError(msg, { isCorsOrNetwork: isNetwork && !isNativeApp() });
   }
 }
 
@@ -335,13 +353,116 @@ export async function listSurveys(
   mode: ConnectionMode = 'direct'
 ): Promise<LimeSurveyItem[]> {
   const params = username ? [sessionKey, username] : [sessionKey];
-  const result = await callLimeSurveyRpc<LimeSurveyItem[]>(
-    rpcEndpoint,
-    'list_surveys',
-    params,
-    mode
-  );
-  return Array.isArray(result) ? result : [];
+  try {
+    const result = await callLimeSurveyRpc<LimeSurveyItem[]>(
+      rpcEndpoint,
+      'list_surveys',
+      params,
+      mode
+    );
+    return Array.isArray(result) ? result : [];
+  } catch (err) {
+    // Świeża instancja bez ankiet zwraca status „No surveys found” — to pusta lista, nie błąd.
+    if (err instanceof LimeSurveyRpcError && /no surveys found/i.test(err.message)) {
+      return [];
+    }
+    throw err;
+  }
+}
+
+/**
+ * Importuje ankietę z pliku struktury (.lss) lub archiwum (.lsa). Zwraca identyfikator nowej ankiety.
+ * Podanie nowej nazwy nadpisuje tytuł we wszystkich językach — dla szablonów wielojęzycznych zostaw puste.
+ */
+export async function importSurvey(
+  rpcEndpoint: string,
+  sessionKey: string,
+  base64Data: string,
+  dataType: 'lss' | 'lsa' | 'csv' | 'txt' = 'lss',
+  newSurveyName: string | null = null,
+  mode: ConnectionMode = 'direct'
+): Promise<number> {
+  const params: unknown[] = newSurveyName ? [sessionKey, base64Data, dataType, newSurveyName] : [sessionKey, base64Data, dataType];
+  const result = await callLimeSurveyRpc<number | string>(rpcEndpoint, 'import_survey', params, mode);
+  const sid = Number(result);
+  if (!Number.isInteger(sid) || sid <= 0) {
+    throw new LimeSurveyRpcError(t('Serwer nie zwrócił identyfikatora zaimportowanej ankiety.'));
+  }
+  return sid;
+}
+
+/** Kodowanie base64 tekstu UTF-8 (pliki .lss zawierają polskie znaki). */
+export function utf8ToBase64(text: string): string {
+  const bytes = new TextEncoder().encode(text);
+  let binary = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+/**
+ * Numery dodatkowych pól uczestnika zdefiniowanych w ankiecie (attribute_1 → 1).
+ * LimeSurvey 4+ zapisuje definicje jako JSON; starsze wersje — w formacie serialize() PHP.
+ */
+export function tokenAttributeNumbers(attributeDescriptions: unknown): number[] {
+  let source: unknown = attributeDescriptions;
+  if (typeof source === 'string') {
+    const text = source.trim();
+    if (!text) return [];
+    try {
+      source = JSON.parse(text);
+    } catch {
+      const found = [...text.matchAll(/attribute_(\d+)/g)].map((m) => Number(m[1]));
+      return [...new Set(found)].sort((a, b) => a - b);
+    }
+  }
+  if (!source || typeof source !== 'object') return [];
+  return Object.keys(source as Record<string, unknown>)
+    .map((key) => /^attribute_(\d+)$/.exec(key))
+    .filter((m): m is RegExpExecArray => Boolean(m))
+    .map((m) => Number(m[1]))
+    .sort((a, b) => a - b);
+}
+
+/** Ankieta nie ma jeszcze tabeli uczestników (komunikat zależy od wersji LimeSurvey). */
+export function isMissingParticipantTable(message: string): boolean {
+  return /no token table|no survey participants? (table|list)|ERR_NO_PARTICIPANT_TABLE/i.test(message);
+}
+
+/** Tabela uczestników istnieje, ale nie ma w niej pasujących wpisów. */
+export function isEmptyParticipantList(message: string): boolean {
+  return /no tokens found|no survey participants found|no data/i.test(message);
+}
+
+export interface MailSendResult {
+  sent: number;
+  failed: number;
+  left: number;
+  /** Komunikaty błędów dla nieudanych wysyłek (maks. kilka pierwszych). */
+  errors: string[];
+}
+
+/** Podsumowanie wyniku invite_participants / remind_participants. */
+export function summarizeMailResult(result: unknown): MailSendResult {
+  const summary: MailSendResult = { sent: 0, failed: 0, left: 0, errors: [] };
+  if (!result || typeof result !== 'object') return summary;
+  for (const [key, value] of Object.entries(result as Record<string, unknown>)) {
+    if (key === 'status') {
+      const match = /^(\d+) left to send$/i.exec(String(value));
+      if (match) summary.left = Number(match[1]);
+      continue;
+    }
+    if (!value || typeof value !== 'object') continue;
+    const item = value as Record<string, unknown>;
+    if (/^ok$/i.test(String(item.status || ''))) summary.sent += 1;
+    else {
+      summary.failed += 1;
+      if (summary.errors.length < 3) summary.errors.push(String(item.error || item.status || '').slice(0, 200));
+    }
+  }
+  return summary;
 }
 
 export async function getSurveyProperties(
@@ -479,12 +600,14 @@ export async function activateTokens(
   rpcEndpoint: string,
   sessionKey: string,
   surveyId: number,
-  mode: ConnectionMode = 'direct'
+  mode: ConnectionMode = 'direct',
+  /** Numery dodatkowych pól (np. [1, 2] tworzy attribute_1 i attribute_2). */
+  attributeFields: number[] = []
 ): Promise<Record<string, unknown>> {
   return callLimeSurveyRpc<Record<string, unknown>>(
     rpcEndpoint,
     'activate_tokens',
-    [sessionKey, surveyId],
+    attributeFields.length ? [sessionKey, surveyId, attributeFields] : [sessionKey, surveyId],
     mode
   );
 }

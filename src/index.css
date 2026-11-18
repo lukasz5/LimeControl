@@ -49,6 +49,63 @@
   font-variant-numeric: tabular-nums;
 }
 
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Ekran bez paska nagłówka (logowanie): odstęp od wcięcia ekranu i paska stanu. */
+.pt-safe-screen {
+  padding-top: max(2.5rem, calc(env(safe-area-inset-top, 0px) + 1.25rem));
+}
+
+/*
+ * iOS (Safari i aplikacja mobilna) rysuje pola daty i listy wyboru po swojemu: pola daty mają
+ * własną minimalną szerokość i wychodzą poza kartę, a listy ignorują wysokość 44 px.
+ * Bez natywnego wyglądu kontrolki słuchają klas Tailwinda; lista dostaje własną strzałkę.
+ */
+input[type='date'],
+input[type='datetime-local'],
+input[type='time'] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+}
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2364748b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.25rem !important;
+}
+
+/*
+ * Telefon: dolna nawigacja ma 4rem + pasek gestów. Powiadomienia i treść strony zostawiają na nią
+ * miejsce; od szerokości „sm” / „md” nawigacji na dole nie ma.
+ */
+.above-bottom-nav {
+  bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 640px) {
+  .above-bottom-nav {
+    bottom: 1.5rem;
+  }
+}
+
+.pb-bottom-nav {
+  padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  .pb-bottom-nav {
+    padding-bottom: 2.5rem;
+  }
+}
+
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }

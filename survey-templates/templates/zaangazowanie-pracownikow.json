@@ -1,0 +1,123 @@
+{
+  "id": "zaangazowanie-pracownikow",
+  "order": 30,
+  "category": "hr",
+  "modes": ["cawi"],
+  "theme": "professional",
+  "minutes": 8,
+  "languages": ["pl", "en"],
+  "title": ["Zaangażowanie pracowników i eNPS", "Employee engagement and eNPS"],
+  "summary": ["Badanie zaangażowania: 17 stwierdzeń w trzech obszarach (praca, przełożony i zespół, organizacja), eNPS, dwa pytania otwarte i opcjonalna metryczka.", "An engagement survey: 17 statements in three areas (the job, manager and team, the organisation), eNPS, two open questions and optional demographics."],
+  "description": ["Badanie opinii pracowników. Wypełnienie zajmuje około 8 minut.", "An employee opinion survey. It takes about 8 minutes to complete."],
+  "welcome": ["Ankieta jest anonimowa. Wyniki będą prezentowane wyłącznie zbiorczo, dla grup liczących co najmniej 5 osób. Odpowiadaj szczerze — nie ma dobrych ani złych odpowiedzi.", "This survey is anonymous. Results will only be reported in aggregate, for groups of at least 5 people. Please answer honestly — there are no right or wrong answers."],
+  "end": ["Dziękujemy. O wynikach i planowanych działaniach poinformujemy po zakończeniu badania.", "Thank you. We will share the results and planned actions once the survey is closed."],
+  "groups": [
+    {
+      "title": ["Twoja praca", "Your job"],
+      "questions": [
+        {
+          "code": "JOB",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile zgadzasz się z poniższymi stwierdzeniami?", "How much do you agree with the following statements?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Wiem, czego oczekuje się ode mnie w pracy.", "I know what is expected of me at work."] },
+            { "code": "Q02", "text": ["Mam narzędzia i zasoby potrzebne do dobrego wykonywania pracy.", "I have the tools and resources I need to do my job well."] },
+            { "code": "Q03", "text": ["W pracy mogę wykorzystywać swoje mocne strony.", "I can use my strengths at work."] },
+            { "code": "Q04", "text": ["Moja praca daje mi poczucie sensu.", "My work gives me a sense of purpose."] },
+            { "code": "Q05", "text": ["Mam możliwość uczenia się i rozwoju.", "I have opportunities to learn and grow."] },
+            { "code": "Q06", "text": ["Moje obciążenie pracą jest możliwe do udźwignięcia.", "My workload is manageable."] }
+          ],
+          "options": "@agree5"
+        }
+      ]
+    },
+    {
+      "title": ["Przełożony i zespół", "Manager and team"],
+      "questions": [
+        {
+          "code": "TEAM",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile zgadzasz się z poniższymi stwierdzeniami?", "How much do you agree with the following statements?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Przełożony regularnie przekazuje mi informację zwrotną.", "My manager gives me regular feedback."] },
+            { "code": "Q02", "text": ["Przełożony traktuje mnie z szacunkiem.", "My manager treats me with respect."] },
+            { "code": "Q03", "text": ["Moja opinia jest brana pod uwagę.", "My opinion counts."] },
+            { "code": "Q04", "text": ["W moim zespole możemy na sobie polegać.", "In my team we can rely on each other."] },
+            { "code": "Q05", "text": ["Współpraca między działami przebiega sprawnie.", "Cooperation between departments works well."] },
+            { "code": "Q06", "text": ["Otrzymuję uznanie za dobrze wykonaną pracę.", "I receive recognition for good work."] }
+          ],
+          "options": "@agree5"
+        }
+      ]
+    },
+    {
+      "title": ["Organizacja", "The organisation"],
+      "questions": [
+        {
+          "code": "ORG",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile zgadzasz się z poniższymi stwierdzeniami?", "How much do you agree with the following statements?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Rozumiem cele i kierunek rozwoju organizacji.", "I understand the organisation's goals and direction."] },
+            { "code": "Q02", "text": ["Ufam decyzjom kierownictwa.", "I trust the decisions made by senior management."] },
+            { "code": "Q03", "text": ["Komunikacja wewnętrzna jest jasna i terminowa.", "Internal communication is clear and timely."] },
+            { "code": "Q04", "text": ["Moje wynagrodzenie jest adekwatne do obowiązków.", "My pay is fair for my responsibilities."] },
+            { "code": "Q05", "text": ["Widzę tu swoją przyszłość w perspektywie dwóch lat.", "I can see myself working here in two years' time."] }
+          ],
+          "options": "@agree5"
+        },
+        {
+          "code": "ENPS",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile prawdopodobne jest, że polecisz naszą organizację jako miejsce pracy?", "How likely are you to recommend our organisation as a place to work?"],
+          "help": ["0 — zdecydowanie nie polecę, 10 — zdecydowanie polecę.", "0 — not at all likely, 10 — extremely likely."],
+          "subquestions": [
+            { "code": "SQ001", "text": ["Prawdopodobieństwo polecenia", "Likelihood to recommend"] }
+          ],
+          "options": "@nps11"
+        }
+      ]
+    },
+    {
+      "title": ["Twoje uwagi", "Your comments"],
+      "questions": [
+        {
+          "code": "BEST",
+          "type": "longtext",
+          "text": ["Co najbardziej cenisz w pracy u nas?", "What do you value most about working here?"]
+        },
+        {
+          "code": "CHANGE",
+          "type": "longtext",
+          "text": ["Jaką jedną rzecz warto zmienić w pierwszej kolejności?", "What is the one thing we should change first?"]
+        }
+      ]
+    },
+    {
+      "title": ["O Tobie (opcjonalnie)", "About you (optional)"],
+      "description": ["Odpowiedzi posłużą wyłącznie do porównań między grupami.", "Your answers will only be used to compare groups."],
+      "questions": [
+        {
+          "code": "TENURE",
+          "type": "radio",
+          "text": ["Jak długo pracujesz w organizacji?", "How long have you worked for the organisation?"],
+          "options": [
+            { "code": "1", "text": ["Krócej niż rok", "Less than a year"] },
+            { "code": "2", "text": ["1–3 lata", "1–3 years"] },
+            { "code": "3", "text": ["3–5 lat", "3–5 years"] },
+            { "code": "4", "text": ["Ponad 5 lat", "More than 5 years"] }
+          ]
+        },
+        {
+          "code": "MANAGER",
+          "type": "yesno",
+          "text": ["Czy zarządzasz zespołem?", "Do you manage a team?"]
+        }
+      ]
+    }
+  ]
+}

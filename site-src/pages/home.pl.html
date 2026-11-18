@@ -1,0 +1,486 @@
+<!--meta
+{
+  "title": "LimeControl — aplikacja, motywy i szablony ankiet dla LimeSurvey",
+  "description": "Darmowe, otwarte narzędzia dla LimeSurvey 3.x–7.x: aplikacja PWA do zarządzania ankietami z telefonu, {{THEME_COUNT}} motywów WCAG 2.2 AA, {{TEMPLATE_COUNT}} szablonów ankiet PL/EN, wtyczki CATI/CAPI i wdrożenia Docker. Płatne są tylko usługi: konto StrefaAnkiet i hosting.",
+  "ogTitle": "LimeControl — LimeSurvey w Twojej kieszeni",
+  "ogDescription": "Aplikacja, motywy, szablony ankiet i wdrożenia dla LimeSurvey 3.x–7.x. Darmowe i open source.",
+  "jsonLd": {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "LimeControl",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://limecontrol.eu/",
+    "softwareVersion": "{{VERSION}}",
+    "inLanguage": ["pl", "en"],
+    "license": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
+    "description": "Otwarty zestaw narzędzi dla LimeSurvey: aplikacja PWA do zarządzania ankietami przez API RemoteControl 2, motywy WCAG 2.2 AA, szablony ankiet i wdrożenia Docker.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "author": { "@type": "Organization", "name": "strefabadan.pl", "url": "https://strefabadan.pl" }
+  }
+}
+-->
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div>
+          <span class="eyebrow">Darmowe i open source</span>
+          <h1>Twoje ankiety LimeSurvey. <span class="lime">Pod kontrolą</span>, z&nbsp;telefonu.</h1>
+          <p class="lead">LimeControl to darmowe, otwarte narzędzia dla LimeSurvey: aplikacja do zarządzania ankietami przez oficjalne API RemoteControl&nbsp;2, motywy WCAG, gotowe szablony ankiet, wtyczki i wdrożenia Docker. Aktywuj ankiety, planuj wysyłki i sprawdzaj wyniki — bez logowania do panelu administratora.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="{{APP_URL}}">
+              Uruchom LimeControl
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="{{docs}}#szybki-start">Szybki start</a>
+          </div>
+          <ul class="hero-meta">
+            <li>Darmowa i open source</li>
+            <li>LimeSurvey 3.x – 7.x</li>
+            <li>PWA lub własny serwer</li>
+            <li>Po polsku i po angielsku</li>
+          </ul>
+        </div>
+
+        <!-- Makieta ekranu aplikacji -->
+        <div class="phone" aria-hidden="true">
+          <div class="screen">
+            <div class="screen-top">
+              <div class="row"><small>Badania Uczelnia · LS 7.1</small><span class="pill pill-live">● połączono</span></div>
+              <div class="row" style="margin-top:8px"><strong>Ankiety</strong><small>12 aktywnych</small></div>
+            </div>
+            <div class="screen-body">
+              <div class="stats">
+                <div><b>1 284</b><span>odpowiedzi</span></div>
+                <div><b>76%</b><span>kompletnych</span></div>
+                <div><b>412</b><span>tokenów</span></div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Satysfakcja studentów 2026</span><span class="pill pill-on">Aktywna</span></div>
+                <div class="s">#482913 · do 30.11.2026</div>
+                <div class="bar"><i style="width:76%"></i></div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Ewaluacja szkolenia BHP</span><span class="pill pill-sched">Start 08:00</span></div>
+                <div class="s">#219034 · harmonogram serwera</div>
+              </div>
+              <div class="card-mini">
+                <div class="row"><span class="t">Badanie pilotażowe Q4</span><span class="pill pill-off">Nieaktywna</span></div>
+                <div class="s">#771205 · 0 odpowiedzi</div>
+              </div>
+            </div>
+            <div class="tabbar">
+              <div class="on"><i></i>Ankiety</div>
+              <div><i></i>Harmonogram</div>
+              <div><i></i>Uczestnicy</div>
+              <div><i></i>Instancje</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- W LICZBACH -->
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="compat">
+          <div><b>3.x – 7.x</b><span>wersje LimeSurvey, w tym daty UTC w&nbsp;LS&nbsp;7</span></div>
+          <div><b>{{THEME_COUNT}} motywów</b><span>WCAG 2.2 AA dla LimeSurvey 6 i&nbsp;7</span></div>
+          <div><b>{{TEMPLATE_COUNT}} szablonów</b><span>ankiet po polsku i&nbsp;angielsku</span></div>
+          <div><b>PWA + Docker</b><span>w chmurze albo na własnym serwerze</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EKOSYSTEM -->
+    <section id="ekosystem" class="section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Ekosystem</span>
+          <h2>Wszystko, czego potrzeba do prowadzenia badań w LimeSurvey</h2>
+          <p>Każdy element działa osobno, a razem tworzą kompletny warsztat: od instalacji serwera, przez wygląd i treść ankiety, po realizację i wyniki.</p>
+        </div>
+
+        <div class="grid grid-3 eco">
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+            <h3>Aplikacja LimeControl</h3>
+            <p>PWA na telefon i komputer: aktywacja ankiet, harmonogram, uczestnicy, statystyki i eksport wyników z wielu instancji LimeSurvey.</p>
+            <a class="card-link" href="#funkcje">Zobacz funkcje →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 1 0 0 20c1.7 0 2.5-1.2 2-2.5-.6-1.6.4-3 2-3H18a4 4 0 0 0 4-4c0-5.5-4.5-10.5-10-10.5z"/></svg></div>
+            <h3>Motywy ankiet</h3>
+            <p>{{THEME_COUNT}} motywów WCAG 2.2 AA dla LimeSurvey 6 i 7 — od medycznego po minimalistyczny, a do tego motywy ankietera CATI i CAPI ze skrótami klawiszowymi.</p>
+            <a class="card-link" href="{{themes}}">Pobierz motywy →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h7M9 11h5"/></svg></div>
+            <h3>Szablony ankiet</h3>
+            <p>{{TEMPLATE_COUNT}} gotowych kwestionariuszy po polsku i angielsku: NPS, CSAT, zaangażowanie pracowników, ewaluacje, SUS oraz szkielety wywiadów CATI i CAPI.</p>
+            <a class="card-link" href="{{templates}}">Przeglądaj szablony →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></div>
+            <h3>Wtyczki StrefaAnkiet</h3>
+            <p>Darmowe wtyczki łączące LimeSurvey z platformą StrefaAnkiet: wysyłki przez Amazon SES, telefonia VoIP do CATI, praca ankieterów i analizy. Płatne jest tylko konto i usługi platformy.</p>
+            <a class="card-link" href="{{plugins}}">Poznaj wtyczki →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="M3.3 7L12 12l8.7-5M12 22V12"/></svg></div>
+            <h3>Wdrożenia</h3>
+            <p>Zestawy Docker: zabezpieczony LimeSurvey 7 z HTTPS i kopiami zapasowymi oraz LimeControl na własnym serwerze — bez usług zewnętrznych.</p>
+            <a class="card-link" href="#hosting">Zobacz wdrożenia →</a>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+            <h3>Otwarty kod</h3>
+            <p>Aplikacja, motywy, wtyczki i zestawy wdrożeniowe mają otwarty kod, a szablony ankiet są na licencji CC0. Zgłoszenia i poprawki są mile widziane.</p>
+            <a class="card-link" href="{{GITHUB_URL}}" target="_blank" rel="noopener">Repozytorium na GitHubie →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNKCJE -->
+    <section id="funkcje">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Funkcje aplikacji</span>
+          <h2>Wszystko, czego potrzebujesz w terenie i&nbsp;w&nbsp;biegu</h2>
+          <p>Najczęstsze operacje na ankietach — dostępne w kilku dotknięciach, na każdym urządzeniu.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></svg></div>
+            <h3>Wiele instancji LimeSurvey</h3>
+            <p>Zapisz profile wszystkich serwerów i przełączaj się między nimi jednym dotknięciem. Profile synchronizują się w chmurze po zalogowaniu kontem Google.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3>Aktywacja i zamykanie ankiet</h3>
+            <p>Aktywuj ankietę razem z tabelą tokenów, ustaw daty <code>startdate</code> i <code>expires</code>, zamknij badanie lub skopiuj ankietę.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v3l2 1"/></svg></div>
+            <h3>Harmonogram po stronie serwera</h3>
+            <p>Zaplanuj aktywację, zamknięcie ankiety, wysyłkę zaproszeń albo cykliczne przypomnienia. Zadanie wykona się na serwerze — nawet gdy telefon jest wyłączony.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 7v6M9 10h6"/></svg></div>
+            <h3>Biblioteka szablonów ankiet</h3>
+            <p>Zaimportuj gotowy kwestionariusz do połączonej instancji jednym dotknięciem — od NPS po szkielet wywiadu CATI. Powstaje nieaktywna ankieta, którą dowolnie zmienisz.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20v.01M17 20h3v-3"/></svg></div>
+            <h3>Link, kod QR i motyw</h3>
+            <p>Skopiuj lub udostępnij link do ankiety, pokaż kod QR na plakat lub prezentację i ustaw motyw ankiety — bez wchodzenia do panelu.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M11 18h2M9 7h6M9 11h6"/></svg></div>
+            <h3>Tryb CAPI</h3>
+            <p>Rozpocznij wywiad na tablecie lub telefonie i włącz pętlę wywiadów: po zakończeniu ankieta sama zaczyna kolejny, pusty wywiad.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div>
+            <h3>Uczestnicy i zaproszenia</h3>
+            <p>Dodawaj i usuwaj respondentów, edytuj szablony e-maili z podglądem na żywo i wysyłaj zaproszenia oraz przypomnienia — od razu albo z harmonogramu.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+            <h3>Statystyki i porównania</h3>
+            <p>Podsumowanie odpowiedzi i tokenów na wykresach oraz porównanie dwóch ankiet obok siebie — wszystko z <code>get_summary</code>.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
+            <h3>Eksport wyników</h3>
+            <p>Pobierz odpowiedzi do CSV, Excela lub JSON i sprawdź identyfikatory kolumn (SGQA i LS&nbsp;7) w inspektorze <code>get_fieldmap</code>.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div>
+            <h3>Powiadomienia i dziennik RPC</h3>
+            <p>Komunikaty o wykonanych i nieudanych zadaniach, podgląd każdego wywołania JSON-RPC z czasem odpowiedzi, diagnostyka CORS i czytelne błędy API.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+            <h3>PWA i aplikacja mobilna</h3>
+            <p>Zainstaluj aplikację na ekranie głównym jednym dotknięciem. Bezpłatna aplikacja LimeControl na iOS i Androida jest w przygotowaniu.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <h3>Własny serwer bez chmury</h3>
+            <p>Uruchom LimeControl w kontenerze Docker i loguj się kluczem dostępu — bez konta Google, a przekaźnik i harmonogram działają w Twojej sieci.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- JAK TO DZIAŁA -->
+    <section id="jak-to-dziala" class="section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Jak to działa</span>
+          <h2>Gotowe w czterech krokach</h2>
+          <p>Nie instalujesz niczego na serwerze LimeSurvey — wystarczy włączone API JSON-RPC.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Włącz API w LimeSurvey</h3>
+            <p><em>Konfiguracja → Ustawienia globalne → Interfejsy</em> i wybierz <strong>JSON-RPC</strong>.</p>
+          </li>
+          <li>
+            <h3>Zaloguj się</h3>
+            <p>Otwórz LimeControl i zaloguj się kontem Google. We własnej instalacji wystarczy klucz dostępu.</p>
+          </li>
+          <li>
+            <h3>Dodaj instancję</h3>
+            <p>Podaj adres LimeSurvey, login i hasło. Ścieżka do API uzupełni się automatycznie.</p>
+          </li>
+          <li>
+            <h3>Zarządzaj</h3>
+            <p>Aktywuj ankiety, importuj szablony, planuj wysyłki i pobieraj wyniki.</p>
+          </li>
+        </ol>
+        <p style="margin-top:28px"><a href="{{docs}}#konfiguracja-limesurvey">Szczegółowa instrukcja konfiguracji →</a></p>
+      </div>
+    </section>
+
+    <!-- CATI / CAPI -->
+    <section id="cati-capi">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">CATI i CAPI</span>
+          <h2>Wywiady telefoniczne i terenowe w LimeSurvey</h2>
+          <p class="muted">Darmowe narzędzia LimeControl przygotowują ankietę do pracy ankietera: wygodny motyw, gotowy szkielet wywiadu i tryb „wywiad za wywiadem”. Gdy badanie wymaga przydziałów, kolejki rozmów, telefonii i kwot, dołączasz darmowe wtyczki oraz konto platformy StrefaAnkiet — a postęp realizacji widzisz w aplikacji.</p>
+          <div class="hero-cta" style="margin-bottom:0">
+            <a class="btn btn-primary" href="{{plugins}}">Darmowe wtyczki StrefaAnkiet</a>
+            <a class="btn btn-ghost" href="{{docs}}#wywiady">Jak prowadzić wywiady</a>
+          </div>
+        </div>
+        <ul class="checklist">
+          <li><span><strong>Motyw CATI</strong> — układ dla ankietera przy komputerze: odpowiedzi klawiszami <kbd>1</kbd>–<kbd>9</kbd>, przejście dalej <kbd>Ctrl</kbd>+<kbd>Enter</kbd>, nawigacja zawsze pod ręką.</span></li>
+          <li><span><strong>Motyw CAPI</strong> — duże pola dotykowe i czytelna typografia na tablet lub telefon w terenie.</span></li>
+          <li><span><strong>Szkielety wywiadów</strong> — szablony „Wywiad CATI” (wynik kontaktu, termin oddzwonienia, notatka ankietera) i „Wywiad CAPI”, po polsku i angielsku.</span></li>
+          <li><span><strong>Pętla wywiadów</strong> — aplikacja ustawia ankietę tak, by po zakończeniu sama zaczynała kolejny wywiad; link i kod QR dla ankietera masz pod ręką.</span></li>
+          <li><span><strong>Stan realizacji ze StrefyAnkiet</strong> — ukończone wywiady, przydziały ankieterów i kolejka rozmów przy ankiecie, tylko do odczytu (beta).</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- DARMOWE I PŁATNE -->
+    <section id="darmowe-i-platne" class="section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Darmowe i płatne</span>
+          <h2>Darmowe narzędzia, płatne usługi</h2>
+          <p>LimeControl rozwijamy jako darmowe, otwarte oprogramowanie dla każdego użytkownika LimeSurvey. Utrzymujemy je z usług — konta StrefaAnkiet oraz wdrożeń i hostingu — czyli z tego, czego nie da się rozdać jako kodu.</p>
+        </div>
+        <div class="grid grid-2">
+          <article class="card host-card">
+            <span class="tag">Zawsze bezpłatnie</span>
+            <h3>Oprogramowanie</h3>
+            <p>Bez limitu ankiet, instancji i użytkowników — z otwartym kodem.</p>
+            <ul>
+              <li>Aplikacja LimeControl: w przeglądarce, jako PWA i na własnym serwerze</li>
+              <li>{{THEME_COUNT}} motywów ankiet i {{TEMPLATE_COUNT}} szablonów ankiet</li>
+              <li>Wtyczki StrefaAnkiet dla LimeSurvey</li>
+              <li>Zestawy Docker dla LimeSurvey i LimeControl</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="{{GITHUB_URL}}" target="_blank" rel="noopener">Kod na GitHubie</a>
+            </div>
+          </article>
+
+          <article class="card host-card featured">
+            <span class="tag">Konto StrefaAnkiet</span>
+            <h3>Usługi dla badań</h3>
+            <p>Abonament platformy i usługi rozliczane według użycia — gdy badanie potrzebuje infrastruktury i zespołu.</p>
+            <ul>
+              <li><strong>Zarządzany Amazon SES</strong> — wysyłki z własnej domeny bez konfigurowania AWS</li>
+              <li><strong>Telefonia VoIP</strong> — telefon w przeglądarce i serwer VoIP do wywiadów CATI</li>
+              <li><strong>Praca w terenie</strong> — przydziały ankieterów i aplikacja do pracy bez sieci</li>
+              <li><strong>Analizy i raporty</strong> — wersje danych, R, PDF i DOCX, praca zespołowa</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-primary" href="{{STREFAANKIET_PRICING_URL}}" rel="noopener">Cennik StrefaAnkiet</a>
+              <a class="btn btn-ghost" href="{{plugins}}">Jak to się łączy</a>
+            </div>
+          </article>
+        </div>
+        <p class="muted" style="margin:22px 0 0">Potrzebujesz serwera? <a href="#hosting">Wdrażamy i utrzymujemy serwery ankietowe</a> oparte na oprogramowaniu LimeSurvey — to osobna, opcjonalna usługa.</p>
+      </div>
+    </section>
+
+    <!-- WDROŻENIA I HOSTING -->
+    <section id="hosting">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Hosting i wdrożenia</span>
+          <h2>Postaw wszystko u siebie albo zleć to nam</h2>
+          <p>Własny serwer ankiet i LimeControl uruchomisz samodzielnie z otwartych zestawów Docker. Możesz też zlecić nam wdrożenie i utrzymanie serwera ankietowego — gotowego do pracy od pierwszego dnia.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card host-card">
+            <span class="tag">Open source · serwer ankiet</span>
+            <h3>Gotowy stack Docker na GitHubie</h3>
+            <p>Zestaw do samodzielnego uruchomienia serwera ankiet (LimeSurvey 7) na Ubuntu jednym skryptem <code>install.sh</code>.</p>
+            <ul>
+              <li>HTTPS z Let's Encrypt (Traefik), TLS 1.2+, HSTS</li>
+              <li>MariaDB w sieci wewnętrznej, bez portów na zewnątrz</li>
+              <li>Kontenery tylko do odczytu, sekrety poza obrazem</li>
+              <li>Limity logowania i opcjonalna lista IP dla panelu</li>
+              <li>Codzienny backup bazy, plików i kluczy oraz skrypt odtwarzania</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="{{STACK_URL}}" target="_blank" rel="noopener">Instrukcja na GitHubie</a>
+            </div>
+          </article>
+
+          <article class="card host-card">
+            <span class="tag">Open source · LimeControl</span>
+            <h3>LimeControl na własnym serwerze</h3>
+            <p>Aplikacja w kontenerze Docker — bez konta Google i bez usług zewnętrznych.</p>
+            <ul>
+              <li>Logowanie kluczem dostępu, profile zapisane w przeglądarce</li>
+              <li>Harmonogram i przekaźnik działają w Twoim kontenerze</li>
+              <li>Hasła zadań harmonogramu zaszyfrowane na dysku</li>
+              <li>Wspólny Traefik i certyfikaty ze stackiem LimeSurvey</li>
+              <li>Kontener tylko do odczytu, bez dodatkowych uprawnień</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="{{docs}}#wlasny-serwer">Instrukcja instalacji</a>
+            </div>
+          </article>
+
+          <article class="card host-card featured">
+            <span class="tag">Usługa · strefabadan.pl</span>
+            <h3>Wdrożenie i utrzymanie serwera ankietowego</h3>
+            <p>Instalacja, konfiguracja i utrzymanie serwera ankietowego (opartego na silniku LimeSurvey) — na Twojej infrastrukturze albo na naszej.</p>
+            <ul>
+              <li>Instalacja na Twojej infrastrukturze lub hosting po naszej stronie</li>
+              <li>Własna domena, certyfikat SSL i skonfigurowana poczta SMTP</li>
+              <li>Włączone API RemoteControl 2 i CORS pod LimeControl</li>
+              <li>Aktualizacje oprogramowania, monitoring i kopie zapasowe</li>
+              <li>Motywy, szablony ankiet i pomoc przy migracji badań</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://strefabadan.pl#contact" rel="noopener">Zapytaj o wycenę</a>
+              <a class="btn btn-ghost" href="mailto:{{CONTACT_EMAIL}}?subject=Wdro%C5%BCenie%20serwera%20ankietowego">{{CONTACT_EMAIL}}</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEZPIECZEŃSTWO -->
+    <section id="bezpieczenstwo" class="section-soft">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">Bezpieczeństwo i prywatność</span>
+          <h2>Twoje hasła zostają przy Tobie</h2>
+          <p class="muted">W trybie bezpośrednim LimeControl rozmawia z Twoim serwerem prosto z przeglądarki — dane ankiet nie przechodzą przez nasze serwery, a hasła do LimeSurvey nie są zapisywane w profilach.</p>
+          <a class="btn btn-ghost" href="{{docs}}#bezpieczenstwo">Jak chronimy dane</a>
+        </div>
+        <ul class="checklist">
+          <li><span><strong>Hasła LimeSurvey nigdy nie trafiają do chmury</strong> — ani do Firestore, ani do <code>localStorage</code>. Opcjonalnie są trzymane tylko w pamięci otwartej karty.</span></li>
+          <li><span><strong>Bezpośrednie połączenie</strong> przeglądarka → Twój serwer przez HTTPS. Przekaźnik serwerowy włączasz tylko, gdy go potrzebujesz.</span></li>
+          <li><span><strong>Przekaźnik tylko dla zalogowanych</strong> — z limitem zapytań i blokadą adresów sieci wewnętrznej w usłudze publicznej.</span></li>
+          <li><span><strong>Harmonogram szyfruje hasło zadania</strong> (AES-256-GCM) i usuwa je zaraz po wykonaniu lub anulowaniu.</span></li>
+          <li><span><strong>Kod jest otwarty</strong> — możesz go przejrzeć albo uruchomić aplikację na własnym serwerze.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow">FAQ</span>
+          <h2>Najczęstsze pytania</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Czy LimeControl jest darmowy?</summary>
+            <p>Tak. Aplikacja, motywy, szablony ankiet, wtyczki i zestawy wdrożeniowe są bezpłatne — bez limitu ankiet i instancji. Jeśli Ci się przydają, możesz wesprzeć ich rozwój linkiem „Postaw mi kawę” w stopce.</p>
+          </details>
+          <details>
+            <summary>Co w takim razie jest płatne?</summary>
+            <p>Usługi. <a href="{{plugins}}">Konto StrefaAnkiet</a> daje to, czego nie zapewni samo oprogramowanie: zarządzaną wysyłkę przez Amazon SES, telefonię VoIP do wywiadów CATI, pracę ankieterów w terenie oraz analizy i raporty. Osobno oferujemy <a href="#hosting">wdrożenie i utrzymanie serwera ankietowego</a>. Darmowe narzędzia działają bez żadnej z tych usług.</p>
+          </details>
+          <details>
+            <summary>Czy kod LimeControl jest otwarty?</summary>
+            <p>Tak. Kod aplikacji, motywów ankiet i zestawów wdrożeniowych jest na <a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHubie</a> na licencji GPL-2.0-or-later, a szablony ankiet są na CC0. Otwarty kod mają też wtyczki StrefaAnkiet dla LimeSurvey. Zgłoszenia błędów i propozycje zmian są mile widziane. Treść i wygląd tej strony nie są częścią otwartego kodu.</p>
+          </details>
+          <details>
+            <summary>Czy mogę uruchomić LimeControl na własnym serwerze?</summary>
+            <p>Tak. Zestaw Docker z katalogu <code>deploy/selfhost</code> uruchamia aplikację bez konta Google i bez Firebase — logujesz się kluczem dostępu, a profile serwerów zostają w przeglądarce. <a href="{{docs}}#wlasny-serwer">Instrukcja instalacji</a>.</p>
+          </details>
+          <details>
+            <summary>Nie mam własnego LimeSurvey. Pomożecie go uruchomić?</summary>
+            <p>Tak. Możesz skorzystać z naszego <a href="{{STACK_URL}}" target="_blank" rel="noopener">otwartego stacka Docker</a> albo zlecić nam <a href="#hosting">wdrożenie i utrzymanie środowiska ankietowego</a> opartego na oprogramowaniu LimeSurvey — z HTTPS, kopiami zapasowymi i API gotowym pod LimeControl.</p>
+          </details>
+          <details>
+            <summary>Czy muszę instalować wtyczkę w LimeSurvey?</summary>
+            <p>Nie. LimeControl korzysta z wbudowanego API RemoteControl 2 — wystarczy włączyć interfejs JSON-RPC w ustawieniach globalnych. Motywy ankiet i wtyczki StrefaAnkiet są opcjonalne.</p>
+          </details>
+          <details>
+            <summary>Działa z LimeSurvey Cloud i z własnym serwerem?</summary>
+            <p>Tak — z każdą instancją 3.x–7.x, która ma włączone JSON-RPC i jest dostępna przez HTTPS. Dla serwerów bez nagłówków CORS jest tryb przekaźnika serwerowego.</p>
+          </details>
+          <details>
+            <summary>Czy LimeControl obsługuje badania CATI i CAPI?</summary>
+            <p>Darmowe narzędzia obejmują motywy ankietera, szkielety wywiadów, pętlę wywiadów CAPI w aplikacji i <a href="{{plugins}}">wtyczki StrefaAnkiet</a>. Przydziały ankieterów, kolejkę rozmów, telefonię VoIP i kwoty między trybami zapewnia płatne konto platformy StrefaAnkiet.</p>
+          </details>
+          <details>
+            <summary>Jak zaimportować szablon ankiety?</summary>
+            <p>W aplikacji otwórz zakładkę Ankiety i wybierz „Biblioteka szablonów” — import tworzy nieaktywną ankietę w połączonej instancji. Pliki <code>.lss</code> możesz też <a href="{{templates}}">pobrać ze strony</a> i zaimportować w panelu LimeSurvey.</p>
+          </details>
+          <details>
+            <summary>Widzę błąd CORS. Co zrobić?</summary>
+            <p>Dodaj nagłówki CORS na serwerze LimeSurvey albo przełącz profil w tryb „Przekaźnik serwerowy”. <a href="{{docs}}#cors">Instrukcja z przykładami dla Apache i Nginx</a>.</p>
+          </details>
+          <details>
+            <summary>Jak zainstalować aplikację na telefonie?</summary>
+            <p>Na Androidzie użyj przycisku „Zainstaluj PWA” w aplikacji lub menu Chrome → „Dodaj do ekranu głównego”. Na iPhonie w Safari wybierz „Udostępnij” → „Do ekranu początkowego”. Aplikacja w App Store i Google Play jest w przygotowaniu.</p>
+          </details>
+          <details>
+            <summary>Jakie uprawnienia musi mieć konto LimeSurvey?</summary>
+            <p>Odczyt, edycja, tworzenie i aktywacja ankiet, zarządzanie uczestnikami oraz eksport odpowiedzi. <a href="{{docs}}#uprawnienia">Pełna lista uprawnień</a>.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="cta">
+          <h2>Zacznij zarządzać ankietami z telefonu</h2>
+          <p>Otwórz LimeControl w przeglądarce, dodaj swoją instancję LimeSurvey i zainstaluj aplikację na ekranie głównym.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="{{APP_URL}}">Otwórz aplikację</a>
+            <a class="btn btn-ghost" href="{{docs}}">Przeczytaj dokumentację</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
