@@ -1,0 +1,65 @@
+name: Bug report / Zgłoszenie błędu
+description: Something does not work as expected (English or Polish).
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the report! Please **remove passwords, session keys, access keys and participant data**
+        from anything you paste. Security problems: do not open an issue — see SECURITY.md.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - App (PWA)
+        - Server relay / scheduler
+        - Survey themes
+        - Survey templates
+        - Self-hosted deployment
+        - Website / documentation
+        - StrefaAnkiet connector
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect and what did you get instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. …
+        2. …
+    validations:
+      required: true
+  - type: input
+    id: limesurvey
+    attributes:
+      label: LimeSurvey version
+      placeholder: e.g. 6.15.12 or 7.10.0
+  - type: dropdown
+    id: mode
+    attributes:
+      label: How do you run LimeControl?
+      options:
+        - app.limecontrol.eu — direct connection
+        - app.limecontrol.eu — server relay
+        - Self-hosted (Docker)
+        - Local development
+        - Not applicable
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: e.g. iPhone 15 / Safari 18, Windows 11 / Chrome 131
+  - type: textarea
+    id: log
+    attributes:
+      label: RPC log or error message
+      description: The relevant lines from the "RPC log" panel (Instances tab) or the server log, with secrets removed.
+      render: text

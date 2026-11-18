@@ -1,656 +1,257 @@
 import express from 'express';
-import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { LOCAL_UID, authenticate, safeEqual } from './server/auth.ts';
+import { loadConfig } from './server/config.ts';
+import { errorText, msg, requestLang } from './server/messages.ts';
+import { OutboundRequestError, guardedRequest } from './server/netguard.ts';
+import { RateLimiter } from './server/rateLimit.ts';
+import { Scheduler, buildJob, sanitizeJobForClient } from './server/scheduler.ts';
+import { loadSecretKey } from './server/secretbox.ts';
+import { forwardStrefaRequest } from './server/strefaankiet.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = Number(process.env.PORT || 3000);
-const DATA_DIR = path.resolve(__dirname, 'data');
-const SCHEDULES_FILE = path.join(DATA_DIR, 'schedules.json');
-
-const FIREBASE_CONFIG_FILE = path.resolve(__dirname, 'firebase-applet-config.json');
-
-function readFirebaseApiKey(): string {
-  try {
-    if (!fs.existsSync(FIREBASE_CONFIG_FILE)) return '';
-    const parsed = JSON.parse(fs.readFileSync(FIREBASE_CONFIG_FILE, 'utf-8')) as {
-      apiKey?: string;
-    };
-    return typeof parsed.apiKey === 'string' ? parsed.apiKey : '';
-  } catch {
-    return '';
-  }
+// Opcjonalny plik .env obok serwera (patrz .env.example). Zmienne ustawione już w środowisku
+// — np. przez Dockera — mają pierwszeństwo przed wartościami z pliku.
+try {
+  process.loadEnvFile(path.resolve(__dirname, '.env'));
+} catch {
+  // brak pliku .env: konfiguracja pochodzi wyłącznie ze środowiska
 }
 
-const FIREBASE_API_KEY = readFirebaseApiKey();
-const verifiedTokenCache = new Map<string, { uid: string; expiresAt: number }>();
+const config = loadConfig(__dirname);
+const scheduler = new Scheduler({
+  dataDir: config.dataDir,
+  secretKey: loadSecretKey(config.dataDir),
+  allowPrivate: config.relayAllowPrivate,
+});
 
-async function verifyBearerUser(req: express.Request): Promise<string | null> {
-  if (!FIREBASE_API_KEY) return null;
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+const AUTH_REQUIRED_KEY = config.authMode === 'local' ? 'auth_required_local' : 'auth_required_firebase';
+
+/** Limity na użytkownika: przekaźnik RPC, łącznik StrefaAnkiet i próby logowania kluczem. */
+const relayLimiter = new RateLimiter(600, 60_000);
+const strefaLimiter = new RateLimiter(240, 60_000);
+const loginLimiter = new RateLimiter(20, 60_000);
+
+function clientIp(req: express.Request): string {
+  return req.ip || req.socket.remoteAddress || 'unknown';
+}
+
+/** Zwraca uid albo wysyła 401 i zwraca null. */
+async function requireUser(req: express.Request, res: express.Response): Promise<string | null> {
+  const uid = await authenticate(req, config);
+  if (!uid) {
+    res.status(401).json({ error: msg(AUTH_REQUIRED_KEY, requestLang(req)) });
     return null;
   }
-  const idToken = authHeader.slice('Bearer '.length).trim();
-  if (!idToken) return null;
-
-  const cached = verifiedTokenCache.get(idToken);
-  if (cached && cached.expiresAt > Date.now()) {
-    return cached.uid;
-  }
-
-  try {
-    const resp = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_API_KEY)}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      }
-    );
-    if (!resp.ok) {
-      return null;
-    }
-    const data = (await resp.json()) as {
-      users?: Array<{ localId?: string; emailVerified?: boolean }>;
-    };
-    const user = data.users?.[0];
-    if (!user?.localId) {
-      return null;
-    }
-    verifiedTokenCache.set(idToken, {
-      uid: user.localId,
-      expiresAt: Date.now() + 120_000,
-    });
-    if (verifiedTokenCache.size > 200) {
-      const oldestKey = verifiedTokenCache.keys().next().value;
-      if (oldestKey) verifiedTokenCache.delete(oldestKey);
-    }
-    return user.localId;
-  } catch {
-    return null;
-  }
+  return uid;
 }
 
-interface ScheduleStepLog {
-  step: string;
-  ok: boolean;
-  detail: string;
-  timestamp: string;
-}
-
-interface StoredScheduleJob {
-  id: string;
-  ownerUid?: string;
-  surveyId: number;
-  surveyTitle: string;
-  instanceName: string;
-  rpcEndpoint: string;
-  username: string;
-  password: string;
-  authPlugin: string;
-  limeVersion?: 'auto' | 'v7' | 'legacy';
-  scheduledAt: string;
-  activateTokens: boolean;
-  startdateAt: string | null;
-  expiresAt: string | null;
-  clearCredentialsAfterRun: boolean;
-  status: 'scheduled' | 'running' | 'completed' | 'failed' | 'cancelled';
-  resultMessage: string;
-  steps: ScheduleStepLog[];
-  createdAt: string;
-  executedAt: string | null;
-}
-
-function ensureDataDir(): void {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+/** Błąd zapytania wychodzącego w języku aplikacji; `prefixKey` opisuje, co się nie udało. */
+function sendOutboundError(req: express.Request, res: express.Response, err: unknown, prefixKey: string): void {
+  const lang = requestLang(req);
+  if (err instanceof OutboundRequestError) {
+    res.status(err.status).json({ error: err.localized(lang) });
+    return;
   }
-}
-
-function readJobs(): StoredScheduleJob[] {
-  ensureDataDir();
-  if (!fs.existsSync(SCHEDULES_FILE)) {
-    return [];
-  }
-  try {
-    const raw = fs.readFileSync(SCHEDULES_FILE, 'utf-8');
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeJobs(jobs: StoredScheduleJob[]): void {
-  ensureDataDir();
-  fs.writeFileSync(SCHEDULES_FILE, JSON.stringify(jobs, null, 2), 'utf-8');
-}
-
-function sanitizeJobForClient(job: StoredScheduleJob) {
-  return {
-    id: job.id,
-    ownerUid: job.ownerUid,
-    surveyId: job.surveyId,
-    surveyTitle: job.surveyTitle,
-    instanceName: job.instanceName,
-    rpcEndpoint: job.rpcEndpoint,
-    username: job.username,
-    authPlugin: job.authPlugin,
-    limeVersion: job.limeVersion || 'auto',
-    hasPassword: Boolean(job.password),
-    scheduledAt: job.scheduledAt,
-    activateTokens: job.activateTokens,
-    startdateAt: job.startdateAt,
-    expiresAt: job.expiresAt,
-    clearCredentialsAfterRun: job.clearCredentialsAfterRun,
-    status: job.status,
-    resultMessage: job.resultMessage,
-    steps: job.steps,
-    createdAt: job.createdAt,
-    executedAt: job.executedAt,
-  };
-}
-
-function formatLimeSurveyDate(isoString: string, useUtc = false): string {
-  const date = new Date(isoString);
-  if (Number.isNaN(date.getTime())) {
-    return isoString;
-  }
-  const pad = (n: number) => String(n).padStart(2, '0');
-  if (useUtc) {
-    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}`;
-  }
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
-async function callLimeSurveyRpc(
-  endpoint: string,
-  method: string,
-  params: unknown[]
-): Promise<unknown> {
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      method,
-      params,
-      id: Date.now(),
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status} ${response.statusText}`);
-  }
-
-  const data = (await response.json()) as {
-    result?: unknown;
-    error?: { message?: string; code?: number } | string | null;
-  };
-
-  if (data.error) {
-    const errText =
-      typeof data.error === 'string'
-        ? data.error
-        : data.error.code !== undefined
-          ? `[RPC ${data.error.code}] ${data.error.message || JSON.stringify(data.error)}`
-          : data.error.message || JSON.stringify(data.error);
-    throw new Error(`RPC Error: ${errText}`);
-  }
-
-  return data.result;
-}
-
-function isLimeSurveyStatusError(result: unknown): string | null {
-  if (!result || typeof result !== 'object') {
-    return null;
-  }
-  const record = result as Record<string, unknown>;
-  const rawCode =
-    typeof record.error_code === 'string' || typeof record.error_code === 'number'
-      ? record.error_code
-      : typeof record.code === 'string' || typeof record.code === 'number'
-        ? record.code
-        : undefined;
-
-  if (typeof record.status === 'string' && record.status.toUpperCase() !== 'OK') {
-    return rawCode !== undefined
-      ? `[Kod ${rawCode}] ${record.status}`
-      : record.status;
-  }
-  if (rawCode !== undefined && typeof record.message === 'string') {
-    return `[Kod ${rawCode}] ${record.message}`;
-  }
-  return null;
-}
-
-const runningJobIds = new Set<string>();
-
-async function executeScheduleJob(jobId: string): Promise<StoredScheduleJob | null> {
-  if (runningJobIds.has(jobId)) {
-    return null;
-  }
-
-  const jobs = readJobs();
-  const jobIndex = jobs.findIndex((j) => j.id === jobId);
-  if (jobIndex === -1) {
-    return null;
-  }
-
-  const job = jobs[jobIndex];
-  if (!job.password) {
-    job.status = 'failed';
-    job.executedAt = new Date().toISOString();
-    job.resultMessage = 'Brak zapisanego hasła do uwierzytelnienia sesji LimeSurvey.';
-    writeJobs(jobs);
-    return job;
-  }
-
-  runningJobIds.add(jobId);
-  job.status = 'running';
-  job.steps = [];
-  writeJobs(jobs);
-
-  let sessionKey: string | null = null;
-  const nowIso = () => new Date().toISOString();
-
-  try {
-    const authParams: unknown[] = job.authPlugin
-      ? [job.username, job.password, job.authPlugin]
-      : [job.username, job.password];
-    const keyResult = await callLimeSurveyRpc(
-      job.rpcEndpoint,
-      'get_session_key',
-      authParams
-    );
-
-    if (typeof keyResult !== 'string' || !keyResult) {
-      const statusErr = isLimeSurveyStatusError(keyResult);
-      throw new Error(
-        statusErr || `Nie udało się uzyskać klucza sesji: ${JSON.stringify(keyResult)}`
-      );
-    }
-
-    sessionKey = keyResult;
-    job.steps.push({
-      step: 'get_session_key',
-      ok: true,
-      detail: 'Uzyskano klucz sesji administratora.',
-      timestamp: nowIso(),
-    });
-
-    const activateResult = await callLimeSurveyRpc(
-      job.rpcEndpoint,
-      'activate_survey',
-      [sessionKey, Number(job.surveyId)]
-    );
-
-    const activateErr = isLimeSurveyStatusError(activateResult);
-    if (activateErr) {
-      // If survey is already active, record note and continue optional steps if requested
-      if (activateErr.toLowerCase().includes('already active')) {
-        job.steps.push({
-          step: 'activate_survey',
-          ok: true,
-          detail: 'Ankieta była już aktywna w LimeSurvey.',
-          timestamp: nowIso(),
-        });
-      } else {
-        throw new Error(`activate_survey: ${activateErr}`);
-      }
-    } else {
-      job.steps.push({
-        step: 'activate_survey',
-        ok: true,
-        detail: `Ankieta #${job.surveyId} została aktywowana (${JSON.stringify(activateResult)}).`,
-        timestamp: nowIso(),
-      });
-    }
-
-    if (job.activateTokens) {
-      const tokenResult = await callLimeSurveyRpc(
-        job.rpcEndpoint,
-        'activate_tokens',
-        [sessionKey, Number(job.surveyId)]
-      );
-      const tokenErr = isLimeSurveyStatusError(tokenResult);
-      if (tokenErr && !tokenErr.toLowerCase().includes('already')) {
-        job.steps.push({
-          step: 'activate_tokens',
-          ok: false,
-          detail: `Ostrzeżenie: ${tokenErr}`,
-          timestamp: nowIso(),
-        });
-      } else {
-        job.steps.push({
-          step: 'activate_tokens',
-          ok: true,
-          detail: 'Tabela uczestników (tokenów) została aktywowana.',
-          timestamp: nowIso(),
-        });
-      }
-    }
-
-    const useUtcDates = job.limeVersion === 'v7';
-    const propsToUpdate: Record<string, string> = {};
-    if (job.startdateAt) {
-      propsToUpdate.startdate = formatLimeSurveyDate(job.startdateAt, useUtcDates);
-    }
-    if (job.expiresAt) {
-      propsToUpdate.expires = formatLimeSurveyDate(job.expiresAt, useUtcDates);
-    }
-
-    if (Object.keys(propsToUpdate).length > 0) {
-      const propsResult = await callLimeSurveyRpc(
-        job.rpcEndpoint,
-        'set_survey_properties',
-        [sessionKey, Number(job.surveyId), propsToUpdate]
-      );
-      const propsErr = isLimeSurveyStatusError(propsResult);
-      if (propsErr) {
-        job.steps.push({
-          step: 'set_survey_properties',
-          ok: false,
-          detail: `Nie udało się zapisać dat ankiety: ${propsErr}`,
-          timestamp: nowIso(),
-        });
-      } else {
-        job.steps.push({
-          step: 'set_survey_properties',
-          ok: true,
-          detail: `Zaktualizowano właściwości: ${Object.entries(propsToUpdate)
-            .map(([k, v]) => `${k}=${v}`)
-            .join(', ')}`,
-          timestamp: nowIso(),
-        });
-      }
-    }
-
-    job.status = 'completed';
-    job.executedAt = nowIso();
-    job.resultMessage = `Ankieta #${job.surveyId} została pomyślnie aktywowana przez harmonogram.`;
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    job.status = 'failed';
-    job.executedAt = nowIso();
-    job.resultMessage = message;
-    job.steps.push({
-      step: 'error',
-      ok: false,
-      detail: message,
-      timestamp: nowIso(),
-    });
-  } finally {
-    if (sessionKey) {
-      try {
-        await callLimeSurveyRpc(job.rpcEndpoint, 'release_session_key', [
-          sessionKey,
-        ]);
-        job.steps.push({
-          step: 'release_session_key',
-          ok: true,
-          detail: 'Sesja RPC została poprawnie zamknięta.',
-          timestamp: nowIso(),
-        });
-      } catch {
-        // Ignore release errors
-      }
-    }
-
-    if (job.clearCredentialsAfterRun) {
-      job.password = '';
-    }
-
-    const latestJobs = readJobs();
-    const idx = latestJobs.findIndex((j) => j.id === jobId);
-    if (idx !== -1) {
-      latestJobs[idx] = job;
-      writeJobs(latestJobs);
-    }
-    runningJobIds.delete(jobId);
-  }
-
-  return job;
-}
-
-function startSchedulerLoop(): void {
-  const tick = async () => {
-    const jobs = readJobs();
-    const now = Date.now();
-    const dueJobs = jobs.filter(
-      (j) =>
-        j.status === 'scheduled' &&
-        !runningJobIds.has(j.id) &&
-        new Date(j.scheduledAt).getTime() <= now
-    );
-
-    for (const job of dueJobs) {
-      await executeScheduleJob(job.id);
-    }
-  };
-
-  setInterval(() => {
-    void tick();
-  }, 15_000);
+  res.status(502).json({ error: msg(prefixKey, lang, errorText(err, lang)) });
 }
 
 async function startServer(): Promise<void> {
   const app = express();
-  app.use(express.json({ limit: '4mb' }));
+  app.disable('x-powered-by');
+  // Za odwrotnym proxy (Traefik, nginx) adres klienta jest w X-Forwarded-For.
+  app.set('trust proxy', 'loopback, linklocal, uniquelocal');
+  app.use((_req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-Frame-Options', 'DENY');
+    next();
+  });
+  app.use(express.json({ limit: '16mb' }));
 
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true, now: new Date().toISOString() });
   });
 
-  // Schedule CRUD endpoints for automated activate_survey execution (authenticated per Firebase user)
-  app.get('/api/schedules', async (req, res) => {
-    const uid = await verifyBearerUser(req);
-    if (!uid) {
-      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
+  // Publiczna konfiguracja potrzebna aplikacji przed zalogowaniem (bez sekretów).
+  app.get('/api/config', (_req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    res.json({ authMode: config.authMode, relayAllowPrivate: config.relayAllowPrivate, version: config.version });
+  });
+
+  // Tryb lokalny: sprawdzenie klucza dostępu przy logowaniu.
+  app.post('/api/session', async (req, res) => {
+    const ip = clientIp(req);
+    if (!loginLimiter.take(ip)) {
+      res.setHeader('Retry-After', String(loginLimiter.retryAfterSeconds(ip)));
+      res.status(429).json({ error: msg('too_many_attempts', requestLang(req)) });
       return;
     }
-    const jobs = readJobs()
+    if (config.authMode !== 'local') {
+      const uid = await authenticate(req, config);
+      res.status(uid ? 200 : 401).json(uid ? { ok: true, uid } : { error: msg(AUTH_REQUIRED_KEY, requestLang(req)) });
+      return;
+    }
+    const key = typeof req.body?.accessKey === 'string' ? req.body.accessKey.trim() : '';
+    if (!key || !safeEqual(key, config.accessKey)) {
+      res.status(401).json({ error: msg('access_key_invalid', requestLang(req)) });
+      return;
+    }
+    res.json({ ok: true, uid: LOCAL_UID });
+  });
+
+  // ----- Harmonogram -----
+  app.get('/api/schedules', async (req, res) => {
+    const uid = await requireUser(req, res);
+    if (!uid) return;
+    const jobs = scheduler
+      .readJobs()
       .filter((j) => j.ownerUid === uid)
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     res.json({ jobs: jobs.map(sanitizeJobForClient) });
   });
 
   app.post('/api/schedules', async (req, res) => {
-    const uid = await verifyBearerUser(req);
-    if (!uid) {
-      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
-      return;
+    const uid = await requireUser(req, res);
+    if (!uid) return;
+    try {
+      const job = buildJob((req.body || {}) as Record<string, unknown>, uid, scheduler.encrypt);
+      scheduler.add(job);
+      res.status(201).json({ job: sanitizeJobForClient(job) });
+    } catch (err) {
+      res.status(400).json({ error: errorText(err, requestLang(req)) });
     }
-
-    const body = req.body as Partial<StoredScheduleJob>;
-    if (
-      !body.surveyId ||
-      !body.rpcEndpoint ||
-      !body.username ||
-      !body.password ||
-      !body.scheduledAt
-    ) {
-      res.status(400).json({
-        error:
-          'Wymagane pola: surveyId, rpcEndpoint, username, password oraz scheduledAt.',
-      });
-      return;
-    }
-
-    const scheduledDate = new Date(body.scheduledAt);
-    if (Number.isNaN(scheduledDate.getTime())) {
-      res.status(400).json({ error: 'Nieprawidłowy format daty scheduledAt.' });
-      return;
-    }
-
-    const limeVersion =
-      body.limeVersion === 'v7' || body.limeVersion === 'legacy'
-        ? body.limeVersion
-        : 'auto';
-
-    const newJob: StoredScheduleJob = {
-      id: `job_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      ownerUid: uid,
-      surveyId: Number(body.surveyId),
-      surveyTitle: String(body.surveyTitle || `Ankieta #${body.surveyId}`),
-      instanceName: String(body.instanceName || body.rpcEndpoint),
-      rpcEndpoint: String(body.rpcEndpoint),
-      username: String(body.username),
-      password: String(body.password),
-      authPlugin: String(body.authPlugin || 'Authdb'),
-      limeVersion,
-      scheduledAt: scheduledDate.toISOString(),
-      activateTokens: Boolean(body.activateTokens),
-      startdateAt: body.startdateAt ? String(body.startdateAt) : null,
-      expiresAt: body.expiresAt ? String(body.expiresAt) : null,
-      clearCredentialsAfterRun:
-        body.clearCredentialsAfterRun !== undefined
-          ? Boolean(body.clearCredentialsAfterRun)
-          : true,
-      status: 'scheduled',
-      resultMessage: 'Oczekuje na zaplanowaną godzinę uruchomienia.',
-      steps: [],
-      createdAt: new Date().toISOString(),
-      executedAt: null,
-    };
-
-    const jobs = readJobs();
-    jobs.unshift(newJob);
-    writeJobs(jobs);
-
-    res.status(201).json({ job: sanitizeJobForClient(newJob) });
   });
 
   app.post('/api/schedules/:id/run-now', async (req, res) => {
-    const uid = await verifyBearerUser(req);
-    if (!uid) {
-      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
-      return;
-    }
-
+    const uid = await requireUser(req, res);
+    if (!uid) return;
     const { id } = req.params;
-    const jobs = readJobs();
-    const existing = jobs.find((j) => j.id === id && j.ownerUid === uid);
+    const existing = scheduler.readJobs().find((j) => j.id === id && j.ownerUid === uid);
     if (!existing) {
-      res.status(404).json({ error: 'Nie znaleziono zadania harmonogramu.' });
+      res.status(404).json({ error: msg('job_not_found', requestLang(req)) });
       return;
     }
-    if (existing.status === 'running') {
-      res.status(409).json({ error: 'Zadanie jest już w trakcie wykonywania.' });
+    if (existing.status === 'running' || scheduler.isRunning(id)) {
+      res.status(409).json({ error: msg('job_running', requestLang(req)) });
       return;
     }
-    const updated = await executeScheduleJob(id);
+    const updated = await scheduler.execute(id);
     if (!updated) {
-      res.status(500).json({ error: 'Nie udało się uruchomić zadania.' });
+      res.status(500).json({ error: msg('job_run_failed', requestLang(req)) });
       return;
     }
     res.json({ job: sanitizeJobForClient(updated) });
   });
 
   app.patch('/api/schedules/:id/cancel', async (req, res) => {
-    const uid = await verifyBearerUser(req);
-    if (!uid) {
-      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
-      return;
-    }
-
-    const { id } = req.params;
-    const jobs = readJobs();
-    const job = jobs.find((j) => j.id === id && j.ownerUid === uid);
+    const uid = await requireUser(req, res);
+    if (!uid) return;
+    const jobs = scheduler.readJobs();
+    const job = jobs.find((j) => j.id === req.params.id && j.ownerUid === uid);
     if (!job) {
-      res.status(404).json({ error: 'Nie znaleziono zadania harmonogramu.' });
+      res.status(404).json({ error: msg('job_not_found', requestLang(req)) });
       return;
     }
     if (job.status !== 'scheduled') {
-      res.status(400).json({
-        error: 'Można anulować wyłącznie zadania o statusie „Zaplanowane”.',
-      });
+      res.status(400).json({ error: msg('job_cancel_only_scheduled', requestLang(req)) });
       return;
     }
     job.status = 'cancelled';
     job.password = '';
-    job.resultMessage = 'Anulowane przez użytkownika.';
-    writeJobs(jobs);
+    job.resultMessage = msg('job_cancelled', job.lang === 'en' ? 'en' : 'pl');
+    scheduler.writeJobs(jobs);
     res.json({ job: sanitizeJobForClient(job) });
   });
 
   app.delete('/api/schedules/:id', async (req, res) => {
-    const uid = await verifyBearerUser(req);
-    if (!uid) {
-      res.status(401).json({ error: 'Wymagane uwierzytelnienie kontem Google.' });
+    const uid = await requireUser(req, res);
+    if (!uid) return;
+    const jobs = scheduler.readJobs();
+    if (!jobs.some((j) => j.id === req.params.id && j.ownerUid === uid)) {
+      res.status(404).json({ error: msg('job_not_found', requestLang(req)) });
       return;
     }
-
-    const { id } = req.params;
-    const jobs = readJobs();
-    const target = jobs.find((j) => j.id === id && j.ownerUid === uid);
-    if (!target) {
-      res.status(404).json({ error: 'Nie znaleziono zadania.' });
+    if (scheduler.isRunning(req.params.id)) {
+      res.status(409).json({ error: msg('job_running', requestLang(req)) });
       return;
     }
-    const filtered = jobs.filter((j) => j.id !== id);
-    writeJobs(filtered);
+    scheduler.writeJobs(jobs.filter((j) => j.id !== req.params.id));
     res.json({ ok: true });
   });
 
-  // Optional CORS-fallback relay endpoint (disabled by default on client; used only if user explicitly enables relay mode when target server blocks browser CORS)
+  // ----- Przekaźnik JSON-RPC -----
+  // Dla serwerów LimeSurvey bez nagłówków CORS. Wymaga zalogowania; łączy się tylko z adresami
+  // publicznymi (patrz server/netguard.ts), chyba że administrator ustawi RELAY_ALLOW_PRIVATE=1.
   app.post('/api/rpc-relay', async (req, res) => {
-    const { endpoint, method, params, id } = req.body as {
-      endpoint?: string;
-      method?: string;
-      params?: unknown[];
-      id?: number | string;
-    };
-
-    if (!endpoint || !method) {
-      res.status(400).json({ error: 'Brak adresu endpoint lub nazwy metody RPC.' });
+    const uid = await requireUser(req, res);
+    if (!uid) return;
+    if (!relayLimiter.take(uid)) {
+      res.setHeader('Retry-After', String(relayLimiter.retryAfterSeconds(uid)));
+      res.status(429).json({ error: msg('relay_rate', requestLang(req)) });
       return;
     }
-
-    try {
-      const parsedUrl = new URL(endpoint);
-      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
-        res.status(400).json({ error: 'Dozwolone są wyłącznie protokoły HTTP/HTTPS.' });
-        return;
-      }
-
-      const upstream = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          method,
-          params: Array.isArray(params) ? params : [],
-          id: id ?? 1,
-        }),
-      });
-
-      const text = await upstream.text();
-      res.status(upstream.status);
-      res.setHeader(
-        'Content-Type',
-        upstream.headers.get('content-type') || 'application/json'
-      );
-      res.send(text);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      res.status(502).json({
-        error: `Błąd połączenia przekaźnika z serwerem LimeSurvey: ${message}`,
-      });
+    const { endpoint, method, params, id } = (req.body || {}) as { endpoint?: unknown; method?: unknown; params?: unknown; id?: unknown };
+    if (typeof endpoint !== 'string' || !endpoint || typeof method !== 'string' || !method) {
+      res.status(400).json({ error: msg('relay_missing', requestLang(req)) });
+      return;
     }
+    if (!/^[a-z][a-z0-9_]{0,63}$/.test(method)) {
+      res.status(400).json({ error: msg('relay_method_invalid', requestLang(req)) });
+      return;
+    }
+    try {
+      const upstream = await guardedRequest(
+        endpoint,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            method,
+            params: Array.isArray(params) ? params : [],
+            id: typeof id === 'number' || typeof id === 'string' ? id : 1,
+          }),
+          timeoutMs: 120_000,
+          maxBytes: 64 * 1024 * 1024,
+        },
+        { allowPrivate: config.relayAllowPrivate }
+      );
+      res.status(upstream.status);
+      // Odpowiedź upstreamu zawsze jako JSON — nigdy jako HTML wykonywany w domenie aplikacji.
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.send(upstream.body);
+    } catch (err) {
+      sendOutboundError(req, res, err, 'relay_error');
+    }
+  });
+
+  // ----- Łącznik StrefaAnkiet (tylko odczyt stanu realizacji CATI/CAPI) -----
+  app.post('/api/strefaankiet', async (req, res) => {
+    const uid = await requireUser(req, res);
+    if (!uid) return;
+    if (!strefaLimiter.take(uid)) {
+      res.setHeader('Retry-After', String(strefaLimiter.retryAfterSeconds(uid)));
+      res.status(429).json({ error: msg('strefa_rate', requestLang(req)) });
+      return;
+    }
+    try {
+      const upstream = await forwardStrefaRequest(req.body || {}, { allowPrivate: config.relayAllowPrivate });
+      res.status(upstream.status);
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-store');
+      res.send(upstream.body);
+    } catch (err) {
+      sendOutboundError(req, res, err, 'strefa_error');
+    }
+  });
+
+  app.use('/api', (req, res) => {
+    res.status(404).json({ error: msg('not_found', requestLang(req)) });
   });
 
   const httpServer = http.createServer(app);
@@ -677,10 +278,23 @@ async function startServer(): Promise<void> {
     });
   }
 
-  startSchedulerLoop();
+  const migrated = scheduler.migratePlaintextPasswords();
+  if (migrated) console.log(`Harmonogram: zaszyfrowano ${migrated} haseł zapisanych wcześniej jawnym tekstem.`);
+  scheduler.start();
 
-  httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`LimeControl server listening on http://0.0.0.0:${PORT}`);
+  httpServer.listen(config.port, '0.0.0.0', () => {
+    console.log(`LimeControl ${config.version} — http://0.0.0.0:${config.port} (logowanie: ${config.authMode})`);
+    if (config.authMode === 'local') {
+      if (config.accessKeyGenerated) {
+        console.log('──────────────────────────────────────────────────────────────');
+        console.log(' Tryb lokalny: wygenerowano klucz dostępu do tej instancji.');
+        console.log(` Klucz: ${config.accessKey}`);
+        console.log(' Zapisano go w pliku data/access-key. Własny klucz ustawisz zmienną LIMECONTROL_ACCESS_KEY.');
+        console.log('──────────────────────────────────────────────────────────────');
+      } else {
+        console.log('Tryb lokalny: zaloguj się kluczem dostępu (LIMECONTROL_ACCESS_KEY lub plik data/access-key).');
+      }
+    }
   });
 }
 

@@ -23,9 +23,11 @@
   --bs-border-radius: var(--lc-radius);
   --bs-danger: var(--lc-danger);
   --bs-secondary-color: var(--lc-muted);
-  --lc-gap: clamp(1rem, 3vw, 1.75rem);
-  --lc-maxw: 52rem;
-  --lc-target: 44px;
+  /* Układ: motyw może nadpisać wartości zmiennymi --lc-layout-* w lc-theme.css */
+  --lc-gap: var(--lc-layout-gap, clamp(1rem, 3vw, 1.75rem));
+  --lc-maxw: var(--lc-layout-maxw, 52rem);
+  --lc-target: var(--lc-layout-target, 44px);
+  --lc-card-pad: var(--lc-layout-card-pad, clamp(1rem, 3.5vw, 1.75rem));
 }
 
 /* ---------- 2. Typografia i tło ---------- */
@@ -151,7 +153,7 @@ html body .question-container {
   border: 1px solid var(--lc-border-soft);
   border-radius: var(--lc-radius);
   box-shadow: var(--lc-shadow);
-  padding: clamp(1rem, 3.5vw, 1.75rem);
+  padding: var(--lc-card-pad);
   margin: 0 0 var(--lc-gap);
   color: var(--lc-text);
 }
@@ -373,8 +375,8 @@ html body .answers-list { padding-left: 0; margin-bottom: 0; list-style: none; }
 
 html body li.answer-item.radio-item,
 html body li.answer-item.checkbox-item,
-html body .answers-list > .answer-item.radio-item,
-html body .answers-list > .answer-item.checkbox-item,
+html body .answers-list > .answer-item.radio-item:not(td),
+html body .answers-list > .answer-item.checkbox-item:not(td),
 html body .answers-list div.answer-item.radio-item,
 html body .answers-list div.answer-item.checkbox-item {
   position: relative;
@@ -392,14 +394,14 @@ html body .answers-list div.answer-item.checkbox-item {
 }
 html body li.answer-item.radio-item:hover,
 html body li.answer-item.checkbox-item:hover,
-html body .answers-list .answer-item.radio-item:hover,
-html body .answers-list .answer-item.checkbox-item:hover {
+html body .answers-list .answer-item.radio-item:not(td):hover,
+html body .answers-list .answer-item.checkbox-item:not(td):hover {
   border-color: var(--lc-primary);
 }
 html body li.answer-item.radio-item:has(input:checked),
 html body li.answer-item.checkbox-item:has(input:checked),
-html body .answers-list .answer-item.radio-item:has(input:checked),
-html body .answers-list .answer-item.checkbox-item:has(input:checked) {
+html body .answers-list .answer-item.radio-item:not(td):has(input:checked),
+html body .answers-list .answer-item.checkbox-item:not(td):has(input:checked) {
   background: var(--lc-accent);
   border-color: var(--lc-primary);
   box-shadow: inset 0 0 0 1px var(--lc-primary);
@@ -413,8 +415,8 @@ html body li.answer-item input:focus-visible { outline: none !important; box-sha
 
 html body li.answer-item.radio-item > label,
 html body li.answer-item.checkbox-item > label,
-html body .answers-list .answer-item.radio-item > label,
-html body .answers-list .answer-item.checkbox-item > label {
+html body .answers-list .answer-item.radio-item:not(td) > label,
+html body .answers-list .answer-item.checkbox-item:not(td) > label {
   flex: 1 1 12rem;
   margin: 0 !important;
   padding: .35rem 0 !important;
@@ -509,15 +511,60 @@ html body table.ls-answers .ls-heading td {
 }
 html body table.ls-answers th.answertext,
 html body table.ls-answers td.answertext,
-html body table.ls-answers tbody th { font-weight: 600; text-align: start; }
+html body table.ls-answers tbody th { font-weight: 600; text-align: start; color: var(--lc-text); }
 html body table.ls-answers td, html body table.ls-answers th { padding: .7rem .5rem; border-color: var(--lc-border-soft); }
 html body table.ls-answers tbody tr:hover > * { background: var(--lc-accent); }
 html body table.ls-answers td.radio-item,
 html body table.ls-answers td.checkbox-item { text-align: center; }
 html body table.ls-answers td.radio-item label,
 html body table.ls-answers td.checkbox-item label { cursor: pointer; }
+html body table.ls-answers td.answer-item:has(input:checked) { background: var(--lc-accent); }
+/* Wiersz tablicy to też .answers-list — nie może dostać stylów listy */
+html body table.ls-answers tr.answers-list { list-style: none; }
 html body table.ls-answers tr.ls-error-mandatory > *,
 html body table.ls-answers tr.error > * { background: var(--lc-danger-bg) !important; }
+
+/* Tablice w układzie pionowym. fruity_twentythree rozkłada tabelę na bloki na telefonach i tabletach
+   (to samo zapytanie o media) albo zawsze, gdy w opcjach motywu wybrano zawijanie tabel (.no-tables-general).
+   Każda odpowiedź staje się wtedy kafelkiem — tak jak w pytaniach z listą odpowiedzi. */
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  html body table.ls-answers td.answer-item.radio-item,
+  html body table.ls-answers td.answer-item.checkbox-item {
+    position: relative;
+    display: flex !important;
+    align-items: center;
+    gap: .75rem;
+    min-height: var(--lc-target);
+    margin: 0 0 .4rem;
+    padding: .45rem .9rem !important;
+    text-align: start;
+    background: var(--lc-surface);
+    border: 1px solid var(--lc-border);
+    border-radius: calc(var(--lc-radius) * .8);
+  }
+  html body table.ls-answers td.answer-item:has(input:checked) {
+    border-color: var(--lc-primary);
+    box-shadow: inset 0 0 0 1px var(--lc-primary);
+  }
+  html body table.ls-answers td.answer-item > label.ls-label-xs-visibility {
+    position: static !important;
+    flex: 1 1 auto;
+    width: auto; height: auto;
+    margin: 0 !important;
+    padding: .2rem 0 !important;
+    color: var(--lc-text) !important;
+    font-weight: 400;
+    line-height: 1.4;
+    text-indent: 0;
+    text-align: start;
+  }
+  html body table.ls-answers tbody th.answertext,
+  html body table.ls-answers tbody td.answertext { display: block; width: auto; padding: .9rem 0 .5rem; }
+  html body table.ls-answers tbody tr.answers-list { display: block; padding: 0 0 .6rem; margin: 0 0 .6rem; border-bottom: 1px solid var(--lc-border-soft); }
+  html body table.ls-answers tbody tr.answers-list:last-child { border-bottom: 0; margin-bottom: 0; }
+  html body table.ls-answers tbody tr:hover > * { background: var(--lc-surface); }
+  html body table.ls-answers tbody tr:hover > td.answer-item:has(input:checked) { background: var(--lc-accent); }
+}
 
 /* Szerokie tabele przewijają się poziomo zamiast łamać stronę (WCAG 1.4.10) */
 html body .ls-table-wrapper,
@@ -584,6 +631,13 @@ html body #navigator-container {
   justify-content: space-between;
   align-items: center;
   margin: calc(var(--lc-gap) * .5) 0 var(--lc-gap);
+  /* Motywy CATI/CAPI przyklejają pasek do dołu ekranu (zmienne ustawia lc-theme.css) */
+  position: var(--lc-nav-position, static);
+  bottom: 0;
+  z-index: 20;
+  background: var(--lc-nav-bg, transparent);
+  padding: var(--lc-nav-padding, 0);
+  border-top: var(--lc-nav-border, 0);
 }
 html body .navigator > [class*="col"] { flex: 1 1 auto; width: auto; padding: 0; }
 html body .navigator .text-end, html body .navigator .text-right { text-align: end; }
@@ -629,6 +683,52 @@ html body .sortable-item {
 html body .survey-list-heading, html body .surveys-list .list-group-item { color: var(--lc-text); }
 html body .surveys-list .list-group-item { border-color: var(--lc-border-soft); }
 
+/* ---------- 12a. Tryb ankietera (CATI / CAPI) ---------- */
+/* Pytanie z klasą CSS „lc-interviewer” (Ustawienia pytania → Wyświetlanie → Klasy CSS):
+   skrypt do odczytania lub pole wypełniane przez ankietera. Wyróżnienie nie opiera się
+   tylko na kolorze: przerywana ramka, gruby lewy brzeg i treść zaczynająca się od „ANKIETER”. */
+html body .question-container.lc-interviewer {
+  background: var(--lc-accent);
+  border: 1px dashed var(--lc-border);
+  border-left: 6px solid var(--lc-primary);
+  box-shadow: none;
+}
+html body .question-container.lc-interviewer .question-title-container .question-text,
+html body .question-container.lc-interviewer .question-title-container .ls-label-question {
+  font-family: var(--lc-font);
+  font-weight: 500;
+  font-size: 1.05em;
+}
+/* Tekst bez odpowiedzi (typ „Wyświetlanie tekstu”): bez pustego odstępu pod treścią */
+html body .question-container.boilerplate .question-title-container,
+html body .question-container.boilerplate .question-valid-container { margin-top: 0; margin-bottom: 0; }
+html body .question-container.lc-interviewer li.answer-item,
+html body .question-container.lc-interviewer .form-control { background-color: var(--lc-surface); }
+
+/* Legenda skrótów klawiszowych (lc-a11y.js, tylko gdy motyw ustawia --lc-hotkeys: 1) */
+/* Bootstrap nadaje dzieciom .row szerokość 100% — legenda ma zająć tylko środek paska. */
+html body .navigator > .lc-hotkeys,
+.lc-hotkeys {
+  flex: 0 1 auto; width: auto; max-width: 100%; margin: 0 auto; padding: 0;
+  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; justify-content: center;
+  color: var(--lc-muted);
+  font-size: .8125rem; line-height: 1.4;
+}
+.lc-hotkeys kbd {
+  display: inline-block; min-width: 1.5em; padding: .05rem .35rem;
+  background: var(--lc-accent); color: var(--lc-text);
+  border: 1px solid var(--lc-border); border-radius: 4px;
+  font: 600 .95em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; text-align: center;
+}
+.lc-hotkeys button {
+  min-height: 24px; padding: .1rem .55rem;
+  background: var(--lc-surface); color: var(--lc-text);
+  border: 1px solid var(--lc-border); border-radius: 999px;
+  font: inherit; font-weight: 600; cursor: pointer;
+}
+.lc-hotkeys button[aria-pressed="true"] { background: var(--lc-primary); border-color: var(--lc-primary); color: var(--lc-on-primary); }
+.lc-hotkeys[data-off="1"] .lc-hotkeys-keys { display: none; }
+
 /* Tekst tylko dla czytników ekranu */
 .lc-sr-only {
   position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -639,9 +739,11 @@ html body .surveys-list .list-group-item { border-color: var(--lc-border-soft); 
 @media (max-width: 575.98px) {
   html body #outerframeContainer { padding-left: .75rem; padding-right: .75rem; }
   html body .question-container { padding: 1rem; border-radius: calc(var(--lc-radius) * .8); }
-  html body .navigator, html body #navigator-container { flex-direction: column-reverse; align-items: stretch; }
-  html body .navigator .btn, html body #navigator-container .btn { width: 100%; }
-  html body .navigator > [class*="col"] { width: 100%; text-align: center !important; }
+  html body .navigator, html body #navigator-container { flex-direction: var(--lc-nav-direction-mobile, column-reverse); align-items: stretch; }
+  html body .navigator .btn, html body #navigator-container .btn { width: 100%; min-width: 0; }
+  html body .navigator > [class*="col"] { width: var(--lc-nav-col-mobile, 100%); text-align: center !important; }
+  /* Na telefonie nie ma klawiatury — legenda skrótów jest zbędna */
+  html body .navigator > .lc-hotkeys, .lc-hotkeys { display: none; }
 }
 
 /* ---------- 14. Preferencje użytkownika ---------- */
@@ -664,5 +766,5 @@ html body .surveys-list .list-group-item { border-color: var(--lc-border-soft); 
 @media print {
   html body { background: #fff !important; color: #000; }
   html body .question-container { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
-  html body .navbar, html body .navigator, html body .lc-skip-link { display: none !important; }
+  html body .navbar, html body .navigator, html body .lc-skip-link, .lc-hotkeys { display: none !important; }
 }

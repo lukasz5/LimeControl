@@ -1,0 +1,100 @@
+{
+  "id": "ewaluacja-szkolenia",
+  "order": 50,
+  "category": "events",
+  "modes": ["cawi"],
+  "theme": "professional",
+  "minutes": 4,
+  "languages": ["pl", "en"],
+  "title": ["Ewaluacja szkolenia", "Training evaluation"],
+  "summary": ["Ankieta po szkoleniu: ocena ogólna, realizacja celów, prowadzący, organizacja, gotowość do polecenia (NPS) i propozycje kolejnych tematów.", "A post-training survey: overall rating, objectives, the trainer, organisation, likelihood to recommend (NPS) and suggestions for future topics."],
+  "description": ["Podziel się opinią o szkoleniu. Ankieta zajmie około 4 minut.", "Share your opinion about the training. The survey takes about 4 minutes."],
+  "welcome": ["Twoje uwagi pomogą nam ulepszyć kolejne szkolenia.", "Your feedback will help us improve future training sessions."],
+  "end": ["Dziękujemy za udział w szkoleniu i wypełnienie ankiety.", "Thank you for attending the training and completing the survey."],
+  "groups": [
+    {
+      "title": ["Ocena szkolenia", "Rating the training"],
+      "questions": [
+        {
+          "code": "OVERALL",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak ogólnie oceniasz szkolenie?", "How do you rate the training overall?"],
+          "options": "@quality5"
+        },
+        {
+          "code": "CONTENT",
+          "type": "array",
+          "text": ["Na ile zgadzasz się z poniższymi stwierdzeniami?", "How much do you agree with the following statements?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Cele szkolenia były jasno określone.", "The training objectives were clearly defined."] },
+            { "code": "Q02", "text": ["Treści odpowiadały moim potrzebom.", "The content matched my needs."] },
+            { "code": "Q03", "text": ["Tempo zajęć było odpowiednie.", "The pace was appropriate."] },
+            { "code": "Q04", "text": ["Ćwiczenia pomagały zrozumieć materiał.", "The exercises helped me understand the material."] },
+            { "code": "Q05", "text": ["Wykorzystam zdobytą wiedzę w pracy.", "I will use what I learned in my work."] }
+          ],
+          "options": "@agree5"
+        }
+      ]
+    },
+    {
+      "title": ["Prowadzący i organizacja", "Trainer and organisation"],
+      "questions": [
+        {
+          "code": "TRAINER",
+          "type": "array",
+          "text": ["Jak oceniasz prowadzącego?", "How do you rate the trainer?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Przygotowanie merytoryczne", "Subject knowledge"] },
+            { "code": "Q02", "text": ["Sposób przekazywania wiedzy", "Way of explaining"] },
+            { "code": "Q03", "text": ["Angażowanie uczestników", "Engaging participants"] },
+            { "code": "Q04", "text": ["Odpowiedzi na pytania", "Answering questions"] }
+          ],
+          "options": "@quality5"
+        },
+        {
+          "code": "ORGANIZ",
+          "type": "array",
+          "text": ["Jak oceniasz organizację szkolenia?", "How do you rate the organisation of the training?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Materiały szkoleniowe", "Training materials"] },
+            { "code": "Q02", "text": ["Sala lub platforma online", "Venue or online platform"] },
+            { "code": "Q03", "text": ["Informacje przed szkoleniem", "Information before the training"] },
+            { "code": "Q04", "text": ["Catering", "Catering"] }
+          ],
+          "options": "@quality5na"
+        }
+      ]
+    },
+    {
+      "title": ["Podsumowanie", "Summary"],
+      "questions": [
+        {
+          "code": "NPS",
+          "type": "array",
+          "text": ["Na ile prawdopodobne jest, że polecisz to szkolenie innym?", "How likely are you to recommend this training to others?"],
+          "help": ["0 — zdecydowanie nie polecę, 10 — zdecydowanie polecę.", "0 — not at all likely, 10 — extremely likely."],
+          "subquestions": [
+            { "code": "SQ001", "text": ["Prawdopodobieństwo polecenia", "Likelihood to recommend"] }
+          ],
+          "options": "@nps11"
+        },
+        {
+          "code": "BEST",
+          "type": "longtext",
+          "text": ["Co było najbardziej wartościowe?", "What was the most valuable part?"]
+        },
+        {
+          "code": "IMPROVE",
+          "type": "longtext",
+          "text": ["Co warto zmienić lub dodać?", "What should be changed or added?"]
+        },
+        {
+          "code": "TOPICS",
+          "type": "longtext",
+          "text": ["Jakie tematy kolejnych szkoleń Cię interesują?", "Which topics would you like future training to cover?"]
+        }
+      ]
+    }
+  ]
+}

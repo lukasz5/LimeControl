@@ -6,9 +6,14 @@
  * 1. Sprawdza kontrast kolorów każdego motywu (WCAG 2.2 AA) — przerywa przy błędzie.
  * 2. Tworzy limesurvey-themes/dist/<ls6|ls7>/lc_<id>/ (config.xml, css, scripts, files, views).
  * 3. Pakuje ZIP-y do site/szablony/pobierz/<ls6|ls7>/ (nazwa pliku = nazwa motywu w LS).
- * 4. Kopiuje zrzuty z previews/ i generuje stronę site/szablony.html.
+ * 4. Kopiuje zrzuty z previews/ do site/szablony/img/.
+ *
+ * Podstrony z motywami (PL i EN) generuje osobno site-src/build.mjs — `npm run build:site`.
+ *
+ * Wynik jest deterministyczny: daty w paczkach pochodzą z pola „released” w themes.json,
+ * więc ponowne uruchomienie bez zmian nie zmienia ZIP-ów.
  */
-import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync, existsSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync, existsSync, statSync, readdirSync, utimesSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -90,15 +95,56 @@ const themeCss = (t) => {
   --lc-font: ${k.font};
   --lc-font-heading: ${k.fontHeading};
   --lc-heading-weight: ${k.headingWeight};
-  --lc-base-size: ${k.baseSize};
+  --lc-base-size: ${k.baseSize};${layoutCss(t.layout)}
 }
 `;
 };
 
+/** Opcjonalne ustawienia układu motywu (themes.json → layout) jako zmienne CSS czytane przez lc-base.css. */
+function layoutCss(layout) {
+  if (!layout) return '';
+  const lines = ['', '', '  /* Układ */'];
+  if (layout.maxWidth) lines.push(`  --lc-layout-maxw: ${layout.maxWidth};`);
+  if (layout.gap) lines.push(`  --lc-layout-gap: ${layout.gap};`);
+  if (layout.target) lines.push(`  --lc-layout-target: ${layout.target};`);
+  if (layout.cardPadding) lines.push(`  --lc-layout-card-pad: ${layout.cardPadding};`);
+  if (layout.stickyNav) {
+    lines.push(
+      '  /* Pasek „Wstecz / Dalej” przyklejony do dołu ekranu */',
+      '  --lc-nav-position: sticky;',
+      '  --lc-nav-bg: var(--lc-bg);',
+      '  --lc-nav-padding: .75rem 0;',
+      '  --lc-nav-border: 1px solid var(--lc-border-soft);',
+      '  --lc-nav-direction-mobile: row;',
+      '  --lc-nav-col-mobile: auto;',
+    );
+  }
+  if (layout.hotkeys) lines.push('  /* Skróty klawiszowe dla ankietera (lc-a11y.js): 1 = włączone */', '  --lc-hotkeys: 1;');
+  return lines.join('\n');
+}
+
 const xmlEsc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const today = new Date();
-const dateUS = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}/${today.getFullYear()}`;
+// Data wydania z themes.json (nie „dziś”) — paczki są wtedy powtarzalne bit w bit.
+const today = new Date(`${cfg.released}T12:00:00Z`);
+if (Number.isNaN(today.getTime())) throw new Error('themes.json: pole „released” musi mieć format RRRR-MM-DD');
+const dateUS = `${String(today.getUTCMonth() + 1).padStart(2, '0')}/${String(today.getUTCDate()).padStart(2, '0')}/${today.getUTCFullYear()}`;
 const dateISO = today.toISOString().slice(0, 19).replace('T', ' ');
+
+/** ZIP zapisuje czas lokalny — stała strefa daje identyczne archiwa na każdej maszynie (także w CI). */
+const ZIP_ENV = { ...process.env, TZ: 'UTC' };
+
+/** Lista plików katalogu (rekurencyjnie, posortowana) z ustawioną stałą datą modyfikacji. */
+function stampedFiles(dir, prefix = '') {
+  const out = [];
+  for (const name of readdirSync(dir).sort()) {
+    if (name.startsWith('.')) continue;
+    const full = join(dir, name);
+    const rel = prefix ? `${prefix}/${name}` : name;
+    if (statSync(full).isDirectory()) out.push(...stampedFiles(full, rel));
+    else { utimesSync(full, today, today); out.push(rel); }
+  }
+  return out;
+}
 
 // ---------- warianty dla wersji LimeSurvey ----------
 // Formularz „Opcje motywu” czyta definicje opcji tylko z config.xml samego motywu, a LS 6 i LS 7
@@ -155,11 +201,11 @@ const configXml = (t, variant) => `<?xml version="1.0" encoding="UTF-8"?>
         <author>LimeControl / strefabadan.pl</author>
         <authorEmail>kontakt@strefabadan.pl</authorEmail>
         <authorUrl>https://limecontrol.eu/szablony.html</authorUrl>
-        <copyright>Copyright (C) ${today.getFullYear()} LimeControl. Based on Fruity TwentyThree by LimeSurvey GmbH.</copyright>
+        <copyright>Copyright (C) ${today.getUTCFullYear()} LimeControl. Based on Fruity TwentyThree by LimeSurvey GmbH.</copyright>
         <license>GNU General Public License version 2 or later</license>
         <version>${cfg.version}</version>
         <apiVersion>3.0</apiVersion>
-        <description><![CDATA[${t.description} Wariant dla LimeSurvey ${variant.label}.]]></description>
+        <description><![CDATA[${t.description.en} For LimeSurvey ${variant.label}. / ${t.description.pl} Wariant dla LimeSurvey ${variant.label}.]]></description>
         <lastUpdate>${dateISO}</lastUpdate>
         <extends>${cfg.extends}</extends>
     </metadata>
@@ -191,14 +237,52 @@ const configXml = (t, variant) => `<?xml version="1.0" encoding="UTF-8"?>
 
 const readme = (t, variant) => `# ${t.title} — LimeSurvey ${variant.label}
 
-${t.description}
+Version ${cfg.version} · GPL-2.0-or-later · https://limecontrol.eu/en/themes.html
+
+- [English](#english)
+- [Polski](#polski)
+
+## English
+
+${t.description.en}
+
+A survey theme for LimeSurvey ${variant.label} (it extends the built-in "${cfg.extends}" theme).
+Tested on LimeSurvey ${variant.testedOn}. For the other LimeSurvey version download the other variant.
+
+### Installation
+
+1. Log in to LimeSurvey as an administrator.
+2. Configuration → Themes → "Upload & install" (the "Survey themes" tab).
+3. Choose lc_${t.id}.zip (do not rename it) and confirm.
+4. In a survey: Survey settings → General → Theme: "${t.title}" → Save.
+
+Manual installation (FTP/SSH): unpack the ZIP into upload/themes/survey/lc_${t.id}/
+(config.xml must sit directly in that directory), then click "Install" next to the theme
+in Configuration → Themes.
+
+### Customisation
+
+- Colours and fonts: css/lc-theme.css (the --lc-* variables).
+- Logo: in a survey, Theme options → Images → Logo: Yes (upload a PNG/JPG).
+- Your own CSS tweaks: Theme editor → css/custom.css.
+- Interviewer instructions: give a question the CSS class "lc-interviewer"
+  (Question settings → Display → CSS class) to highlight it as a script or an interviewer-only field.
+
+### Accessibility (WCAG 2.2 AA)
+
+Text contrast >= 4.5:1, borders and focus >= 3:1, native form controls (high-contrast mode),
+touch targets >= 44 px, a "Skip to questions" link, errors marked with colour, border and text,
+aria-invalid/aria-required, on-page validation messages, prefers-reduced-motion and forced-colors support.
+
+## Polski
+
+${t.description.pl}
 
 Motyw ankiety dla LimeSurvey ${variant.label} (dziedziczy po wbudowanym motywie „${cfg.extends}”).
 Przetestowano na LimeSurvey ${variant.testedOn}. Dla drugiej wersji LimeSurvey pobierz drugi wariant:
 https://limecontrol.eu/szablony.html
-Wersja ${cfg.version} · licencja GPL-2.0-or-later
 
-## Instalacja
+### Instalacja
 
 1. Zaloguj się do LimeSurvey jako administrator.
 2. Konfiguracja → Motywy → przycisk „Prześlij i zainstaluj” (zakładka „Motywy ankiet”).
@@ -209,13 +293,15 @@ Instalacja ręczna (FTP/SSH): rozpakuj ZIP do katalogu upload/themes/survey/lc_$
 (plik config.xml musi leżeć bezpośrednio w tym katalogu), a następnie w
 Konfiguracja → Motywy kliknij „Zainstaluj” przy motywie.
 
-## Dostosowanie
+### Dostosowanie
 
 - Kolory i fonty: css/lc-theme.css (zmienne --lc-*).
 - Logo: w ankiecie Opcje motywu → Obrazy → Logo: Tak (wgraj PNG/JPG).
 - Własne poprawki CSS: Edytor motywów → css/custom.css.
+- Wskazówki dla ankietera: nadaj pytaniu klasę CSS „lc-interviewer”
+  (Ustawienia pytania → Wyświetlanie → Klasa CSS), aby wyróżnić je jako skrypt lub pole ankietera.
 
-## Dostępność (WCAG 2.2 AA)
+### Dostępność (WCAG 2.2 AA)
 
 Kontrast tekstu >= 4.5:1, obramowań i fokusu >= 3:1, natywne pola wyboru
 (tryb wysokiego kontrastu), cele dotykowe >= 44 px, link „Przejdź do pytań”,
@@ -224,57 +310,65 @@ komunikaty walidacji na stronie, obsługa prefers-reduced-motion i forced-colors
 `;
 
 // ---------- build ----------
-rmSync(DIST, { recursive: true, force: true });
-rmSync(SITE, { recursive: true, force: true });
-mkdirSync(join(SITE, 'img'), { recursive: true });
+/**
+ * Buduje paczki motywów i kopiuje zrzuty do site/szablony/. Zwraca dane potrzebne podstronom
+ * z motywami (generuje je site-src/build.mjs).
+ */
+export function build({ quiet = false } = {}) {
+  const log = quiet ? () => {} : console.log;
+  rmSync(DIST, { recursive: true, force: true });
+  rmSync(SITE, { recursive: true, force: true });
+  mkdirSync(join(SITE, 'img'), { recursive: true });
 
-const report = [];
-for (const t of cfg.themes) {
-  const results = checkContrast(t);
-  const worst = results.filter((r) => r.min === 4.5).sort((a, b) => a.ratio - b.ratio)[0];
-  const rep = { id: t.id, sizes: {}, minText: +worst.ratio.toFixed(2), btn: +contrast(t.tokens.onPrimary, t.tokens.primary).toFixed(2), body: +contrast(t.tokens.text, t.tokens.surface).toFixed(2) };
+  const report = [];
+  for (const t of cfg.themes) {
+    const results = checkContrast(t);
+    const worst = results.filter((r) => r.min === 4.5).sort((a, b) => a.ratio - b.ratio)[0];
+    const rep = { id: t.id, sizes: {}, minText: +worst.ratio.toFixed(2), btn: +contrast(t.tokens.onPrimary, t.tokens.primary).toFixed(2), body: +contrast(t.tokens.text, t.tokens.surface).toFixed(2) };
 
-  // Podglądy to zrzuty z prawdziwego LimeSurvey (patrz README.md → „Podglądy”).
-  const preview = join(ROOT, 'previews', `${t.id}.png`);
-  if (!existsSync(preview)) console.warn(`  ! brak podglądu previews/${t.id}.png — motyw będzie bez miniatury w LimeSurvey`);
-  for (const v of ['desktop', 'mobile', 'errors']) {
-    const img = join(ROOT, 'previews', `${t.id}-${v}.jpg`);
-    if (existsSync(img)) copyFileSync(img, join(SITE, 'img', `${t.id}-${v}.jpg`));
+    // Podglądy to zrzuty z prawdziwego LimeSurvey (patrz README.md → „Podglądy”).
+    const preview = join(ROOT, 'previews', `${t.id}.png`);
+    if (!existsSync(preview)) console.warn(`  ! brak podglądu previews/${t.id}.png — motyw będzie bez miniatury w LimeSurvey`);
+    for (const v of ['desktop', 'mobile', 'errors']) {
+      const img = join(ROOT, 'previews', `${t.id}-${v}.jpg`);
+      if (existsSync(img)) copyFileSync(img, join(SITE, 'img', `${t.id}-${v}.jpg`));
+    }
+
+    for (const variant of VARIANTS) {
+      const dir = join(DIST, variant.id, `lc_${t.id}`);
+      for (const d of ['css', 'scripts', 'files', 'views']) mkdirSync(join(dir, d), { recursive: true });
+      writeFileSync(join(dir, 'config.xml'), configXml(t, variant));
+      writeFileSync(join(dir, 'README.md'), readme(t, variant));
+      // LS wymaga katalogu views/ także w motywie potomnym (widoki dziedziczone z fruity_twentythree).
+      writeFileSync(join(dir, 'views/README.md'), `Views are inherited from the ${cfg.extends} theme.\nTo override a view, copy its .twig file here from the parent theme (e.g. with the LimeSurvey theme editor).\n\nWidoki są dziedziczone z motywu ${cfg.extends}.\nAby nadpisać widok, skopiuj tu plik .twig z motywu bazowego (np. przez Edytor motywów w LimeSurvey).\n`);
+      writeFileSync(join(dir, 'css/lc-theme.css'), themeCss(t));
+      copyFileSync(join(ROOT, 'shared/css/lc-base.css'), join(dir, 'css/lc-base.css'));
+      copyFileSync(join(ROOT, 'shared/scripts/lc-a11y.js'), join(dir, 'scripts/lc-a11y.js'));
+      if (existsSync(preview)) copyFileSync(preview, join(dir, 'files/preview.png'));
+
+      const outDir = join(SITE, 'pobierz', variant.id);
+      mkdirSync(outDir, { recursive: true });
+      const zip = join(outDir, `lc_${t.id}.zip`);
+      // Pliki w korzeniu archiwum (jak eksport z LimeSurvey); bez metadanych macOS, w stałej kolejności i ze stałą datą.
+      execFileSync('zip', ['-qX', zip, ...stampedFiles(dir)], { cwd: dir, env: ZIP_ENV });
+      utimesSync(zip, today, today);
+      rep.sizes[variant.id] = statSync(zip).size;
+    }
+    report.push(rep);
+    log(`✓ lc_${t.id}  ${VARIANTS.map((v) => `${v.id}: ${(rep.sizes[v.id] / 1024).toFixed(1)} kB`).join(', ')}  min. kontrast tekstu ${worst.ratio.toFixed(2)}:1`);
   }
 
+  // Paczki zbiorcze: ZIP-y wszystkich motywów danej wersji (każdy importuje się osobno).
+  const bundles = {};
   for (const variant of VARIANTS) {
-    const dir = join(DIST, variant.id, `lc_${t.id}`);
-    for (const d of ['css', 'scripts', 'files', 'views']) mkdirSync(join(dir, d), { recursive: true });
-    writeFileSync(join(dir, 'config.xml'), configXml(t, variant));
-    writeFileSync(join(dir, 'README.md'), readme(t, variant));
-    // LS wymaga katalogu views/ także w motywie potomnym (widoki dziedziczone z fruity_twentythree).
-    writeFileSync(join(dir, 'views/README.md'), `Widoki są dziedziczone z motywu ${cfg.extends}.\nAby nadpisać widok, skopiuj tu plik .twig z motywu bazowego (np. przez Edytor motywów w LimeSurvey).\n`);
-    writeFileSync(join(dir, 'css/lc-theme.css'), themeCss(t));
-    copyFileSync(join(ROOT, 'shared/css/lc-base.css'), join(dir, 'css/lc-base.css'));
-    copyFileSync(join(ROOT, 'shared/scripts/lc-a11y.js'), join(dir, 'scripts/lc-a11y.js'));
-    if (existsSync(preview)) copyFileSync(preview, join(dir, 'files/preview.png'));
-
-    const outDir = join(SITE, 'pobierz', variant.id);
-    mkdirSync(outDir, { recursive: true });
-    const zip = join(outDir, `lc_${t.id}.zip`);
-    // Pliki w korzeniu archiwum (jak eksport z LimeSurvey); bez metadanych macOS.
-    execFileSync('zip', ['-qrX', zip, '.', '-x', '.*', '-x', '__MACOSX'], { cwd: dir });
-    rep.sizes[variant.id] = statSync(zip).size;
+    const all = join(SITE, 'pobierz', variant.id, `limecontrol-motywy-ankiet-${variant.id}.zip`);
+    execFileSync('zip', ['-qjX', all, ...cfg.themes.map((t) => join(SITE, 'pobierz', variant.id, `lc_${t.id}.zip`))], { env: ZIP_ENV });
+    utimesSync(all, today, today);
+    bundles[variant.id] = statSync(all).size;
+    log(`✓ ${variant.id}/limecontrol-motywy-ankiet-${variant.id}.zip  ${(bundles[variant.id] / 1024).toFixed(1)} kB`);
   }
-  report.push(rep);
-  console.log(`✓ lc_${t.id}  ${VARIANTS.map((v) => `${v.id}: ${(rep.sizes[v.id] / 1024).toFixed(1)} kB`).join(', ')}  min. kontrast tekstu ${worst.ratio.toFixed(2)}:1`);
+
+  return { cfg, report, bundles };
 }
 
-// Paczki zbiorcze: sześć ZIP-ów motywów danej wersji (każdy importuje się osobno).
-const bundles = {};
-for (const variant of VARIANTS) {
-  const all = join(SITE, 'pobierz', variant.id, `limecontrol-motywy-ankiet-${variant.id}.zip`);
-  execFileSync('zip', ['-qjX', all, ...cfg.themes.map((t) => join(SITE, 'pobierz', variant.id, `lc_${t.id}.zip`))]);
-  bundles[variant.id] = statSync(all).size;
-  console.log(`✓ ${variant.id}/limecontrol-motywy-ankiet-${variant.id}.zip  ${(bundles[variant.id] / 1024).toFixed(1)} kB`);
-}
-
-// Strona pobierania generowana z themes.json, żeby opisy, rozmiary i kontrasty były zawsze aktualne.
-const { renderPage } = await import('./page.mjs');
-writeFileSync(join(REPO, 'site', 'szablony.html'), renderPage({ cfg, report, bundles }));
-console.log('✓ site/szablony.html');
+if (process.argv[1] === fileURLToPath(import.meta.url)) build();

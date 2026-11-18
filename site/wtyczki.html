@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Darmowe wtyczki StrefaAnkiet dla LimeSurvey — CATI, CAPI, Amazon SES</title>
+  <meta name="description" content="Wtyczki StrefaAnkiet dla LimeSurvey są bezpłatne i mają otwarty kod. Łączą ankietę z platformą StrefaAnkiet: zarządzana wysyłka przez Amazon SES, telefonia VoIP do wywiadów CATI, praca ankieterów CAPI i analiza wyników. Płatne jest konto i usługi platformy." />
+  <link rel="canonical" href="https://limecontrol.eu/wtyczki.html" />
+  <link rel="alternate" hreflang="pl" href="https://limecontrol.eu/wtyczki.html" />
+  <link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/plugins.html" />
+  <link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/plugins.html" />
+  <meta name="theme-color" content="#1b5e36" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="LimeControl" />
+  <meta property="og:url" content="https://limecontrol.eu/wtyczki.html" />
+  <meta property="og:title" content="Darmowe wtyczki łączące LimeSurvey ze StrefąAnkiet" />
+  <meta property="og:description" content="Wtyczki StrefaAnkiet dla LimeSurvey są bezpłatne i mają otwarty kod. Łączą ankietę z platformą StrefaAnkiet: zarządzana wysyłka przez Amazon SES, telefonia VoIP do wywiadów CATI, praca ankieterów CAPI i analiza wyników. Płatne jest konto i usługi platformy." />
+  <meta property="og:locale" content="pl_PL" />
+  <meta property="og:locale:alternate" content="en_GB" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/style.css?v=3" />
+
+</head>
+<body>
+  <a class="skip" href="#main">Przejdź do treści</a>
+
+  <header class="nav">
+    <div class="container">
+      <a class="nav-logo" href="/" aria-label="LimeControl — strona główna">
+        <img class="logo-light" src="/assets/logo.svg?v=3" alt="LimeControl" width="104" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=3" alt="LimeControl" width="104" height="34" />
+      </a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/#funkcje">Funkcje</a></li>
+        <li><a href="/szablony.html">Motywy</a></li>
+        <li><a href="/ankiety.html">Szablony</a></li>
+        <li><a href="/wtyczki.html" aria-current="page">Wtyczki</a></li>
+        <li><a href="/#hosting">Hosting i wdrożenia</a></li>
+        <li><a href="/docs.html">Dokumentacja</a></li>
+        <li><a class="nav-gh" href="https://github.com/lukasz5/LimeControl" target="_blank" rel="noopener" aria-label="Kod źródłowy LimeControl na GitHubie"><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a></li>
+        <li><a class="nav-lang" href="/en/plugins.html" hreflang="en" lang="en" aria-label="Switch to English">EN<span> — English</span></a></li>
+        <li><a class="btn btn-primary btn-sm" href="https://app.limecontrol.eu">Otwórz aplikację</a></li>
+      </ul>
+    </div>
+  </header>
+
+<main id="main">
+    <section class="hero hero-themes">
+      <div class="container">
+        <div>
+          <span class="eyebrow">Darmowe wtyczki dla LimeSurvey</span>
+          <h1>Połącz LimeSurvey ze StrefąAnkiet. <span class="lime">Wtyczki są darmowe</span>.</h1>
+          <p class="lead">Wtyczki StrefaAnkiet dla LimeSurvey są bezpłatne i mają otwarty kod. Łączą Twoją ankietę z platformą <strong>StrefaAnkiet</strong> — a płacisz dopiero za konto i usługi, z których korzystasz: zarządzaną wysyłkę przez Amazon SES, telefonię VoIP do wywiadów CATI, pracę ankieterów w terenie i analizę wyników. Respondent nadal wypełnia tę samą ankietę LimeSurvey.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">Poproś o wtyczki</a>
+            <a class="btn btn-ghost" href="https://strefaankiet.pl/#cena" rel="noopener">Cennik StrefaAnkiet</a>
+          </div>
+          <ul class="hero-meta">
+            <li>Wtyczki: 0 zł, otwarty kod</li>
+            <li>Sprawdzone na LimeSurvey 6.15 i 7.10</li>
+            <li>PHP 8.1+</li>
+            <li>Dane zostają w Twoim LimeSurvey</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="darmowe-i-platne" class="section-soft" aria-labelledby="model-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Jak to działa</span>
+          <h2 id="model-h">Darmowe oprogramowanie, płatne usługi</h2>
+          <p>Oprogramowanie instalujesz u siebie za darmo. Płatne jest to, czego nie da się rozdać jako kodu: infrastruktura wysyłkowa, telefonia i konto zespołu na platformie.</p>
+        </div>
+        <div class="grid grid-2">
+          <article class="card host-card">
+            <span class="tag">Bezpłatnie</span>
+            <h3>Wtyczki i narzędzia</h3>
+            <p>Instalujesz je w swoim LimeSurvey i używasz bez ograniczeń czasowych.</p>
+            <ul>
+              <li>Sześć wtyczek i narzędzi StrefaAnkiet dla LimeSurvey — z kodem źródłowym</li>
+              <li>Wymiana kwestionariuszy, eksport odpowiedzi i konwertery działają bez konta</li>
+              <li>Aplikacja LimeControl, <a href="/szablony.html">motywy</a> i <a href="/ankiety.html">szablony ankiet</a></li>
+              <li>Zestawy wdrożeniowe Docker dla LimeSurvey i LimeControl</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">Poproś o wtyczki</a>
+            </div>
+          </article>
+          <article class="card host-card featured">
+            <span class="tag">Konto StrefaAnkiet</span>
+            <h3>Usługi platformy</h3>
+            <p>Abonament platformy oraz usługi dodatkowe rozliczane według użycia. Zakres dobierasz do badania.</p>
+            <ul>
+              <li><strong>Zarządzany Amazon SES</strong> — podajesz nadawcę i dodajesz trzy rekordy DNS; bez własnego konta AWS i bez kluczy</li>
+              <li><strong>Telefonia VoIP do CATI</strong> — telefon w przeglądarce ankietera, serwer VoIP StrefyAnkiet, numer, połączenia i nagrania</li>
+              <li><strong>Praca w terenie (CAPI)</strong> — przydziały i cele ankieterów, aplikacja ankietera do pracy bez sieci</li>
+              <li><strong>Przestrzeń zespołu</strong> — projekty, role, kwoty między trybami, analizy w R i raporty PDF/DOCX</li>
+            </ul>
+            <p class="fineprint">Telefonia, masowe wysyłki, transkrypcja i AI wymagają osobnej konfiguracji i mają własne warunki rozliczenia.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://strefaankiet.pl/#cena" rel="noopener">Cennik StrefaAnkiet</a>
+              <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">Porozmawiajmy</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="wtyczki" aria-labelledby="plugins-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Pakiet wtyczek</span>
+          <h2 id="plugins-h">StrefaAnkiet dla LimeSurvey</h2>
+          <p>Sześć niezależnych elementów — instalujesz tylko te, których potrzebujesz. Wtyczki nie dodają własnych tabel do bazy LimeSurvey.</p>
+        </div>
+        <div class="pgrid">
+          <article class="card pcard" id="StrefaWorkspace">
+            <span class="status">Wymaga konta StrefaAnkiet</span>
+            <h3>Menu badania</h3>
+            <span class="pname">Wtyczka: StrefaWorkspace</span>
+            <p>Łączy ankietę LimeSurvey z badaniem w StrefieAnkiet i dodaje do menu ankiety skróty do całego warsztatu.</p>
+            <ul>
+              <li>Realizacja CAWI, CATI i CAPI, wyniki, analizy, respondenci i zespół — z poziomu ankiety</li>
+              <li>Jawne mapowanie numeru ankiety (SID) na badanie</li>
+              <li>Linki nie nadają uprawnień — obowiązują role z platformy</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaInvitationRelay">
+            <span class="status">Wymaga konta StrefaAnkiet</span>
+            <h3>Wysyłki przez Amazon SES</h3>
+            <span class="pname">Wtyczka: StrefaInvitationRelay</span>
+            <p>Zaproszenia i przypomnienia LimeSurvey wysyłane kanałem Amazon SES Twojej firmy w StrefieAnkiet — bez zmiany sposobu pracy z uczestnikami.</p>
+            <ul>
+              <li>Odbiorcy, tokeny i treści zostają w LimeSurvey</li>
+              <li>Potwierdzenia doręczeń, odbicia i skargi w historii wysyłek</li>
+              <li>Ochrona przed podwójną wysyłką</li>
+              <li>Klucze AWS pozostają po stronie platformy</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaResearch">
+            <span class="status">Wymaga konta StrefaAnkiet</span>
+            <h3>Realizacja CATI i CAPI, analizy</h3>
+            <span class="pname">Wtyczka: StrefaResearch</span>
+            <p>Panel pracy badawczej osadzony w LimeSurvey: przydziały ankieterów, koordynacja rozmów telefonicznych i analiza odpowiedzi.</p>
+            <ul>
+              <li>CAPI: przydziały, cele i terminy dla ankieterów; wywiad w natywnej ankiecie LimeSurvey</li>
+              <li>CATI: próba, kolejka spraw, przydziały, oddzwonienia i przekazania między ankieterami</li>
+              <li>Kwoty próby i postęp realizacji w jednym widoku</li>
+              <li>Analiza: wersje zbiorów danych, słownik zmiennych, analizy w R, raporty</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaSurveyExchange">
+            <span class="status is-free">Działa bez konta</span>
+            <h3>Wymiana kwestionariuszy</h3>
+            <span class="pname">Wtyczka: StrefaSurveyExchange</span>
+            <p>Pobiera kwestionariusz z LimeSurvey jako strukturę .lss albo pakiet JSON z mapą pól i raportem różnic.</p>
+            <ul>
+              <li>Eksport struktury (.lss) lub pakietu JSON z mapą kodów pól</li>
+              <li>Lista elementów, których nie da się przenieść — bez cichego upraszczania</li>
+              <li>Ustawienia innych wtyczek są usuwane z eksportu</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaResponseExport">
+            <span class="status is-free">Działa bez konta</span>
+            <h3>Eksport odpowiedzi</h3>
+            <span class="pname">Wtyczka: StrefaResponseExport</span>
+            <p>Udostępnia zakodowane odpowiedzi aktywnej ankiety do analiz — stronicowane i bez technicznych identyfikatorów.</p>
+            <ul>
+              <li>Pomija tokeny, adresy IP i adres odsyłający</li>
+              <li>Wymaga uprawnień odczytu i eksportu odpowiedzi do konkretnej ankiety</li>
+              <li>Pobieranie załączników z pytań plikowych</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaConverters">
+            <span class="status is-free">Działa bez konta</span>
+            <h3>Konwertery (wiersz poleceń)</h3>
+            <span class="pname">Pakiet narzędzi: StrefaConverters</span>
+            <p>Niezależne narzędzia do konwersji kwestionariuszy i odpowiedzi — przydatne przy migracjach i archiwizacji.</p>
+            <ul>
+              <li>LSS ↔ JSON z kontrolą sumy SHA-256</li>
+              <li>Odpowiedzi z JSON, CSV i eksportu VV</li>
+              <li>Zachowuje kody z zerami wiodącymi (np. 001) jako tekst</li>
+            </ul>
+          </article>
+        </div>
+        <div class="callout" style="margin-top:32px">
+          <p><strong>Stan wydania.</strong> Pakiet jest w wersji kandydującej 0.9 (pilotaż), sprawdzony na LimeSurvey 6.15 i 7.10. Publiczne repozytorium z paczkami instalacyjnymi jest w przygotowaniu — do tego czasu <a href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">napisz do nas</a>, a prześlemy wtyczki bezpłatnie razem z instrukcją.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="tryby" class="section-soft" aria-labelledby="modes-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Tryby realizacji</span>
+          <h2 id="modes-h">Jedna ankieta, trzy sposoby zbierania odpowiedzi</h2>
+          <p>Kwestionariusz i odpowiedzi pozostają w LimeSurvey. Zmienia się tylko to, kto i jak prowadzi wywiad.</p>
+        </div>
+        <div class="modes">
+          <article class="card">
+            <div class="abbr">CAWI</div>
+            <h3>Ankieta internetowa</h3>
+            <p>Respondent wypełnia ankietę sam, z linku lub zaproszenia e-mail. To natywny tryb LimeSurvey — w LimeControl aktywujesz ankietę, wysyłasz zaproszenia i śledzisz wyniki.</p>
+            <p class="more">Darmowe w LimeControl</p>
+          </article>
+          <article class="card">
+            <div class="abbr">CATI</div>
+            <h3>Wywiad telefoniczny</h3>
+            <p>Ankieter dzwoni i zapisuje odpowiedzi. Platforma dodaje próbę, kolejkę spraw, przydziały, oddzwonienia, telefon w przeglądarce i nagrania rozmów.</p>
+            <p class="more">Darmowa wtyczka + telefonia StrefaAnkiet</p>
+          </article>
+          <article class="card">
+            <div class="abbr">CAPI</div>
+            <h3>Wywiad bezpośredni</h3>
+            <p>Ankieter prowadzi wywiad na tablecie lub telefonie. Platforma dodaje przydziały z celami i terminami, potwierdzanie wywiadów oraz aplikację ankietera do pracy bez sieci.</p>
+            <p class="more">Darmowa wtyczka + konto StrefaAnkiet</p>
+          </article>
+          <article class="card">
+            <div class="abbr">Mixed-mode</div>
+            <h3>Łączenie trybów</h3>
+            <p>Jedno badanie realizowane kilkoma kanałami, ze wspólnymi kwotami, jednym zbiorem danych i analizą w R.</p>
+            <p class="more">Konto StrefaAnkiet</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="porownanie" aria-labelledby="compare-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Co jest darmowe, a co płatne</span>
+          <h2 id="compare-h">Od darmowych narzędzi do usług platformy</h2>
+          <p>Zacznij od tego, co darmowe. Konto StrefaAnkiet dołączasz, gdy badanie potrzebuje infrastruktury i zespołu.</p>
+        </div>
+        <div class="table-scroll">
+          <table class="compare">
+            <thead>
+              <tr><th scope="col">Potrzeba</th><th scope="col">Bezpłatnie — LimeControl i wtyczki</th><th scope="col">Płatnie — konto i usługi StrefaAnkiet</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Zarządzanie ankietami z telefonu</th><td>Aplikacja: aktywacja, harmonogram, uczestnicy, eksport</td><td>—</td></tr>
+              <tr><th scope="row">Wygląd ankiety</th><td>Osiem motywów WCAG 2.2 AA, w tym CATI i CAPI</td><td>—</td></tr>
+              <tr><th scope="row">Gotowe kwestionariusze</th><td>Dwanaście szablonów PL/EN, w tym szkielety CATI i CAPI</td><td>Biblioteka szablonów badań i raportów</td></tr>
+              <tr><th scope="row">Połączenie LimeSurvey z platformą</th><td>Wtyczki: instalacja, aktualizacje i kod źródłowy</td><td>Konto organizacji z rolami zespołu</td></tr>
+              <tr><th scope="row">Wysyłka zaproszeń</th><td>Poczta LimeSurvey, harmonogram zaproszeń i przypomnień w LimeControl</td><td>Zarządzany Amazon SES: nadawca we własnej domenie, potwierdzenia doręczeń, odbicia i skargi</td></tr>
+              <tr><th scope="row">Wywiady telefoniczne</th><td>Motyw CATI ze skrótami klawiszowymi, szkielet wywiadu z wynikiem kontaktu</td><td>Kolejka spraw, przydziały, oddzwonienia, telefon VoIP w przeglądarce, serwer VoIP, nagrania</td></tr>
+              <tr><th scope="row">Wywiady terenowe</th><td>Motyw CAPI i pętla wywiadów na tablecie (online)</td><td>Przydziały i cele ankieterów, potwierdzanie wywiadów, aplikacja do pracy bez sieci</td></tr>
+              <tr><th scope="row">Kwoty i kontrola jakości</th><td>Natywne kwoty LimeSurvey</td><td>Kwoty łączone między trybami, kontrola jakości wywiadów</td></tr>
+              <tr><th scope="row">Analiza wyników</th><td>Podsumowania i wykresy, eksport CSV / Excel / JSON, konwertery</td><td>Wersjonowane zbiory, analizy w R, raporty PDF i DOCX</td></tr>
+              <tr><th scope="row">Serwer ankiet</th><td>Zestawy Docker do samodzielnej instalacji</td><td><a href="/#hosting">Wdrożenie i utrzymanie serwera ankietowego</a> przez strefabadan.pl</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="limecontrol" class="section-soft" aria-labelledby="connect-h">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">Połączenie z LimeControl</span>
+          <h2 id="connect-h">Postęp realizacji w aplikacji</h2>
+          <p class="muted">Jeśli ankieta jest powiązana z badaniem w StrefieAnkiet, LimeControl pokaże przy niej stan realizacji — bez otwierania panelu.</p>
+          <a class="btn btn-ghost" href="/docs.html#strefaankiet">Jak połączyć konto</a>
+        </div>
+        <ul class="checklist">
+          <li><span><strong>CAPI</strong> — ukończone wywiady, przydziały ankieterów i ich postęp względem celu.</span></li>
+          <li><span><strong>CATI</strong> — liczba spraw w kolejce, sprawy bez przydziału i sprawy wymagające uwagi.</span></li>
+          <li><span><strong>Tylko odczyt</strong> — aplikacja niczego nie zmienia w badaniu; potrzebuje klucza dostępu z zakresami <code>fieldwork.read</code> i <code>cati.read</code>.</span></li>
+          <li><span><strong>Klucz zostaje u Ciebie</strong> — jest trzymany wyłącznie w pamięci otwartej karty, tak jak hasła do LimeSurvey.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="start" aria-labelledby="start-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Jak zacząć</span>
+          <h2 id="start-h">Cztery kroki — trzy pierwsze są darmowe</h2>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Przygotuj serwer ankiet</h3>
+            <p>Użyj własnej instancji LimeSurvey, darmowego zestawu Docker albo zleć nam <a href="/#hosting">wdrożenie i utrzymanie serwera</a>.</p>
+          </li>
+          <li>
+            <h3>Dodaj motyw i szablon</h3>
+            <p>Zainstaluj <a href="/szablony.html#cati">motyw CATI lub CAPI</a> i zaimportuj <a href="/ankiety.html#wywiad-cati">szkielet wywiadu</a>.</p>
+          </li>
+          <li>
+            <h3>Zainstaluj darmowe wtyczki</h3>
+            <p>Wgraj paczki w menedżerze wtyczek LimeSurvey i wskaż, która ankieta odpowiada któremu badaniu.</p>
+          </li>
+          <li>
+            <h3>Włącz usługi, gdy ich potrzebujesz</h3>
+            <p>Załóż konto StrefaAnkiet, skonfiguruj wysyłkę lub telefonię i śledź postęp w <a href="https://app.limecontrol.eu">LimeControl</a>.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="cta">
+          <h2>Planujesz badanie CATI lub CAPI?</h2>
+          <p>Opisz badanie — liczbę wywiadów, tryby i terminy. Odpowiemy, co zrobisz darmowymi narzędziami, a gdzie przyda się konto StrefaAnkiet.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">info@strefabadan.pl</a>
+            <a class="btn btn-ghost" href="https://strefaankiet.pl" rel="noopener">strefaankiet.pl</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <a href="/" aria-label="LimeControl">
+        <img class="logo-light" src="/assets/logo.svg?v=3" alt="LimeControl" width="86" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=3" alt="LimeControl" width="86" height="28" />
+      </a>
+      <ul class="footer-links">
+        <li><a href="/szablony.html">Motywy ankiet</a></li>
+        <li><a href="/ankiety.html">Szablony ankiet</a></li>
+        <li><a href="/wtyczki.html">Wtyczki StrefaAnkiet</a></li>
+        <li><a href="/#hosting">Hosting i wdrożenia</a></li>
+        <li><a href="/docs.html">Dokumentacja</a></li>
+        <li><a href="/prywatnosc.html">Prywatność</a></li>
+        <li><a href="https://app.limecontrol.eu">Aplikacja</a></li>
+        <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
+        <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
+        <li><a href="/en/plugins.html" hreflang="en" lang="en">English</a></li>
+      </ul>
+      <a class="coffee" href="https://www.paypal.com/biz/profile/strefabadan" target="_blank" rel="noopener noreferrer">Postaw mi kawę</a>
+    </div>
+    <div class="container" style="margin-top:20px">
+      <p style="margin:0">© <span id="year">2026</span> LimeControl · StrefaAnkiet i LimeControl są rozwijane przez <a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a>. Aplikacja, motywy, wtyczki i wdrożenia są otwartym oprogramowaniem; treść i wygląd tej strony — wszelkie prawa zastrzeżone. LimeSurvey jest zastrzeżonym znakiem towarowym LimeSurvey GmbH. LimeControl oraz usługi strefabadan.pl są niezależnymi projektami i nie są powiązane z LimeSurvey GmbH.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/site.js?v=3" defer></script>
+</body>
+</html>

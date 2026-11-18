@@ -1,0 +1,9 @@
+[
+  { "id": "customer-satisfaction", "label": { "pl": "Satysfakcja klienta", "en": "Customer satisfaction" } },
+  { "id": "hr", "label": { "pl": "HR i pracownicy", "en": "HR & employees" } },
+  { "id": "events", "label": { "pl": "Wydarzenia i szkolenia", "en": "Events & training" } },
+  { "id": "education", "label": { "pl": "Edukacja", "en": "Education" } },
+  { "id": "health", "label": { "pl": "Zdrowie", "en": "Health" } },
+  { "id": "research", "label": { "pl": "Badania i UX", "en": "Research & UX" } },
+  { "id": "fieldwork", "label": { "pl": "CATI i CAPI", "en": "CATI & CAPI" } }
+]

@@ -18,10 +18,25 @@ import type {
   ActiveSession,
   InstanceProfile,
   LimeSurveyItem,
+  ScheduleAction,
   ScheduleJob,
 } from '../types/limesurvey';
 import { useNotifications } from './NotificationProvider';
-import { locale, t } from '../i18n';
+import { getLang, locale, t } from '../i18n';
+
+/** Nazwy operacji harmonogramu (klucze tłumaczeń). */
+export function scheduleActionLabel(action: ScheduleAction | undefined): string {
+  switch (action) {
+    case 'expire':
+      return t('Zamknięcie ankiety');
+    case 'invite':
+      return t('Wysyłka zaproszeń');
+    case 'remind':
+      return t('Wysyłka przypomnień');
+    default:
+      return t('Aktywacja ankiety');
+  }
+}
 
 interface ScheduleViewProps {
   activeSession: ActiveSession | null;
@@ -58,7 +73,12 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   const [scheduledAt, setScheduledAt] = useState<string>(() =>
     defaultFutureLocalInput(30)
   );
+  const [action, setAction] = useState<ScheduleAction>('activate');
   const [expiresAt, setExpiresAt] = useState<string>('');
+  const [minDaysBetween, setMinDaysBetween] = useState<string>('');
+  const [maxReminders, setMaxReminders] = useState<string>('');
+  const [repeatEveryDays, setRepeatEveryDays] = useState<string>('');
+  const [repeatCount, setRepeatCount] = useState<string>('');
   const [activateTokens, setActivateTokens] = useState<boolean>(false);
   const [clearCreds, setClearCreds] = useState<boolean>(true);
   const [password, setPassword] = useState<string>(
@@ -127,13 +147,27 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
 
     const scheduledDate = new Date(scheduledAt);
     if (Number.isNaN(scheduledDate.getTime())) {
-      setError(t('Podaj prawidłową datę i godzinę aktywacji.'));
+      setError(t('Podaj prawidłową datę i godzinę wykonania.'));
+      return;
+    }
+
+    const repeatEvery = action === 'remind' && repeatEveryDays ? Number(repeatEveryDays) : null;
+    const repeatTimes = action === 'remind' && repeatCount ? Number(repeatCount) : null;
+    if (Boolean(repeatEvery) !== Boolean(repeatTimes)) {
+      setError(t('Aby powtarzać przypomnienia, podaj odstęp w dniach i liczbę powtórzeń.'));
       return;
     }
 
     setSubmitting(true);
     try {
       const job = await createSchedule({
+        action,
+        lang: getLang(),
+        tzOffsetMinutes: new Date().getTimezoneOffset(),
+        minDaysBetween: action === 'remind' && minDaysBetween ? Number(minDaysBetween) : null,
+        maxReminders: action === 'remind' && maxReminders ? Number(maxReminders) : null,
+        repeatEveryDays: repeatEvery,
+        repeatRemaining: repeatTimes,
         surveyId: sid,
         surveyTitle: selectedSurvey?.surveyls_title || t('Ankieta #{0}', sid),
         instanceName: activeSession.profileName,
@@ -143,20 +177,19 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
         authPlugin: activeSession.authPlugin || 'Authdb',
         limeVersion: activeSession.limeVersion || 'auto',
         scheduledAt: scheduledDate.toISOString(),
-        activateTokens,
+        activateTokens: action === 'activate' && activateTokens,
         startdateAt: null,
-        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
+        expiresAt: action === 'activate' && expiresAt ? new Date(expiresAt).toISOString() : null,
         clearCredentialsAfterRun: clearCreds,
       });
 
       setJobs((prev) => [job, ...prev]);
-      setSuccessMsg(
-        t('Zaplanowano automatyczne wywołanie activate_survey dla ankiety #{0}.', sid)
-      );
+      const summary = t('{0}: ankieta #{1}, {2}.', scheduleActionLabel(action), sid, scheduledDate.toLocaleString(locale()));
+      setSuccessMsg(t('Zaplanowano zadanie. {0}', summary));
       notify({
         type: 'info',
         title: t('Dodano zadanie do harmonogramu'),
-        message: t('Aktywacja ankiety #{0} zaplanowana na {1}.', sid, scheduledDate.toLocaleString(locale())),
+        message: summary,
         dedupeKey: `schedule:create:${job.id}`,
       });
     } catch (err) {
@@ -182,7 +215,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
         notify({
           type: 'success',
           title: t('Zadanie wykonane pomyślnie'),
-          message: t('Ankieta #{0} ({1}) została aktywowana.', updated.surveyId, updated.surveyTitle),
+          message: updated.resultMessage || `${scheduleActionLabel(updated.action)} · #${updated.surveyId}`,
           dedupeKey: `job:${updated.id}:completed`,
         });
       } else if (updated.status === 'failed') {
@@ -216,7 +249,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       notify({
         type: 'info',
         title: t('Anulowano zadanie harmonogramu'),
-        message: t('Ankieta #{0} nie zostanie automatycznie aktywowana.', updated.surveyId),
+        message: t('{0} dla ankiety #{1} nie zostanie wykonane.', scheduleActionLabel(updated.action), updated.surveyId),
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -255,7 +288,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
         };
       case 'running':
         return {
-          label: 'Wykonywanie...',
+          label: t('Wykonywanie...'),
           className: 'text-sky-700 dark:text-sky-400',
         };
       case 'completed':
@@ -281,10 +314,10 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-            {t('Harmonogram aktywowania ankiet')}
+            {t('Harmonogram ankiet')}
           </h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            {t('Serwer automatycznie wywoła')}{' '}<code className="font-mono">activate_survey</code>{' '}{t('o wybranej godzinie — nawet po zamknięciu aplikacji na telefonie.')}
+            {t('Serwer o wybranej godzinie aktywuje lub zamknie ankietę albo wyśle zaproszenia i przypomnienia — nawet po zamknięciu aplikacji na telefonie.')}
           </p>
         </div>
 
@@ -320,8 +353,25 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           <div className="flex items-center gap-2">
             <CalendarClock className="h-5 w-5 text-emerald-600" aria-hidden="true" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              {t('Nowe zadanie aktywacji')}
+              {t('Nowe zadanie')}
             </h3>
+          </div>
+
+          <div>
+            <label htmlFor="schedule-action" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              {t('Operacja')}
+            </label>
+            <select
+              id="schedule-action"
+              value={action}
+              onChange={(e) => setAction(e.target.value as ScheduleAction)}
+              className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 text-xs font-medium text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
+            >
+              <option value="activate">{t('Aktywuj ankietę (activate_survey)')}</option>
+              <option value="expire">{t('Zamknij ankietę (expires)')}</option>
+              <option value="invite">{t('Wyślij zaproszenia (invite_participants)')}</option>
+              <option value="remind">{t('Wyślij przypomnienia (remind_participants)')}</option>
+            </select>
           </div>
 
           {!activeSession && (
@@ -333,7 +383,13 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           {surveys.length > 0 && (
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                {t('Wybierz ankietę (')}{inactiveSurveys.length}{' '}{t('nieaktywnych)')}
+                {action === 'activate' ? (
+                  <>
+                    {t('Wybierz ankietę (')}{inactiveSurveys.length}{' '}{t('nieaktywnych)')}
+                  </>
+                ) : (
+                  t('Wybierz ankietę')
+                )}
               </label>
               <select
                 value={surveyIdInput}
@@ -367,7 +423,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                {t('Data i godzina aktywacji')}
+                {t('Data i godzina wykonania')}
               </label>
               <input
                 type="datetime-local"
@@ -378,18 +434,61 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                {t('Auto-wygaśnięcie (opcjonalne)')}
-              </label>
-              <input
-                type="datetime-local"
-                value={expiresAt}
-                onChange={(e) => setExpiresAt(e.target.value)}
-                className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 font-mono text-xs text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
-              />
-            </div>
+            {action === 'activate' && (
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  {t('Auto-wygaśnięcie (opcjonalne)')}
+                </label>
+                <input
+                  type="datetime-local"
+                  value={expiresAt}
+                  onChange={(e) => setExpiresAt(e.target.value)}
+                  className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 font-mono text-xs text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
+                />
+              </div>
+            )}
           </div>
+
+          {(action === 'invite' || action === 'remind') && (
+            <p className="rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 p-3 text-[11px] text-slate-600 dark:text-slate-400">
+              {action === 'invite'
+                ? t('Zaproszenia trafią do uczestników, którzy jeszcze ich nie dostali. Ankieta musi być aktywna i mieć tabelę uczestników.')
+                : t('Przypomnienia trafią do uczestników, którzy dostali zaproszenie i nie ukończyli ankiety.')}
+            </p>
+          )}
+
+          {action === 'remind' && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="schedule-min-days" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  {t('Min. dni od ostatniej wiadomości')}
+                </label>
+                <input id="schedule-min-days" type="number" min={0} max={365} value={minDaysBetween} onChange={(e) => setMinDaysBetween(e.target.value)} placeholder="—"
+                  className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 font-mono text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label htmlFor="schedule-max-reminders" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  {t('Maks. przypomnień na osobę')}
+                </label>
+                <input id="schedule-max-reminders" type="number" min={1} max={50} value={maxReminders} onChange={(e) => setMaxReminders(e.target.value)} placeholder="—"
+                  className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 font-mono text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label htmlFor="schedule-repeat-every" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  {t('Powtarzaj co (dni)')}
+                </label>
+                <input id="schedule-repeat-every" type="number" min={1} max={60} value={repeatEveryDays} onChange={(e) => setRepeatEveryDays(e.target.value)} placeholder="—"
+                  className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 font-mono text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label htmlFor="schedule-repeat-count" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  {t('Liczba powtórzeń')}
+                </label>
+                <input id="schedule-repeat-count" type="number" min={1} max={24} value={repeatCount} onChange={(e) => setRepeatCount(e.target.value)} placeholder="—"
+                  className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3 font-mono text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
@@ -406,15 +505,17 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           </div>
 
           <div className="space-y-1.5">
-            <label className="flex min-h-[44px] items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={activateTokens}
-                onChange={(e) => setActivateTokens(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-              />
-              <span>{t('Uruchom także tabelę uczestników (activate_tokens)')}</span>
-            </label>
+            {action === 'activate' && (
+              <label className="flex min-h-[44px] items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={activateTokens}
+                  onChange={(e) => setActivateTokens(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                />
+                <span>{t('Uruchom także tabelę uczestników (activate_tokens)')}</span>
+              </label>
+            )}
 
             <label className="flex min-h-[44px] items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
               <input
@@ -432,7 +533,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
             disabled={submitting || !activeSession}
             className="w-full min-h-[48px] rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
           >
-            {submitting ? 'Zapisywanie...' : t('Zaplanuj aktywację na serwerze')}
+            {submitting ? t('Zapisywanie...') : t('Zaplanuj na serwerze')}
           </button>
         </form>
 
@@ -448,7 +549,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
 
           {jobs.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-              {t('Brak zaplanowanych zadań aktywacji. Utwórz pierwsze zadanie w formularzu obok.')}
+              {t('Brak zaplanowanych zadań. Utwórz pierwsze zadanie w formularzu obok.')}
             </div>
           ) : (
             jobs.map((job) => {
@@ -461,6 +562,10 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
                         <span className={`font-semibold ${st.className}`}>
                           {st.label}
+                        </span>
+                        <span aria-hidden="true" className="text-slate-300 dark:text-slate-700">·</span>
+                        <span className="font-semibold text-slate-700 dark:text-slate-200">
+                          {scheduleActionLabel(job.action)}
                         </span>
                         <span aria-hidden="true" className="text-slate-300 dark:text-slate-700">·</span>
                         <span className="font-mono text-slate-500 dark:text-slate-400 tabular-nums">
@@ -478,6 +583,9 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                         {t('Start:')}{' '}{new Date(job.scheduledAt).toLocaleString(locale())}
                         {job.expiresAt
                           ? ` · ${t('Koniec:')} ${new Date(job.expiresAt).toLocaleString(locale())}`
+                          : ''}
+                        {job.repeatEveryDays && job.repeatRemaining
+                          ? ` · ${t('powtórzy się jeszcze {0}× co {1} dni', job.repeatRemaining, job.repeatEveryDays)}`
                           : ''}
                       </p>
                       <p className="text-xs text-slate-500 dark:text-slate-400">

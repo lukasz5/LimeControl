@@ -12,3 +12,10 @@ limesurvey-themes
 deploy
 *.log
 .DS_Store
+survey-templates
+site-src
+tests
+*.md
+mobile
+dist-mobile
+capacitor.config.ts

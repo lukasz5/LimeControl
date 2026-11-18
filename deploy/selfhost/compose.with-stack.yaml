@@ -1,0 +1,26 @@
+# Override: run LimeControl next to limesurvey-stack (https://github.com/lukasz5/limesurvey-stack)
+# behind the same Traefik, with its own domain and Let's Encrypt certificate.
+#
+#   docker compose -f compose.yaml -f compose.with-stack.yaml up -d --build
+#
+# Requirements: the LimeSurvey stack is running on this host and LIMECONTROL_DOMAIN points at it.
+# In LimeControl add the instance as http://limesurvey:8080 with the "Server relay" connection mode —
+# requests then stay inside the Docker network and are not subject to the admin IP allow-list.
+services:
+  app:
+    ports: !reset []
+    environment:
+      RELAY_ALLOW_PRIVATE: "1"
+    networks: [proxy]
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: ${STACK_NAME:-limesurvey}-proxy
+      traefik.http.routers.limecontrol.rule: Host(`${LIMECONTROL_DOMAIN:?LIMECONTROL_DOMAIN is required}`)
+      traefik.http.routers.limecontrol.entrypoints: websecure
+      traefik.http.routers.limecontrol.service: limecontrol
+      traefik.http.services.limecontrol.loadbalancer.server.port: "8080"
+
+networks:
+  proxy:
+    name: ${STACK_NAME:-limesurvey}-proxy
+    external: true

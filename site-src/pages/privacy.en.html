@@ -1,0 +1,131 @@
+<!--meta
+{
+  "title": "LimeControl privacy policy — website, web app and mobile app",
+  "description": "What data LimeControl processes: the limecontrol.eu website, the app.limecontrol.eu service, the mobile app and self-hosted installations. No ads and no tracking; survey data stays on your LimeSurvey server.",
+  "ogTitle": "LimeControl privacy policy",
+  "ogDescription": "No ads and no tracking. Survey data stays on your LimeSurvey server."
+}
+-->
+  <div class="container docs">
+    <nav class="docs-nav" aria-label="Table of contents">
+      <p>Privacy policy</p>
+      <ul>
+        <li><a href="#summary">In short</a></li>
+        <li><a href="#controller">Controller</a></li>
+        <li><a href="#website">The limecontrol.eu website</a></li>
+        <li><a href="#service">The app.limecontrol.eu service</a></li>
+        <li><a href="#mobile-app">Mobile app</a></li>
+        <li><a href="#self-hosted">Self-hosted installation</a></li>
+        <li><a href="#survey-data">Survey and respondent data</a></li>
+        <li><a href="#providers">Providers</a></li>
+        <li><a href="#retention">Retention</a></li>
+        <li><a href="#rights">Your rights</a></li>
+        <li><a href="#changes">Changes</a></li>
+      </ul>
+    </nav>
+
+    <main id="main" class="prose legal">
+      <section id="summary">
+        <span class="eyebrow">Privacy</span>
+        <h1>LimeControl privacy policy</h1>
+        <p class="updated">Version 1.0 · effective from 18 November 2026</p>
+        <p class="lead-docs">LimeControl is a tool for managing <em>your</em> LimeSurvey server. Survey data and respondents’ answers stay on that server — we neither collect nor store them.</p>
+        <ul>
+          <li>We show no ads, use no analytics or tracking tools, and do not sell data.</li>
+          <li>LimeSurvey passwords are not stored in our database or in browser storage.</li>
+          <li>The mobile app works without an account — server profiles are saved on the device only.</li>
+          <li>If you run LimeControl on your own server, we receive no data at all.</li>
+        </ul>
+      </section>
+
+      <section id="controller">
+        <h2>Controller and contact</h2>
+        <p>The controller of personal data processed in connection with the limecontrol.eu website, the app.limecontrol.eu service and the LimeControl mobile app is <strong>Strefabadań.pl – Łukasz Szemiako</strong>, Wały Jagiellońskie 28/30 lok. 2, 80-853 Gdańsk, Poland, tax ID (NIP) 9571090805.</p>
+        <p>Contact for privacy matters: <a href="mailto:{{CONTACT_EMAIL}}?subject=LimeControl%20%E2%80%94%20privacy">{{CONTACT_EMAIL}}</a>.</p>
+      </section>
+
+      <section id="website">
+        <h2>The limecontrol.eu website</h2>
+        <ul>
+          <li><strong>Server logs.</strong> The server records the IP address, the time of the request, the page address and the browser identifier. They serve security and error diagnosis (legitimate interest, Article 6(1)(f) GDPR).</li>
+          <li><strong>Cookies.</strong> The website sets no cookies and uses no analytics tools.</li>
+          <li><strong>Fonts.</strong> The website loads fonts from Google Fonts, so Google receives the browser’s IP address.</li>
+          <li><strong>Downloads.</strong> You download the themes, survey templates and plugins without registering.</li>
+          <li><strong>Contact.</strong> When you write to us, we process the message and your contact details in order to reply.</li>
+        </ul>
+      </section>
+
+      <section id="service">
+        <h2>The app.limecontrol.eu service</h2>
+        <p>The web app requires signing in with a Google account. We then process:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Data</th><th>Purpose</th><th>Where</th></tr></thead>
+            <tbody>
+              <tr><td>Account identifier, email address, name and profile picture from the Google account</td><td>Signing in and tying profiles to your account</td><td>Firebase Authentication</td></tr>
+              <tr><td>Instance profiles: name, LimeSurvey server address, user name, login plugin, connection mode, version — <strong>no passwords</strong></td><td>Syncing profiles between your devices</td><td>Cloud Firestore</td></tr>
+              <tr><td>Scheduled jobs: server address, user name, survey ID, time and an encrypted password</td><td>Running the scheduled operation while you are away</td><td>The app server; the password is removed once the job has run or been cancelled</td></tr>
+              <tr><td>Requests in “Server relay” mode and of the StrefaAnkiet connector</td><td>Forwarding the request to the server you specified</td><td>They pass through the app server and are not stored</td></tr>
+              <tr><td>Technical logs: IP address, time, errors</td><td>Security, request limits and diagnostics</td><td>The app server</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The legal basis is the provision of the service you use (Article 6(1)(b) GDPR) and our legitimate interest in keeping it secure (point (f)).</p>
+        <p>In direct mode the browser connects to your LimeSurvey server without us in between — the user name, the password and the survey data never reach our servers.</p>
+      </section>
+
+      <section id="mobile-app">
+        <h2>Mobile app</h2>
+        <ul>
+          <li><strong>No account.</strong> The app for iOS and Android requires no registration or sign-in with us.</li>
+          <li><strong>Data on the device.</strong> Server profiles (name, address, user name, settings) and preferences are saved only in the app’s storage on your device. They disappear when you uninstall it.</li>
+          <li><strong>Passwords.</strong> The LimeSurvey password is not stored; you can only keep it until you close the app.</li>
+          <li><strong>Connections.</strong> The app connects directly to the LimeSurvey server you specify. If you connect it to your own LimeControl server, the access key for it is kept on the device.</li>
+          <li><strong>No tracking.</strong> The app contains no ads, analytics tools or tracking libraries and sends us no usage data.</li>
+          <li><strong>Permissions.</strong> The app does not ask for access to location, contacts, the camera or the microphone. You save or share exported files through the system share sheet.</li>
+        </ul>
+      </section>
+
+      <section id="self-hosted">
+        <h2>Self-hosted installation</h2>
+        <p>LimeControl running on your own server (the access-key mode) does not connect to our infrastructure. Profiles are saved in the browser and the scheduler queue on your server. You or your organisation are the controller of that data.</p>
+      </section>
+
+      <section id="survey-data">
+        <h2>Survey and respondent data</h2>
+        <p>Surveys, participants and responses are stored in your LimeSurvey. LimeControl displays them and lets you manage them, but does not collect them. The controller of respondents’ data is the organisation running the study — it is responsible for the legal basis and for informing participants.</p>
+        <p>Exported responses are saved on your device. From that moment you decide how they are stored.</p>
+        <p>The StrefaAnkiet platform, to which you can link a survey, has its <a href="https://strefaankiet.pl/legal/privacy" rel="noopener">own privacy policy</a>.</p>
+      </section>
+
+      <section id="providers">
+        <h2>Providers</h2>
+        <ul>
+          <li><strong>Google (Firebase Authentication, Cloud Firestore, Google Fonts)</strong> — sign-in, profile storage in the app.limecontrol.eu service and the website fonts. Data may be processed outside the European Economic Area on the basis of standard contractual clauses.</li>
+          <li><strong>Hosting provider</strong> — the servers that run the website and the app.</li>
+        </ul>
+      </section>
+
+      <section id="retention">
+        <h2>Retention</h2>
+        <ul>
+          <li>The account and profiles in the app.limecontrol.eu service — until you delete them or request deletion of the account.</li>
+          <li>The password in a scheduled job — until the job has run or been cancelled; the job history — until you delete it in the app.</li>
+          <li>Server logs — for the limited time needed to keep the service secure and diagnose errors.</li>
+          <li>Correspondence — for as long as needed to handle the matter and for the limitation period of claims.</li>
+        </ul>
+        <p><strong>Deleting your account.</strong> You can delete profiles yourself on the Instances tab. To delete the account together with all its data, write to <a href="mailto:{{CONTACT_EMAIL}}?subject=LimeControl%20%E2%80%94%20account%20deletion">{{CONTACT_EMAIL}}</a> from the address tied to the account.</p>
+      </section>
+
+      <section id="rights">
+        <h2>Your rights</h2>
+        <p>You have the right to access your data, to have it rectified or erased, to restrict its processing and to data portability, as well as the right to object to processing based on legitimate interest. Send your request to <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a>. You may also lodge a complaint with the President of the Personal Data Protection Office (UODO) in Poland or with your local supervisory authority.</p>
+        <p>Providing data is voluntary, but signing in with a Google account is necessary to use the app.limecontrol.eu service. We make no automated decisions and do not profile users.</p>
+      </section>
+
+      <section id="changes">
+        <h2>Changes to this policy</h2>
+        <p>We will announce material changes on this page with a new effective date. Earlier versions are available on request.</p>
+      </section>
+    </main>
+  </div>

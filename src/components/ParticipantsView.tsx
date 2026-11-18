@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   BellRing,
   Check,
@@ -14,9 +14,14 @@ import {
   addParticipants,
   deleteParticipants,
   getSummary,
+  getSurveyProperties,
   inviteParticipants,
+  isEmptyParticipantList,
+  isMissingParticipantTable,
   listParticipants,
   remindParticipants,
+  summarizeMailResult,
+  tokenAttributeNumbers,
 } from '../services/limeSurveyRpc';
 import type {
   ActiveSession,
@@ -56,6 +61,9 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  /** Dodatkowe pola uczestnika zdefiniowane w ankiecie (np. z szablonu CATI): numery i opisy. */
+  const [templateFields, setTemplateFields] = useState<Array<{ number: number; label: string }>>([]);
+  const [createTemplateFields, setCreateTemplateFields] = useState(true);
   const [subTab, setSubTab] = useState<'list' | 'email-template'>('list');
 
   useEffect(() => {
@@ -67,8 +75,15 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
     }
   }, [preselectedSurveyId, surveys, selectedSid]);
 
+  /**
+   * Numer ostatniego wczytywania. Po szybkiej zmianie ankiety odpowiedź dla poprzedniej może
+   * wrócić później niż dla bieżącej — taka spóźniona odpowiedź nie może nadpisać widoku.
+   */
+  const loadSeq = useRef(0);
+
   async function loadParticipantsData(sidNum: number) {
     if (!activeSession) return;
+    const seq = ++loadSeq.current;
     setLoading(true);
     setError(null);
     setTokensMissing(false);
@@ -93,22 +108,24 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
           activeSession.connectionMode
         ).catch(() => null),
       ]);
+      if (seq !== loadSeq.current) return;
       setParticipants(list);
       setSummary(sum);
     } catch (err) {
+      if (seq !== loadSeq.current) return;
       const msg = err instanceof Error ? err.message : String(err);
-      if (/no token table|no data|fault/i.test(msg)) {
-        setTokensMissing(/token table|not exist/i.test(msg));
-        if (/no data/i.test(msg)) {
-          setParticipants([]);
-        } else {
-          setError(msg);
-        }
+      // Komunikaty różnią się między wersjami: LimeSurvey 3 — „No token table” / „No Tokens found”,
+      // LimeSurvey 6–7 — „No survey participant list” (ERR_NO_PARTICIPANT_TABLE) / „No survey participants found.”
+      if (isMissingParticipantTable(msg)) {
+        setTokensMissing(true);
+        setParticipants([]);
+      } else if (isEmptyParticipantList(msg)) {
+        setParticipants([]);
       } else {
         setError(msg);
       }
     } finally {
-      setLoading(false);
+      if (seq === loadSeq.current) setLoading(false);
     }
   }
 
@@ -117,11 +134,57 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
     if (activeSession && sidNum > 0) {
       void loadParticipantsData(sidNum);
     } else {
+      loadSeq.current += 1; // unieważnia wczytywanie, które jeszcze trwa
       setParticipants([]);
       setSummary(null);
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSid, unusedOnly, activeSession?.sessionKey]);
+
+  // Gdy ankieta nie ma jeszcze tabeli uczestników, sprawdź, czy definiuje dodatkowe pola (atrybuty).
+  useEffect(() => {
+    setTemplateFields([]);
+    setCreateTemplateFields(true);
+    const sidNum = Number(selectedSid);
+    if (!activeSession || !tokensMissing || !sidNum) return;
+    let cancelled = false;
+    getSurveyProperties(activeSession.rpcEndpoint, activeSession.sessionKey, sidNum, activeSession.connectionMode)
+      .then((props) => {
+        if (cancelled) return;
+        let descriptions: Record<string, { description?: string }> = {};
+        try {
+          const raw = props.attributedescriptions;
+          descriptions = (typeof raw === 'string' ? JSON.parse(raw || '{}') : raw || {}) as typeof descriptions;
+        } catch {
+          descriptions = {};
+        }
+        setTemplateFields(
+          tokenAttributeNumbers(props.attributedescriptions).map((number) => ({
+            number,
+            label: String(descriptions[`attribute_${number}`]?.description || `attribute_${number}`),
+          }))
+        );
+      })
+      .catch(() => {
+        // brak uprawnień do właściwości ankiety — tabela powstanie bez pól dodatkowych
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeSession, selectedSid, tokensMissing]);
+
+  /** Czytelne podsumowanie wyniku wysyłki; rzuca błąd, gdy nie wyszła żadna wiadomość. */
+  function describeMailResult(result: unknown, kind: 'invite' | 'remind'): string {
+    const summary = summarizeMailResult(result);
+    if (summary.sent === 0 && summary.failed > 0) {
+      throw new Error(t('Nie udało się wysłać żadnej z {0} wiadomości. {1}', summary.failed, summary.errors[0] || ''));
+    }
+    const base = kind === 'invite' ? t('Wysłano zaproszenia: {0}.', summary.sent) : t('Wysłano przypomnienia: {0}.', summary.sent);
+    const failed = summary.failed ? ` ${t('Nieudane: {0}.', summary.failed)}` : '';
+    const left = summary.left ? ` ${t('Pozostało do wysłania: {0} — powtórz operację.', summary.left)}` : '';
+    return `${base}${failed}${left}`;
+  }
 
   async function handleActivateTokenTable() {
     if (!activeSession || !selectedSid) return;
@@ -132,7 +195,8 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         activeSession.rpcEndpoint,
         activeSession.sessionKey,
         Number(selectedSid),
-        activeSession.connectionMode
+        activeSession.connectionMode,
+        createTemplateFields ? templateFields.map((f) => f.number) : []
       );
       setTokensMissing(false);
       setFeedback(t('Tabela uczestników (tokenów) została pomyślnie aktywowana.'));
@@ -190,7 +254,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         tids,
         activeSession.connectionMode
       );
-      setFeedback(t('Wysłano zaproszenia: {0}', JSON.stringify(result)));
+      setFeedback(describeMailResult(result, 'invite'));
       await loadParticipantsData(Number(selectedSid));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -212,7 +276,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
         tids,
         activeSession.connectionMode
       );
-      setFeedback(t('Wysłano przypomnienia: {0}', JSON.stringify(result)));
+      setFeedback(describeMailResult(result, 'remind'));
       await loadParticipantsData(Number(selectedSid));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -416,6 +480,20 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
           <p className="text-xs text-slate-600 dark:text-slate-300 max-w-xl">
             {t('Wybrana ankieta nie ma zainicjalizowanej tabeli tokenów w LimeSurvey. Możesz utworzyć ją jednym kliknięciem poprzez')}{' '}<code className="font-mono">activate_tokens</code>.
           </p>
+          {templateFields.length > 0 && (
+            <label className="flex min-h-[44px] items-start gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer max-w-xl">
+              <input
+                type="checkbox"
+                checked={createTemplateFields}
+                onChange={(e) => setCreateTemplateFields(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+              />
+              <span>
+                {t('Utwórz pola z szablonu')}{' '}
+                <span className="text-slate-500 dark:text-slate-400">({templateFields.map((f) => f.label).join(', ')})</span>
+              </span>
+            </label>
+          )}
           <button
             type="button"
             disabled={submitting}
@@ -424,7 +502,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
             }}
             className="min-h-[44px] rounded-xl bg-emerald-600 px-5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
           >
-            {submitting ? 'Aktywowanie...' : t('Aktywuj tabelę uczestników (activate_tokens)')}
+            {submitting ? t('Aktywowanie...') : t('Aktywuj tabelę uczestników (activate_tokens)')}
           </button>
         </div>
       ) : (
@@ -449,7 +527,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="jan.kowalski@firma.pl"
+                placeholder={t('jan.kowalski@firma.pl')}
                 className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
               />
             </div>
@@ -463,7 +541,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Jan"
+                  placeholder={t('Jan')}
                   className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -475,7 +553,7 @@ export const ParticipantsView: React.FC<ParticipantsViewProps> = ({
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Kowalski"
+                  placeholder={t('Kowalski')}
                   className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>

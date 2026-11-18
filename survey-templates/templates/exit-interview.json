@@ -1,0 +1,102 @@
+{
+  "id": "exit-interview",
+  "order": 40,
+  "category": "hr",
+  "modes": ["cawi"],
+  "theme": "professional",
+  "minutes": 6,
+  "languages": ["pl", "en"],
+  "title": ["Ankieta wyjściowa (exit interview)", "Exit interview survey"],
+  "summary": ["Ankieta dla odchodzących pracowników: powody odejścia, co mogło zatrzymać, ocena sześciu obszarów pracy oraz gotowość do polecenia i powrotu.", "A survey for departing employees: reasons for leaving, what could have changed the decision, a rating of six job areas and willingness to recommend and return."],
+  "description": ["Twoje doświadczenia pomogą nam stać się lepszym pracodawcą. Ankieta zajmie około 6 minut.", "Your experience will help us become a better employer. The survey takes about 6 minutes."],
+  "welcome": ["Dziękujemy za wspólną pracę. Prosimy o szczere odpowiedzi — zostaną wykorzystane wyłącznie do poprawy warunków pracy.", "Thank you for working with us. Please answer honestly — your answers will only be used to improve working conditions."],
+  "end": ["Dziękujemy i życzymy powodzenia w dalszej karierze.", "Thank you, and we wish you every success in your future career."],
+  "groups": [
+    {
+      "title": ["Decyzja o odejściu", "Decision to leave"],
+      "questions": [
+        {
+          "code": "REASONS",
+          "type": "checkbox",
+          "mandatory": true,
+          "other": true,
+          "text": ["Co wpłynęło na Twoją decyzję o odejściu?", "What influenced your decision to leave?"],
+          "help": ["Zaznacz wszystkie pasujące odpowiedzi.", "Select all that apply."],
+          "subquestions": [
+            { "code": "R01", "text": ["Lepsza oferta finansowa", "A better financial offer"] },
+            { "code": "R02", "text": ["Brak możliwości rozwoju", "Lack of development opportunities"] },
+            { "code": "R03", "text": ["Relacje z przełożonym", "Relationship with my manager"] },
+            { "code": "R04", "text": ["Atmosfera w zespole", "Team atmosphere"] },
+            { "code": "R05", "text": ["Nadmierne obciążenie pracą", "Excessive workload"] },
+            { "code": "R06", "text": ["Zmiana ścieżki kariery", "Career change"] },
+            { "code": "R07", "text": ["Brak elastyczności (czas pracy, praca zdalna)", "Lack of flexibility (working hours, remote work)"] },
+            { "code": "R08", "text": ["Przeprowadzka lub powody osobiste", "Relocation or personal reasons"] }
+          ]
+        },
+        {
+          "code": "MAINREASON",
+          "type": "longtext",
+          "text": ["Co ostatecznie przesądziło o Twojej decyzji?", "What finally tipped your decision?"]
+        },
+        {
+          "code": "PREVENT",
+          "type": "radio",
+          "text": ["Czy mogliśmy zrobić coś, co skłoniłoby Cię do pozostania?", "Could we have done something that would have made you stay?"],
+          "options": [
+            { "code": "1", "text": ["Tak", "Yes"] },
+            { "code": "2", "text": ["Raczej tak", "Probably yes"] },
+            { "code": "3", "text": ["Raczej nie", "Probably not"] },
+            { "code": "4", "text": ["Nie", "No"] }
+          ]
+        },
+        {
+          "code": "PREVENTHOW",
+          "type": "longtext",
+          "relevance": "PREVENT.NAOK <= 2",
+          "text": ["Co mogłoby zmienić Twoją decyzję?", "What could have changed your decision?"]
+        }
+      ]
+    },
+    {
+      "title": ["Ocena pracy", "Rating your job"],
+      "questions": [
+        {
+          "code": "RATE",
+          "type": "array",
+          "text": ["Jak oceniasz poniższe obszary?", "How do you rate the following areas?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Zakres obowiązków", "Scope of responsibilities"] },
+            { "code": "Q02", "text": ["Wynagrodzenie i benefity", "Pay and benefits"] },
+            { "code": "Q03", "text": ["Możliwości rozwoju", "Development opportunities"] },
+            { "code": "Q04", "text": ["Współpraca z przełożonym", "Working with my manager"] },
+            { "code": "Q05", "text": ["Atmosfera w zespole", "Team atmosphere"] },
+            { "code": "Q06", "text": ["Równowaga między pracą a życiem prywatnym", "Work-life balance"] }
+          ],
+          "options": "@quality5"
+        }
+      ]
+    },
+    {
+      "title": ["Na koniec", "Finally"],
+      "questions": [
+        {
+          "code": "RECOMMEND",
+          "type": "radio",
+          "text": ["Czy polecił(a)byś nas jako pracodawcę?", "Would you recommend us as an employer?"],
+          "options": "@likelihood5"
+        },
+        {
+          "code": "RETURN",
+          "type": "radio",
+          "text": ["Czy rozważył(a)byś powrót do nas w przyszłości?", "Would you consider coming back in the future?"],
+          "options": "@likelihood5"
+        },
+        {
+          "code": "ADVICE",
+          "type": "longtext",
+          "text": ["Jaką radę dał(a)byś nam na przyszłość?", "What advice would you give us for the future?"]
+        }
+      ]
+    }
+  ]
+}

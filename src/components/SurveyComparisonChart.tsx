@@ -340,6 +340,7 @@ export const SurveyComparisonChart: React.FC<SurveyComparisonChartProps> = ({
               type="button"
               onClick={onClose}
               aria-label={t('Zamknij porównanie ankiet')}
+              data-back-close
               className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               <X className="h-4 w-4" />

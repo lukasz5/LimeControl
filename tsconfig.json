@@ -4,7 +4,10 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "module": "ESNext",
-    "types": ["vite/client", "vite-plugin-pwa/client"],
+    "types": [
+      "vite/client",
+      "vite-plugin-pwa/client"
+    ],
     "lib": [
       "ES2022",
       "DOM",
@@ -17,6 +20,9 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "paths": {
+      "#firebase-config": [
+        "./firebase-applet-config.example.json"
+      ],
       "@/*": [
         "./*"
       ]
@@ -24,5 +30,12 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "exclude": ["dist"]
+  "exclude": [
+    "dist",
+    "dist-mobile",
+    "dev-dist",
+    "mobile",
+    "site",
+    "limesurvey-themes/dist"
+  ]
 }

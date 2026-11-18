@@ -6,6 +6,7 @@ import {
   CopyPlus,
   Download,
   GitCompareArrows,
+  LibraryBig,
   Lock,
   MoreVertical,
   Play,
@@ -30,14 +31,19 @@ import {
 import type {
   ActiveSession,
   FieldmapEntry,
+  InstanceProfile,
   LimeSurveyItem,
   SurveyProperties,
   SurveySummary,
 } from '../types/limesurvey';
+import { FieldworkCard } from './FieldworkCard';
 import { useNotifications } from './NotificationProvider';
+import { SurveyToolsCard } from './SurveyToolsCard';
+import { TemplateLibrary } from './TemplateLibrary';
 import { SurveyComparisonChart } from './SurveyComparisonChart';
 import { SurveySummaryCharts } from './SurveySummaryCharts';
 import { SurveySummaryRing } from './SurveySummaryRing';
+import { saveFile } from '../services/nativeBridge';
 import { t } from '../i18n';
 
 interface SurveysViewProps {
@@ -48,6 +54,8 @@ interface SurveysViewProps {
   onScheduleSurvey: (surveyId: number) => void;
   onOpenParticipants: (surveyId: number) => void;
   onGoToInstances: () => void;
+  /** Profil połączonej instancji (adres bazowy dla łącznika StrefaAnkiet). */
+  activeProfile?: InstanceProfile | null;
 }
 
 type StatusFilter = 'all' | 'active' | 'inactive';
@@ -60,6 +68,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
   onScheduleSurvey,
   onOpenParticipants,
   onGoToInstances,
+  activeProfile = null,
 }) => {
   const { notify } = useNotifications();
   const [search, setSearch] = useState('');
@@ -67,6 +76,9 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
   const [selectedSurvey, setSelectedSurvey] = useState<LimeSurveyItem | null>(null);
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  /** Ankieta do zaznaczenia po odświeżeniu listy (np. świeżo zaimportowana z biblioteki). */
+  const [pendingSelectSid, setPendingSelectSid] = useState<number | null>(null);
   const [openQuickMenuSid, setOpenQuickMenuSid] = useState<number | null>(null);
   const comparisonSectionRef = useRef<HTMLDivElement | null>(null);
   const statsSectionRef = useRef<HTMLDivElement | null>(null);
@@ -138,6 +150,17 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
   }, [surveys, filter, search]);
 
   useEffect(() => {
+    // Świeżo zaimportowana ankieta ma pierwszeństwo przed dotychczasowym zaznaczeniem.
+    if (pendingSelectSid !== null) {
+      const imported = surveys.find((s) => Number(s.sid) === pendingSelectSid);
+      if (imported) {
+        setSearch('');
+        setFilter('all');
+        setSelectedSurvey(imported);
+        setPendingSelectSid(null);
+      }
+      return;
+    }
     if (!selectedSurvey && filteredSurveys.length > 0) {
       const firstActive = filteredSurveys.find((s) => s.active === 'Y');
       setSelectedSurvey(firstActive || filteredSurveys[0]);
@@ -147,7 +170,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         setSelectedSurvey(updated);
       }
     }
-  }, [surveys, filteredSurveys, selectedSurvey]);
+  }, [surveys, filteredSurveys, selectedSurvey, pendingSelectSid]);
 
   useEffect(() => {
     if (!activeSession || !selectedSurvey) {
@@ -382,17 +405,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         xls: 'application/vnd.ms-excel',
         json: 'application/json;charset=utf-8',
       };
-      const blob = new Blob([new Uint8Array(result.bytes)], {
-        type: mimeMap[exportFormat],
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `survey_${selectedSurvey.sid}_responses.${exportFormat}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      await saveFile(`survey_${selectedSurvey.sid}_responses.${exportFormat}`, new Uint8Array(result.bytes), mimeMap[exportFormat]);
 
       if (result.textPreview) {
         const lines = result.textPreview.split('\n').slice(0, 12).join('\n');
@@ -490,6 +503,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           type="button"
           onClick={() => setMobileDetailOpen(false)}
           aria-label={t('Zamknij szczegóły')}
+          data-back-close
           className="lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
         >
           <X className="h-5 w-5" />
@@ -671,6 +685,15 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         </div>
       </div>
 
+      <SurveyToolsCard
+        activeSession={activeSession}
+        survey={selectedSurvey}
+        properties={properties}
+        onPropertiesChanged={setProperties}
+      />
+
+      <FieldworkCard activeSession={activeSession} activeProfile={activeProfile} survey={selectedSurvey} />
+
       {/* Eksport odpowiedzi */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-3.5">
         <h4 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -814,6 +837,18 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2 self-start">
+          <button
+            type="button"
+            aria-expanded={libraryOpen}
+            onClick={() => setLibraryOpen((prev) => !prev)}
+            className={`inline-flex min-h-[44px] items-center gap-2 rounded-xl border px-3.5 text-xs font-semibold transition-colors ${libraryOpen
+                ? 'border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700'
+                : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+          >
+            <LibraryBig className="h-4 w-4" aria-hidden="true" />
+            <span>{t('Biblioteka szablonów')}</span>
+          </button>
+
           {surveys.length >= 2 && (
             <button
               type="button"
@@ -907,6 +942,17 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         </div>
       </div>
 
+      {libraryOpen && (
+        <TemplateLibrary
+          activeSession={activeSession}
+          onClose={() => setLibraryOpen(false)}
+          onImported={async (sid) => {
+            setPendingSelectSid(sid);
+            await onRefreshSurveys();
+          }}
+        />
+      )}
+
       {compareOpen && surveys.length >= 2 && (
         <div ref={comparisonSectionRef}>
           <SurveyComparisonChart
@@ -950,8 +996,20 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           {filteredSurveys.length === 0 ? (
             <div className="p-8 text-center space-y-3">
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                {t('Brak ankiet pasujących do wybranych kryteriów.')}
+                {surveys.length === 0
+                  ? t('Ta instancja nie ma jeszcze żadnej ankiety. Zacznij od gotowego szablonu.')
+                  : t('Brak ankiet pasujących do wybranych kryteriów.')}
               </p>
+              {surveys.length === 0 && !libraryOpen && (
+                <button
+                  type="button"
+                  onClick={() => setLibraryOpen(true)}
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700"
+                >
+                  <LibraryBig className="h-4 w-4" aria-hidden="true" />
+                  <span>{t('Otwórz bibliotekę szablonów')}</span>
+                </button>
+              )}
               {(search.trim() !== '' || filter !== 'all') && surveys.length > 0 && (
                 <button
                   type="button"

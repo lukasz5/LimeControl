@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import type { User } from 'firebase/auth';
-import { onAuthStateChanged } from 'firebase/auth';
 import {
   CalendarClock,
   ClipboardList,
@@ -22,19 +20,12 @@ import { ParticipantsView } from './components/ParticipantsView';
 import { PWAInstallButton } from './components/PWAInstallButton';
 import { ScheduleView } from './components/ScheduleView';
 import { SurveysView } from './components/SurveysView';
-import { auth, signOutUser } from './firebase';
-import {
-  deleteInstanceFromFirestore,
-  ensureUserProfile,
-  saveInstanceToFirestore,
-  subscribeUserInstances,
-  updateInstanceConnectionModeInFirestore,
-  updateInstanceLastConnectedInFirestore,
-  updateInstanceLimeVersionInFirestore,
-} from './services/firestoreInstances';
+import { getBackend, type BackendUser } from './backend';
 import {
   getSessionKey,
   getSiteSettings,
+  isEmptyParticipantList,
+  isMissingParticipantTable,
   LimeSurveyRpcError,
   listSurveys,
   releaseSessionKey,
@@ -54,24 +45,43 @@ import type {
 import { BrandLogo } from './components/BrandLogo';
 import { AppFooter } from './components/AppFooter';
 import { LanguageSwitch } from './components/LanguageSwitch';
+import { ScheduleNeedsServer } from './components/ServerConnection';
+import { useAndroidBackButton } from './hooks/useAndroidBackButton';
+import { useTextEntryActive } from './hooks/useTextEntryActive';
+import { isNativeApp } from './platform';
+import { syncStatusBar } from './services/nativeBridge';
 import { t, useLang } from './i18n';
 
 const LEGACY_PROFILES_KEY = 'limecontrol_profiles_v1';
 const THEME_KEY = 'limecontrol_theme_v1';
 
+/** Motyw wybrany przełącznikiem w nagłówku; null, dopóki użytkownik go nie użył. */
+function storedDarkMode(): boolean | null {
+  try {
+    const value = localStorage.getItem(THEME_KEY);
+    return value === 'dark' ? true : value === 'light' ? false : null;
+  } catch {
+    return null;
+  }
+}
+
+const systemDarkQuery = (): MediaQueryList | null =>
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+    : null;
+
 function AppContent() {
   // Subskrypcja języka: zmiana PL/EN przerenderowuje całe drzewo widoków.
   useLang();
   const { notify } = useNotifications();
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem(THEME_KEY) === 'dark';
-    } catch {
-      return false;
-    }
-  });
+  // Aplikacja mobilna przyjmuje motyw systemu, dopóki użytkownik nie wybierze własnego;
+  // w przeglądarce domyślny jest motyw jasny.
+  const [darkMode, setDarkMode] = useState<boolean>(
+    () => storedDarkMode() ?? (isNativeApp() && Boolean(systemDarkQuery()?.matches))
+  );
 
-  const [authUser, setAuthUser] = useState<User | null>(null);
+  const backend = getBackend();
+  const [authUser, setAuthUser] = useState<BackendUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -89,6 +99,10 @@ function AppContent() {
   } | null>(null);
   const [rpcTraces, setRpcTraces] = useState<RpcTraceEntry[]>([]);
   const [preselectedSid, setPreselectedSid] = useState<number | null>(null);
+  const [openServerPanel, setOpenServerPanel] = useState(false);
+  // Aplikacja mobilna: gdy klawiatura ekranowa jest otwarta, dolna nawigacja zasłaniałaby formularz.
+  const typing = useTextEntryActive(isNativeApp());
+  useAndroidBackButton(tab === 'surveys', () => setTab('surveys'));
 
   const runtimePasswordsRef = useRef<Record<string, string>>({});
   const knownJobStatusesRef = useRef<Map<string, ScheduleJob['status']> | null>(
@@ -108,17 +122,34 @@ function AppContent() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
+    void syncStatusBar(darkMode);
+  }, [darkMode]);
+
+  // Zmiana motywu systemu w trakcie pracy (aplikacja mobilna, bez własnego wyboru użytkownika).
+  useEffect(() => {
+    const query = isNativeApp() ? systemDarkQuery() : null;
+    if (!query) return;
+    const onChange = (event: MediaQueryListEvent) => {
+      if (storedDarkMode() === null) setDarkMode(event.matches);
+    };
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const next = !darkMode;
+    setDarkMode(next);
     try {
-      localStorage.setItem(THEME_KEY, darkMode ? 'dark' : 'light');
+      localStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
     } catch {
       // Ignore storage errors
     }
-  }, [darkMode]);
+  };
 
   useEffect(() => {
     let unsubscribeInstances: (() => void) | null = null;
 
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    const unsubscribeAuth = backend.onAuthChange((user) => {
       if (unsubscribeInstances) {
         unsubscribeInstances();
         unsubscribeInstances = null;
@@ -139,11 +170,11 @@ function AppContent() {
       setAuthError(null);
       setAuthLoading(false);
 
-      void ensureUserProfile(user).catch((err) => {
+      void backend.ensureUserProfile(user).catch((err) => {
         setAuthError(err instanceof Error ? err.message : String(err));
       });
 
-      unsubscribeInstances = subscribeUserInstances(
+      unsubscribeInstances = backend.subscribeInstances(
         user.uid,
         (cloudProfiles) => {
           setProfiles(
@@ -171,7 +202,7 @@ function AppContent() {
         unsubscribeInstances();
       }
     };
-  }, [notify]);
+  }, [notify, backend]);
 
   useEffect(() => {
     return subscribeRpcTrace((entry) => {
@@ -179,10 +210,12 @@ function AppContent() {
 
       if (!entry.ok) {
         const isExpectedProbe =
+          // Pusta instancja: „No surveys found” to pusta lista ankiet, nie błąd (patrz listSurveys).
+          (entry.method === 'list_surveys' && /no surveys found/i.test(entry.summary)) ||
           (entry.method === 'get_summary' &&
             /no data|not active|no survey/i.test(entry.summary)) ||
           (entry.method === 'list_participants' &&
-            /no token table|not exist|no data/i.test(entry.summary));
+            (isMissingParticipantTable(entry.summary) || isEmptyParticipantList(entry.summary) || /not exist/i.test(entry.summary)));
 
         if (!isExpectedProbe) {
           notify({
@@ -199,7 +232,8 @@ function AppContent() {
   }, [notify]);
 
   useEffect(() => {
-    if (!authUser) return;
+    // Tryb „na urządzeniu” nie ma serwera, więc nie ma też kolejki harmonogramu do odpytywania.
+    if (!authUser || backend.mode === 'device') return;
     let cancelled = false;
 
     const pollSchedules = async () => {
@@ -222,8 +256,8 @@ function AppContent() {
               shouldRefreshSurveys = true;
               notify({
                 type: 'success',
-                title: t('Zaplanowana aktywacja zakończona'),
-                message: t('Ankieta #{0} ({1}) została pomyślnie aktywowana.', job.surveyId, job.surveyTitle),
+                title: t('Zadanie harmonogramu zakończone'),
+                message: job.resultMessage || `${job.surveyTitle} (#${job.surveyId})`,
                 actionLabel: t('Harmonogram'),
                 onAction: () => setTab('schedule'),
                 dedupeKey: `job:${job.id}:completed`,
@@ -260,7 +294,7 @@ function AppContent() {
       cancelled = true;
       clearInterval(timer);
     };
-  }, [authUser, notify]);
+  }, [authUser, backend, notify]);
 
   async function refreshSurveysForSession(session: ActiveSession) {
     setLoadingSurveys(true);
@@ -332,11 +366,9 @@ function AppContent() {
       setActiveSession(session);
 
       if (authUser) {
-        void updateInstanceLastConnectedInFirestore(
-          authUser.uid,
-          profile.id,
-          sitename
-        ).catch(() => null);
+        void backend
+          .updateInstance(authUser.uid, profile.id, { lastConnectedAt: new Date().toISOString(), siteName: sitename })
+          .catch(() => null);
       }
 
       await refreshSurveysForSession(session);
@@ -365,7 +397,7 @@ function AppContent() {
       delete runtimePasswordsRef.current[profile.id];
     }
 
-    const saved = await saveInstanceToFirestore(authUser.uid, profile);
+    const saved = await backend.saveInstance(authUser.uid, profile);
     setProfiles((prev) => {
       const exists = prev.some((p) => p.id === saved.id);
       const hydrated: InstanceProfile = {
@@ -383,7 +415,7 @@ function AppContent() {
   async function handleDeleteProfile(profileId: string) {
     if (!authUser) return;
     delete runtimePasswordsRef.current[profileId];
-    await deleteInstanceFromFirestore(authUser.uid, profileId);
+    await backend.deleteInstance(authUser.uid, profileId);
     if (activeSession?.profileId === profileId) {
       setActiveSession(null);
       setSurveys([]);
@@ -395,7 +427,7 @@ function AppContent() {
     mode: ConnectionMode
   ) {
     if (!authUser) return;
-    await updateInstanceConnectionModeInFirestore(authUser.uid, profileId, mode);
+    await backend.updateInstance(authUser.uid, profileId, { connectionMode: mode });
     if (activeSession?.profileId === profileId) {
       setActiveSession((prev) =>
         prev ? { ...prev, connectionMode: mode } : prev
@@ -408,11 +440,7 @@ function AppContent() {
     limeVersion: LimeSurveyVersion
   ) {
     if (!authUser) return;
-    await updateInstanceLimeVersionInFirestore(
-      authUser.uid,
-      profileId,
-      limeVersion
-    );
+    await backend.updateInstance(authUser.uid, profileId, { limeVersion });
     if (activeSession?.profileId === profileId) {
       setActiveSession((prev) => (prev ? { ...prev, limeVersion } : prev));
     }
@@ -437,13 +465,13 @@ function AppContent() {
   async function handleSignOut() {
     await handleDisconnect();
     runtimePasswordsRef.current = {};
-    await signOutUser();
+    await backend.signOut();
   }
 
   if (authLoading || !authUser) {
     return (
       <>
-        <AuthGate loading={authLoading} authError={authError} />
+        <AuthGate loading={authLoading} authError={authError} mode={backend.mode} />
         <OfflineIndicator />
       </>
     );
@@ -471,8 +499,8 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
       {/* Sticky Header: 3-zone contract on desktop, compact 54px App Bar on mobile */}
-      <header className="sticky top-0 z-30 h-[54px] md:h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6">
+      <header className="sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md pt-safe">
+        <div className="mx-auto flex h-[54px] md:h-16 max-w-7xl items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6">
           <button
             type="button"
             onClick={() => setTab('surveys')}
@@ -521,26 +549,32 @@ function AppContent() {
                 />
               )}
               <span className="text-xs font-medium text-slate-700 dark:text-slate-300 max-w-[140px] truncate">
-                {authUser.email || authUser.displayName}
+                {backend.mode === 'device'
+                  ? t('Na tym urządzeniu')
+                  : backend.mode === 'local'
+                    ? t('Instalacja własna')
+                    : authUser.email || authUser.displayName}
               </span>
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                void handleSignOut();
-              }}
-              aria-label={t('Wyloguj z konta Google')}
-              title={t('Wyloguj ({0})', authUser.email || '')}
-              className="min-h-[44px] min-w-[44px] px-2.5 flex items-center justify-center gap-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs font-semibold"
-            >
-              <LogOut className="h-4 w-4" aria-hidden="true" />
-              <span className="hidden sm:inline">{t('Wyloguj')}</span>
-            </button>
+            {backend.mode !== 'device' && (
+              <button
+                type="button"
+                onClick={() => {
+                  void handleSignOut();
+                }}
+                aria-label={backend.mode === 'local' ? t('Wyloguj') : t('Wyloguj z konta Google')}
+                title={backend.mode === 'local' ? t('Wyloguj') : t('Wyloguj ({0})', authUser.email || '')}
+                className="min-h-[44px] min-w-[44px] px-2.5 flex items-center justify-center gap-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs font-semibold"
+              >
+                <LogOut className="h-4 w-4" aria-hidden="true" />
+                <span className="hidden sm:inline">{t('Wyloguj')}</span>
+              </button>
+            )}
 
             <button
               type="button"
-              onClick={() => setDarkMode((d) => !d)}
+              onClick={toggleDarkMode}
               aria-label={
                 darkMode ? t('Przełącz na tryb jasny') : t('Przełącz na tryb ciemny')
               }
@@ -556,7 +590,7 @@ function AppContent() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 pt-5 pb-24 md:pb-10">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 pt-5 pb-bottom-nav">
         {tab === 'surveys' && (
           <SurveysView
             activeSession={activeSession}
@@ -574,10 +608,20 @@ function AppContent() {
               setTab('participants');
             }}
             onGoToInstances={() => setTab('instances')}
+            activeProfile={activeProfile}
           />
         )}
 
-        {tab === 'schedule' && (
+        {tab === 'schedule' && backend.mode === 'device' && (
+          <ScheduleNeedsServer
+            onConnect={() => {
+              setOpenServerPanel(true);
+              setTab('instances');
+            }}
+          />
+        )}
+
+        {tab === 'schedule' && backend.mode !== 'device' && (
           <ScheduleView
             activeSession={activeSession}
             activeProfile={activeProfile}
@@ -612,6 +656,7 @@ function AppContent() {
             onSwitchConnectionMode={handleSwitchConnectionMode}
             onSwitchLimeVersion={handleSwitchLimeVersion}
             onClearTraces={() => setRpcTraces([])}
+            openServerPanel={openServerPanel}
           />
         )}
         <AppFooter className="mt-12 border-t border-slate-200 dark:border-slate-800 pt-6" />
@@ -620,7 +665,7 @@ function AppContent() {
       {/* Mobile Fixed Bottom Tab Bar (Thumb Zone) */}
       <nav
         aria-label={t('Dolna nawigacja mobilna')}
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pb-safe"
+        className={`md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pb-safe ${typing ? 'hidden' : ''}`}
       >
         <div className="grid grid-cols-4 h-16 items-center">
           {navItems.map((item) => {

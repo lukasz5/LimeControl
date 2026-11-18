@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/lukasz5/LimeControl/blob/main/SECURITY.md
+    about: Please report security problems privately — do not open a public issue.
+  - name: Documentation
+    url: https://limecontrol.eu/en/docs.html
+    about: Setup, connection modes, CORS and troubleshooting (also in Polish at limecontrol.eu/docs.html).
+  - name: Survey server deployment, maintenance and StrefaAnkiet services
+    url: https://strefabadan.pl
+    about: Commercial services by the authors of LimeControl.

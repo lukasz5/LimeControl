@@ -1,0 +1,142 @@
+{
+  "id": "test-koncepcji-produktu",
+  "order": 100,
+  "category": "research",
+  "modes": ["cawi"],
+  "theme": "marketing",
+  "minutes": 6,
+  "languages": ["pl", "en"],
+  "title": ["Test koncepcji produktu", "Product concept test"],
+  "summary": ["Badanie nowej koncepcji: atrakcyjność, unikalność, dopasowanie do potrzeb, intencja zakupu oraz cztery pytania cenowe metodą Van Westendorpa (PSM).", "A new concept study: appeal, uniqueness, relevance, purchase intent and four pricing questions using the Van Westendorp method (PSM)."],
+  "description": ["Chcemy poznać Twoją opinię o nowym pomyśle. Ankieta zajmie około 6 minut.", "We would like your opinion on a new idea. The survey takes about 6 minutes."],
+  "welcome": ["Za chwilę zobaczysz opis nowego produktu. Zapoznaj się z nim i odpowiedz na kilka pytań.", "You are about to see a description of a new product. Please read it and answer a few questions."],
+  "end": ["Dziękujemy — Twoja opinia pomoże nam dopracować produkt.", "Thank you — your opinion will help us refine the product."],
+  "groups": [
+    {
+      "title": ["Koncepcja", "The concept"],
+      "questions": [
+        {
+          "code": "CONCEPT",
+          "type": "info",
+          "text": ["<strong>[Tutaj wstaw opis koncepcji: nazwę, krótki opis, najważniejsze korzyści i zdjęcie lub wizualizację produktu.]</strong>", "<strong>[Insert the concept description here: name, short description, key benefits and a photo or visual of the product.]</strong>"]
+        },
+        {
+          "code": "APPEAL",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak bardzo podoba Ci się ten produkt?", "How much do you like this product?"],
+          "options": [
+            { "code": "1", "text": ["Zdecydowanie mi się nie podoba", "I strongly dislike it"] },
+            { "code": "2", "text": ["Raczej mi się nie podoba", "I dislike it"] },
+            { "code": "3", "text": ["Jest mi obojętny", "I am neutral"] },
+            { "code": "4", "text": ["Raczej mi się podoba", "I like it"] },
+            { "code": "5", "text": ["Zdecydowanie mi się podoba", "I like it very much"] }
+          ]
+        },
+        {
+          "code": "UNIQUE",
+          "type": "radio",
+          "text": ["Na ile ten produkt różni się od innych dostępnych na rynku?", "How different is this product from others available on the market?"],
+          "options": [
+            { "code": "1", "text": ["Wcale się nie różni", "Not at all different"] },
+            { "code": "2", "text": ["Trochę się różni", "Slightly different"] },
+            { "code": "3", "text": ["Umiarkowanie się różni", "Moderately different"] },
+            { "code": "4", "text": ["Bardzo się różni", "Very different"] },
+            { "code": "5", "text": ["Jest wyjątkowy", "Completely unique"] }
+          ]
+        },
+        {
+          "code": "RELEVANT",
+          "type": "radio",
+          "text": ["Ten produkt odpowiada na moje potrzeby.", "This product meets my needs."],
+          "options": "@agree5"
+        }
+      ]
+    },
+    {
+      "title": ["Zakup i cena", "Purchase and price"],
+      "description": ["Podawaj kwoty w swojej walucie, bez symbolu.", "Enter amounts in your currency, without the symbol."],
+      "questions": [
+        {
+          "code": "INTENT",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Czy kupił(a)byś ten produkt, gdyby był dostępny?", "Would you buy this product if it were available?"],
+          "options": "@likelihood5"
+        },
+        {
+          "code": "PTOOCHEAP",
+          "type": "number",
+          "attributes": {
+            "min_num_value_n": "0"
+          },
+          "text": ["Przy jakiej cenie uznał(a)byś produkt za tak tani, że zwątpił(a)byś w jego jakość?", "At what price would you consider the product so cheap that you would doubt its quality?"]
+        },
+        {
+          "code": "PBARGAIN",
+          "type": "number",
+          "attributes": {
+            "min_num_value_n": "0"
+          },
+          "text": ["Przy jakiej cenie uznał(a)byś produkt za okazję — dobry zakup za te pieniądze?", "At what price would you consider the product a bargain — a great buy for the money?"]
+        },
+        {
+          "code": "PEXPENSIVE",
+          "type": "number",
+          "attributes": {
+            "min_num_value_n": "0"
+          },
+          "text": ["Przy jakiej cenie produkt zacząłby wydawać Ci się drogi, ale nadal wart rozważenia?", "At what price would the product start to seem expensive, but still worth considering?"]
+        },
+        {
+          "code": "PTOOEXP",
+          "type": "number",
+          "attributes": {
+            "min_num_value_n": "0"
+          },
+          "text": ["Przy jakiej cenie uznał(a)byś produkt za zbyt drogi, aby go kupić?", "At what price would you consider the product too expensive to buy?"]
+        }
+      ]
+    },
+    {
+      "title": ["Twoja opinia", "Your opinion"],
+      "questions": [
+        {
+          "code": "LIKES",
+          "type": "longtext",
+          "text": ["Co najbardziej podoba Ci się w tym produkcie?", "What do you like most about this product?"]
+        },
+        {
+          "code": "DISLIKES",
+          "type": "longtext",
+          "text": ["Co Ci się nie podoba lub budzi wątpliwości?", "What do you dislike or have doubts about?"]
+        },
+        {
+          "code": "USAGE",
+          "type": "radio",
+          "text": ["Jak często korzystasz z podobnych produktów?", "How often do you use similar products?"],
+          "options": [
+            { "code": "1", "text": ["Codziennie", "Every day"] },
+            { "code": "2", "text": ["Co najmniej raz w tygodniu", "At least once a week"] },
+            { "code": "3", "text": ["Co najmniej raz w miesiącu", "At least once a month"] },
+            { "code": "4", "text": ["Rzadziej", "Less often"] },
+            { "code": "5", "text": ["Nigdy", "Never"] }
+          ]
+        },
+        {
+          "code": "AGE",
+          "type": "dropdown",
+          "text": ["Ile masz lat?", "How old are you?"],
+          "options": [
+            { "code": "1", "text": ["18–24", "18–24"] },
+            { "code": "2", "text": ["25–34", "25–34"] },
+            { "code": "3", "text": ["35–44", "35–44"] },
+            { "code": "4", "text": ["45–54", "45–54"] },
+            { "code": "5", "text": ["55–64", "55–64"] },
+            { "code": "6", "text": ["65 lub więcej", "65 or older"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

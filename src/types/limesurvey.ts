@@ -53,6 +53,8 @@ export interface SurveyProperties {
   template?: string;
   language?: string;
   additional_languages?: string;
+  /** Definicje dodatkowych pól uczestnika (JSON): {"attribute_1": {"description": "Telefon", …}}. */
+  attributedescriptions?: string | Record<string, unknown> | null;
   allowregister?: 'Y' | 'N' | string;
   autoredirect?: 'Y' | 'N' | string;
   datestamp?: 'Y' | 'N' | string;
@@ -123,9 +125,13 @@ export interface ScheduleStepLog {
   timestamp: string;
 }
 
+export type ScheduleAction = 'activate' | 'expire' | 'invite' | 'remind';
+
 export interface ScheduleJob {
   id: string;
   ownerUid?: string;
+  /** Rodzaj operacji; starsze wpisy bez pola to aktywacja. */
+  action?: ScheduleAction;
   surveyId: number;
   surveyTitle: string;
   instanceName: string;
@@ -138,6 +144,10 @@ export interface ScheduleJob {
   activateTokens: boolean;
   startdateAt: string | null;
   expiresAt: string | null;
+  minDaysBetween?: number | null;
+  maxReminders?: number | null;
+  repeatEveryDays?: number | null;
+  repeatRemaining?: number | null;
   clearCredentialsAfterRun: boolean;
   status: 'scheduled' | 'running' | 'completed' | 'failed' | 'cancelled';
   resultMessage: string;

@@ -1,0 +1,252 @@
+{
+  "id": "wywiad-cati",
+  "order": 110,
+  "category": "fieldwork",
+  "modes": ["cati"],
+  "theme": "cati",
+  "minutes": 8,
+  "languages": ["pl", "en"],
+  "title": ["Wywiad telefoniczny CATI — skrypt z wynikiem kontaktu", "CATI telephone interview — script with call outcome"],
+  "summary": ["Szkielet wywiadu telefonicznego: skrypt powitania, wynik kontaktu (rozmowa, oddzwonienie, odmowa), zgoda, blok pytań, metryczka i notatki ankietera. Zawiera pola uczestnika: telefon, status kontaktu, termin oddzwonienia, notatka.", "A telephone interview skeleton: opening script, call outcome (interview, callback, refusal), consent, a question block, demographics and interviewer notes. Includes participant fields: phone, contact status, callback time, note."],
+  "description": ["Wywiad telefoniczny realizowany przez ankietera.", "A telephone interview conducted by an interviewer."],
+  "welcome": ["Ekran dla ankietera. Teksty oznaczone „ANKIETER” są wskazówkami — nie odczytuj ich respondentowi.", "Interviewer screen. Texts marked “INTERVIEWER” are instructions — do not read them out to the respondent."],
+  "end": ["Wywiad zapisany. Możesz przejść do następnego kontaktu.", "Interview saved. You can move on to the next contact."],
+  "settings": {
+    "anonymized": "N",
+    "datestamp": "Y",
+    "savetimings": "Y",
+    "showprogress": "N",
+    "allowsave": "Y",
+    "showwelcome": "N"
+  },
+  "tokenAttributes": [
+    {
+      "name": ["Telefon", "Phone"]
+    },
+    {
+      "name": ["Status kontaktu", "Contact status"]
+    },
+    {
+      "name": ["Termin oddzwonienia", "Callback time"]
+    },
+    {
+      "name": ["Notatka ankietera", "Interviewer note"]
+    }
+  ],
+  "groups": [
+    {
+      "title": ["Nawiązanie rozmowy", "Opening the call"],
+      "questions": [
+        {
+          "code": "INTRO",
+          "type": "info",
+          "cssClass": "lc-interviewer",
+          "text": ["<strong>ANKIETER — odczytaj:</strong> Dzień dobry, nazywam się [imię i nazwisko] i dzwonię z [nazwa firmy]. Prowadzimy krótkie badanie na temat [temat]. Rozmowa potrwa około 8 minut. Czy mogę zadać Panu/Pani kilka pytań?", "<strong>INTERVIEWER — read out:</strong> Good morning, my name is [name] and I am calling from [company]. We are conducting a short survey about [topic]. It will take about 8 minutes. May I ask you a few questions?"]
+        },
+        {
+          "code": "CONTACT",
+          "type": "radio",
+          "mandatory": true,
+          "cssClass": "lc-interviewer",
+          "text": ["Wynik kontaktu", "Call outcome"],
+          "help": ["ANKIETER: nie odczytuj. Zaznacz wynik próby kontaktu.", "INTERVIEWER: do not read out. Record the outcome of the call attempt."],
+          "options": [
+            { "code": "1", "text": ["Respondent zgadza się na rozmowę teraz", "The respondent agrees to be interviewed now"] },
+            { "code": "2", "text": ["Prosi o telefon w innym terminie", "Asks to be called back at another time"] },
+            { "code": "3", "text": ["Odmawia udziału", "Refuses to take part"] },
+            { "code": "4", "text": ["Nie ta osoba lub błędny numer", "Wrong person or wrong number"] },
+            { "code": "5", "text": ["Nie spełnia kryteriów badania", "Does not meet the study criteria"] }
+          ]
+        },
+        {
+          "code": "CALLBACK",
+          "type": "date",
+          "mandatory": true,
+          "relevance": "CONTACT.NAOK == 2",
+          "cssClass": "lc-interviewer",
+          "attributes": {
+            "date_format": "yyyy-mm-dd HH:MM"
+          },
+          "text": ["Termin oddzwonienia", "Callback date and time"],
+          "help": ["ANKIETER: zapytaj o dogodny dzień i godzinę.", "INTERVIEWER: ask for a convenient day and time."]
+        },
+        {
+          "code": "CALLBACKNOTE",
+          "type": "text",
+          "relevance": "CONTACT.NAOK == 2",
+          "cssClass": "lc-interviewer",
+          "text": ["Uwagi do oddzwonienia (np. o kogo pytać)", "Callback notes (e.g. who to ask for)"]
+        },
+        {
+          "code": "REFUSAL",
+          "type": "radio",
+          "other": true,
+          "relevance": "CONTACT.NAOK == 3",
+          "cssClass": "lc-interviewer",
+          "text": ["Powód odmowy", "Reason for refusal"],
+          "help": ["ANKIETER: nie odczytuj. Zaznacz powód podany przez respondenta.", "INTERVIEWER: do not read out. Record the reason given by the respondent."],
+          "options": [
+            { "code": "1", "text": ["Brak czasu", "No time"] },
+            { "code": "2", "text": ["Nie interesuje mnie temat", "Not interested in the topic"] },
+            { "code": "3", "text": ["Nie udzielam informacji przez telefon", "I do not give information over the phone"] },
+            { "code": "4", "text": ["Nie podał(a) powodu", "No reason given"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Zgoda i kwalifikacja", "Consent and screening"],
+      "relevance": "CONTACT.NAOK == 1",
+      "questions": [
+        {
+          "code": "CONSENT",
+          "type": "yesno",
+          "mandatory": true,
+          "text": ["Udział w badaniu jest dobrowolny, a odpowiedzi posłużą wyłącznie do zbiorczych zestawień. Czy zgadza się Pan/Pani na udział?", "Taking part is voluntary and your answers will only be used in aggregate. Do you agree to take part?"]
+        },
+        {
+          "code": "AGEGROUP",
+          "type": "radio",
+          "mandatory": true,
+          "relevance": "CONSENT.NAOK == \"Y\"",
+          "text": ["Do której grupy wiekowej Pan/Pani należy?", "Which age group are you in?"],
+          "help": ["ANKIETER: odczytaj przedziały.", "INTERVIEWER: read out the ranges."],
+          "options": [
+            { "code": "1", "text": ["18–24 lata", "18–24"] },
+            { "code": "2", "text": ["25–34 lata", "25–34"] },
+            { "code": "3", "text": ["35–44 lata", "35–44"] },
+            { "code": "4", "text": ["45–54 lata", "45–54"] },
+            { "code": "5", "text": ["55–64 lata", "55–64"] },
+            { "code": "6", "text": ["65 lat lub więcej", "65 or older"] },
+            { "code": "7", "text": ["Odmowa odpowiedzi", "Refused"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Pytania główne", "Main questions"],
+      "relevance": "CONTACT.NAOK == 1 and CONSENT.NAOK == \"Y\"",
+      "questions": [
+        {
+          "code": "Q1",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak ogólnie ocenia Pan/Pani [badany produkt lub usługę]?", "Overall, how satisfied are you with [the product or service]?"],
+          "help": ["ANKIETER: odczytaj skalę.", "INTERVIEWER: read out the scale."],
+          "options": "@satisfaction5"
+        },
+        {
+          "code": "Q2",
+          "type": "checkbox",
+          "other": true,
+          "text": ["Co miało największy wpływ na tę ocenę?", "What influenced this rating the most?"],
+          "help": ["ANKIETER: nie odczytuj odpowiedzi. Zaznacz wszystkie wymienione.", "INTERVIEWER: do not read out the answers. Select all that are mentioned."],
+          "subquestions": [
+            { "code": "A01", "text": ["Jakość", "Quality"] },
+            { "code": "A02", "text": ["Cena", "Price"] },
+            { "code": "A03", "text": ["Obsługa klienta", "Customer service"] },
+            { "code": "A04", "text": ["Dostępność", "Availability"] },
+            { "code": "A05", "text": ["Terminowość", "Timeliness"] }
+          ]
+        },
+        {
+          "code": "Q3",
+          "type": "array",
+          "text": ["Na ile prawdopodobne jest, że poleci Pan/Pani [produkt lub usługę] znajomym?", "How likely are you to recommend [the product or service] to friends?"],
+          "help": ["ANKIETER: skala od 0 (zdecydowanie nie) do 10 (zdecydowanie tak).", "INTERVIEWER: a scale from 0 (not at all likely) to 10 (extremely likely)."],
+          "subquestions": [
+            { "code": "SQ001", "text": ["Ocena", "Rating"] }
+          ],
+          "options": "@nps11"
+        },
+        {
+          "code": "Q4",
+          "type": "longtext",
+          "text": ["Co należałoby poprawić w pierwszej kolejności?", "What should be improved first?"],
+          "help": ["ANKIETER: zapisz odpowiedź dosłownie.", "INTERVIEWER: record the answer verbatim."]
+        }
+      ]
+    },
+    {
+      "title": ["Metryczka", "Demographics"],
+      "relevance": "CONTACT.NAOK == 1 and CONSENT.NAOK == \"Y\"",
+      "questions": [
+        {
+          "code": "GENDER",
+          "type": "radio",
+          "text": ["Płeć respondenta", "Respondent's gender"],
+          "help": ["ANKIETER: zapytaj tylko w razie wątpliwości.", "INTERVIEWER: ask only if in doubt."],
+          "options": [
+            { "code": "1", "text": ["Kobieta", "Female"] },
+            { "code": "2", "text": ["Mężczyzna", "Male"] },
+            { "code": "3", "text": ["Inna", "Other"] },
+            { "code": "4", "text": ["Odmowa odpowiedzi", "Refused"] }
+          ]
+        },
+        {
+          "code": "EDU",
+          "type": "radio",
+          "text": ["Jakie ma Pan/Pani wykształcenie?", "What is your highest level of education?"],
+          "options": [
+            { "code": "1", "text": ["Podstawowe", "Primary"] },
+            { "code": "2", "text": ["Zasadnicze zawodowe", "Vocational"] },
+            { "code": "3", "text": ["Średnie", "Secondary"] },
+            { "code": "4", "text": ["Wyższe", "Higher"] },
+            { "code": "5", "text": ["Odmowa odpowiedzi", "Refused"] }
+          ]
+        },
+        {
+          "code": "LOCALITY",
+          "type": "radio",
+          "text": ["Jak duża jest miejscowość, w której Pan/Pani mieszka?", "How large is the place where you live?"],
+          "options": [
+            { "code": "1", "text": ["Wieś", "Village"] },
+            { "code": "2", "text": ["Miasto do 20 tys. mieszkańców", "Town up to 20,000 inhabitants"] },
+            { "code": "3", "text": ["Miasto 20–100 tys.", "Town of 20,000–100,000"] },
+            { "code": "4", "text": ["Miasto 100–500 tys.", "City of 100,000–500,000"] },
+            { "code": "5", "text": ["Miasto powyżej 500 tys.", "City over 500,000"] },
+            { "code": "6", "text": ["Odmowa odpowiedzi", "Refused"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Zakończenie", "Closing"],
+      "questions": [
+        {
+          "code": "OUTRO",
+          "type": "info",
+          "relevance": "CONTACT.NAOK == 1 and CONSENT.NAOK == \"Y\"",
+          "cssClass": "lc-interviewer",
+          "text": ["<strong>ANKIETER — odczytaj:</strong> To już wszystkie pytania. Bardzo dziękuję za rozmowę i poświęcony czas. Do widzenia.", "<strong>INTERVIEWER — read out:</strong> Those are all my questions. Thank you very much for your time. Goodbye."]
+        },
+        {
+          "code": "OUTROSHORT",
+          "type": "info",
+          "relevance": "!(CONTACT.NAOK == 1 and CONSENT.NAOK == \"Y\")",
+          "cssClass": "lc-interviewer",
+          "text": ["<strong>ANKIETER — odczytaj:</strong> Rozumiem, dziękuję za poświęcony czas. Do widzenia.", "<strong>INTERVIEWER — read out:</strong> I understand, thank you for your time. Goodbye."]
+        },
+        {
+          "code": "IVQUALITY",
+          "type": "radio",
+          "relevance": "CONTACT.NAOK == 1 and CONSENT.NAOK == \"Y\"",
+          "cssClass": "lc-interviewer",
+          "text": ["Przebieg rozmowy (wypełnia ankieter)", "How the call went (completed by the interviewer)"],
+          "options": [
+            { "code": "1", "text": ["Bez zakłóceń", "No problems"] },
+            { "code": "2", "text": ["Respondent spieszył się lub był rozkojarzony", "The respondent was in a hurry or distracted"] },
+            { "code": "3", "text": ["Słaba jakość połączenia", "Poor line quality"] },
+            { "code": "4", "text": ["Rozmowa została przerwana", "The call was cut off"] }
+          ]
+        },
+        {
+          "code": "IVNOTE",
+          "type": "longtext",
+          "cssClass": "lc-interviewer",
+          "text": ["Uwagi ankietera", "Interviewer's notes"]
+        }
+      ]
+    }
+  ]
+}

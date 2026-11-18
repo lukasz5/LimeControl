@@ -1,0 +1,4 @@
+# Identyfikatory aplikacji LimeControl w obu sklepach.
+# Dane kont (klucze API, identyfikator zespołu) podawaj w zmiennych środowiskowych — patrz mobile/README.md.
+app_identifier("eu.limecontrol.app") # App Store: Bundle ID
+package_name("eu.limecontrol.app")   # Google Play: nazwa pakietu

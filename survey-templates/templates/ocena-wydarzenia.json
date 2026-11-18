@@ -1,0 +1,88 @@
+{
+  "id": "ocena-wydarzenia",
+  "order": 60,
+  "category": "events",
+  "modes": ["cawi"],
+  "theme": "social",
+  "minutes": 4,
+  "languages": ["pl", "en"],
+  "title": ["Ocena wydarzenia lub konferencji", "Event or conference feedback"],
+  "summary": ["Ankieta dla uczestników wydarzenia: satysfakcja, spełnienie oczekiwań, ocena sześciu elementów, źródło informacji i chęć udziału w kolejnej edycji.", "A survey for event attendees: satisfaction, expectations, a rating of six elements, how they heard about the event and intention to attend again."],
+  "description": ["Dziękujemy za udział w wydarzeniu. Powiedz nam, jak było — to zajmie około 4 minut.", "Thank you for attending. Tell us how it went — it takes about 4 minutes."],
+  "welcome": ["Twoja opinia pomoże nam przygotować jeszcze lepszą kolejną edycję.", "Your opinion will help us make the next edition even better."],
+  "end": ["Dziękujemy za opinię i do zobaczenia na kolejnych wydarzeniach!", "Thank you for your feedback — see you at our next events!"],
+  "groups": [
+    {
+      "title": ["Ogólna ocena", "Overall rating"],
+      "questions": [
+        {
+          "code": "OVERALL",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak ogólnie oceniasz wydarzenie?", "Overall, how satisfied are you with the event?"],
+          "options": "@satisfaction5"
+        },
+        {
+          "code": "EXPECT",
+          "type": "radio",
+          "text": ["Czy wydarzenie spełniło Twoje oczekiwania?", "Did the event meet your expectations?"],
+          "options": [
+            { "code": "1", "text": ["Przerosło moje oczekiwania", "It exceeded my expectations"] },
+            { "code": "2", "text": ["Spełniło oczekiwania", "It met my expectations"] },
+            { "code": "3", "text": ["Spełniło je częściowo", "It partly met them"] },
+            { "code": "4", "text": ["Nie spełniło oczekiwań", "It did not meet my expectations"] }
+          ]
+        },
+        {
+          "code": "ELEMENTS",
+          "type": "array",
+          "text": ["Jak oceniasz poszczególne elementy wydarzenia?", "How do you rate each element of the event?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Program i tematyka", "Programme and topics"] },
+            { "code": "Q02", "text": ["Prelegenci", "Speakers"] },
+            { "code": "Q03", "text": ["Możliwość nawiązania kontaktów", "Networking opportunities"] },
+            { "code": "Q04", "text": ["Miejsce wydarzenia", "Venue"] },
+            { "code": "Q05", "text": ["Rejestracja i organizacja", "Registration and organisation"] },
+            { "code": "Q06", "text": ["Catering", "Catering"] }
+          ],
+          "options": "@quality5na"
+        }
+      ]
+    },
+    {
+      "title": ["Szczegóły", "Details"],
+      "questions": [
+        {
+          "code": "BESTSESSION",
+          "type": "text",
+          "text": ["Która sesja lub prelekcja była dla Ciebie najbardziej wartościowa?", "Which session or talk was the most valuable for you?"]
+        },
+        {
+          "code": "SOURCE",
+          "type": "checkbox",
+          "other": true,
+          "text": ["Skąd wiesz o wydarzeniu?", "How did you hear about the event?"],
+          "help": ["Zaznacz wszystkie pasujące odpowiedzi.", "Select all that apply."],
+          "subquestions": [
+            { "code": "S01", "text": ["Newsletter lub e-mail", "Newsletter or email"] },
+            { "code": "S02", "text": ["Media społecznościowe", "Social media"] },
+            { "code": "S03", "text": ["Polecenie znajomych", "Recommendation from a friend"] },
+            { "code": "S04", "text": ["Strona internetowa", "Website"] },
+            { "code": "S05", "text": ["Zaproszenie od organizatora", "Invitation from the organiser"] }
+          ]
+        },
+        {
+          "code": "AGAIN",
+          "type": "radio",
+          "text": ["Czy weźmiesz udział w kolejnej edycji?", "Will you attend the next edition?"],
+          "options": "@likelihood5"
+        },
+        {
+          "code": "SUGGEST",
+          "type": "longtext",
+          "text": ["Co powinniśmy zmienić lub dodać następnym razem?", "What should we change or add next time?"]
+        }
+      ]
+    }
+  ]
+}

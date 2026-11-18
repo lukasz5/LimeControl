@@ -63,3 +63,15 @@ export function t(key: string, ...args: unknown[]): string {
   if (!args.length) return raw;
   return raw.replace(/\{(\d+)\}/g, (m, i) => (Number(i) < args.length ? String(args[Number(i)]) : m));
 }
+
+/**
+ * Odmiana rzeczownika przez liczby: plural(3, ['pytanie', 'pytania', 'pytań'], ['question', 'questions'])
+ * → „3 pytania” / “3 questions”.
+ */
+export function plural(count: number, pl: [string, string, string], english: [string, string]): string {
+  if (current === 'en') return `${count} ${count === 1 ? english[0] : english[1]}`;
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  const form = count === 1 ? pl[0] : mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20) ? pl[1] : pl[2];
+  return `${count} ${form}`;
+}

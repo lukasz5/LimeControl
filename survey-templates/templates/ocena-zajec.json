@@ -1,0 +1,98 @@
+{
+  "id": "ocena-zajec",
+  "order": 70,
+  "category": "education",
+  "modes": ["cawi"],
+  "theme": "minimalist",
+  "minutes": 5,
+  "languages": ["pl", "en"],
+  "title": ["Ocena zajęć dydaktycznych", "Course evaluation"],
+  "summary": ["Studencka ocena zajęć: organizacja kursu, praca prowadzącego, nakład pracy i frekwencja oraz dwa pytania otwarte.", "A student course evaluation: course organisation, the instructor, workload and attendance, plus two open questions."],
+  "description": ["Anonimowa ocena zajęć. Wypełnienie zajmie około 5 minut.", "An anonymous course evaluation. It takes about 5 minutes to complete."],
+  "welcome": ["Twoja opinia jest anonimowa i pomoże ulepszyć zajęcia w kolejnych semestrach.", "Your feedback is anonymous and will help improve the course in future semesters."],
+  "end": ["Dziękujemy za ocenę zajęć.", "Thank you for evaluating the course."],
+  "groups": [
+    {
+      "title": ["Zajęcia", "The course"],
+      "questions": [
+        {
+          "code": "COURSE",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Na ile zgadzasz się z poniższymi stwierdzeniami?", "How much do you agree with the following statements?"],
+          "subquestions": [
+            { "code": "Q01", "text": ["Cele i wymagania zostały jasno przedstawione.", "The objectives and requirements were clearly presented."] },
+            { "code": "Q02", "text": ["Zajęcia były dobrze zorganizowane.", "The course was well organised."] },
+            { "code": "Q03", "text": ["Materiały pomagały w nauce.", "The materials supported my learning."] },
+            { "code": "Q04", "text": ["Kryteria oceniania były jasne i przestrzegane.", "The assessment criteria were clear and followed."] },
+            { "code": "Q05", "text": ["Zajęcia poszerzyły moją wiedzę lub umiejętności.", "The course improved my knowledge or skills."] }
+          ],
+          "options": "@agree5"
+        }
+      ]
+    },
+    {
+      "title": ["Prowadzący", "The instructor"],
+      "questions": [
+        {
+          "code": "TEACHER",
+          "type": "array",
+          "mandatory": true,
+          "text": ["Prowadzący zajęcia…", "The instructor…"],
+          "subquestions": [
+            { "code": "Q01", "text": ["tłumaczył(a) w zrozumiały sposób.", "explained things clearly."] },
+            { "code": "Q02", "text": ["zachęcał(a) do zadawania pytań i dyskusji.", "encouraged questions and discussion."] },
+            { "code": "Q03", "text": ["był(a) dostępny(-a) na konsultacjach.", "was available for consultations."] },
+            { "code": "Q04", "text": ["traktował(a) studentów z szacunkiem.", "treated students with respect."] }
+          ],
+          "options": "@agree5"
+        }
+      ]
+    },
+    {
+      "title": ["Twój udział i podsumowanie", "Your participation and summary"],
+      "questions": [
+        {
+          "code": "WORKLOAD",
+          "type": "radio",
+          "text": ["Jaki był nakład pracy w porównaniu z innymi zajęciami?", "How did the workload compare with other courses?"],
+          "options": [
+            { "code": "1", "text": ["Znacznie mniejszy", "Much lighter"] },
+            { "code": "2", "text": ["Mniejszy", "Lighter"] },
+            { "code": "3", "text": ["Podobny", "About the same"] },
+            { "code": "4", "text": ["Większy", "Heavier"] },
+            { "code": "5", "text": ["Znacznie większy", "Much heavier"] }
+          ]
+        },
+        {
+          "code": "ATTEND",
+          "type": "radio",
+          "text": ["W ilu zajęciach uczestniczyłeś(-aś)?", "How many classes did you attend?"],
+          "options": [
+            { "code": "1", "text": ["Mniej niż w połowie", "Less than half"] },
+            { "code": "2", "text": ["Mniej więcej w połowie", "About half"] },
+            { "code": "3", "text": ["W większości", "Most of them"] },
+            { "code": "4", "text": ["We wszystkich lub prawie wszystkich", "All or nearly all"] }
+          ]
+        },
+        {
+          "code": "OVERALL",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak ogólnie oceniasz te zajęcia?", "How do you rate this course overall?"],
+          "options": "@quality5"
+        },
+        {
+          "code": "STRENGTHS",
+          "type": "longtext",
+          "text": ["Co było mocną stroną zajęć?", "What were the strengths of the course?"]
+        },
+        {
+          "code": "CHANGES",
+          "type": "longtext",
+          "text": ["Co warto zmienić?", "What should be changed?"]
+        }
+      ]
+    }
+  ]
+}

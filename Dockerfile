@@ -9,9 +9,18 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-# Firebase web config is not committed; CI writes it before the build.
-RUN test -f firebase-applet-config.json \
-  || (echo "firebase-applet-config.json is missing" >&2 && exit 1)
+# Two flavours of the same image:
+#   - cloud service (default): Google sign-in + Firestore. The Firebase web config is not
+#     committed; CI writes firebase-applet-config.json before the build.
+#   - self-hosted: build with --build-arg VITE_AUTH_MODE=local. No Firebase config is needed
+#     or embedded; users sign in with an access key (see deploy/selfhost/).
+ARG VITE_AUTH_MODE=""
+ENV VITE_AUTH_MODE=$VITE_AUTH_MODE
+RUN if [ "$VITE_AUTH_MODE" = "local" ]; then \
+      echo '{}' > firebase-applet-config.json; \
+    elif [ ! -f firebase-applet-config.json ]; then \
+      echo "firebase-applet-config.json is missing (or build with --build-arg VITE_AUTH_MODE=local)" >&2; exit 1; \
+    fi
 
 ARG VITE_SUPPORT_URL=""
 ARG VITE_APP_STORE_URL=""
@@ -36,6 +45,7 @@ WORKDIR /app
 COPY --from=build --chown=node:node /src/server.mjs ./server.mjs
 COPY --from=build --chown=node:node /src/dist ./dist
 COPY --from=build --chown=node:node /src/firebase-applet-config.json ./firebase-applet-config.json
+COPY --from=build --chown=node:node /src/package.json ./package.json
 RUN mkdir -p /app/data && chown node:node /app/data
 
 USER node

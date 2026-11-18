@@ -1,0 +1,230 @@
+{
+  "id": "wywiad-capi",
+  "order": 120,
+  "category": "fieldwork",
+  "modes": ["capi"],
+  "theme": "capi",
+  "minutes": 10,
+  "languages": ["pl", "en"],
+  "title": ["Wywiad bezpośredni CAPI — badanie terenowe", "CAPI face-to-face interview — field study"],
+  "summary": ["Szkielet wywiadu terenowego na tablecie: dane wywiadu (ankieter, punkt, miejsce), zgoda, kwalifikacja, blok pytań z kartami odpowiedzi i rankingiem, metryczka oraz obserwacje ankietera po wywiadzie.", "A tablet field interview skeleton: interview details (interviewer, sampling point, place), consent, screening, a question block with show cards and ranking, demographics and post-interview observations."],
+  "description": ["Wywiad bezpośredni realizowany przez ankietera na tablecie lub telefonie.", "A face-to-face interview conducted by an interviewer on a tablet or phone."],
+  "welcome": ["Ekran dla ankietera. Teksty oznaczone „ANKIETER” są wskazówkami — nie odczytuj ich respondentowi.", "Interviewer screen. Texts marked “INTERVIEWER” are instructions — do not read them out to the respondent."],
+  "end": ["Wywiad zapisany. Aby rozpocząć kolejny, otwórz ankietę ponownie.", "Interview saved. To start the next one, open the survey again."],
+  "settings": {
+    "datestamp": "Y",
+    "savetimings": "Y",
+    "showwelcome": "N",
+    "allowsave": "Y"
+  },
+  "groups": [
+    {
+      "title": ["Dane wywiadu", "Interview details"],
+      "description": ["Wypełnia ankieter przed rozpoczęciem rozmowy.", "Completed by the interviewer before the interview starts."],
+      "questions": [
+        {
+          "code": "IVID",
+          "type": "text",
+          "mandatory": true,
+          "cssClass": "lc-interviewer",
+          "text": ["Numer ankietera", "Interviewer ID"]
+        },
+        {
+          "code": "POINT",
+          "type": "text",
+          "cssClass": "lc-interviewer",
+          "text": ["Numer punktu lub rejonu", "Sampling point or area number"]
+        },
+        {
+          "code": "PLACE",
+          "type": "radio",
+          "mandatory": true,
+          "other": true,
+          "cssClass": "lc-interviewer",
+          "text": ["Miejsce realizacji wywiadu", "Place of interview"],
+          "options": [
+            { "code": "1", "text": ["Mieszkanie respondenta", "Respondent's home"] },
+            { "code": "2", "text": ["Sklep lub punkt usługowy", "Shop or service point"] },
+            { "code": "3", "text": ["Ulica lub przestrzeń publiczna", "Street or public space"] },
+            { "code": "4", "text": ["Miejsce pracy", "Workplace"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Zgoda i kwalifikacja", "Consent and screening"],
+      "questions": [
+        {
+          "code": "INTRO",
+          "type": "info",
+          "cssClass": "lc-interviewer",
+          "text": ["<strong>ANKIETER — odczytaj:</strong> Dzień dobry, nazywam się [imię i nazwisko], jestem ankieterem [nazwa firmy]. Prowadzimy badanie na temat [temat]. Rozmowa potrwa około 10 minut, jest dobrowolna i anonimowa.", "<strong>INTERVIEWER — read out:</strong> Good morning, my name is [name] and I am an interviewer for [company]. We are conducting a study about [topic]. It will take about 10 minutes and is voluntary and anonymous."]
+        },
+        {
+          "code": "CONSENT",
+          "type": "yesno",
+          "mandatory": true,
+          "text": ["Czy zgadza się Pan/Pani na udział w badaniu?", "Do you agree to take part in the study?"]
+        },
+        {
+          "code": "SCREENOUT",
+          "type": "info",
+          "relevance": "CONSENT.NAOK == \"N\"",
+          "cssClass": "lc-interviewer",
+          "text": ["<strong>ANKIETER:</strong> podziękuj i zakończ wywiad. Przejdź dalej, aby zapisać odmowę.", "<strong>INTERVIEWER:</strong> thank the person and end the interview. Continue to record the refusal."]
+        },
+        {
+          "code": "AGE",
+          "type": "number",
+          "mandatory": true,
+          "relevance": "CONSENT.NAOK == \"Y\"",
+          "attributes": {
+            "min_num_value_n": "15",
+            "max_num_value_n": "110",
+            "num_value_int_only": "1"
+          },
+          "text": ["Ile ma Pan/Pani lat?", "How old are you?"]
+        },
+        {
+          "code": "GENDER",
+          "type": "radio",
+          "relevance": "CONSENT.NAOK == \"Y\"",
+          "cssClass": "lc-interviewer",
+          "text": ["Płeć respondenta", "Respondent's gender"],
+          "help": ["ANKIETER: zaznacz bez pytania; zapytaj tylko w razie wątpliwości.", "INTERVIEWER: record without asking; ask only if in doubt."],
+          "options": [
+            { "code": "1", "text": ["Kobieta", "Female"] },
+            { "code": "2", "text": ["Mężczyzna", "Male"] },
+            { "code": "3", "text": ["Inna", "Other"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Pytania główne", "Main questions"],
+      "relevance": "CONSENT.NAOK == \"Y\"",
+      "questions": [
+        {
+          "code": "Q1",
+          "type": "radio",
+          "mandatory": true,
+          "text": ["Jak często korzysta Pan/Pani z [badany produkt lub usługa]?", "How often do you use [the product or service]?"],
+          "help": ["ANKIETER: pokaż kartę A.", "INTERVIEWER: show card A."],
+          "options": [
+            { "code": "1", "text": ["Codziennie", "Every day"] },
+            { "code": "2", "text": ["Kilka razy w tygodniu", "A few times a week"] },
+            { "code": "3", "text": ["Kilka razy w miesiącu", "A few times a month"] },
+            { "code": "4", "text": ["Rzadziej", "Less often"] },
+            { "code": "5", "text": ["Nigdy", "Never"] }
+          ]
+        },
+        {
+          "code": "Q2",
+          "type": "array",
+          "relevance": "Q1.NAOK <= 4",
+          "text": ["Jak ocenia Pan/Pani następujące elementy?", "How do you rate the following?"],
+          "help": ["ANKIETER: pokaż kartę B i odczytuj kolejne elementy.", "INTERVIEWER: show card B and read out each item."],
+          "subquestions": [
+            { "code": "Q01", "text": ["Jakość", "Quality"] },
+            { "code": "Q02", "text": ["Dostępność", "Availability"] },
+            { "code": "Q03", "text": ["Cena", "Price"] },
+            { "code": "Q04", "text": ["Obsługa", "Service"] }
+          ],
+          "options": "@quality5na"
+        },
+        {
+          "code": "Q3",
+          "type": "ranking",
+          "text": ["Co jest dla Pana/Pani najważniejsze przy wyborze? Proszę uszeregować od najważniejszego.", "What matters most to you when choosing? Please rank from the most important."],
+          "help": ["ANKIETER: pokaż kartę C. Dotknij pozycji dwukrotnie lub przeciągnij ją na listę.", "INTERVIEWER: show card C. Double-tap an item or drag it to the list."],
+          "options": [
+            { "code": "1", "text": ["Cena", "Price"] },
+            { "code": "2", "text": ["Jakość", "Quality"] },
+            { "code": "3", "text": ["Marka", "Brand"] },
+            { "code": "4", "text": ["Dostępność", "Availability"] },
+            { "code": "5", "text": ["Opinie innych", "Other people's opinions"] }
+          ]
+        },
+        {
+          "code": "Q4",
+          "type": "longtext",
+          "text": ["Co należałoby zmienić lub poprawić?", "What should be changed or improved?"],
+          "help": ["ANKIETER: zapisz odpowiedź dosłownie.", "INTERVIEWER: record the answer verbatim."]
+        }
+      ]
+    },
+    {
+      "title": ["Metryczka", "Demographics"],
+      "relevance": "CONSENT.NAOK == \"Y\"",
+      "questions": [
+        {
+          "code": "EDU",
+          "type": "radio",
+          "text": ["Jakie ma Pan/Pani wykształcenie?", "What is your highest level of education?"],
+          "options": [
+            { "code": "1", "text": ["Podstawowe", "Primary"] },
+            { "code": "2", "text": ["Zasadnicze zawodowe", "Vocational"] },
+            { "code": "3", "text": ["Średnie", "Secondary"] },
+            { "code": "4", "text": ["Wyższe", "Higher"] },
+            { "code": "5", "text": ["Odmowa odpowiedzi", "Refused"] }
+          ]
+        },
+        {
+          "code": "HHSIZE",
+          "type": "number",
+          "attributes": {
+            "min_num_value_n": "1",
+            "max_num_value_n": "20",
+            "num_value_int_only": "1"
+          },
+          "text": ["Ile osób, łącznie z Panem/Panią, mieszka w gospodarstwie domowym?", "How many people, including yourself, live in your household?"]
+        },
+        {
+          "code": "WORK",
+          "type": "radio",
+          "text": ["Jaka jest Pana/Pani sytuacja zawodowa?", "What is your employment status?"],
+          "options": [
+            { "code": "1", "text": ["Pracuję", "Employed"] },
+            { "code": "2", "text": ["Uczę się lub studiuję", "Student"] },
+            { "code": "3", "text": ["Jestem na emeryturze lub rencie", "Retired or on a pension"] },
+            { "code": "4", "text": ["Nie pracuję", "Not working"] },
+            { "code": "5", "text": ["Odmowa odpowiedzi", "Refused"] }
+          ]
+        }
+      ]
+    },
+    {
+      "title": ["Po wywiadzie", "After the interview"],
+      "description": ["Wypełnia ankieter po zakończeniu rozmowy.", "Completed by the interviewer after the interview."],
+      "questions": [
+        {
+          "code": "COOP",
+          "type": "radio",
+          "relevance": "CONSENT.NAOK == \"Y\"",
+          "cssClass": "lc-interviewer",
+          "text": ["Nastawienie respondenta", "Respondent's attitude"],
+          "options": [
+            { "code": "1", "text": ["Bardzo chętny", "Very willing"] },
+            { "code": "2", "text": ["Raczej chętny", "Fairly willing"] },
+            { "code": "3", "text": ["Obojętny", "Indifferent"] },
+            { "code": "4", "text": ["Niechętny", "Reluctant"] }
+          ]
+        },
+        {
+          "code": "OTHERS",
+          "type": "yesno",
+          "relevance": "CONSENT.NAOK == \"Y\"",
+          "cssClass": "lc-interviewer",
+          "text": ["Czy podczas wywiadu były obecne inne osoby?", "Were other people present during the interview?"]
+        },
+        {
+          "code": "IVNOTE",
+          "type": "longtext",
+          "cssClass": "lc-interviewer",
+          "text": ["Uwagi ankietera", "Interviewer's notes"],
+          "help": ["Bez danych osobowych respondenta.", "Do not include the respondent's personal data."]
+        }
+      ]
+    }
+  ]
+}
