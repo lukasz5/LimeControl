@@ -1,93 +1,105 @@
 // Strona „Wtyczki StrefaAnkiet” — darmowe wtyczki łączące LimeSurvey z platformą StrefaAnkiet
 // oraz płatne usługi platformy (konto, zarządzany Amazon SES, telefonia VoIP).
-//   site/wtyczki.html (PL) i site/en/plugins.html (EN)
+//   site/wtyczki.html (PL), site/en/plugins.html (EN) i site/de/plugins.html (DE)
 import {
   APP_URL, CONTACT_EMAIL, PLUGINS_URL, ROUTES, STREFAANKIET_PRICING_URL, STREFAANKIET_URL,
   esc, homeUrl, layout, outputPath,
 } from '../chrome.mjs';
 
 /** Stan pakietu wtyczek opisany na stronie — zaktualizuj przy nowym wydaniu StrefaAnkiet dla LimeSurvey. */
-const SUITE = { version: '0.9', testedOn: '6.15 i 7.10', testedOnEn: '6.15 and 7.10', php: '8.1' };
+const SUITE = { version: '0.9', testedOn: '6.15 i 7.10', testedOnEn: '6.15 and 7.10', testedOnDe: '6.15 und 7.10', php: '8.1' };
 
 /** account: false = wtyczka działa samodzielnie, bez konta StrefaAnkiet. */
 const PLUGINS = [
   {
     id: 'StrefaWorkspace',
     account: true,
-    title: { pl: 'Menu badania', en: 'Study menu' },
+    title: { pl: 'Menu badania', en: 'Study menu', de: 'Studienmenü' },
     lead: {
       pl: 'Łączy ankietę LimeSurvey z badaniem w StrefieAnkiet i dodaje do menu ankiety skróty do całego warsztatu.',
       en: 'Links a LimeSurvey survey to a study in StrefaAnkiet and adds shortcuts to the whole workspace to the survey menu.',
+      de: 'Verknüpft eine LimeSurvey-Umfrage mit einer Studie in StrefaAnkiet und ergänzt das Umfragemenü um Verknüpfungen zum gesamten Arbeitsbereich.',
     },
     points: {
       pl: ['Realizacja CAWI, CATI i CAPI, wyniki, analizy, respondenci i zespół — z poziomu ankiety', 'Jawne mapowanie numeru ankiety (SID) na badanie', 'Linki nie nadają uprawnień — obowiązują role z platformy'],
       en: ['CAWI, CATI and CAPI fieldwork, results, analyses, respondents and team — from within the survey', 'An explicit mapping of the survey ID (SID) to a study', 'Links grant no permissions — the platform roles still apply'],
+      de: ['CAWI-, CATI- und CAPI-Feldarbeit, Ergebnisse, Analysen, Befragte und Team — direkt aus der Umfrage', 'Eine explizite Zuordnung der Umfrage-ID (SID) zu einer Studie', 'Links vergeben keine Rechte — es gelten die Rollen der Plattform'],
     },
   },
   {
     id: 'StrefaInvitationRelay',
     account: true,
-    title: { pl: 'Wysyłki przez Amazon SES', en: 'Mailing through Amazon SES' },
+    title: { pl: 'Wysyłki przez Amazon SES', en: 'Mailing through Amazon SES', de: 'Versand über Amazon SES' },
     lead: {
       pl: 'Zaproszenia i przypomnienia LimeSurvey wysyłane kanałem Amazon SES Twojej firmy w StrefieAnkiet — bez zmiany sposobu pracy z uczestnikami.',
       en: 'LimeSurvey invitations and reminders sent through your company’s Amazon SES channel in StrefaAnkiet — without changing how you work with participants.',
+      de: 'Einladungen und Erinnerungen aus LimeSurvey, verschickt über den Amazon-SES-Kanal Ihres Unternehmens in StrefaAnkiet — ohne die Arbeit mit Teilnehmern zu ändern.',
     },
     points: {
       pl: ['Odbiorcy, tokeny i treści zostają w LimeSurvey', 'Potwierdzenia doręczeń, odbicia i skargi w historii wysyłek', 'Ochrona przed podwójną wysyłką', 'Klucze AWS pozostają po stronie platformy'],
       en: ['Recipients, tokens and content stay in LimeSurvey', 'Delivery confirmations, bounces and complaints in the mailing history', 'Protection against duplicate sending', 'AWS keys stay on the platform side'],
+      de: ['Empfänger, Tokens und Inhalte bleiben in LimeSurvey', 'Zustellbestätigungen, Bounces und Beschwerden im Versandverlauf', 'Schutz vor doppeltem Versand', 'AWS-Schlüssel bleiben auf der Plattformseite'],
     },
   },
   {
     id: 'StrefaResearch',
     account: true,
-    title: { pl: 'Realizacja CATI i CAPI, analizy', en: 'CATI and CAPI fieldwork, analysis' },
+    title: { pl: 'Realizacja CATI i CAPI, analizy', en: 'CATI and CAPI fieldwork, analysis', de: 'CATI- und CAPI-Feldarbeit, Analyse' },
     lead: {
       pl: 'Panel pracy badawczej osadzony w LimeSurvey: przydziały ankieterów, koordynacja rozmów telefonicznych i analiza odpowiedzi.',
       en: 'A research workspace embedded in LimeSurvey: interviewer assignments, telephone fieldwork coordination and response analysis.',
+      de: 'Ein in LimeSurvey eingebetteter Forschungsarbeitsplatz: Interviewer-Zuteilungen, Koordination der Telefonfeldarbeit und Antwortanalyse.',
     },
     points: {
       pl: ['CAPI: przydziały, cele i terminy dla ankieterów; wywiad w natywnej ankiecie LimeSurvey', 'CATI: próba, kolejka spraw, przydziały, oddzwonienia i przekazania między ankieterami', 'Kwoty próby i postęp realizacji w jednym widoku', 'Analiza: wersje zbiorów danych, słownik zmiennych, analizy w R, raporty'],
       en: ['CAPI: assignments, targets and deadlines for interviewers; the interview runs in the native LimeSurvey survey', 'CATI: sample, case queue, assignments, callbacks and handovers between interviewers', 'Sample quotas and fieldwork progress in one view', 'Analysis: dataset versions, variable dictionary, analyses in R, reports'],
+      de: ['CAPI: Zuteilungen, Ziele und Fristen für Interviewer; das Interview läuft in der nativen LimeSurvey-Umfrage', 'CATI: Stichprobe, Fallwarteschlange, Zuteilungen, Rückrufe und Übergaben zwischen Interviewern', 'Stichprobenquoten und Feldfortschritt in einer Ansicht', 'Analyse: Datensatzversionen, Variablenverzeichnis, Analysen in R, Berichte'],
     },
   },
   {
     id: 'StrefaSurveyExchange',
     account: false,
-    title: { pl: 'Wymiana kwestionariuszy', en: 'Questionnaire exchange' },
+    title: { pl: 'Wymiana kwestionariuszy', en: 'Questionnaire exchange', de: 'Fragebogenaustausch' },
     lead: {
       pl: 'Pobiera kwestionariusz z LimeSurvey jako strukturę .lss albo pakiet JSON z mapą pól i raportem różnic.',
       en: 'Downloads a questionnaire from LimeSurvey as an .lss structure or a JSON package with a field map and a difference report.',
+      de: 'Lädt einen Fragebogen aus LimeSurvey als .lss-Struktur oder als JSON-Paket mit Feldzuordnung und Differenzbericht herunter.',
     },
     points: {
       pl: ['Eksport struktury (.lss) lub pakietu JSON z mapą kodów pól', 'Lista elementów, których nie da się przenieść — bez cichego upraszczania', 'Ustawienia innych wtyczek są usuwane z eksportu'],
       en: ['Export of the structure (.lss) or a JSON package with a field-code map', 'A list of elements that cannot be transferred — nothing is silently simplified', 'Settings of other plugins are stripped from the export'],
+      de: ['Export der Struktur (.lss) oder eines JSON-Pakets mit Feldcode-Zuordnung', 'Eine Liste nicht übertragbarer Elemente — nichts wird stillschweigend vereinfacht', 'Einstellungen anderer Plugins werden aus dem Export entfernt'],
     },
   },
   {
     id: 'StrefaResponseExport',
     account: false,
-    title: { pl: 'Eksport odpowiedzi', en: 'Response export' },
+    title: { pl: 'Eksport odpowiedzi', en: 'Response export', de: 'Antwortexport' },
     lead: {
       pl: 'Udostępnia zakodowane odpowiedzi aktywnej ankiety do analiz — stronicowane i bez technicznych identyfikatorów.',
       en: 'Provides coded responses of an active survey for analysis — paginated and without technical identifiers.',
+      de: 'Stellt die codierten Antworten einer aktiven Umfrage für Analysen bereit — seitenweise und ohne technische Kennungen.',
     },
     points: {
       pl: ['Pomija tokeny, adresy IP i adres odsyłający', 'Wymaga uprawnień odczytu i eksportu odpowiedzi do konkretnej ankiety', 'Pobieranie załączników z pytań plikowych'],
       en: ['Skips tokens, IP addresses and the referrer', 'Requires read and export permissions for the specific survey', 'Download of attachments from file-upload questions'],
+      de: ['Lässt Tokens, IP-Adressen und den Referrer weg', 'Erfordert Lese- und Exportrechte für die jeweilige Umfrage', 'Download von Anhängen aus Datei-Upload-Fragen'],
     },
   },
   {
     id: 'StrefaConverters',
     account: false,
     tool: true,
-    title: { pl: 'Konwertery (wiersz poleceń)', en: 'Converters (command line)' },
+    title: { pl: 'Konwertery (wiersz poleceń)', en: 'Converters (command line)', de: 'Konverter (Kommandozeile)' },
     lead: {
       pl: 'Niezależne narzędzia do konwersji kwestionariuszy i odpowiedzi — przydatne przy migracjach i archiwizacji.',
       en: 'Standalone tools for converting questionnaires and responses — useful for migrations and archiving.',
+      de: 'Eigenständige Werkzeuge zum Konvertieren von Fragebögen und Antworten — nützlich für Migrationen und Archivierung.',
     },
     points: {
       pl: ['LSS ↔ JSON z kontrolą sumy SHA-256', 'Odpowiedzi z JSON, CSV i eksportu VV', 'Zachowuje kody z zerami wiodącymi (np. 001) jako tekst'],
       en: ['LSS ↔ JSON with a SHA-256 checksum', 'Responses from JSON, CSV and the VV export', 'Keeps codes with leading zeros (e.g. 001) as text'],
+      de: ['LSS ↔ JSON mit SHA-256-Prüfsumme', 'Antworten aus JSON, CSV und dem VV-Export', 'Behält Codes mit führenden Nullen (z. B. 001) als Text'],
     },
   },
 ];
@@ -114,7 +126,7 @@ const S = {
     freeList: [
       'Sześć wtyczek i narzędzi StrefaAnkiet dla LimeSurvey — z kodem źródłowym',
       'Wymiana kwestionariuszy, eksport odpowiedzi i konwertery działają bez konta',
-      `Aplikacja LimeControl, <a href="${ROUTES.themes.pl}">motywy</a> i <a href="${ROUTES.templates.pl}">szablony ankiet</a>`,
+      `Aplikacja LimeControl (iOS, Android, web), <a href="${ROUTES.themes.pl}">motywy</a> i <a href="${ROUTES.templates.pl}">szablony ankiet</a>`,
       `Zestawy wdrożeniowe Docker dla LimeSurvey i LimeControl`,
     ],
     paidTag: 'Konto StrefaAnkiet',
@@ -151,7 +163,7 @@ const S = {
     compareP: 'Zacznij od tego, co darmowe. Konto StrefaAnkiet dołączasz, gdy badanie potrzebuje infrastruktury i zespołu.',
     compareHead: ['Potrzeba', 'Bezpłatnie — LimeControl i wtyczki', 'Płatnie — konto i usługi StrefaAnkiet'],
     compare: [
-      ['Zarządzanie ankietami z telefonu', 'Aplikacja: aktywacja, harmonogram, uczestnicy, eksport', '—'],
+      ['Zarządzanie ankietami z telefonu', 'Aplikacja na iOS, Androida i web: aktywacja, harmonogram, uczestnicy, eksport', '—'],
       ['Wygląd ankiety', 'Osiem motywów WCAG 2.2 AA, w tym CATI i CAPI', '—'],
       ['Gotowe kwestionariusze', 'Dwanaście szablonów PL/EN, w tym szkielety CATI i CAPI', 'Biblioteka szablonów badań i raportów'],
       ['Połączenie LimeSurvey z platformą', 'Wtyczki: instalacja, aktualizacje i kod źródłowy', 'Konto organizacji z rolami zespołu'],
@@ -206,7 +218,7 @@ const S = {
     freeList: [
       'Six StrefaAnkiet plugins and tools for LimeSurvey — with source code',
       'Questionnaire exchange, response export and the converters work without an account',
-      `The LimeControl app, <a href="${ROUTES.themes.en}">themes</a> and <a href="${ROUTES.templates.en}">survey templates</a>`,
+      `The LimeControl app (iOS, Android, web), <a href="${ROUTES.themes.en}">themes</a> and <a href="${ROUTES.templates.en}">survey templates</a>`,
       'Docker deployment kits for LimeSurvey and LimeControl',
     ],
     paidTag: 'StrefaAnkiet account',
@@ -243,7 +255,7 @@ const S = {
     compareP: 'Start with what is free. Add a StrefaAnkiet account when a study needs infrastructure and a team.',
     compareHead: ['Need', 'Free — LimeControl and the plugins', 'Paid — StrefaAnkiet account and services'],
     compare: [
-      ['Managing surveys from a phone', 'The app: activation, scheduling, participants, export', '—'],
+      ['Managing surveys from a phone', 'The iOS, Android and web app: activation, scheduling, participants, export', '—'],
       ['Survey look', 'Eight WCAG 2.2 AA themes, including CATI and CAPI', '—'],
       ['Ready-made questionnaires', 'Twelve EN/PL templates, including CATI and CAPI skeletons', 'A library of study and report templates'],
       ['Connecting LimeSurvey to the platform', 'The plugins: installation, updates and source code', 'An organisation account with team roles'],
@@ -276,6 +288,98 @@ const S = {
     ctaP: 'Describe the study — the number of interviews, the modes and the dates. We will tell you what the free tools can do and where a StrefaAnkiet account helps.',
     mailSubject: 'StrefaAnkiet plugins for LimeSurvey',
     footerNote: 'StrefaAnkiet and LimeControl are developed by <a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a>.',
+  },
+  de: {
+    title: 'Kostenlose StrefaAnkiet-Plugins für LimeSurvey — CATI, CAPI, Amazon SES',
+    description: 'Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden eine Umfrage mit der Plattform StrefaAnkiet: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, CAPI-Feldarbeit und Antwortanalyse. Kostenpflichtig sind das Plattformkonto und die Dienste.',
+    ogTitle: 'Kostenlose Plugins, die LimeSurvey mit StrefaAnkiet verbinden',
+    eyebrow: 'Kostenlose Plugins für LimeSurvey',
+    h1: 'Verbinden Sie LimeSurvey mit StrefaAnkiet. <span class="lime">Die Plugins sind kostenlos</span>.',
+    lead: 'Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden Ihre Umfrage mit der Plattform <strong>StrefaAnkiet</strong> — bezahlt wird nur das Konto und die Dienste, die Sie nutzen: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, Interviewer im Feld und die Analyse der Ergebnisse. Befragte füllen weiterhin dieselbe LimeSurvey-Umfrage aus.',
+    ctaDownload: 'Plugins herunterladen',
+    ctaAsk: 'Plugins anfordern',
+    ctaPricing: 'Preise von StrefaAnkiet',
+    meta: ['Plugins: kostenlos, Open Source', `Getestet mit LimeSurvey ${SUITE.testedOnDe}`, `PHP ${SUITE.php}+`, 'Daten bleiben in Ihrem LimeSurvey'],
+    ids: { model: 'kostenlos-und-kostenpflichtig', modes: 'modi', plugins: 'plugins', compare: 'vergleich', connect: 'limecontrol', start: 'start' },
+    modelEyebrow: 'So funktioniert’s',
+    modelH: 'Kostenlose Software, kostenpflichtige Dienste',
+    modelP: 'Die Software installieren Sie kostenlos bei sich. Kostenpflichtig ist, was sich nicht als Code verschenken lässt: Versandinfrastruktur, Telefonie und ein Teamkonto auf der Plattform.',
+    freeTag: 'Kostenlos',
+    freeH: 'Plugins und Werkzeuge',
+    freeP: 'Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne zeitliche Begrenzung.',
+    freeList: [
+      'Sechs StrefaAnkiet-Plugins und -Werkzeuge für LimeSurvey — mit Quellcode',
+      'Fragebogenaustausch, Antwortexport und Konverter funktionieren ohne Konto',
+      `Die App LimeControl (iOS, Android, Web), <a href="${ROUTES.themes.de}">Designs</a> und <a href="${ROUTES.templates.de}">Umfragevorlagen</a>`,
+      'Docker-Deployment-Kits für LimeSurvey und LimeControl',
+    ],
+    paidTag: 'StrefaAnkiet-Konto',
+    paidH: 'Dienste der Plattform',
+    paidP: 'Ein Plattform-Abonnement plus nutzungsabhängig abgerechnete Zusatzdienste. Den Umfang wählen Sie passend zur Studie.',
+    paidList: [
+      '<strong>Verwaltetes Amazon SES</strong> — Sie geben den Absender an und ergänzen drei DNS-Einträge; ohne eigenes AWS-Konto und ohne Schlüssel',
+      '<strong>VoIP-Telefonie für CATI</strong> — ein Telefon im Browser des Interviewers, der VoIP-Server von StrefaAnkiet, eine Rufnummer, Anrufe und Aufzeichnungen',
+      '<strong>Feldarbeit (CAPI)</strong> — Zuteilungen und Ziele für Interviewer, eine Interviewer-App, die offline funktioniert',
+      '<strong>Team-Arbeitsbereich</strong> — Projekte, Rollen, modusübergreifende Quoten, Analysen in R und Berichte als PDF/DOCX',
+    ],
+    paidNote: 'Telefonie, Massenversand, Transkription und KI erfordern eine eigene Konfiguration und haben eigene Abrechnungsbedingungen.',
+    ctaTalk: 'Sprechen wir darüber',
+    modesEyebrow: 'Erhebungsmodi',
+    modesH: 'Eine Umfrage, drei Wege zu Antworten',
+    modesP: 'Fragebogen und Antworten bleiben in LimeSurvey. Es ändert sich nur, wer das Interview führt und wie.',
+    modes: [
+      ['CAWI', 'Online-Umfrage', 'Befragte füllen die Umfrage selbst aus, über einen Link oder eine E-Mail-Einladung. Das ist der native Modus von LimeSurvey — in LimeControl aktivieren Sie die Umfrage, versenden Einladungen und verfolgen die Ergebnisse.', 'Kostenlos in LimeControl'],
+      ['CATI', 'Telefoninterview', 'Ein Interviewer ruft an und erfasst die Antworten. Die Plattform ergänzt Stichprobe, Fallwarteschlange, Zuteilungen, Rückrufe, ein Telefon im Browser und Gesprächsaufzeichnungen.', 'Kostenloses Plugin + Telefonie von StrefaAnkiet'],
+      ['CAPI', 'Persönliches Interview', 'Ein Interviewer führt das Interview auf Tablet oder Smartphone. Die Plattform ergänzt Zuteilungen mit Zielen und Fristen, die Bestätigung von Interviews und eine Interviewer-App, die offline funktioniert.', 'Kostenloses Plugin + StrefaAnkiet-Konto'],
+      ['Mixed-Mode', 'Modi kombinieren', 'Eine Studie über mehrere Kanäle, mit gemeinsamen Quoten, einem Datensatz und Analyse in R.', 'StrefaAnkiet-Konto'],
+    ],
+    pluginsEyebrow: 'Das Plugin-Paket',
+    pluginsH: 'StrefaAnkiet für LimeSurvey',
+    pluginsP: 'Sechs unabhängige Bausteine — Sie installieren nur, was Sie brauchen. Die Plugins legen keine eigenen Tabellen in der LimeSurvey-Datenbank an.',
+    statusFree: 'Funktioniert ohne Konto',
+    statusAccount: 'Benötigt ein StrefaAnkiet-Konto',
+    pluginLabel: 'Plugin',
+    toolLabel: 'Werkzeugpaket',
+    releaseReady: (url) => `<strong>Download und Quellcode.</strong> Die aktuelle Version des Pakets (${SUITE.version}) samt Installationsanleitung finden Sie im <a href="${url}" target="_blank" rel="noopener">öffentlichen Plugin-Repository</a>. Getestet mit LimeSurvey ${SUITE.testedOnDe}.`,
+    releasePending: (mailto) => `<strong>Stand der Veröffentlichung.</strong> Das Paket liegt als Release Candidate ${SUITE.version} vor (Pilotphase), getestet mit LimeSurvey ${SUITE.testedOnDe}. Ein öffentliches Repository mit den Installationspaketen ist in Vorbereitung — bis dahin <a href="${mailto}">schreiben Sie uns</a>, und wir senden Ihnen die Plugins kostenlos samt Anleitung.`,
+    compareEyebrow: 'Was kostenlos ist und was nicht',
+    compareH: 'Von kostenlosen Werkzeugen zu Plattformdiensten',
+    compareP: 'Beginnen Sie mit dem, was kostenlos ist. Ein StrefaAnkiet-Konto kommt dazu, wenn eine Studie Infrastruktur und ein Team braucht.',
+    compareHead: ['Bedarf', 'Kostenlos — LimeControl und die Plugins', 'Kostenpflichtig — StrefaAnkiet-Konto und Dienste'],
+    compare: [
+      ['Umfragen vom Smartphone verwalten', 'Die App für iOS, Android und Web: Aktivierung, Zeitplan, Teilnehmer, Export', '—'],
+      ['Aussehen der Umfrage', 'Acht Designs nach WCAG 2.2 AA, darunter CATI und CAPI', '—'],
+      ['Fertige Fragebögen', 'Zwölf Vorlagen (EN/PL), darunter Gerüste für CATI und CAPI', 'Eine Bibliothek mit Studien- und Berichtsvorlagen'],
+      ['LimeSurvey mit der Plattform verbinden', 'Die Plugins: Installation, Updates und Quellcode', 'Ein Organisationskonto mit Teamrollen'],
+      ['Einladungen versenden', 'LimeSurvey-Mail, geplante Einladungen und Erinnerungen in LimeControl', 'Verwaltetes Amazon SES: Absender in der eigenen Domain, Zustellbestätigungen, Bounces und Beschwerden'],
+      ['Telefoninterviews', 'Das CATI-Design mit Tastenkürzeln, ein Interviewgerüst mit Kontaktergebnis', 'Fallwarteschlange, Zuteilungen, Rückrufe, VoIP-Telefon im Browser, VoIP-Server, Aufzeichnungen'],
+      ['Feldinterviews', 'Das CAPI-Design und die Interview-Schleife auf dem Tablet (online)', 'Zuteilungen und Ziele für Interviewer, Bestätigung von Interviews, eine Offline-App'],
+      ['Quoten und Qualitätskontrolle', 'Native LimeSurvey-Quoten', 'Modusübergreifende Quoten, Qualitätskontrolle der Interviews'],
+      ['Ergebnisse analysieren', 'Übersichten und Diagramme, Export als CSV / Excel / JSON, Konverter', 'Versionierte Datensätze, Analysen in R, Berichte als PDF und DOCX'],
+      ['Umfrageserver', 'Docker-Kits zur eigenen Installation', `<a href="${homeUrl('de', 'hosting')}">Einrichtung und Betreuung eines Umfrageservers</a> durch strefabadan.pl`],
+    ],
+    connectEyebrow: 'Verbindung mit LimeControl',
+    connectH: 'Feldfortschritt in der App',
+    connectP: 'Ist eine Umfrage mit einer Studie in StrefaAnkiet verknüpft, zeigt LimeControl deren Feldstatus — ohne das Panel zu öffnen.',
+    connectList: [
+      '<strong>CAPI</strong> — abgeschlossene Interviews, Interviewer-Zuteilungen und ihr Fortschritt gegenüber dem Ziel.',
+      '<strong>CATI</strong> — die Zahl der Fälle in der Warteschlange, nicht zugeteilte Fälle und Fälle, die Aufmerksamkeit brauchen.',
+      '<strong>Nur lesend</strong> — die App ändert nichts an der Studie; sie braucht einen Zugangsschlüssel mit den Scopes <code>fieldwork.read</code> und <code>cati.read</code>.',
+      '<strong>Der Schlüssel bleibt bei Ihnen</strong> — er liegt nur im Speicher des geöffneten Tabs, genau wie LimeSurvey-Passwörter.',
+    ],
+    connectCta: 'So verbinden Sie Ihr Konto',
+    startEyebrow: 'Erste Schritte',
+    startH: 'Vier Schritte — die ersten drei sind kostenlos',
+    start: [
+      ['Umfrageserver bereitstellen', `Nutzen Sie Ihre eigene LimeSurvey-Instanz, das kostenlose Docker-Kit oder überlassen Sie uns <a href="${homeUrl('de', 'hosting')}">Einrichtung und Betreuung</a>.`],
+      ['Design und Vorlage hinzufügen', `Installieren Sie das <a href="${ROUTES.themes.de}#cati">CATI- oder CAPI-Design</a> und importieren Sie ein <a href="${ROUTES.templates.de}#wywiad-cati">Interviewgerüst</a>.`],
+      ['Kostenlose Plugins installieren', 'Laden Sie die Pakete im Plugin-Manager von LimeSurvey hoch und legen Sie fest, welche Umfrage zu welcher Studie gehört.'],
+      ['Dienste bei Bedarf einschalten', `Legen Sie ein StrefaAnkiet-Konto an, richten Sie Versand oder Telefonie ein und verfolgen Sie den Fortschritt in <a href="${APP_URL}">LimeControl</a>.`],
+    ],
+    ctaH: 'Sie planen eine CATI- oder CAPI-Studie?',
+    ctaP: 'Beschreiben Sie die Studie — Zahl der Interviews, Modi und Termine. Wir sagen Ihnen, was die kostenlosen Werkzeuge leisten und wo ein StrefaAnkiet-Konto hilft.',
+    mailSubject: 'StrefaAnkiet-Plugins für LimeSurvey',
+    footerNote: 'StrefaAnkiet und LimeControl werden von <a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a> entwickelt.',
   },
 };
 

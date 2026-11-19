@@ -53,7 +53,7 @@
       <section id="introduction">
         <span class="eyebrow">Documentation</span>
         <h1>LimeControl — the guide</h1>
-        <p class="lead-docs">LimeControl is a PWA for managing LimeSurvey instances through the official <strong>RemoteControl 2</strong> API (JSON-RPC, <code>remotecontrol_handle</code>). It runs in the browser on a phone or a computer, can be installed on the home screen or run on your own server. The same code also runs as a <a href="#mobile-app">mobile app</a> for iOS and Android — with no account and no CORS restrictions.</p>
+        <p class="lead-docs">LimeControl is an app for managing LimeSurvey instances through the official <strong>RemoteControl 2</strong> API (JSON-RPC, <code>remotecontrol_handle</code>). It runs as a native <a href="#mobile-app">mobile app</a> for iOS and Android (with no account and no CORS restrictions), in the browser on a phone or a computer — also installed as a PWA — and on your own server. It is the same code everywhere.</p>
         <div class="callout">
           <p><strong>Requirements:</strong> LimeSurvey 3.x, 5.x, 6.x or 7.x with the JSON-RPC interface enabled, and a LimeSurvey account with the right permissions. In the <a href="{{APP_URL}}">app.limecontrol.eu</a> service you sign in with a Google account; a <a href="#self-hosting">self-hosted installation</a> uses an access key.</p>
         </div>
@@ -74,7 +74,8 @@
 
       <section id="install">
         <h2>Installing on a phone</h2>
-        <p>LimeControl is a progressive web app — it installs without an app store and updates itself.</p>
+        <p><strong>Mobile app:</strong> the free LimeControl app for iPhone, iPad and Android. {{MOBILE_AVAILABILITY}} See <a href="#mobile-app">Mobile app</a> for details.</p>
+        <p><strong>PWA:</strong> the web version installs without an app store and updates itself.</p>
         <ul>
           <li><strong>Android (Chrome, Edge):</strong> the <em>Install PWA</em> button in the app, or the browser menu → <em>Add to Home screen</em>.</li>
           <li><strong>iPhone / iPad (Safari):</strong> <em>Share</em> → <em>Add to Home Screen</em>.</li>
@@ -147,7 +148,7 @@ Header always set Access-Control-Allow-Headers "Content-Type, Accept"</pre>
 <pre>add_header Access-Control-Allow-Origin <span class="k">"https://app.limecontrol.eu"</span> always;
 add_header Access-Control-Allow-Methods "POST, OPTIONS" always;
 add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
-        <p>If you have no access to the server configuration, use the <a href="#connection-modes">server relay</a> mode.</p>
+        <p>If you have no access to the server configuration, use the <a href="#connection-modes">server relay</a> mode or the <a href="#mobile-app">mobile app</a>.</p>
       </section>
 
       <section id="limesurvey-7">
@@ -167,7 +168,7 @@ add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
 
       <section id="instances">
         <h2>Instances</h2>
-        <p>The <strong>Instances</strong> tab keeps the LimeSurvey server profiles. In the app.limecontrol.eu service the profiles are stored in the cloud (Cloud Firestore) and tied to your Google account, so they are available on every device. On a self-hosted installation the profiles stay in the browser.</p>
+        <p>The <strong>Instances</strong> tab keeps the LimeSurvey server profiles. In the app.limecontrol.eu service the profiles are stored in the cloud (Cloud Firestore) and tied to your Google account, so they are available on every device. In the mobile app and on a self-hosted installation the profiles stay on the device and in the browser respectively.</p>
         <ul>
           <li>Search and filter profiles by name, address, user or login plugin, and by connection mode (<em>All</em>, <em>Direct</em>, <em>Relay</em>).</li>
           <li>A LimeSurvey version setting for each profile.</li>
@@ -427,7 +428,7 @@ sudo ./install.sh</pre>
         <h2>Security and privacy</h2>
         <ul>
           <li><strong>Google sign-in</strong> (Firebase Authentication) protects access to your profiles; on a self-hosted installation an access key with a limit on sign-in attempts plays that role.</li>
-          <li><strong>Server profiles</strong> are stored in Cloud Firestore; the database rules allow only the account owner to read and change them. On a self-hosted installation the profiles stay in the browser.</li>
+          <li><strong>Server profiles</strong> are stored in Cloud Firestore; the database rules allow only the account owner to read and change them. In the mobile app and on a self-hosted installation the profiles stay on the device and in the browser respectively.</li>
           <li><strong>LimeSurvey passwords are not stored</strong> in Firestore or in <code>localStorage</code>. The “Remember the password for this session only” option keeps them solely in the memory of the open tab.</li>
           <li><strong>Direct mode</strong> — survey data goes straight from the LimeSurvey server to your browser.</li>
           <li><strong>The relay and the StrefaAnkiet connector</strong> require sign-in, have request limits, connect over HTTP/HTTPS only, do not follow redirects and pin the checked IP address (protection against SSRF and DNS rebinding).</li>
@@ -448,7 +449,7 @@ sudo ./install.sh</pre>
               <tr><td>404 or an HTML response instead of JSON</td><td>The JSON-RPC interface is disabled or the API address is different — enter the full path with <code>?r=admin/remotecontrol</code>.</td></tr>
               <tr><td><em>No permission</em></td><td>The account lacks the required <a href="#permissions">permissions</a> for that survey.</td></tr>
               <tr><td>Dates shifted by a few hours</td><td>Set the LimeSurvey 7.x version in the profile (dates in UTC) or check the server time zone.</td></tr>
-              <tr><td>The relay rejects the server address</td><td>In the public service the relay does not connect to internal network addresses. Use direct mode or a <a href="#self-hosting">self-hosted installation</a>.</td></tr>
+              <tr><td>The relay rejects the server address</td><td>In the public service the relay does not connect to internal network addresses. Use direct mode, the mobile app or a <a href="#self-hosting">self-hosted installation</a>.</td></tr>
               <tr><td>The survey uses a different theme than the one chosen</td><td>The theme is not installed in LimeSurvey. Upload the theme ZIP file (<a href="{{themes}}#install">instructions</a>) and save the theme again.</td></tr>
               <tr><td>Invitations are not going out</td><td>Check that the survey is active, has a participant table and that mail is configured correctly in LimeSurvey. The error details are in the scheduled job's log.</td></tr>
             </tbody>

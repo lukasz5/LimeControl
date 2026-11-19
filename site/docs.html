@@ -8,6 +8,7 @@
   <link rel="canonical" href="https://limecontrol.eu/docs.html" />
   <link rel="alternate" hreflang="pl" href="https://limecontrol.eu/docs.html" />
   <link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/docs.html" />
+  <link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/docs.html" />
   <link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/docs.html" />
   <meta name="theme-color" content="#1b5e36" />
 
@@ -18,6 +19,7 @@
   <meta property="og:description" content="Konfiguracja LimeSurvey, funkcje aplikacji, wywiady CATI/CAPI i instalacja LimeControl na własnym serwerze." />
   <meta property="og:locale" content="pl_PL" />
   <meta property="og:locale:alternate" content="en_GB" />
+  <meta property="og:locale:alternate" content="de_DE" />
   <meta name="twitter:card" content="summary" />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -26,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=4" />
+  <link rel="stylesheet" href="/assets/style.css?v=5" />
   <script>document.documentElement.classList.add('js')</script>
 
 </head>
@@ -36,8 +38,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/" aria-label="LimeControl — strona główna">
-        <img class="logo-light" src="/assets/logo.svg?v=4" alt="LimeControl" width="104" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=4" alt="LimeControl" width="104" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="104" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="104" height="34" />
       </a>
       <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -50,7 +52,7 @@
         <li><a href="/#hosting">Hosting i wdrożenia</a></li>
         <li><a href="/docs.html" aria-current="page">Dokumentacja</a></li>
         <li><a class="nav-gh" href="https://github.com/lukasz5/LimeControl" target="_blank" rel="noopener" aria-label="Kod źródłowy LimeControl na GitHubie"><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a></li>
-        <li><a class="nav-lang" href="/en/docs.html" hreflang="en" lang="en" aria-label="Switch to English">EN<span> — English</span></a></li>
+        <li class="nav-langs"><a class="nav-lang" href="/en/docs.html" hreflang="en" lang="en" aria-label="English version">EN<span> — English</span></a><a class="nav-lang" href="/de/docs.html" hreflang="de" lang="de" aria-label="Deutsche Version">DE<span> — Deutsch</span></a></li>
         <li><a class="btn btn-primary btn-sm" href="https://app.limecontrol.eu">Otwórz aplikację</a></li>
       </ul>
     </div>
@@ -103,7 +105,7 @@
       <section id="wprowadzenie">
         <span class="eyebrow">Dokumentacja</span>
         <h1>LimeControl — przewodnik</h1>
-        <p class="lead-docs">LimeControl to aplikacja PWA do zarządzania instancjami LimeSurvey przez oficjalne API <strong>RemoteControl 2</strong> (JSON-RPC, <code>remotecontrol_handle</code>). Działa w przeglądarce na telefonie i komputerze, można ją zainstalować na ekranie głównym albo uruchomić na własnym serwerze. Ten sam kod działa też jako <a href="#aplikacja-mobilna">aplikacja mobilna</a> na iOS i Androida — bez konta i bez ograniczeń CORS.</p>
+        <p class="lead-docs">LimeControl to aplikacja do zarządzania instancjami LimeSurvey przez oficjalne API <strong>RemoteControl 2</strong> (JSON-RPC, <code>remotecontrol_handle</code>). Działa jako natywna <a href="#aplikacja-mobilna">aplikacja mobilna</a> na iOS i Androida (bez konta i bez ograniczeń CORS), w przeglądarce na telefonie i komputerze — także zainstalowana jako PWA — oraz na Twoim własnym serwerze. To wszędzie ten sam kod.</p>
         <div class="callout">
           <p><strong>Wymagania:</strong> LimeSurvey 3.x, 5.x, 6.x lub 7.x z włączonym interfejsem JSON-RPC i konto LimeSurvey z odpowiednimi uprawnieniami. W usłudze <a href="https://app.limecontrol.eu">app.limecontrol.eu</a> logujesz się kontem Google; <a href="#wlasny-serwer">własna instalacja</a> używa klucza dostępu.</p>
         </div>
@@ -124,7 +126,8 @@
 
       <section id="instalacja">
         <h2>Instalacja na telefonie</h2>
-        <p>LimeControl jest progresywną aplikacją webową — instaluje się bez sklepu z aplikacjami i aktualizuje automatycznie.</p>
+        <p><strong>Aplikacja mobilna:</strong> bezpłatna LimeControl na iPhone’a, iPada i Androida. Pobierz ją bezpłatnie: <a href="https://play.google.com/store/apps/details?id=eu.limecontrol.app" target="_blank" rel="noopener">Google Play</a>. Wersja w App Store czeka na publikację. Szczegóły w sekcji <a href="#aplikacja-mobilna">Aplikacja mobilna</a>.</p>
+        <p><strong>PWA:</strong> wersję przeglądarkową zainstalujesz bez sklepu z aplikacjami — aktualizuje się automatycznie.</p>
         <ul>
           <li><strong>Android (Chrome, Edge):</strong> przycisk <em>Zainstaluj PWA</em> w aplikacji lub menu przeglądarki → <em>Dodaj do ekranu głównego</em>.</li>
           <li><strong>iPhone / iPad (Safari):</strong> <em>Udostępnij</em> → <em>Do ekranu początkowego</em>.</li>
@@ -197,7 +200,7 @@ Header always set Access-Control-Allow-Headers "Content-Type, Accept"</pre>
 <pre>add_header Access-Control-Allow-Origin <span class="k">"https://app.limecontrol.eu"</span> always;
 add_header Access-Control-Allow-Methods "POST, OPTIONS" always;
 add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
-        <p>Jeśli nie masz dostępu do konfiguracji serwera, użyj trybu <a href="#tryby-polaczenia">przekaźnika serwerowego</a>.</p>
+        <p>Jeśli nie masz dostępu do konfiguracji serwera, użyj trybu <a href="#tryby-polaczenia">przekaźnika serwerowego</a> albo <a href="#aplikacja-mobilna">aplikacji mobilnej</a>.</p>
       </section>
 
       <section id="limesurvey-7">
@@ -217,7 +220,7 @@ add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
 
       <section id="instancje">
         <h2>Instancje</h2>
-        <p>Zakładka <strong>Instancje</strong> przechowuje profile serwerów LimeSurvey. W usłudze app.limecontrol.eu profile są zapisywane w chmurze (Cloud Firestore) i przypisane do Twojego konta Google, więc są dostępne na każdym urządzeniu. We własnej instalacji profile zostają w przeglądarce.</p>
+        <p>Zakładka <strong>Instancje</strong> przechowuje profile serwerów LimeSurvey. W usłudze app.limecontrol.eu profile są zapisywane w chmurze (Cloud Firestore) i przypisane do Twojego konta Google, więc są dostępne na każdym urządzeniu. W aplikacji mobilnej i we własnej instalacji profile zostają odpowiednio na urządzeniu i w przeglądarce.</p>
         <ul>
           <li>Wyszukiwanie i filtrowanie profili po nazwie, adresie, użytkowniku lub wtyczce logowania oraz po trybie połączenia (<em>Wszystkie</em>, <em>Bezpośredni</em>, <em>Przekaźnik</em>).</li>
           <li>Wybór wersji LimeSurvey dla każdego profilu.</li>
@@ -477,7 +480,7 @@ sudo ./install.sh</pre>
         <h2>Bezpieczeństwo i prywatność</h2>
         <ul>
           <li><strong>Logowanie Google</strong> (Firebase Authentication) chroni dostęp do Twoich profili; we własnej instalacji tę rolę pełni klucz dostępu z limitem prób logowania.</li>
-          <li><strong>Profile serwerów</strong> są zapisywane w Cloud Firestore; reguły bazy pozwalają je czytać i zmieniać wyłącznie właścicielowi konta. We własnej instalacji profile zostają w przeglądarce.</li>
+          <li><strong>Profile serwerów</strong> są zapisywane w Cloud Firestore; reguły bazy pozwalają je czytać i zmieniać wyłącznie właścicielowi konta. W aplikacji mobilnej i we własnej instalacji profile zostają odpowiednio na urządzeniu i w przeglądarce.</li>
           <li><strong>Hasła do LimeSurvey nie są zapisywane</strong> ani w Firestore, ani w <code>localStorage</code>. Opcja „Zapamiętaj hasło tylko w pamięci tej sesji” trzyma je wyłącznie w pamięci otwartej karty.</li>
           <li><strong>Tryb bezpośredni</strong> — dane ankiet trafiają wprost z serwera LimeSurvey do Twojej przeglądarki.</li>
           <li><strong>Przekaźnik i łącznik StrefaAnkiet</strong> wymagają zalogowania, mają limity zapytań, łączą się tylko przez HTTP/HTTPS, nie podążają za przekierowaniami i przypinają sprawdzony adres IP (ochrona przed SSRF i podmianą DNS).</li>
@@ -498,7 +501,7 @@ sudo ./install.sh</pre>
               <tr><td>404 lub odpowiedź HTML zamiast JSON</td><td>Interfejs JSON-RPC jest wyłączony albo adres API jest inny — wpisz pełną ścieżkę z <code>?r=admin/remotecontrol</code>.</td></tr>
               <tr><td><em>No permission</em></td><td>Konto nie ma wymaganych <a href="#uprawnienia">uprawnień</a> do danej ankiety.</td></tr>
               <tr><td>Przesunięte godziny dat</td><td>Ustaw w profilu wersję LimeSurvey 7.x (daty w UTC) lub sprawdź strefę czasową serwera.</td></tr>
-              <tr><td>Przekaźnik odrzuca adres serwera</td><td>W usłudze publicznej przekaźnik nie łączy się z adresami sieci wewnętrznej. Użyj trybu bezpośredniego albo <a href="#wlasny-serwer">własnej instalacji</a>.</td></tr>
+              <tr><td>Przekaźnik odrzuca adres serwera</td><td>W usłudze publicznej przekaźnik nie łączy się z adresami sieci wewnętrznej. Użyj trybu bezpośredniego, aplikacji mobilnej albo <a href="#wlasny-serwer">własnej instalacji</a>.</td></tr>
               <tr><td>Ankieta ma inny motyw niż wybrany</td><td>Motyw nie jest zainstalowany w LimeSurvey. Zaimportuj plik ZIP motywu (<a href="/szablony.html#instalacja">instrukcja</a>) i zapisz motyw ponownie.</td></tr>
               <tr><td>Zaproszenia nie wychodzą</td><td>Sprawdź, czy ankieta jest aktywna, ma tabelę uczestników i poprawną konfigurację poczty w LimeSurvey. Szczegóły błędu są w logu zadania harmonogramu.</td></tr>
             </tbody>
@@ -531,8 +534,8 @@ sudo ./install.sh</pre>
   <footer class="footer">
     <div class="container">
       <a href="/" aria-label="LimeControl">
-        <img class="logo-light" src="/assets/logo.svg?v=4" alt="LimeControl" width="86" height="28" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=4" alt="LimeControl" width="86" height="28" />
+        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="86" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="86" height="28" />
       </a>
       <ul class="footer-links">
         <li><a href="/szablony.html">Motywy ankiet</a></li>
@@ -545,6 +548,7 @@ sudo ./install.sh</pre>
         <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
         <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
         <li><a href="/en/docs.html" hreflang="en" lang="en">English</a></li>
+        <li><a href="/de/docs.html" hreflang="de" lang="de">Deutsch</a></li>
       </ul>
       <a class="coffee" href="https://www.paypal.com/biz/profile/strefabadan" target="_blank" rel="noopener noreferrer">Postaw mi kawę</a>
     </div>
@@ -553,6 +557,6 @@ sudo ./install.sh</pre>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=4" defer></script>
+  <script src="/assets/site.js?v=5" defer></script>
 </body>
 </html>

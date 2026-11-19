@@ -1,6 +1,6 @@
 # limecontrol.eu — strona produktowa
 
-Statyczna strona (HTML + CSS + odrobina JS) po polsku i angielsku. **Pliki `.html` w tym katalogu są
+Statyczna strona (HTML + CSS + odrobina JS) po polsku, angielsku i niemiecku. **Pliki `.html` w tym katalogu są
 generowane** — nie edytuj ich ręcznie, tylko zmień źródła i zbuduj stronę ponownie.
 
 > Strona nie jest częścią otwartego oprogramowania LimeControl — wszelkie prawa zastrzeżone
@@ -12,14 +12,14 @@ npm run build:site     # paczki motywów i szablonów + wszystkie podstrony → 
 npm run check:site     # linki wewnętrzne, kotwice, wersje językowe
 ```
 
-| Podstrona | PL | EN | Źródło |
-| --- | --- | --- | --- |
-| Strona główna | `index.html` | `en/index.html` | `site-src/pages/home.<lang>.html` |
-| Dokumentacja | `docs.html` | `en/docs.html` | `site-src/pages/docs.<lang>.html` |
-| Wtyczki StrefaAnkiet | `wtyczki.html` | `en/plugins.html` | `site-src/pages/plugins.mjs` |
-| Polityka prywatności | `prywatnosc.html` | `en/privacy.html` | `site-src/pages/privacy.<lang>.html` |
-| Motywy ankiet | `szablony.html` | `en/themes.html` | `site-src/pages/themes.mjs` + dane z `limesurvey-themes/` |
-| Szablony ankiet | `ankiety.html` | `en/templates.html` | `site-src/pages/templates.mjs` + dane z `survey-templates/` |
+| Podstrona | PL | EN | DE | Źródło |
+| --- | --- | --- | --- | --- |
+| Strona główna | `index.html` | `en/index.html` | `de/index.html` | `site-src/pages/home.<lang>.html` |
+| Dokumentacja | `docs.html` | `en/docs.html` | `de/docs.html` | `site-src/pages/docs.<lang>.html` |
+| Wtyczki StrefaAnkiet | `wtyczki.html` | `en/plugins.html` | `de/plugins.html` | `site-src/pages/plugins.mjs` |
+| Polityka prywatności | `prywatnosc.html` | `en/privacy.html` | `de/datenschutz.html` | `site-src/pages/privacy.<lang>.html` |
+| Motywy ankiet | `szablony.html` | `en/themes.html` | `de/designs.html` | `site-src/pages/themes.mjs` + dane z `limesurvey-themes/` |
+| Szablony ankiet | `ankiety.html` | `en/templates.html` | `de/vorlagen.html` | `site-src/pages/templates.mjs` + dane z `survey-templates/` |
 
 Pozostałe pliki:
 
@@ -46,8 +46,12 @@ Po zmianie `assets/style.css` lub `assets/site.js` podbij `ASSET_VERSION` w `sit
 
 ## Nowa wersja językowa strony
 
-Każda podstrona musi istnieć po polsku i angielsku — `npm run check:site` zgłosi brak odpowiednika,
-niedziałający link albo kotwicę, której nie ma na stronie docelowej.
+Każda podstrona musi istnieć we wszystkich językach z `LANGS` (PL, EN, DE) — `npm run check:site` zgłosi brak
+odpowiednika, niedziałający link albo kotwicę, której nie ma na stronie docelowej.
+
+Opisy motywów, szablonów i kategorii po niemiecku są w `site-src/pages/data.de.mjs` (dane źródłowe i katalog
+aplikacji zostają PL/EN). Nowy motyw lub szablon bez wpisu w tym pliku przerywa budowanie. Interfejs aplikacji
+jest tylko PL/EN, dlatego niemiecka strona pokazuje angielskie zrzuty ekranu.
 
 ## Podgląd lokalny
 

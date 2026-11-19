@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kostenlose StrefaAnkiet-Plugins für LimeSurvey — CATI, CAPI, Amazon SES</title>
+  <meta name="description" content="Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden eine Umfrage mit der Plattform StrefaAnkiet: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, CAPI-Feldarbeit und Antwortanalyse. Kostenpflichtig sind das Plattformkonto und die Dienste." />
+  <link rel="canonical" href="https://limecontrol.eu/de/plugins.html" />
+  <link rel="alternate" hreflang="pl" href="https://limecontrol.eu/wtyczki.html" />
+  <link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/plugins.html" />
+  <link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/plugins.html" />
+  <link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/plugins.html" />
+  <meta name="theme-color" content="#1b5e36" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="LimeControl" />
+  <meta property="og:url" content="https://limecontrol.eu/de/plugins.html" />
+  <meta property="og:title" content="Kostenlose Plugins, die LimeSurvey mit StrefaAnkiet verbinden" />
+  <meta property="og:description" content="Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden eine Umfrage mit der Plattform StrefaAnkiet: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, CAPI-Feldarbeit und Antwortanalyse. Kostenpflichtig sind das Plattformkonto und die Dienste." />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:locale:alternate" content="pl_PL" />
+  <meta property="og:locale:alternate" content="en_GB" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/style.css?v=5" />
+  <script>document.documentElement.classList.add('js')</script>
+
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt springen</a>
+
+  <header class="nav">
+    <div class="container">
+      <a class="nav-logo" href="/de/" aria-label="LimeControl — Startseite">
+        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="104" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="104" height="34" />
+      </a>
+      <button class="nav-toggle" aria-label="Menü" aria-expanded="false" aria-controls="nav-links">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/de/#funktionen">Funktionen</a></li>
+        <li><a href="/de/designs.html">Designs</a></li>
+        <li><a href="/de/vorlagen.html">Vorlagen</a></li>
+        <li><a href="/de/plugins.html" aria-current="page">Plugins</a></li>
+        <li><a href="/de/#hosting">Hosting & Betrieb</a></li>
+        <li><a href="/de/docs.html">Doku</a></li>
+        <li><a class="nav-gh" href="https://github.com/lukasz5/LimeControl" target="_blank" rel="noopener" aria-label="Quellcode von LimeControl auf GitHub"><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a></li>
+        <li class="nav-langs"><a class="nav-lang" href="/wtyczki.html" hreflang="pl" lang="pl" aria-label="Wersja polska">PL<span> — Polski</span></a><a class="nav-lang" href="/en/plugins.html" hreflang="en" lang="en" aria-label="English version">EN<span> — English</span></a></li>
+        <li><a class="btn btn-primary btn-sm" href="https://app.limecontrol.eu">App öffnen</a></li>
+      </ul>
+    </div>
+  </header>
+
+<main id="main">
+    <section class="hero hero-themes">
+      <div class="container">
+        <div>
+          <span class="eyebrow">Kostenlose Plugins für LimeSurvey</span>
+          <h1>Verbinden Sie LimeSurvey mit StrefaAnkiet. <span class="lime">Die Plugins sind kostenlos</span>.</h1>
+          <p class="lead">Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden Ihre Umfrage mit der Plattform <strong>StrefaAnkiet</strong> — bezahlt wird nur das Konto und die Dienste, die Sie nutzen: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, Interviewer im Feld und die Analyse der Ergebnisse. Befragte füllen weiterhin dieselbe LimeSurvey-Umfrage aus.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">Plugins anfordern</a>
+            <a class="btn btn-ghost" href="https://strefaankiet.pl/#cena" rel="noopener">Preise von StrefaAnkiet</a>
+          </div>
+          <ul class="hero-meta">
+            <li>Plugins: kostenlos, Open Source</li>
+            <li>Getestet mit LimeSurvey 6.15 und 7.10</li>
+            <li>PHP 8.1+</li>
+            <li>Daten bleiben in Ihrem LimeSurvey</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="kostenlos-und-kostenpflichtig" class="section-soft" aria-labelledby="model-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">So funktioniert’s</span>
+          <h2 id="model-h">Kostenlose Software, kostenpflichtige Dienste</h2>
+          <p>Die Software installieren Sie kostenlos bei sich. Kostenpflichtig ist, was sich nicht als Code verschenken lässt: Versandinfrastruktur, Telefonie und ein Teamkonto auf der Plattform.</p>
+        </div>
+        <div class="grid grid-2">
+          <article class="card host-card">
+            <span class="tag">Kostenlos</span>
+            <h3>Plugins und Werkzeuge</h3>
+            <p>Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne zeitliche Begrenzung.</p>
+            <ul>
+              <li>Sechs StrefaAnkiet-Plugins und -Werkzeuge für LimeSurvey — mit Quellcode</li>
+              <li>Fragebogenaustausch, Antwortexport und Konverter funktionieren ohne Konto</li>
+              <li>Die App LimeControl (iOS, Android, Web), <a href="/de/designs.html">Designs</a> und <a href="/de/vorlagen.html">Umfragevorlagen</a></li>
+              <li>Docker-Deployment-Kits für LimeSurvey und LimeControl</li>
+            </ul>
+            <div class="actions">
+              <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">Plugins anfordern</a>
+            </div>
+          </article>
+          <article class="card host-card featured">
+            <span class="tag">StrefaAnkiet-Konto</span>
+            <h3>Dienste der Plattform</h3>
+            <p>Ein Plattform-Abonnement plus nutzungsabhängig abgerechnete Zusatzdienste. Den Umfang wählen Sie passend zur Studie.</p>
+            <ul>
+              <li><strong>Verwaltetes Amazon SES</strong> — Sie geben den Absender an und ergänzen drei DNS-Einträge; ohne eigenes AWS-Konto und ohne Schlüssel</li>
+              <li><strong>VoIP-Telefonie für CATI</strong> — ein Telefon im Browser des Interviewers, der VoIP-Server von StrefaAnkiet, eine Rufnummer, Anrufe und Aufzeichnungen</li>
+              <li><strong>Feldarbeit (CAPI)</strong> — Zuteilungen und Ziele für Interviewer, eine Interviewer-App, die offline funktioniert</li>
+              <li><strong>Team-Arbeitsbereich</strong> — Projekte, Rollen, modusübergreifende Quoten, Analysen in R und Berichte als PDF/DOCX</li>
+            </ul>
+            <p class="fineprint">Telefonie, Massenversand, Transkription und KI erfordern eine eigene Konfiguration und haben eigene Abrechnungsbedingungen.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://strefaankiet.pl/#cena" rel="noopener">Preise von StrefaAnkiet</a>
+              <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">Sprechen wir darüber</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="plugins" aria-labelledby="plugins-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Das Plugin-Paket</span>
+          <h2 id="plugins-h">StrefaAnkiet für LimeSurvey</h2>
+          <p>Sechs unabhängige Bausteine — Sie installieren nur, was Sie brauchen. Die Plugins legen keine eigenen Tabellen in der LimeSurvey-Datenbank an.</p>
+        </div>
+        <div class="pgrid">
+          <article class="card pcard" id="StrefaWorkspace">
+            <span class="status">Benötigt ein StrefaAnkiet-Konto</span>
+            <h3>Studienmenü</h3>
+            <span class="pname">Plugin: StrefaWorkspace</span>
+            <p>Verknüpft eine LimeSurvey-Umfrage mit einer Studie in StrefaAnkiet und ergänzt das Umfragemenü um Verknüpfungen zum gesamten Arbeitsbereich.</p>
+            <ul>
+              <li>CAWI-, CATI- und CAPI-Feldarbeit, Ergebnisse, Analysen, Befragte und Team — direkt aus der Umfrage</li>
+              <li>Eine explizite Zuordnung der Umfrage-ID (SID) zu einer Studie</li>
+              <li>Links vergeben keine Rechte — es gelten die Rollen der Plattform</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaInvitationRelay">
+            <span class="status">Benötigt ein StrefaAnkiet-Konto</span>
+            <h3>Versand über Amazon SES</h3>
+            <span class="pname">Plugin: StrefaInvitationRelay</span>
+            <p>Einladungen und Erinnerungen aus LimeSurvey, verschickt über den Amazon-SES-Kanal Ihres Unternehmens in StrefaAnkiet — ohne die Arbeit mit Teilnehmern zu ändern.</p>
+            <ul>
+              <li>Empfänger, Tokens und Inhalte bleiben in LimeSurvey</li>
+              <li>Zustellbestätigungen, Bounces und Beschwerden im Versandverlauf</li>
+              <li>Schutz vor doppeltem Versand</li>
+              <li>AWS-Schlüssel bleiben auf der Plattformseite</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaResearch">
+            <span class="status">Benötigt ein StrefaAnkiet-Konto</span>
+            <h3>CATI- und CAPI-Feldarbeit, Analyse</h3>
+            <span class="pname">Plugin: StrefaResearch</span>
+            <p>Ein in LimeSurvey eingebetteter Forschungsarbeitsplatz: Interviewer-Zuteilungen, Koordination der Telefonfeldarbeit und Antwortanalyse.</p>
+            <ul>
+              <li>CAPI: Zuteilungen, Ziele und Fristen für Interviewer; das Interview läuft in der nativen LimeSurvey-Umfrage</li>
+              <li>CATI: Stichprobe, Fallwarteschlange, Zuteilungen, Rückrufe und Übergaben zwischen Interviewern</li>
+              <li>Stichprobenquoten und Feldfortschritt in einer Ansicht</li>
+              <li>Analyse: Datensatzversionen, Variablenverzeichnis, Analysen in R, Berichte</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaSurveyExchange">
+            <span class="status is-free">Funktioniert ohne Konto</span>
+            <h3>Fragebogenaustausch</h3>
+            <span class="pname">Plugin: StrefaSurveyExchange</span>
+            <p>Lädt einen Fragebogen aus LimeSurvey als .lss-Struktur oder als JSON-Paket mit Feldzuordnung und Differenzbericht herunter.</p>
+            <ul>
+              <li>Export der Struktur (.lss) oder eines JSON-Pakets mit Feldcode-Zuordnung</li>
+              <li>Eine Liste nicht übertragbarer Elemente — nichts wird stillschweigend vereinfacht</li>
+              <li>Einstellungen anderer Plugins werden aus dem Export entfernt</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaResponseExport">
+            <span class="status is-free">Funktioniert ohne Konto</span>
+            <h3>Antwortexport</h3>
+            <span class="pname">Plugin: StrefaResponseExport</span>
+            <p>Stellt die codierten Antworten einer aktiven Umfrage für Analysen bereit — seitenweise und ohne technische Kennungen.</p>
+            <ul>
+              <li>Lässt Tokens, IP-Adressen und den Referrer weg</li>
+              <li>Erfordert Lese- und Exportrechte für die jeweilige Umfrage</li>
+              <li>Download von Anhängen aus Datei-Upload-Fragen</li>
+            </ul>
+          </article>
+          <article class="card pcard" id="StrefaConverters">
+            <span class="status is-free">Funktioniert ohne Konto</span>
+            <h3>Konverter (Kommandozeile)</h3>
+            <span class="pname">Werkzeugpaket: StrefaConverters</span>
+            <p>Eigenständige Werkzeuge zum Konvertieren von Fragebögen und Antworten — nützlich für Migrationen und Archivierung.</p>
+            <ul>
+              <li>LSS ↔ JSON mit SHA-256-Prüfsumme</li>
+              <li>Antworten aus JSON, CSV und dem VV-Export</li>
+              <li>Behält Codes mit führenden Nullen (z. B. 001) als Text</li>
+            </ul>
+          </article>
+        </div>
+        <div class="callout" style="margin-top:32px">
+          <p><strong>Stand der Veröffentlichung.</strong> Das Paket liegt als Release Candidate 0.9 vor (Pilotphase), getestet mit LimeSurvey 6.15 und 7.10. Ein öffentliches Repository mit den Installationspaketen ist in Vorbereitung — bis dahin <a href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">schreiben Sie uns</a>, und wir senden Ihnen die Plugins kostenlos samt Anleitung.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="modi" class="section-soft" aria-labelledby="modes-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Erhebungsmodi</span>
+          <h2 id="modes-h">Eine Umfrage, drei Wege zu Antworten</h2>
+          <p>Fragebogen und Antworten bleiben in LimeSurvey. Es ändert sich nur, wer das Interview führt und wie.</p>
+        </div>
+        <div class="modes">
+          <article class="card">
+            <div class="abbr">CAWI</div>
+            <h3>Online-Umfrage</h3>
+            <p>Befragte füllen die Umfrage selbst aus, über einen Link oder eine E-Mail-Einladung. Das ist der native Modus von LimeSurvey — in LimeControl aktivieren Sie die Umfrage, versenden Einladungen und verfolgen die Ergebnisse.</p>
+            <p class="more">Kostenlos in LimeControl</p>
+          </article>
+          <article class="card">
+            <div class="abbr">CATI</div>
+            <h3>Telefoninterview</h3>
+            <p>Ein Interviewer ruft an und erfasst die Antworten. Die Plattform ergänzt Stichprobe, Fallwarteschlange, Zuteilungen, Rückrufe, ein Telefon im Browser und Gesprächsaufzeichnungen.</p>
+            <p class="more">Kostenloses Plugin + Telefonie von StrefaAnkiet</p>
+          </article>
+          <article class="card">
+            <div class="abbr">CAPI</div>
+            <h3>Persönliches Interview</h3>
+            <p>Ein Interviewer führt das Interview auf Tablet oder Smartphone. Die Plattform ergänzt Zuteilungen mit Zielen und Fristen, die Bestätigung von Interviews und eine Interviewer-App, die offline funktioniert.</p>
+            <p class="more">Kostenloses Plugin + StrefaAnkiet-Konto</p>
+          </article>
+          <article class="card">
+            <div class="abbr">Mixed-Mode</div>
+            <h3>Modi kombinieren</h3>
+            <p>Eine Studie über mehrere Kanäle, mit gemeinsamen Quoten, einem Datensatz und Analyse in R.</p>
+            <p class="more">StrefaAnkiet-Konto</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="vergleich" aria-labelledby="compare-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Was kostenlos ist und was nicht</span>
+          <h2 id="compare-h">Von kostenlosen Werkzeugen zu Plattformdiensten</h2>
+          <p>Beginnen Sie mit dem, was kostenlos ist. Ein StrefaAnkiet-Konto kommt dazu, wenn eine Studie Infrastruktur und ein Team braucht.</p>
+        </div>
+        <div class="table-scroll">
+          <table class="compare">
+            <thead>
+              <tr><th scope="col">Bedarf</th><th scope="col">Kostenlos — LimeControl und die Plugins</th><th scope="col">Kostenpflichtig — StrefaAnkiet-Konto und Dienste</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Umfragen vom Smartphone verwalten</th><td>Die App für iOS, Android und Web: Aktivierung, Zeitplan, Teilnehmer, Export</td><td>—</td></tr>
+              <tr><th scope="row">Aussehen der Umfrage</th><td>Acht Designs nach WCAG 2.2 AA, darunter CATI und CAPI</td><td>—</td></tr>
+              <tr><th scope="row">Fertige Fragebögen</th><td>Zwölf Vorlagen (EN/PL), darunter Gerüste für CATI und CAPI</td><td>Eine Bibliothek mit Studien- und Berichtsvorlagen</td></tr>
+              <tr><th scope="row">LimeSurvey mit der Plattform verbinden</th><td>Die Plugins: Installation, Updates und Quellcode</td><td>Ein Organisationskonto mit Teamrollen</td></tr>
+              <tr><th scope="row">Einladungen versenden</th><td>LimeSurvey-Mail, geplante Einladungen und Erinnerungen in LimeControl</td><td>Verwaltetes Amazon SES: Absender in der eigenen Domain, Zustellbestätigungen, Bounces und Beschwerden</td></tr>
+              <tr><th scope="row">Telefoninterviews</th><td>Das CATI-Design mit Tastenkürzeln, ein Interviewgerüst mit Kontaktergebnis</td><td>Fallwarteschlange, Zuteilungen, Rückrufe, VoIP-Telefon im Browser, VoIP-Server, Aufzeichnungen</td></tr>
+              <tr><th scope="row">Feldinterviews</th><td>Das CAPI-Design und die Interview-Schleife auf dem Tablet (online)</td><td>Zuteilungen und Ziele für Interviewer, Bestätigung von Interviews, eine Offline-App</td></tr>
+              <tr><th scope="row">Quoten und Qualitätskontrolle</th><td>Native LimeSurvey-Quoten</td><td>Modusübergreifende Quoten, Qualitätskontrolle der Interviews</td></tr>
+              <tr><th scope="row">Ergebnisse analysieren</th><td>Übersichten und Diagramme, Export als CSV / Excel / JSON, Konverter</td><td>Versionierte Datensätze, Analysen in R, Berichte als PDF und DOCX</td></tr>
+              <tr><th scope="row">Umfrageserver</th><td>Docker-Kits zur eigenen Installation</td><td><a href="/de/#hosting">Einrichtung und Betreuung eines Umfrageservers</a> durch strefabadan.pl</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="limecontrol" class="section-soft" aria-labelledby="connect-h">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">Verbindung mit LimeControl</span>
+          <h2 id="connect-h">Feldfortschritt in der App</h2>
+          <p class="muted">Ist eine Umfrage mit einer Studie in StrefaAnkiet verknüpft, zeigt LimeControl deren Feldstatus — ohne das Panel zu öffnen.</p>
+          <a class="btn btn-ghost" href="/de/docs.html#strefaankiet">So verbinden Sie Ihr Konto</a>
+        </div>
+        <ul class="checklist">
+          <li><span><strong>CAPI</strong> — abgeschlossene Interviews, Interviewer-Zuteilungen und ihr Fortschritt gegenüber dem Ziel.</span></li>
+          <li><span><strong>CATI</strong> — die Zahl der Fälle in der Warteschlange, nicht zugeteilte Fälle und Fälle, die Aufmerksamkeit brauchen.</span></li>
+          <li><span><strong>Nur lesend</strong> — die App ändert nichts an der Studie; sie braucht einen Zugangsschlüssel mit den Scopes <code>fieldwork.read</code> und <code>cati.read</code>.</span></li>
+          <li><span><strong>Der Schlüssel bleibt bei Ihnen</strong> — er liegt nur im Speicher des geöffneten Tabs, genau wie LimeSurvey-Passwörter.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="start" aria-labelledby="start-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Erste Schritte</span>
+          <h2 id="start-h">Vier Schritte — die ersten drei sind kostenlos</h2>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Umfrageserver bereitstellen</h3>
+            <p>Nutzen Sie Ihre eigene LimeSurvey-Instanz, das kostenlose Docker-Kit oder überlassen Sie uns <a href="/de/#hosting">Einrichtung und Betreuung</a>.</p>
+          </li>
+          <li>
+            <h3>Design und Vorlage hinzufügen</h3>
+            <p>Installieren Sie das <a href="/de/designs.html#cati">CATI- oder CAPI-Design</a> und importieren Sie ein <a href="/de/vorlagen.html#wywiad-cati">Interviewgerüst</a>.</p>
+          </li>
+          <li>
+            <h3>Kostenlose Plugins installieren</h3>
+            <p>Laden Sie die Pakete im Plugin-Manager von LimeSurvey hoch und legen Sie fest, welche Umfrage zu welcher Studie gehört.</p>
+          </li>
+          <li>
+            <h3>Dienste bei Bedarf einschalten</h3>
+            <p>Legen Sie ein StrefaAnkiet-Konto an, richten Sie Versand oder Telefonie ein und verfolgen Sie den Fortschritt in <a href="https://app.limecontrol.eu">LimeControl</a>.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="cta">
+          <h2>Sie planen eine CATI- oder CAPI-Studie?</h2>
+          <p>Beschreiben Sie die Studie — Zahl der Interviews, Modi und Termine. Wir sagen Ihnen, was die kostenlosen Werkzeuge leisten und wo ein StrefaAnkiet-Konto hilft.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">info@strefabadan.pl</a>
+            <a class="btn btn-ghost" href="https://strefaankiet.pl" rel="noopener">strefaankiet.pl</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <a href="/de/" aria-label="LimeControl">
+        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="86" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="86" height="28" />
+      </a>
+      <ul class="footer-links">
+        <li><a href="/de/designs.html">Umfrage-Designs</a></li>
+        <li><a href="/de/vorlagen.html">Umfragevorlagen</a></li>
+        <li><a href="/de/plugins.html">StrefaAnkiet-Plugins</a></li>
+        <li><a href="/de/#hosting">Hosting & Betrieb</a></li>
+        <li><a href="/de/docs.html">Dokumentation</a></li>
+        <li><a href="/de/datenschutz.html">Datenschutz</a></li>
+        <li><a href="https://app.limecontrol.eu">App</a></li>
+        <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
+        <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
+        <li><a href="/wtyczki.html" hreflang="pl" lang="pl">Polski</a></li>
+        <li><a href="/en/plugins.html" hreflang="en" lang="en">English</a></li>
+      </ul>
+      <a class="coffee" href="https://www.paypal.com/biz/profile/strefabadan" target="_blank" rel="noopener noreferrer">Spendier mir einen Kaffee</a>
+    </div>
+    <div class="container" style="margin-top:20px">
+      <p style="margin:0">© <span id="year">2026</span> LimeControl · StrefaAnkiet und LimeControl werden von <a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a> entwickelt. App, Designs, Plugins und Deployment-Kits sind Open-Source-Software; Inhalt und Gestaltung dieser Website — alle Rechte vorbehalten. LimeSurvey ist eine eingetragene Marke der LimeSurvey GmbH. LimeControl und die Dienste von strefabadan.pl sind unabhängige Projekte und stehen in keiner Verbindung zur LimeSurvey GmbH.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/site.js?v=5" defer></script>
+</body>
+</html>

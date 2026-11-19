@@ -5,7 +5,7 @@
  *
  *  - każdy link wewnętrzny (href, src) wskazuje istniejący plik,
  *  - każda kotwica (#id) istnieje na stronie docelowej,
- *  - każda podstrona ma swój odpowiednik w drugim języku (hreflang) i dokładnie jeden nagłówek <h1>,
+ *  - każda podstrona ma odpowiedniki we wszystkich językach (hreflang) i dokładnie jeden nagłówek <h1>,
  *  - w treści nie został żaden nierozwinięty znacznik {{…}}.
  *
  * Kończy się kodem 1, gdy znajdzie błąd — używane w CI (npm run check:site).
@@ -46,7 +46,7 @@ for (const [file, { html, ids }] of pages) {
   if (/\{\{[A-Za-z_]+\}\}/.test(html)) report(file, 'nierozwinięty znacznik {{…}}');
   const h1 = (html.match(/<h1[\s>]/g) || []).length;
   if (h1 !== 1) report(file, `oczekiwano jednego <h1>, jest ${h1}`);
-  if (!/<html lang="(pl|en)">/.test(html)) report(file, 'brak atrybutu lang w <html>');
+  if (!/<html lang="(pl|en|de)">/.test(html)) report(file, 'brak atrybutu lang w <html>');
   if (!/<title>[^<]{10,}<\/title>/.test(html)) report(file, 'brak tytułu strony');
 
   for (const [, attr, raw] of html.matchAll(/\s(href|src)="([^"]*)"/g)) {

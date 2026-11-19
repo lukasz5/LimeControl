@@ -8,6 +8,7 @@
   <link rel="canonical" href="https://limecontrol.eu/en/plugins.html" />
   <link rel="alternate" hreflang="pl" href="https://limecontrol.eu/wtyczki.html" />
   <link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/plugins.html" />
+  <link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/plugins.html" />
   <link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/plugins.html" />
   <meta name="theme-color" content="#1b5e36" />
 
@@ -18,6 +19,7 @@
   <meta property="og:description" content="The StrefaAnkiet plugins for LimeSurvey are free and open source. They connect a survey to the StrefaAnkiet platform: managed mailing through Amazon SES, VoIP telephony for CATI interviews, CAPI fieldwork and response analysis. The platform account and services are paid." />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:locale:alternate" content="pl_PL" />
+  <meta property="og:locale:alternate" content="de_DE" />
   <meta name="twitter:card" content="summary" />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -26,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=4" />
+  <link rel="stylesheet" href="/assets/style.css?v=5" />
   <script>document.documentElement.classList.add('js')</script>
 
 </head>
@@ -36,8 +38,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/en/" aria-label="LimeControl — home page">
-        <img class="logo-light" src="/assets/logo.svg?v=4" alt="LimeControl" width="104" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=4" alt="LimeControl" width="104" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="104" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="104" height="34" />
       </a>
       <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -50,7 +52,7 @@
         <li><a href="/en/#hosting">Hosting & deployment</a></li>
         <li><a href="/en/docs.html">Docs</a></li>
         <li><a class="nav-gh" href="https://github.com/lukasz5/LimeControl" target="_blank" rel="noopener" aria-label="LimeControl source code on GitHub"><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a></li>
-        <li><a class="nav-lang" href="/wtyczki.html" hreflang="pl" lang="pl" aria-label="Przełącz na polski">PL<span> — Polski</span></a></li>
+        <li class="nav-langs"><a class="nav-lang" href="/wtyczki.html" hreflang="pl" lang="pl" aria-label="Wersja polska">PL<span> — Polski</span></a><a class="nav-lang" href="/de/plugins.html" hreflang="de" lang="de" aria-label="Deutsche Version">DE<span> — Deutsch</span></a></li>
         <li><a class="btn btn-primary btn-sm" href="https://app.limecontrol.eu">Open the app</a></li>
       </ul>
     </div>
@@ -92,7 +94,7 @@
             <ul>
               <li>Six StrefaAnkiet plugins and tools for LimeSurvey — with source code</li>
               <li>Questionnaire exchange, response export and the converters work without an account</li>
-              <li>The LimeControl app, <a href="/en/themes.html">themes</a> and <a href="/en/templates.html">survey templates</a></li>
+              <li>The LimeControl app (iOS, Android, web), <a href="/en/themes.html">themes</a> and <a href="/en/templates.html">survey templates</a></li>
               <li>Docker deployment kits for LimeSurvey and LimeControl</li>
             </ul>
             <div class="actions">
@@ -251,7 +253,7 @@
               <tr><th scope="col">Need</th><th scope="col">Free — LimeControl and the plugins</th><th scope="col">Paid — StrefaAnkiet account and services</th></tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Managing surveys from a phone</th><td>The app: activation, scheduling, participants, export</td><td>—</td></tr>
+              <tr><th scope="row">Managing surveys from a phone</th><td>The iOS, Android and web app: activation, scheduling, participants, export</td><td>—</td></tr>
               <tr><th scope="row">Survey look</th><td>Eight WCAG 2.2 AA themes, including CATI and CAPI</td><td>—</td></tr>
               <tr><th scope="row">Ready-made questionnaires</th><td>Twelve EN/PL templates, including CATI and CAPI skeletons</td><td>A library of study and report templates</td></tr>
               <tr><th scope="row">Connecting LimeSurvey to the platform</th><td>The plugins: installation, updates and source code</td><td>An organisation account with team roles</td></tr>
@@ -328,8 +330,8 @@
   <footer class="footer">
     <div class="container">
       <a href="/en/" aria-label="LimeControl">
-        <img class="logo-light" src="/assets/logo.svg?v=4" alt="LimeControl" width="86" height="28" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=4" alt="LimeControl" width="86" height="28" />
+        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="86" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="86" height="28" />
       </a>
       <ul class="footer-links">
         <li><a href="/en/themes.html">Survey themes</a></li>
@@ -342,6 +344,7 @@
         <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
         <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
         <li><a href="/wtyczki.html" hreflang="pl" lang="pl">Polski</a></li>
+        <li><a href="/de/plugins.html" hreflang="de" lang="de">Deutsch</a></li>
       </ul>
       <a class="coffee" href="https://www.paypal.com/biz/profile/strefabadan" target="_blank" rel="noopener noreferrer">Buy me a coffee</a>
     </div>
@@ -350,6 +353,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=4" defer></script>
+  <script src="/assets/site.js?v=5" defer></script>
 </body>
 </html>

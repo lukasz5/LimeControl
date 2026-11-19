@@ -4,6 +4,8 @@
     <loc>https://limecontrol.eu/</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/" />
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,6 +13,17 @@
     <loc>https://limecontrol.eu/en/</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/de/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -18,6 +31,8 @@
     <loc>https://limecontrol.eu/szablony.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/szablony.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/themes.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/designs.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/themes.html" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -25,6 +40,17 @@
     <loc>https://limecontrol.eu/en/themes.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/szablony.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/themes.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/designs.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/themes.html" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/de/designs.html</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/szablony.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/themes.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/designs.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/themes.html" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,6 +58,8 @@
     <loc>https://limecontrol.eu/ankiety.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/ankiety.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/templates.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/vorlagen.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/templates.html" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -39,6 +67,17 @@
     <loc>https://limecontrol.eu/en/templates.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/ankiety.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/templates.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/vorlagen.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/templates.html" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/de/vorlagen.html</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/ankiety.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/templates.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/vorlagen.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/templates.html" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -46,6 +85,8 @@
     <loc>https://limecontrol.eu/wtyczki.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/wtyczki.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/plugins.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/plugins.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/plugins.html" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -53,6 +94,17 @@
     <loc>https://limecontrol.eu/en/plugins.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/wtyczki.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/plugins.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/plugins.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/plugins.html" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/de/plugins.html</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/wtyczki.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/plugins.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/plugins.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/plugins.html" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -60,6 +112,8 @@
     <loc>https://limecontrol.eu/docs.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/docs.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/docs.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/docs.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/docs.html" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -67,6 +121,17 @@
     <loc>https://limecontrol.eu/en/docs.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/docs.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/docs.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/docs.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/docs.html" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/de/docs.html</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/docs.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/docs.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/docs.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/docs.html" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -74,6 +139,8 @@
     <loc>https://limecontrol.eu/prywatnosc.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/prywatnosc.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/privacy.html" />
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -81,6 +148,17 @@
     <loc>https://limecontrol.eu/en/privacy.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/prywatnosc.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/privacy.html" />
+    <changefreq>monthly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/de/datenschutz.html</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/prywatnosc.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/privacy.html" />
     <changefreq>monthly</changefreq>
     <priority>0.2</priority>
   </url>
