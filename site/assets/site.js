@@ -87,6 +87,75 @@
     });
   }
 
+  // Google Analytics 4 — ładowany wyłącznie po zgodzie (identyfikator w <html data-ga>, baner w stopce).
+  var gaId = document.documentElement.getAttribute('data-ga');
+  var banner = document.getElementById('cookie-banner');
+  if (gaId && banner) {
+    var KEY = 'lc-consent';
+    var MAX_AGE = 365 * 24 * 3600 * 1000; // po roku pytamy ponownie
+    var read = function () {
+      try {
+        var v = JSON.parse(localStorage.getItem(KEY) || 'null');
+        return v && (v.value === 'granted' || v.value === 'denied') && Date.now() - v.at < MAX_AGE ? v.value : null;
+      } catch (e) { return null; }
+    };
+    var save = function (value) {
+      try { localStorage.setItem(KEY, JSON.stringify({ value: value, at: Date.now() })); } catch (e) { /* tryb prywatny */ }
+    };
+    var loaded = false;
+    var loadGa = function () {
+      if (loaded) return;
+      loaded = true;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted' });
+      window.gtag('js', new Date());
+      window.gtag('config', gaId, { allow_google_signals: false, allow_ad_personalization_signals: false });
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
+      document.head.appendChild(s);
+    };
+    // Usuwa pliki cookie GA (_ga, _ga_<ID>) z bieżącej domeny i domeny nadrzędnej.
+    var clearGa = function () {
+      var host = location.hostname.replace(/^www\./, '');
+      document.cookie.split(';').forEach(function (c) {
+        var name = c.split('=')[0].trim();
+        if (!/^_ga/.test(name)) return;
+        [host, '.' + host, ''].forEach(function (d) {
+          document.cookie = name + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
+        });
+      });
+    };
+    var show = function () { banner.hidden = false; };
+    var decide = function (value) {
+      var before = read();
+      save(value);
+      banner.hidden = true;
+      if (value === 'granted') loadGa();
+      else {
+        clearGa();
+        if (window.gtag) window.gtag('consent', 'update', { analytics_storage: 'denied' });
+        // Skrypt GA już działa na tej stronie — przeładowanie zatrzymuje go od razu.
+        if (before === 'granted' && loaded) location.reload();
+      }
+    };
+    banner.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-consent]');
+      if (btn) decide(btn.getAttribute('data-consent'));
+    });
+    document.querySelectorAll('[data-cookie-settings]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        show();
+        var first = banner.querySelector('button');
+        if (first) first.focus();
+      });
+    });
+    var current = read();
+    if (current === 'granted') loadGa();
+    else if (current === null) show();
+  }
+
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
 })();

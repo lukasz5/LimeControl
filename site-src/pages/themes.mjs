@@ -15,8 +15,8 @@ const NUMBER_WORDS = {
 const S = {
   pl: {
     ratio: (r) => `${r.toFixed(1).replace('.', ',')}:1`,
-    title: 'Darmowe motywy ankiet dla LimeSurvey zgodne z WCAG 2.2 — LimeControl',
-    description: (n, names) => `${n} darmowych, responsywnych motywów ankiet dla LimeSurvey 6 i 7: ${names}. Zgodne z WCAG 2.2 AA, z trybem ankietera CATI/CAPI. Pobierz ZIP i zainstaluj w swojej instancji.`,
+    title: 'Motywy ankiet dla LimeSurvey zgodne z WCAG 2.2 — LimeControl',
+    description: (n, _names) => `${n} darmowych motywów ankiet dla LimeSurvey 6 i 7 zgodnych z WCAG 2.2 AA, z trybem ankietera CATI/CAPI. Pobierz ZIP i zainstaluj w swojej instancji.`,
     ogTitle: 'Darmowe motywy ankiet dla LimeSurvey — WCAG 2.2 AA',
     ogDescription: (names) => `${names}. Responsywne, czytelne, gotowe do importu.`,
     listName: 'Motywy ankiet dla LimeSurvey od LimeControl',
@@ -112,7 +112,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
   en: {
     ratio: (r) => `${r.toFixed(1)}:1`,
     title: 'Free WCAG 2.2 survey themes for LimeSurvey — LimeControl',
-    description: (n, names) => `${n} free, responsive survey themes for LimeSurvey 6 and 7: ${names}. WCAG 2.2 AA compliant, with a CATI/CAPI interviewer mode. Download the ZIP and install it on your instance.`,
+    description: (n, _names) => `${n} free WCAG 2.2 AA survey themes for LimeSurvey 6 and 7, with a CATI/CAPI interviewer mode. Download the ZIP and install it on your instance.`,
     ogTitle: 'Free survey themes for LimeSurvey — WCAG 2.2 AA',
     ogDescription: (names) => `${names}. Responsive, readable, ready to import.`,
     listName: 'Survey themes for LimeSurvey by LimeControl',
@@ -207,8 +207,8 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
   },
   de: {
     ratio: (r) => `${r.toFixed(1).replace('.', ',')}:1`,
-    title: 'Kostenlose Umfrage-Designs für LimeSurvey nach WCAG 2.2 — LimeControl',
-    description: (n, names) => `${n} kostenlose, responsive Umfrage-Designs für LimeSurvey 6 und 7: ${names}. Konform mit WCAG 2.2 AA, mit Interviewer-Modus für CATI/CAPI. ZIP herunterladen und in Ihrer Instanz installieren.`,
+    title: 'Umfrage-Designs für LimeSurvey nach WCAG 2.2 — LimeControl',
+    description: (n, _names) => `${n} kostenlose Umfrage-Designs für LimeSurvey 6 und 7, konform mit WCAG 2.2 AA, mit CATI/CAPI-Interviewer-Modus. ZIP laden und installieren.`,
     ogTitle: 'Kostenlose Umfrage-Designs für LimeSurvey — WCAG 2.2 AA',
     ogDescription: (names) => `${names}. Responsiv, gut lesbar, bereit zum Import.`,
     listName: 'Umfrage-Designs für LimeSurvey von LimeControl',

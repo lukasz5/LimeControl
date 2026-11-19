@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ga="G-C03RCY4KMD">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>LimeControl documentation — setup, features and self-hosting</title>
-  <meta name="description" content="A guide to LimeControl: enabling the RemoteControl 2 API in LimeSurvey, connection modes, the survey template library, the scheduler, participants, the CATI/CAPI mode, the StrefaAnkiet connector and running the app on your own server." />
+  <meta name="description" content="LimeControl guide: enabling the LimeSurvey RemoteControl 2 API, connection modes, templates, scheduler, participants, CATI/CAPI and self-hosting." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/en/docs.html" />
   <link rel="alternate" hreflang="pl" href="https://limecontrol.eu/docs.html" />
   <link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/docs.html" />
@@ -17,10 +19,14 @@
   <meta property="og:url" content="https://limecontrol.eu/en/docs.html" />
   <meta property="og:title" content="LimeControl documentation" />
   <meta property="og:description" content="LimeSurvey setup, app features, CATI/CAPI interviews and running LimeControl on your own server." />
+  <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=6" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="LimeControl — an app for managing LimeSurvey surveys" />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:locale:alternate" content="pl_PL" />
   <meta property="og:locale:alternate" content="de_DE" />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -28,9 +34,29 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=5" />
+  <link rel="stylesheet" href="/assets/style.css?v=6" />
   <script>document.documentElement.classList.add('js')</script>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "LimeControl",
+        "item": "https://limecontrol.eu/en/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Documentation",
+        "item": "https://limecontrol.eu/en/docs.html"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -38,8 +64,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/en/" aria-label="LimeControl — home page">
-        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="104" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="104" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=6" alt="LimeControl" width="106" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=6" alt="LimeControl" width="106" height="34" />
       </a>
       <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -534,8 +560,8 @@ sudo ./install.sh</pre>
   <footer class="footer">
     <div class="container">
       <a href="/en/" aria-label="LimeControl">
-        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="86" height="28" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="86" height="28" />
+        <img class="logo-light" src="/assets/logo.svg?v=6" alt="LimeControl" width="88" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=6" alt="LimeControl" width="88" height="28" />
       </a>
       <ul class="footer-links">
         <li><a href="/en/themes.html">Survey themes</a></li>
@@ -544,6 +570,7 @@ sudo ./install.sh</pre>
         <li><a href="/en/#hosting">Hosting & deployment</a></li>
         <li><a href="/en/docs.html">Documentation</a></li>
         <li><a href="/en/privacy.html">Privacy</a></li>
+        <li><button type="button" class="link-btn" data-cookie-settings>Cookie settings</button></li>
         <li><a href="https://app.limecontrol.eu">App</a></li>
         <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
         <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
@@ -557,6 +584,15 @@ sudo ./install.sh</pre>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=5" defer></script>
+
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookie consent" hidden>
+    <p>We’d like to use Google Analytics cookies to learn which content is useful. They are set only if you agree — you can withdraw consent at any time in the page footer. <a href="/en/privacy.html#cookies">Privacy policy</a></p>
+    <div class="cookie-actions">
+      <button type="button" class="btn btn-ghost btn-sm" data-consent="denied">Reject</button>
+      <button type="button" class="btn btn-primary btn-sm" data-consent="granted">Accept</button>
+    </div>
+  </div>
+
+  <script src="/assets/site.js?v=6" defer></script>
 </body>
 </html>

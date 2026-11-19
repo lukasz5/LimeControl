@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ga="G-C03RCY4KMD">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Free WCAG 2.2 survey themes for LimeSurvey — LimeControl</title>
-  <meta name="description" content="8 free, responsive survey themes for LimeSurvey 6 and 7: Medical, Professional, Social, Marketing, Eco, Minimalist, CATI, CAPI. WCAG 2.2 AA compliant, with a CATI/CAPI interviewer mode. Download the ZIP and install it on your instance." />
+  <meta name="description" content="8 free WCAG 2.2 AA survey themes for LimeSurvey 6 and 7, with a CATI/CAPI interviewer mode. Download the ZIP and install it on your instance." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/en/themes.html" />
   <link rel="alternate" hreflang="pl" href="https://limecontrol.eu/szablony.html" />
   <link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/themes.html" />
@@ -29,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=5" />
+  <link rel="stylesheet" href="/assets/style.css?v=6" />
   <script>document.documentElement.classList.add('js')</script>
 
   <script type="application/ld+json">
@@ -145,6 +147,26 @@
     ]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "LimeControl",
+        "item": "https://limecontrol.eu/en/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Survey themes",
+        "item": "https://limecontrol.eu/en/themes.html"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -152,8 +174,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/en/" aria-label="LimeControl — home page">
-        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="104" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="104" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=6" alt="LimeControl" width="106" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=6" alt="LimeControl" width="106" height="34" />
       </a>
       <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -608,8 +630,8 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
   <footer class="footer">
     <div class="container">
       <a href="/en/" aria-label="LimeControl">
-        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="86" height="28" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="86" height="28" />
+        <img class="logo-light" src="/assets/logo.svg?v=6" alt="LimeControl" width="88" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=6" alt="LimeControl" width="88" height="28" />
       </a>
       <ul class="footer-links">
         <li><a href="/en/themes.html">Survey themes</a></li>
@@ -618,6 +640,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
         <li><a href="/en/#hosting">Hosting & deployment</a></li>
         <li><a href="/en/docs.html">Documentation</a></li>
         <li><a href="/en/privacy.html">Privacy</a></li>
+        <li><button type="button" class="link-btn" data-cookie-settings>Cookie settings</button></li>
         <li><a href="https://app.limecontrol.eu">App</a></li>
         <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
         <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
@@ -631,7 +654,16 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=5" defer></script>
+
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookie consent" hidden>
+    <p>We’d like to use Google Analytics cookies to learn which content is useful. They are set only if you agree — you can withdraw consent at any time in the page footer. <a href="/en/privacy.html#cookies">Privacy policy</a></p>
+    <div class="cookie-actions">
+      <button type="button" class="btn btn-ghost btn-sm" data-consent="denied">Reject</button>
+      <button type="button" class="btn btn-primary btn-sm" data-consent="granted">Accept</button>
+    </div>
+  </div>
+
+  <script src="/assets/site.js?v=6" defer></script>
   <script>
     // Przełącznik podglądu: komputer / telefon / błąd
     document.querySelectorAll('.tcard').forEach(function (card) {

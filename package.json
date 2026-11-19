@@ -22,6 +22,7 @@
     "build:templates": "node survey-templates/build.mjs",
     "build:site": "node site-src/build.mjs",
     "site:screens": "node site-src/screens.mjs",
+    "site:og": "node site-src/og-image.mjs",
     "check:site": "node site-src/check.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist dist-mobile server.js",

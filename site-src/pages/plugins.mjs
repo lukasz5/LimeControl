@@ -106,8 +106,9 @@ const PLUGINS = [
 
 const S = {
   pl: {
-    title: 'Darmowe wtyczki StrefaAnkiet dla LimeSurvey — CATI, CAPI, Amazon SES',
-    description: 'Wtyczki StrefaAnkiet dla LimeSurvey są bezpłatne i mają otwarty kod. Łączą ankietę z platformą StrefaAnkiet: zarządzana wysyłka przez Amazon SES, telefonia VoIP do wywiadów CATI, praca ankieterów CAPI i analiza wyników. Płatne jest konto i usługi platformy.',
+    title: 'Wtyczki StrefaAnkiet dla LimeSurvey — CATI, CAPI, Amazon SES',
+    description: 'Darmowe, otwarte wtyczki StrefaAnkiet dla LimeSurvey: wysyłka przez Amazon SES, VoIP do CATI, ankieterzy CAPI i analiza wyników. Płatne jest tylko konto.',
+    ogDescription: 'Wtyczki StrefaAnkiet dla LimeSurvey są bezpłatne i mają otwarty kod. Łączą ankietę z platformą StrefaAnkiet: zarządzana wysyłka przez Amazon SES, telefonia VoIP do wywiadów CATI, praca ankieterów CAPI i analiza wyników. Płatne jest konto i usługi platformy.',
     ogTitle: 'Darmowe wtyczki łączące LimeSurvey ze StrefąAnkiet',
     eyebrow: 'Darmowe wtyczki dla LimeSurvey',
     h1: 'Połącz LimeSurvey ze StrefąAnkiet. <span class="lime">Wtyczki są darmowe</span>.',
@@ -199,7 +200,8 @@ const S = {
   },
   en: {
     title: 'Free StrefaAnkiet plugins for LimeSurvey — CATI, CAPI, Amazon SES',
-    description: 'The StrefaAnkiet plugins for LimeSurvey are free and open source. They connect a survey to the StrefaAnkiet platform: managed mailing through Amazon SES, VoIP telephony for CATI interviews, CAPI fieldwork and response analysis. The platform account and services are paid.',
+    description: 'Free, open-source StrefaAnkiet plugins for LimeSurvey: Amazon SES mailing, VoIP for CATI, CAPI fieldwork and analysis. Only the platform account is paid.',
+    ogDescription: 'The StrefaAnkiet plugins for LimeSurvey are free and open source. They connect a survey to the StrefaAnkiet platform: managed mailing through Amazon SES, VoIP telephony for CATI interviews, CAPI fieldwork and response analysis. The platform account and services are paid.',
     ogTitle: 'Free plugins that connect LimeSurvey with StrefaAnkiet',
     eyebrow: 'Free plugins for LimeSurvey',
     h1: 'Connect LimeSurvey with StrefaAnkiet. <span class="lime">The plugins are free</span>.',
@@ -290,8 +292,9 @@ const S = {
     footerNote: 'StrefaAnkiet and LimeControl are developed by <a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a>.',
   },
   de: {
-    title: 'Kostenlose StrefaAnkiet-Plugins für LimeSurvey — CATI, CAPI, Amazon SES',
-    description: 'Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden eine Umfrage mit der Plattform StrefaAnkiet: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, CAPI-Feldarbeit und Antwortanalyse. Kostenpflichtig sind das Plattformkonto und die Dienste.',
+    title: 'StrefaAnkiet-Plugins für LimeSurvey — CATI, CAPI, Amazon SES',
+    description: 'Kostenlose Open-Source-Plugins von StrefaAnkiet für LimeSurvey: Amazon-SES-Versand, VoIP für CATI, CAPI-Feldarbeit und Analyse. Nur das Plattformkonto kostet.',
+    ogDescription: 'Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden eine Umfrage mit der Plattform StrefaAnkiet: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, CAPI-Feldarbeit und Antwortanalyse. Kostenpflichtig sind das Plattformkonto und die Dienste.',
     ogTitle: 'Kostenlose Plugins, die LimeSurvey mit StrefaAnkiet verbinden',
     eyebrow: 'Kostenlose Plugins für LimeSurvey',
     h1: 'Verbinden Sie LimeSurvey mit StrefaAnkiet. <span class="lime">Die Plugins sind kostenlos</span>.',
@@ -555,6 +558,7 @@ export function renderPluginsPage(lang) {
     title: s.title,
     description: s.description,
     ogTitle: s.ogTitle,
+    ogDescription: s.ogDescription,
     body,
     footerNote: s.footerNote,
   });
