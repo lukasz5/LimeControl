@@ -57,14 +57,22 @@ const themes = buildThemes();
 const templates = buildTemplates();
 
 /**
- * Zdanie o dostępności aplikacji mobilnej: linki do sklepów, gdy STORES_LIVE w chrome.mjs jest
- * włączone, a do tego czasu — informacja o publikacji i budowaniu ze źródeł.
+ * Zdanie o dostępności aplikacji mobilnej: linki do sklepów włączonych w STORES_LIVE (chrome.mjs),
+ * a gdy żaden nie jest włączony — informacja o publikacji i budowaniu ze źródeł.
  */
 function mobileAvailability(lang) {
-  if (STORES_LIVE) {
-    const links = [['App Store', APP_STORE_URL], ['Google Play', PLAY_STORE_URL]]
-      .map(([name, url]) => `<a href="${url}" target="_blank" rel="noopener">${name}</a>`).join(lang === 'pl' ? ' i ' : ' and ');
+  const live = [['App Store', APP_STORE_URL, STORES_LIVE.appStore], ['Google Play', PLAY_STORE_URL, STORES_LIVE.googlePlay]]
+    .filter(([, , isLive]) => isLive)
+    .map(([name, url]) => `<a href="${url}" target="_blank" rel="noopener">${name}</a>`);
+  if (live.length === 2) {
+    const links = live.join(lang === 'pl' ? ' i ' : ' and ');
     return lang === 'pl' ? `Pobierz ją bezpłatnie: ${links}.` : `Get it for free: ${links}.`;
+  }
+  if (live.length === 1) {
+    const pending = STORES_LIVE.appStore ? 'Google Play' : 'App Store';
+    return lang === 'pl'
+      ? `Pobierz ją bezpłatnie: ${live[0]}. Wersja w ${pending} czeka na publikację.`
+      : `Get it for free: ${live[0]}. The ${pending} version is waiting to be published.`;
   }
   const readme = `${GITHUB_URL}/blob/main/mobile/${lang === 'pl' ? 'README.md' : 'README.en.md'}`;
   return lang === 'pl'
@@ -81,10 +89,10 @@ function storeButtons(lang) {
     ? { soon: 'Wkrótce w', badge: 'wkrótce', label: 'Aplikacja mobilna' }
     : { soon: 'Coming soon to', badge: 'soon', label: 'Mobile app' };
   const stores = [
-    ['App Store', APP_STORE_URL, APPLE_LOGO, lang === 'pl' ? 'Pobierz z' : 'Download on the'],
-    ['Google Play', PLAY_STORE_URL, PLAY_LOGO, lang === 'pl' ? 'Pobierz z' : 'Get it on'],
+    ['App Store', APP_STORE_URL, APPLE_LOGO, lang === 'pl' ? 'Pobierz z' : 'Download on the', STORES_LIVE.appStore],
+    ['Google Play', PLAY_STORE_URL, PLAY_LOGO, lang === 'pl' ? 'Pobierz z' : 'Get it on', STORES_LIVE.googlePlay],
   ];
-  const items = stores.map(([name, url, logo, get]) => STORES_LIVE
+  const items = stores.map(([name, url, logo, get, live]) => live
     ? `<a class="store-btn" href="${url}" target="_blank" rel="noopener">${logo}<span><small>${get}</small><b>${name}</b></span></a>`
     : `<span class="store-btn is-soon" aria-label="${esc(`${name} — ${t.badge}`)}">${logo}<span><small>${t.soon}</small><b>${name}</b></span><em>${t.badge}</em></span>`);
   return `<div class="store-buttons" role="group" aria-label="${t.label}">${items.join('')}</div>`;
