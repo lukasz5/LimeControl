@@ -183,8 +183,8 @@ jobs:
           test "$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $CI_ACCESS_KEY" "$APP/api/schedules")" = 200
           test "$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{"endpoint":"http://127.0.0.1/","method":"get_session_key"}' "$APP/api/rpc-relay")" = 401
 
-          has '<html lang="pl">' "$SITE/"
-          has '<html lang="en">' "$SITE/en/"
+          has '<html lang="pl"' "$SITE/"
+          has '<html lang="en"' "$SITE/en/"
           has 'id="strefaankiet"' "$SITE/en/docs"
           headers="$(curl -fsSI "$SITE/ankiety/pobierz/nps-klienta.lss")"
           grep -qi 'content-disposition: attachment' <<<"$headers"
