@@ -22,10 +22,10 @@ export const STREFAANKIET_PRICING_URL = 'https://strefaankiet.pl/#cena';
 export const APP_STORE_URL = 'https://apps.apple.com/app/id6836539897';
 export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=eu.limecontrol.app';
 /**
- * true, gdy aplikacja jest już opublikowana w obu sklepach. Do tego czasu przyciski sklepów
- * pokazują „wkrótce” i nie prowadzą pod adresy, które jeszcze nie działają.
+ * Czy aplikacja jest już opublikowana w danym sklepie. Do tego czasu jego przycisk pokazuje
+ * „wkrótce” i nie prowadzi pod adres, który jeszcze nie działa.
  */
-export const STORES_LIVE = false;
+export const STORES_LIVE = { appStore: false, googlePlay: true };
 /** Podbij po zmianie site/assets/style.css lub site.js (nagłówki cache: 7 dni). */
 export const ASSET_VERSION = '4';
 
