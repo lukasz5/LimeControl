@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ga="G-C03RCY4KMD">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>LimeControl privacy policy — website, web app and mobile app</title>
-  <meta name="description" content="What data LimeControl processes: the limecontrol.eu website, the app.limecontrol.eu service, the mobile app and self-hosted installations. No ads and no tracking; survey data stays on your LimeSurvey server." />
+  <meta name="description" content="What data LimeControl processes: the website, app.limecontrol.eu and the mobile app. No ads, statistics only with consent; survey data stays on your server." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/en/privacy.html" />
   <link rel="alternate" hreflang="pl" href="https://limecontrol.eu/prywatnosc.html" />
   <link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/privacy.html" />
@@ -16,11 +18,15 @@
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/en/privacy.html" />
   <meta property="og:title" content="LimeControl privacy policy" />
-  <meta property="og:description" content="No ads and no tracking. Survey data stays on your LimeSurvey server." />
+  <meta property="og:description" content="No ads, website statistics only with consent. Survey data stays on your LimeSurvey server." />
+  <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=6" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="LimeControl — an app for managing LimeSurvey surveys" />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:locale:alternate" content="pl_PL" />
   <meta property="og:locale:alternate" content="de_DE" />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -28,9 +34,29 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=5" />
+  <link rel="stylesheet" href="/assets/style.css?v=6" />
   <script>document.documentElement.classList.add('js')</script>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "LimeControl",
+        "item": "https://limecontrol.eu/en/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Privacy",
+        "item": "https://limecontrol.eu/en/privacy.html"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -38,8 +64,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/en/" aria-label="LimeControl — home page">
-        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="104" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="104" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=6" alt="LimeControl" width="106" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=6" alt="LimeControl" width="106" height="34" />
       </a>
       <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -65,6 +91,7 @@
         <li><a href="#summary">In short</a></li>
         <li><a href="#controller">Controller</a></li>
         <li><a href="#website">The limecontrol.eu website</a></li>
+        <li><a href="#cookies">Cookies and statistics</a></li>
         <li><a href="#service">The app.limecontrol.eu service</a></li>
         <li><a href="#mobile-app">Mobile app</a></li>
         <li><a href="#self-hosted">Self-hosted installation</a></li>
@@ -80,10 +107,10 @@
       <section id="summary">
         <span class="eyebrow">Privacy</span>
         <h1>LimeControl privacy policy</h1>
-        <p class="updated">Version 1.0 · effective from 18 November 2026</p>
+        <p class="updated">Version 1.1 · effective from 19 November 2026</p>
         <p class="lead-docs">LimeControl is a tool for managing <em>your</em> LimeSurvey server. Survey data and respondents’ answers stay on that server — we neither collect nor store them.</p>
         <ul>
-          <li>We show no ads, use no analytics or tracking tools, and do not sell data.</li>
+          <li>We show no ads and do not sell data. We collect visit statistics for the limecontrol.eu website (Google Analytics) only with your consent; the apps contain no tracking tools.</li>
           <li>LimeSurvey passwords are not stored in our database or in browser storage.</li>
           <li>The mobile app works without an account — server profiles are saved on the device only.</li>
           <li>If you run LimeControl on your own server, we receive no data at all.</li>
@@ -100,11 +127,34 @@
         <h2>The limecontrol.eu website</h2>
         <ul>
           <li><strong>Server logs.</strong> The server records the IP address, the time of the request, the page address and the browser identifier. They serve security and error diagnosis (legitimate interest, Article 6(1)(f) GDPR).</li>
-          <li><strong>Cookies.</strong> The website sets no cookies and uses no analytics tools.</li>
+          <li><strong>Cookies and statistics.</strong> Google Analytics cookies are set only with your consent — see <a href="#cookies">Cookies and statistics</a>.</li>
           <li><strong>Fonts.</strong> The website loads fonts from Google Fonts, so Google receives the browser’s IP address.</li>
           <li><strong>Downloads.</strong> You download the themes, survey templates and plugins without registering.</li>
           <li><strong>Contact.</strong> When you write to us, we process the message and your contact details in order to reply.</li>
         </ul>
+      </section>
+
+      <section id="cookies">
+        <h2>Cookies and statistics</h2>
+        <p>With your consent, the limecontrol.eu website uses <strong>Google Analytics 4</strong> to measure visits, the popularity of pages and downloads, and traffic sources. Without consent the Google Analytics script is not loaded and no cookies are set.</p>
+        <ul>
+          <li><strong>Legal basis.</strong> Consent (Article 6(1)(a) GDPR and the national rules implementing Article 5(3) of the ePrivacy Directive). You can withdraw it at any time; withdrawal does not affect the lawfulness of earlier processing.</li>
+          <li><strong>Scope.</strong> A browser identifier stored in a cookie, the pages visited, the referring page, approximate location (country, city), and the device and browser type. Google Analytics 4 does not store IP addresses. Google signals and ad personalisation are switched off — the data is not used for advertising.</li>
+          <li><strong>Recipient.</strong> Google Ireland Limited. Data may be transferred to Google LLC in the USA under the European Commission’s adequacy decision on the EU-U.S. Data Privacy Framework.</li>
+          <li><strong>Retention.</strong> Statistics data is deleted after 14 months.</li>
+        </ul>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Expiry</th></tr></thead>
+            <tbody>
+              <tr><td><code>lc-consent</code> (browser storage)</td><td>limecontrol.eu</td><td>Remembers your consent choice — strictly necessary</td><td>12 months</td></tr>
+              <tr><td><code>_ga</code></td><td>Google Analytics</td><td>Distinguishes visitors (only with consent)</td><td>2 years</td></tr>
+              <tr><td><code>_ga_&lt;ID&gt;</code></td><td>Google Analytics</td><td>Keeps the session state (only with consent)</td><td>2 years</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><button type="button" class="btn btn-ghost btn-sm" data-cookie-settings>Change cookie settings</button></p>
+        <p>The app.limecontrol.eu service and the mobile app do not use Google Analytics.</p>
       </section>
 
       <section id="service">
@@ -153,7 +203,7 @@
       <section id="providers">
         <h2>Providers</h2>
         <ul>
-          <li><strong>Google (Firebase Authentication, Cloud Firestore, Google Fonts)</strong> — sign-in, profile storage in the app.limecontrol.eu service and the website fonts. Data may be processed outside the European Economic Area on the basis of standard contractual clauses.</li>
+          <li><strong>Google (Firebase Authentication, Cloud Firestore, Google Fonts, Google Analytics)</strong> — sign-in, profile storage in the app.limecontrol.eu service, the website fonts and — with your consent — website visit statistics. Data may be processed outside the European Economic Area on the basis of standard contractual clauses.</li>
           <li><strong>Hosting provider</strong> — the servers that run the website and the app.</li>
         </ul>
       </section>
@@ -163,6 +213,7 @@
         <ul>
           <li>The account and profiles in the app.limecontrol.eu service — until you delete them or request deletion of the account.</li>
           <li>The password in a scheduled job — until the job has run or been cancelled; the job history — until you delete it in the app.</li>
+          <li>Google Analytics statistics — 14 months; your consent choice — 12 months in your browser’s storage.</li>
           <li>Server logs — for the limited time needed to keep the service secure and diagnose errors.</li>
           <li>Correspondence — for as long as needed to handle the matter and for the limitation period of claims.</li>
         </ul>
@@ -185,8 +236,8 @@
   <footer class="footer">
     <div class="container">
       <a href="/en/" aria-label="LimeControl">
-        <img class="logo-light" src="/assets/logo.svg?v=5" alt="LimeControl" width="86" height="28" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=5" alt="LimeControl" width="86" height="28" />
+        <img class="logo-light" src="/assets/logo.svg?v=6" alt="LimeControl" width="88" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=6" alt="LimeControl" width="88" height="28" />
       </a>
       <ul class="footer-links">
         <li><a href="/en/themes.html">Survey themes</a></li>
@@ -195,6 +246,7 @@
         <li><a href="/en/#hosting">Hosting & deployment</a></li>
         <li><a href="/en/docs.html">Documentation</a></li>
         <li><a href="/en/privacy.html">Privacy</a></li>
+        <li><button type="button" class="link-btn" data-cookie-settings>Cookie settings</button></li>
         <li><a href="https://app.limecontrol.eu">App</a></li>
         <li><a href="https://github.com/lukasz5/LimeControl" rel="noopener">GitHub</a></li>
         <li><a href="https://strefabadan.pl" rel="noopener">strefabadan.pl</a></li>
@@ -208,6 +260,15 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=5" defer></script>
+
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookie consent" hidden>
+    <p>We’d like to use Google Analytics cookies to learn which content is useful. They are set only if you agree — you can withdraw consent at any time in the page footer. <a href="/en/privacy.html#cookies">Privacy policy</a></p>
+    <div class="cookie-actions">
+      <button type="button" class="btn btn-ghost btn-sm" data-consent="denied">Reject</button>
+      <button type="button" class="btn btn-primary btn-sm" data-consent="granted">Accept</button>
+    </div>
+  </div>
+
+  <script src="/assets/site.js?v=6" defer></script>
 </body>
 </html>

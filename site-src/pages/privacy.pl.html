@@ -1,9 +1,9 @@
 <!--meta
 {
-  "title": "Polityka prywatności LimeControl — strona, aplikacja i aplikacja mobilna",
-  "description": "Jakie dane przetwarza LimeControl: strona limecontrol.eu, usługa app.limecontrol.eu, aplikacja mobilna i własna instalacja. Bez reklam i śledzenia; dane ankiet zostają na Twoim serwerze LimeSurvey.",
+  "title": "Polityka prywatności LimeControl — strona i aplikacje",
+  "description": "Jakie dane przetwarza LimeControl: strona, app.limecontrol.eu i aplikacja mobilna. Bez reklam, statystyki tylko za zgodą; dane ankiet zostają na Twoim serwerze.",
   "ogTitle": "Polityka prywatności LimeControl",
-  "ogDescription": "Bez reklam i śledzenia. Dane ankiet zostają na Twoim serwerze LimeSurvey."
+  "ogDescription": "Bez reklam, statystyki strony tylko za zgodą. Dane ankiet zostają na Twoim serwerze LimeSurvey."
 }
 -->
   <div class="container docs">
@@ -13,6 +13,7 @@
         <li><a href="#w-skrocie">W skrócie</a></li>
         <li><a href="#administrator">Administrator</a></li>
         <li><a href="#strona">Strona limecontrol.eu</a></li>
+        <li><a href="#cookies">Pliki cookie i statystyki</a></li>
         <li><a href="#usluga">Usługa app.limecontrol.eu</a></li>
         <li><a href="#aplikacja-mobilna">Aplikacja mobilna</a></li>
         <li><a href="#wlasna-instalacja">Własna instalacja</a></li>
@@ -28,10 +29,10 @@
       <section id="w-skrocie">
         <span class="eyebrow">Prywatność</span>
         <h1>Polityka prywatności LimeControl</h1>
-        <p class="updated">Wersja 1.0 · obowiązuje od 18 listopada 2026 r.</p>
+        <p class="updated">Wersja 1.1 · obowiązuje od 19 listopada 2026 r.</p>
         <p class="lead-docs">LimeControl jest narzędziem do zarządzania <em>Twoim</em> serwerem LimeSurvey. Dane ankiet i odpowiedzi respondentów pozostają na tym serwerze — nie zbieramy ich ani nie przechowujemy.</p>
         <ul>
-          <li>Nie wyświetlamy reklam, nie korzystamy z narzędzi analitycznych ani śledzących i nie sprzedajemy danych.</li>
+          <li>Nie wyświetlamy reklam i nie sprzedajemy danych. Statystyki odwiedzin strony limecontrol.eu (Google Analytics) zbieramy wyłącznie po Twojej zgodzie; aplikacje nie zawierają narzędzi śledzących.</li>
           <li>Hasła do LimeSurvey nie są zapisywane ani w naszej bazie, ani w pamięci przeglądarki.</li>
           <li>Aplikacja mobilna działa bez konta — profile serwerów są zapisane tylko na urządzeniu.</li>
           <li>Jeśli uruchamiasz LimeControl na własnym serwerze, nie otrzymujemy żadnych danych.</li>
@@ -48,11 +49,34 @@
         <h2>Strona limecontrol.eu</h2>
         <ul>
           <li><strong>Logi serwera.</strong> Serwer zapisuje adres IP, czas zapytania, adres strony i identyfikator przeglądarki. Służą bezpieczeństwu i diagnozowaniu błędów (prawnie uzasadniony interes, art. 6 ust. 1 lit. f RODO).</li>
-          <li><strong>Pliki cookie.</strong> Strona nie ustawia plików cookie i nie używa narzędzi analitycznych.</li>
+          <li><strong>Pliki cookie i statystyki.</strong> Pliki cookie Google Analytics są ustawiane wyłącznie po Twojej zgodzie — szczegóły w sekcji <a href="#cookies">Pliki cookie i statystyki</a>.</li>
           <li><strong>Czcionki.</strong> Strona pobiera czcionki z usługi Google Fonts, przez co Google otrzymuje adres IP przeglądarki.</li>
           <li><strong>Pobieranie.</strong> Motywy, szablony ankiet i wtyczki pobierasz bez rejestracji.</li>
           <li><strong>Kontakt.</strong> Gdy do nas piszesz, przetwarzamy treść wiadomości i dane kontaktowe, aby odpowiedzieć.</li>
         </ul>
+      </section>
+
+      <section id="cookies">
+        <h2>Pliki cookie i statystyki</h2>
+        <p>Za Twoją zgodą strona limecontrol.eu korzysta z <strong>Google Analytics 4</strong>, aby mierzyć liczbę odwiedzin, popularność podstron i pobieranych plików oraz źródła ruchu. Bez zgody skrypt Google Analytics nie jest wczytywany, a pliki cookie nie są ustawiane.</p>
+        <ul>
+          <li><strong>Podstawa prawna.</strong> Zgoda (art. 6 ust. 1 lit. a RODO oraz art. 399 ustawy — Prawo komunikacji elektronicznej). Możesz ją w każdej chwili wycofać; wycofanie nie wpływa na zgodność z prawem wcześniejszego przetwarzania.</li>
+          <li><strong>Zakres.</strong> Identyfikator przeglądarki zapisany w pliku cookie, odwiedzone adresy, strona odsyłająca, przybliżona lokalizacja (kraj, miasto), typ urządzenia i przeglądarki. Google Analytics 4 nie zapisuje adresów IP. Wyłączyliśmy sygnały Google i personalizację reklam — dane nie służą do reklam.</li>
+          <li><strong>Odbiorca.</strong> Google Ireland Limited. Dane mogą trafić do Google LLC w USA na podstawie decyzji Komisji Europejskiej w sprawie EU-U.S. Data Privacy Framework.</li>
+          <li><strong>Przechowywanie.</strong> Dane statystyczne są usuwane po 14 miesiącach.</li>
+        </ul>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nazwa</th><th>Dostawca</th><th>Cel</th><th>Ważność</th></tr></thead>
+            <tbody>
+              <tr><td><code>lc-consent</code> (pamięć przeglądarki)</td><td>limecontrol.eu</td><td>Zapamiętanie Twojej decyzji o zgodzie — niezbędne</td><td>12 miesięcy</td></tr>
+              <tr><td><code>_ga</code></td><td>Google Analytics</td><td>Odróżnianie odwiedzających (tylko po zgodzie)</td><td>2 lata</td></tr>
+              <tr><td><code>_ga_&lt;ID&gt;</code></td><td>Google Analytics</td><td>Utrzymanie stanu sesji (tylko po zgodzie)</td><td>2 lata</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><button type="button" class="btn btn-ghost btn-sm" data-cookie-settings>Zmień ustawienia cookie</button></p>
+        <p>Usługa app.limecontrol.eu i aplikacja mobilna nie używają Google Analytics.</p>
       </section>
 
       <section id="usluga">
@@ -101,7 +125,7 @@
       <section id="dostawcy">
         <h2>Dostawcy</h2>
         <ul>
-          <li><strong>Google (Firebase Authentication, Cloud Firestore, Google Fonts)</strong> — logowanie, przechowywanie profili w usłudze app.limecontrol.eu i czcionki strony. Dane mogą być przetwarzane poza Europejskim Obszarem Gospodarczym na podstawie standardowych klauzul umownych.</li>
+          <li><strong>Google (Firebase Authentication, Cloud Firestore, Google Fonts, Google Analytics)</strong> — logowanie, przechowywanie profili w usłudze app.limecontrol.eu, czcionki strony i — za Twoją zgodą — statystyki odwiedzin strony. Dane mogą być przetwarzane poza Europejskim Obszarem Gospodarczym na podstawie standardowych klauzul umownych.</li>
           <li><strong>Dostawca hostingu</strong> — serwery, na których działają strona i aplikacja.</li>
         </ul>
       </section>
@@ -111,6 +135,7 @@
         <ul>
           <li>Konto i profile w usłudze app.limecontrol.eu — do czasu ich usunięcia przez Ciebie albo zgłoszenia żądania usunięcia konta.</li>
           <li>Hasło w zadaniu harmonogramu — do wykonania lub anulowania zadania; historia zadań — do jej usunięcia w aplikacji.</li>
+          <li>Statystyki Google Analytics — 14 miesięcy; decyzja o zgodzie — 12 miesięcy w pamięci Twojej przeglądarki.</li>
           <li>Logi serwera — przez ograniczony czas potrzebny do zapewnienia bezpieczeństwa i diagnozowania błędów.</li>
           <li>Korespondencja — przez czas potrzebny do załatwienia sprawy i przedawnienia roszczeń.</li>
         </ul>

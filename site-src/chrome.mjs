@@ -26,8 +26,20 @@ export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=eu.
  * „wkrótce” i nie prowadzi pod adres, który jeszcze nie działa.
  */
 export const STORES_LIVE = { appStore: false, googlePlay: true };
+/**
+ * Google Analytics 4 (identyfikator strumienia danych, np. 'G-ABC123XYZ'). Puste = brak statystyk i brak
+ * baneru cookie. GA ładuje się dopiero po zgodzie odwiedzającego (baner w stopce, obsługa w assets/site.js).
+ */
+export const GA_MEASUREMENT_ID = 'G-C03RCY4KMD';
+/**
+ * Google Search Console — wartość `content` z metatagu weryfikacyjnego (metoda „Tag HTML”). Puste = brak tagu
+ * (np. gdy domena jest zweryfikowana rekordem DNS TXT, co jest zalecane dla usługi typu „Domena”).
+ */
+export const GSC_VERIFICATION = 'CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0';
+/** Domyślny obrazek podglądu linku (1200×630) dla podstron bez własnego (generuje site-src/og-image.mjs). */
+export const defaultOgImage = (lang) => `/assets/og/${lang}.png?v=${ASSET_VERSION}`;
 /** Podbij po zmianie site/assets/style.css lub site.js (nagłówki cache: 7 dni). */
-export const ASSET_VERSION = '5';
+export const ASSET_VERSION = '6';
 
 export const LANGS = ['pl', 'en', 'de'];
 /** Nazwy języków w przełączniku (każdy we własnym języku). */
@@ -82,6 +94,15 @@ const T = {
     rights: 'Aplikacja, motywy, wtyczki i wdrożenia są otwartym oprogramowaniem; treść i wygląd tej strony — wszelkie prawa zastrzeżone.',
     trademark: 'LimeSurvey jest zastrzeżonym znakiem towarowym LimeSurvey GmbH. LimeControl oraz usługi strefabadan.pl są niezależnymi projektami i nie są powiązane z LimeSurvey GmbH.',
     locale: 'pl_PL',
+    ogAlt: 'LimeControl — aplikacja do zarządzania ankietami LimeSurvey',
+    cookies: {
+      label: 'Zgoda na pliki cookie',
+      text: 'Chcemy używać plików cookie Google Analytics, żeby wiedzieć, które treści są przydatne. Ustawimy je tylko za Twoją zgodą — możesz ją w każdej chwili wycofać w stopce strony.',
+      more: 'Polityka prywatności',
+      accept: 'Akceptuję',
+      reject: 'Odrzucam',
+      settings: 'Ustawienia cookie',
+    },
   },
   en: {
     skip: 'Skip to content',
@@ -97,6 +118,15 @@ const T = {
     rights: 'The app, themes, plugins and deployment kits are open-source software; the content and design of this website — all rights reserved.',
     trademark: 'LimeSurvey is a registered trademark of LimeSurvey GmbH. LimeControl and the strefabadan.pl services are independent projects and are not affiliated with LimeSurvey GmbH.',
     locale: 'en_GB',
+    ogAlt: 'LimeControl — an app for managing LimeSurvey surveys',
+    cookies: {
+      label: 'Cookie consent',
+      text: 'We’d like to use Google Analytics cookies to learn which content is useful. They are set only if you agree — you can withdraw consent at any time in the page footer.',
+      more: 'Privacy policy',
+      accept: 'Accept',
+      reject: 'Reject',
+      settings: 'Cookie settings',
+    },
   },
   de: {
     skip: 'Zum Inhalt springen',
@@ -112,6 +142,15 @@ const T = {
     rights: 'App, Designs, Plugins und Deployment-Kits sind Open-Source-Software; Inhalt und Gestaltung dieser Website — alle Rechte vorbehalten.',
     trademark: 'LimeSurvey ist eine eingetragene Marke der LimeSurvey GmbH. LimeControl und die Dienste von strefabadan.pl sind unabhängige Projekte und stehen in keiner Verbindung zur LimeSurvey GmbH.',
     locale: 'de_DE',
+    ogAlt: 'LimeControl — eine App zur Verwaltung von LimeSurvey-Umfragen',
+    cookies: {
+      label: 'Cookie-Einwilligung',
+      text: 'Wir möchten Cookies von Google Analytics verwenden, um zu erfahren, welche Inhalte nützlich sind. Sie werden nur mit Ihrer Einwilligung gesetzt — widerrufen können Sie sie jederzeit in der Fußzeile.',
+      more: 'Datenschutzerklärung',
+      accept: 'Akzeptieren',
+      reject: 'Ablehnen',
+      settings: 'Cookie-Einstellungen',
+    },
   },
 };
 
@@ -126,14 +165,19 @@ const GITHUB_ICON =
 export function head({ lang, page, title, description, ogTitle, ogDescription, ogImage, jsonLd, extraHead = '' }) {
   const t = T[lang];
   const canonical = absolute(ROUTES[page][lang]);
+  const image = ogImage || defaultOgImage(lang);
+  const imageMeta = ogImage
+    ? ''
+    : `\n  <meta property="og:image:width" content="1200" />\n  <meta property="og:image:height" content="630" />\n  <meta property="og:image:alt" content="${esc(t.ogAlt)}" />`;
   const alternates = LANGS.map((l) => `  <link rel="alternate" hreflang="${l}" href="${absolute(ROUTES[page][l])}" />`).join('\n');
   return `<!doctype html>
-<html lang="${lang}">
+<html lang="${lang}"${GA_MEASUREMENT_ID ? ` data-ga="${esc(GA_MEASUREMENT_ID)}"` : ''}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />${GSC_VERIFICATION ? `\n  <meta name="google-site-verification" content="${esc(GSC_VERIFICATION)}" />` : ''}
   <link rel="canonical" href="${canonical}" />
 ${alternates}
   <link rel="alternate" hreflang="x-default" href="${absolute(ROUTES[page].en)}" />
@@ -143,10 +187,11 @@ ${alternates}
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="${canonical}" />
   <meta property="og:title" content="${esc(ogTitle || title)}" />
-  <meta property="og:description" content="${esc(ogDescription || description)}" />${ogImage ? `\n  <meta property="og:image" content="${absolute(ogImage)}" />` : ''}
+  <meta property="og:description" content="${esc(ogDescription || description)}" />
+  <meta property="og:image" content="${absolute(image)}" />${imageMeta}
   <meta property="og:locale" content="${t.locale}" />
 ${LANGS.filter((l) => l !== lang).map((l) => `  <meta property="og:locale:alternate" content="${T[l].locale}" />`).join('\n')}
-  <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -156,8 +201,24 @@ ${LANGS.filter((l) => l !== lang).map((l) => `  <meta property="og:locale:altern
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/style.css?v=${ASSET_VERSION}" />
   <script>document.documentElement.classList.add('js')</script>
-${jsonLd ? `\n  <script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2).replace(/^/gm, '  ')}\n  </script>` : ''}${extraHead}
+${[jsonLd, breadcrumbs(lang, page)].filter(Boolean).map((data) => `\n  <script type="application/ld+json">\n${JSON.stringify(data, null, 2).replace(/^/gm, '  ')}\n  </script>`).join('')}${extraHead}
 </head>`;
+}
+
+/** Okruszki (schema.org BreadcrumbList) dla podstron: Strona główna › podstrona. */
+function breadcrumbs(lang, page) {
+  if (page === 'home') return null;
+  const names = { ...T[lang].footer, home: 'LimeControl' };
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: ['home', page].map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: names[p],
+      item: absolute(ROUTES[p][lang]),
+    })),
+  };
 }
 
 /** Nagłówek z nawigacją. `page` wyróżnia bieżącą podstronę. */
@@ -173,8 +234,8 @@ export function nav({ lang, page }) {
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="${ROUTES.home[lang]}" aria-label="${t.homeLabel}">
-        <img class="logo-light" src="/assets/logo.svg?v=${ASSET_VERSION}" alt="LimeControl" width="104" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=${ASSET_VERSION}" alt="LimeControl" width="104" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=${ASSET_VERSION}" alt="LimeControl" width="106" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=${ASSET_VERSION}" alt="LimeControl" width="106" height="34" />
       </a>
       <button class="nav-toggle" aria-label="${t.menu}" aria-expanded="false" aria-controls="nav-links">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -205,8 +266,8 @@ export function footer({ lang, page, note, scripts = '' }) {
   <footer class="footer">
     <div class="container">
       <a href="${ROUTES.home[lang]}" aria-label="LimeControl">
-        <img class="logo-light" src="/assets/logo.svg?v=${ASSET_VERSION}" alt="LimeControl" width="86" height="28" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=${ASSET_VERSION}" alt="LimeControl" width="86" height="28" />
+        <img class="logo-light" src="/assets/logo.svg?v=${ASSET_VERSION}" alt="LimeControl" width="88" height="28" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=${ASSET_VERSION}" alt="LimeControl" width="88" height="28" />
       </a>
       <ul class="footer-links">
         <li><a href="${ROUTES.themes[lang]}">${t.footer.themes}</a></li>
@@ -214,7 +275,7 @@ export function footer({ lang, page, note, scripts = '' }) {
         <li><a href="${ROUTES.plugins[lang]}">${t.footer.plugins}</a></li>
         <li><a href="${homeUrl(lang, 'hosting')}">${t.footer.hosting}</a></li>
         <li><a href="${ROUTES.docs[lang]}">${t.footer.docs}</a></li>
-        <li><a href="${ROUTES.privacy[lang]}">${t.footer.privacy}</a></li>
+        <li><a href="${ROUTES.privacy[lang]}">${t.footer.privacy}</a></li>${GA_MEASUREMENT_ID ? `\n        <li><button type="button" class="link-btn" data-cookie-settings>${t.cookies.settings}</button></li>` : ''}
         <li><a href="${APP_URL}">${t.footer.app}</a></li>
         <li><a href="${GITHUB_URL}" rel="noopener">GitHub</a></li>
         <li><a href="${AUTHOR_URL}" rel="noopener">strefabadan.pl</a></li>
@@ -227,9 +288,24 @@ ${LANGS.filter((l) => l !== lang).map((l) => `        <li><a href="${ROUTES[page
     </div>
   </footer>
 
+${GA_MEASUREMENT_ID ? cookieBanner(lang) : ''}
   <script src="/assets/site.js?v=${ASSET_VERSION}" defer></script>${scripts}
 </body>
 </html>
+`;
+}
+
+/** Baner zgody na cookie Google Analytics (ukryty, pokazuje go assets/site.js, gdy brak decyzji). */
+function cookieBanner(lang) {
+  const c = T[lang].cookies;
+  return `
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="${c.label}" hidden>
+    <p>${c.text} <a href="${ROUTES.privacy[lang]}#cookies">${c.more}</a></p>
+    <div class="cookie-actions">
+      <button type="button" class="btn btn-ghost btn-sm" data-consent="denied">${c.reject}</button>
+      <button type="button" class="btn btn-primary btn-sm" data-consent="granted">${c.accept}</button>
+    </div>
+  </div>
 `;
 }
 

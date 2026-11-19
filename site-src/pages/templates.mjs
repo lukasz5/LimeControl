@@ -15,8 +15,9 @@ const MODE_LABEL = { cawi: 'CAWI', cati: 'CATI', capi: 'CAPI' };
 
 const S = {
   pl: {
-    title: 'Darmowe szablony ankiet dla LimeSurvey po polsku i angielsku — LimeControl',
-    description: (n) => `${n} darmowych szablonów ankiet dla LimeSurvey 6 i 7 w dwóch językach: NPS, CSAT, zaangażowanie pracowników, ewaluacja szkoleń, satysfakcja pacjenta, SUS, test koncepcji oraz wywiady CATI i CAPI. Pobierz plik .lss i zaimportuj.`,
+    title: 'Darmowe szablony ankiet PL/EN dla LimeSurvey — LimeControl',
+    description: (n) => `${n} darmowych szablonów ankiet PL/EN dla LimeSurvey 6 i 7: NPS, CSAT, zaangażowanie, ewaluacja szkoleń, SUS, CATI i CAPI. Pobierz plik .lss i zaimportuj.`,
+    ogDescription: (n) => `${n} darmowych szablonów ankiet dla LimeSurvey 6 i 7 w dwóch językach: NPS, CSAT, zaangażowanie pracowników, ewaluacja szkoleń, satysfakcja pacjenta, SUS, test koncepcji oraz wywiady CATI i CAPI. Pobierz plik .lss i zaimportuj.`,
     ogTitle: 'Szablony ankiet dla LimeSurvey — gotowe do importu, PL + EN',
     listName: 'Szablony ankiet dla LimeSurvey od LimeControl',
     eyebrow: 'Szablony ankiet dla LimeSurvey',
@@ -82,8 +83,9 @@ const S = {
     footerNote: (v) => `Szablony ankiet w wersji ${v}, licencja CC0 1.0.`,
   },
   en: {
-    title: 'Free survey templates for LimeSurvey in English and Polish — LimeControl',
-    description: (n) => `${n} free survey templates for LimeSurvey 6 and 7 in two languages: NPS, CSAT, employee engagement, training evaluation, patient satisfaction, SUS, concept test, plus CATI and CAPI interviews. Download the .lss file and import it.`,
+    title: 'Free survey templates for LimeSurvey (EN/PL) — LimeControl',
+    description: (n) => `${n} free PL/EN survey templates for LimeSurvey 6 and 7: NPS, CSAT, engagement, training evaluation, SUS, CATI and CAPI. Download the .lss and import it.`,
+    ogDescription: (n) => `${n} free survey templates for LimeSurvey 6 and 7 in two languages: NPS, CSAT, employee engagement, training evaluation, patient satisfaction, SUS, concept test, plus CATI and CAPI interviews. Download the .lss file and import it.`,
     ogTitle: 'Survey templates for LimeSurvey — ready to import, EN + PL',
     listName: 'Survey templates for LimeSurvey by LimeControl',
     eyebrow: 'Survey templates for LimeSurvey',
@@ -149,8 +151,9 @@ const S = {
     footerNote: (v) => `Survey templates version ${v}, licensed under CC0 1.0.`,
   },
   de: {
-    title: 'Kostenlose Umfragevorlagen für LimeSurvey auf Englisch und Polnisch — LimeControl',
-    description: (n) => `${n} kostenlose Umfragevorlagen für LimeSurvey 6 und 7 in zwei Sprachen (Englisch und Polnisch): NPS, CSAT, Mitarbeiterengagement, Schulungsevaluation, Patientenzufriedenheit, SUS, Konzepttest sowie CATI- und CAPI-Interviews. .lss-Datei herunterladen und importieren.`,
+    title: 'Kostenlose Umfragevorlagen für LimeSurvey — LimeControl',
+    description: (n) => `${n} kostenlose Umfragevorlagen (EN/PL) für LimeSurvey 6 und 7: NPS, CSAT, Engagement, Schulungsevaluation, SUS, CATI, CAPI. .lss laden und importieren.`,
+    ogDescription: (n) => `${n} kostenlose Umfragevorlagen für LimeSurvey 6 und 7 in zwei Sprachen (Englisch und Polnisch): NPS, CSAT, Mitarbeiterengagement, Schulungsevaluation, Patientenzufriedenheit, SUS, Konzepttest sowie CATI- und CAPI-Interviews. .lss-Datei herunterladen und importieren.`,
     ogTitle: 'Umfragevorlagen für LimeSurvey — importfertig, EN + PL',
     listName: 'Umfragevorlagen für LimeSurvey von LimeControl',
     eyebrow: 'Umfragevorlagen für LimeSurvey',
@@ -373,6 +376,7 @@ ${catalog.templates.map((t) => card(t, catalog, lang)).join('\n')}
     title: s.title,
     description: s.description(catalog.templates.length),
     ogTitle: s.ogTitle,
+    ogDescription: s.ogDescription(catalog.templates.length),
     ogImage: catalog.templates.some((t) => t.preview) ? `/ankiety/img/${catalog.templates.find((t) => t.preview).id}.jpg` : undefined,
     jsonLd: {
       '@context': 'https://schema.org',

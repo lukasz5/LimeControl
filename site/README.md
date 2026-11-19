@@ -44,6 +44,19 @@ w języku strony), `{{THEME_COUNT}}`, `{{TEMPLATE_COUNT}}`, `{{VERSION}}`. Niezn
 Po zmianie `assets/style.css` lub `assets/site.js` podbij `ASSET_VERSION` w `site-src/chrome.mjs`
 (pliki są cache'owane przez 7 dni).
 
+## SEO, statystyki i pliki cookie
+
+- **Google Search Console** — w `site-src/chrome.mjs` wpisz wartość metatagu weryfikacyjnego w `GSC_VERIFICATION`
+  (albo zweryfikuj domenę rekordem DNS TXT i zostaw pole puste). W Search Console zgłoś `https://limecontrol.eu/sitemap.xml`.
+- **Google Analytics 4** — identyfikator strumienia (`G-…`) wpisz w `GA_MEASUREMENT_ID`. Pusty = brak statystyk
+  i brak baneru. GA ładuje się dopiero po zgodzie (baner w stopce, obsługa w `assets/site.js`, decyzja w
+  `localStorage` pod kluczem `lc-consent` na 12 miesięcy). W ustawieniach usługi GA ustaw przechowywanie danych
+  na 14 miesięcy i wyłącz sygnały Google — tak opisuje to polityka prywatności (sekcja `#cookies`).
+- **Podgląd linku** — obrazki 1200×630 w `assets/og/<lang>.png` tworzy `npm run site:og -- --playwright <ścieżka>`;
+  podstrony motywów i szablonów mają własne obrazki.
+- Logo w `assets/` nie zawiera elementów `<text>` (napis jest zamieniony na krzywe), bo SVG w `<img>` nie może
+  wczytać fontu z sieci i na iOS zastępczy krój był szerszy, przez co napis był ucinany.
+
 ## Nowa wersja językowa strony
 
 Każda podstrona musi istnieć we wszystkich językach z `LANGS` (PL, EN, DE) — `npm run check:site` zgłosi brak

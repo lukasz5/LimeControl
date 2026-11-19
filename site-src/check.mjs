@@ -46,7 +46,7 @@ for (const [file, { html, ids }] of pages) {
   if (/\{\{[A-Za-z_]+\}\}/.test(html)) report(file, 'nierozwinięty znacznik {{…}}');
   const h1 = (html.match(/<h1[\s>]/g) || []).length;
   if (h1 !== 1) report(file, `oczekiwano jednego <h1>, jest ${h1}`);
-  if (!/<html lang="(pl|en|de)">/.test(html)) report(file, 'brak atrybutu lang w <html>');
+  if (!/<html lang="(pl|en|de)"[ >]/.test(html)) report(file, 'brak atrybutu lang w <html>');
   if (!/<title>[^<]{10,}<\/title>/.test(html)) report(file, 'brak tytułu strony');
 
   for (const [, attr, raw] of html.matchAll(/\s(href|src)="([^"]*)"/g)) {
@@ -87,7 +87,7 @@ for (const page of Object.keys(ROUTES)) {
       const expected = `hreflang="${other}" href="${SITE_URL}${ROUTES[page][other]}"`;
       if (!entry.html.includes(expected)) report(file, `brak <link rel="alternate" ${expected}>`);
     }
-    if (!entry.html.includes(`<html lang="${lang}">`)) report(file, `oczekiwano lang="${lang}"`);
+    if (!new RegExp(`<html lang="${lang}"[ >]`).test(entry.html)) report(file, `oczekiwano lang="${lang}"`);
   }
 }
 
