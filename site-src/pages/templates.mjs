@@ -1,11 +1,15 @@
-// Podstrony z szablonami ankiet: site/ankiety.html (PL) i site/en/templates.html (EN).
+// Podstrony z szablonami ankiet: site/ankiety.html (PL), site/en/templates.html (EN) i site/de/vorlagen.html (DE).
 // Katalog szablonów pochodzi z survey-templates/build.mjs.
 import { APP_URL, GITHUB_URL, ROUTES, absolute, esc, layout, outputPath } from '../chrome.mjs';
+import { TEMPLATES_DE, categoryLabel, localized } from './data.de.mjs';
+
+const templateText = (t, field, lang) => localized(t, field, lang, TEMPLATES_DE, 'Vorlage');
 
 const kb = (n) => `${Math.max(1, Math.round(n / 1024))} kB`;
 const NUMBER_WORDS = {
   pl: { 10: 'Dziesięć', 11: 'Jedenaście', 12: 'Dwanaście', 13: 'Trzynaście', 14: 'Czternaście', 15: 'Piętnaście' },
   en: { 10: 'Ten', 11: 'Eleven', 12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen' },
+  de: { 10: 'Zehn', 11: 'Elf', 12: 'Zwölf', 13: 'Dreizehn', 14: 'Vierzehn', 15: 'Fünfzehn' },
 };
 const MODE_LABEL = { cawi: 'CAWI', cati: 'CATI', capi: 'CAPI' };
 
@@ -144,6 +148,74 @@ const S = {
     ctaThemes: 'See the survey themes',
     footerNote: (v) => `Survey templates version ${v}, licensed under CC0 1.0.`,
   },
+  de: {
+    title: 'Kostenlose Umfragevorlagen für LimeSurvey auf Englisch und Polnisch — LimeControl',
+    description: (n) => `${n} kostenlose Umfragevorlagen für LimeSurvey 6 und 7 in zwei Sprachen (Englisch und Polnisch): NPS, CSAT, Mitarbeiterengagement, Schulungsevaluation, Patientenzufriedenheit, SUS, Konzepttest sowie CATI- und CAPI-Interviews. .lss-Datei herunterladen und importieren.`,
+    ogTitle: 'Umfragevorlagen für LimeSurvey — importfertig, EN + PL',
+    listName: 'Umfragevorlagen für LimeSurvey von LimeControl',
+    eyebrow: 'Umfragevorlagen für LimeSurvey',
+    h1: 'Fertige Umfragen in zwei Sprachen — <span class="lime">mit einer Datei importiert</span>.',
+    lead: (n, how) => `${n} kostenlose Fragebögen auf Englisch und Polnisch: von NPS und Kundenzufriedenheit über Mitarbeiterbefragungen und Evaluationen bis zu Gerüsten für Telefon- (CATI) und Feldinterviews (CAPI). Jeder bringt Bedingungslogik, fertige Einladungstexte und ein passendes Design mit. Eine deutsche Fassung ergänzen Sie in LimeSurvey als weitere Sprache. <a href="#${how}">So importieren Sie</a>.`,
+    downloadAll: (size) => `Alle herunterladen (ZIP, ${size})`,
+    importInApp: 'In der App importieren',
+    meta: (versions) => ['Englisch + Polnisch', `LimeSurvey ${versions}`, 'Bedingungslogik', 'E-Mail-Texte inklusive', 'CC0-Lizenz — ohne Einschränkungen'],
+    and: ' und ',
+    ids: { gallery: 'vorlagen', inside: 'inhalt', how: 'import', fieldwork: 'cati-capi' },
+    galleryEyebrow: 'Bibliothek',
+    galleryH: 'Wählen Sie eine Vorlage',
+    galleryP: (tested) => `Jede Vorlage haben wir importiert und im Browser von Anfang bis Ende ausgefüllt, in beiden Sprachen, mit LimeSurvey ${tested}.`,
+    filterLabel: 'Vorlagen nach Kategorie filtern',
+    all: 'Alle',
+    questions: (n) => `${n} ${n === 1 ? 'Frage' : 'Fragen'}`,
+    minutes: (n) => `ca. ${n} Min.`,
+    theme: 'Design',
+    modes: 'Erhebungsmodus',
+    previewAlt: (t) => `Vorschau der Umfrage „${t}“ in LimeSurvey`,
+    download: '.lss herunterladen',
+    downloadAria: (t, size) => `Vorlage „${t}“ herunterladen (.lss-Datei, ${size})`,
+    insideEyebrow: 'In jeder Vorlage',
+    insideH: 'Mehr als eine Liste von Fragen',
+    insideP: 'Die Vorlagen entstehen aus lesbaren JSON-Definitionen und werden vom selben Skript gebaut, das sie prüft. Nach dem Import können Sie in LimeSurvey alles ändern.',
+    insideList: [
+      '<strong>Zwei Sprachen in einer Datei</strong> — Polnisch als Basissprache und Englisch als zusätzliche; Befragte wechseln die Sprache auf der Umfrageseite. Deutsch fügen Sie als weitere Sprache hinzu.',
+      '<strong>Bedingungslogik</strong> — Nachfragen hängen von der Bewertung ab (z.&nbsp;B. eine andere Frage für NPS-Kritiker und -Promotoren).',
+      '<strong>Berechnete Felder</strong> — das NPS-Segment und der SUS-Wert (0–100) werden mit den Antworten gespeichert, bereit für den Export.',
+      '<strong>Analysefreundliche Codes</strong> — kurze Fragecodes und Skalen mit numerischen Werten 1–5 und 0–10.',
+      '<strong>E-Mail-Texte</strong> — Einladung, Erinnerung, Bestätigung und Registrierung in beiden Sprachen.',
+      '<strong>Ein passendes Design</strong> — ist das vorgeschlagene LimeControl-Design installiert, nutzt die Umfrage es sofort; andernfalls wählt LimeSurvey das Standarddesign.',
+      '<strong>Datensparsam voreingestellt</strong> — anonyme Antworten, ohne IP-Adressen und Zeitstempel (außer bei den CATI/CAPI-Vorlagen, wo die Zeit für die Qualitätskontrolle nötig ist).',
+    ],
+    howEyebrow: 'Import',
+    howH: 'Drei Wege zum Import',
+    how: [
+      ['In der App LimeControl', `Verbinden Sie sich mit Ihrer Instanz und öffnen Sie <em>Surveys → Template library</em>. Vorlage wählen und auf <strong>Import</strong> tippen — die Umfrage erscheint inaktiv in der Liste, bereit zur Bearbeitung. <a href="${APP_URL}">App öffnen</a>.`],
+      ['Im LimeSurvey-Admin-Panel', 'Laden Sie die <code>.lss</code>-Datei herunter. Wählen Sie im Panel <em>Umfragen → Umfrage erstellen → Importieren</em>, wählen Sie die Datei und klicken Sie auf <strong>Umfrage importieren</strong>.'],
+      ['Über die RemoteControl-2-API', 'Rufen Sie <code>import_survey</code> mit dem base64-codierten Dateiinhalt und dem Typ <code>lss</code> auf. So funktionieren der Import in LimeControl und das Skript <code>survey-templates/verify.mjs</code> im Repository.'],
+    ],
+    howNote: 'Nach dem Import ist die Umfrage <strong>inaktiv</strong>. Füllen Sie die Texte in eckigen Klammern aus (Firmenname, Studienthema), legen Sie den Administrator fest und aktivieren Sie sie — im Panel oder in LimeControl.',
+    fwEyebrow: 'CATI und CAPI',
+    fwH: 'Interviewgerüste für Interviewer',
+    fwP: (themes, plugins) => `Die Vorlagen <strong>CATI</strong> und <strong>CAPI</strong> enthalten vorzulesende Skripte, das Kontaktergebnis, die Einwilligung der befragten Person und einen Block für Interviewernotizen. Am besten wirken sie mit den <a href="${themes}">Designs CATI und CAPI</a>, die Interviewer-Hinweise hervorheben und die Navigationsbuttons am unteren Bildschirmrand halten.`,
+    fwCards: (plugins) => [
+      ['Teilnehmerfelder in der CATI-Vorlage', 'Die Vorlage definiert vier Teilnehmerattribute: <em>Telefon</em>, <em>Kontaktstatus</em>, <em>Rückrufzeit</em> und <em>Interviewernotiz</em>. Setzen Sie beim Initialisieren der Teilnehmertabelle in LimeControl das Häkchen bei „Create fields from the template“.'],
+      ['Interview nach Interview auf dem Tablet', 'Öffnen Sie die Umfrage in LimeControl im CAPI-Modus — nach jedem Interview beginnt die Umfrage neu, ohne die Daten der vorherigen befragten Person.'],
+      ['Anrufwarteschlange, Zuteilungen und Quoten', `Die vollständige CATI/CAPI-Feldarbeit — Fallwarteschlange, VoIP-Telefon, Interviewer-Zuteilungen, Quoten und Qualitätskontrolle — bietet ein Konto auf der Plattform StrefaAnkiet. Die <a href="${plugins}">kostenlosen Plugins</a> verbinden sie mit LimeSurvey.`],
+    ],
+    faqTitle: 'Fragen und Antworten',
+    faq: [
+      ['Darf ich die Vorlagen ändern und kommerziell nutzen?', 'Ja. Die Vorlagen stehen unter CC0&nbsp;1.0 — Sie dürfen sie kopieren, ändern und für jeden Zweck nutzen, ohne Quellenangabe. Der SUS-Fragebogen stammt von John Brooke (1986) und ist frei nutzbar.'],
+      ['Mit welchen LimeSurvey-Versionen funktionieren sie?', 'Getestet haben wir sie mit LimeSurvey 6.15.12 und 7.10.0. Die Dateien nutzen das seit LimeSurvey&nbsp;4 verwendete Strukturformat und sollten sich daher auch in den Versionen 4 und 5 importieren lassen — diese haben wir aber nicht getestet.'],
+      ['Gibt es die Vorlagen auf Deutsch?', 'Noch nicht — die Vorlagen enthalten Englisch und Polnisch. Fügen Sie nach dem Import unter <em>Umfrageeinstellungen → Allgemein</em> Deutsch als zusätzliche Sprache hinzu und übersetzen Sie die Texte in LimeSurvey; Logik, Codes und Skalen bleiben dabei erhalten.'],
+      ['Ich brauche nur eine Sprache. Wie entferne ich die andere?', 'Öffnen Sie nach dem Import <em>Umfrageeinstellungen → Allgemein</em> und entfernen Sie die Sprache aus „Zusätzliche Sprachen“. Um die Basissprache zu ändern, kopieren Sie die Umfrage und wählen in den Einstellungen der Kopie eine neue Basissprache.'],
+      ['Die importierte Umfrage nutzt kein LimeControl-Design', `Die Vorlage nennt ein vorgeschlagenes Design (z.&nbsp;B. <code>lc_medical</code>). Ist es nicht installiert, verwendet LimeSurvey das Standarddesign. <a href="${ROUTES.themes.de}">Designs herunterladen</a>, installieren und das Design in den Umfrageeinstellungen oder in LimeControl wählen.`],
+      ['Wie schlage ich eine neue Vorlage oder eine Korrektur vor?', `Die Vorlagendefinitionen sind JSON-Dateien im Verzeichnis <code>survey-templates/templates</code> des <a href="${GITHUB_URL}" target="_blank" rel="noopener">LimeControl-Repositorys</a>. Eröffnen Sie ein Issue oder senden Sie einen Pull Request — das Build-Skript prüft die Datei selbst.`],
+    ],
+    ctaH: 'Importieren Sie eine Vorlage vom Smartphone',
+    ctaP: 'In LimeControl wählen Sie eine Vorlage, importieren sie in Ihre Instanz und aktivieren die Umfrage — ohne Anmeldung im Admin-Panel.',
+    ctaApp: 'App öffnen',
+    ctaThemes: 'Umfrage-Designs ansehen',
+    footerNote: (v) => `Umfragevorlagen in Version ${v}, lizenziert unter CC0 1.0.`,
+  },
 };
 
 const DOWNLOAD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>';
@@ -152,20 +224,20 @@ function card(t, catalog, lang) {
   const s = S[lang];
   const category = catalog.categories.find((c) => c.id === t.category);
   const theme = t.theme ? catalog.themes.find((x) => x.id === t.theme) : null;
-  const title = t.title[lang];
+  const title = templateText(t, 'title', lang);
   const img = t.preview
     ? `<img src="/ankiety/img/${t.id}.jpg" width="960" height="720" loading="lazy" decoding="async" alt="${esc(s.previewAlt(title))}" />`
-    : `<span class="tshot-empty" aria-hidden="true">${esc(category.label[lang])}</span>`;
+    : `<span class="tshot-empty" aria-hidden="true">${esc(categoryLabel(category, lang))}</span>`;
   return `
           <article class="tcard" id="${t.id}" data-category="${t.category}" aria-labelledby="${t.id}-title">
             <div class="tshot">${img}</div>
             <div class="tbody">
               <ul class="tags" aria-label="${s.modes}">
-                <li class="tag-cat">${esc(category.label[lang])}</li>
+                <li class="tag-cat">${esc(categoryLabel(category, lang))}</li>
                 ${t.modes.map((m) => `<li class="tag-mode">${MODE_LABEL[m]}</li>`).join('')}
               </ul>
               <h3 id="${t.id}-title">${esc(title)}</h3>
-              <p>${esc(t.summary[lang])}</p>
+              <p>${esc(templateText(t, 'summary', lang))}</p>
               <p class="tmeta">${s.questions(t.questions)} · ${s.minutes(t.minutes)} · ${t.languages.map((l) => l.toUpperCase()).join(' + ')}${theme ? ` · ${s.theme}: <a href="${ROUTES.themes[lang]}#${theme.id.replace('lc_', '')}">${esc(theme.label)}</a>` : ''}</p>
               <div class="tdl-group">
                 <a class="btn btn-primary tdl" href="/ankiety/pobierz/${t.file}" download aria-label="${esc(s.downloadAria(title, kb(t.bytes)))}">
@@ -178,7 +250,7 @@ function card(t, catalog, lang) {
 }
 
 /**
- * @param {{ catalog: object, zipBytes: number, lang: 'pl'|'en' }} o
+ * @param {{ catalog: object, zipBytes: number, lang: 'pl'|'en'|'de' }} o
  * @returns {{ path: string, html: string }}
  */
 export function renderTemplatesPage({ catalog, zipBytes, lang }) {
@@ -218,7 +290,7 @@ export function renderTemplatesPage({ catalog, zipBytes, lang }) {
         </div>
         <div class="chips" role="group" aria-label="${s.filterLabel}">
           <button type="button" data-filter="" aria-pressed="true">${s.all}</button>
-          ${used.map((c) => `<button type="button" data-filter="${c.id}" aria-pressed="false">${esc(c.label[lang])}</button>`).join('\n          ')}
+          ${used.map((c) => `<button type="button" data-filter="${c.id}" aria-pressed="false">${esc(categoryLabel(c, lang))}</button>`).join('\n          ')}
         </div>
         <div class="tgrid" id="template-grid">
 ${catalog.templates.map((t) => card(t, catalog, lang)).join('\n')}
@@ -311,8 +383,8 @@ ${catalog.templates.map((t) => card(t, catalog, lang)).join('\n')}
         position: i + 1,
         item: {
           '@type': 'DigitalDocument',
-          name: t.title[lang],
-          description: t.summary[lang],
+          name: templateText(t, 'title', lang),
+          description: templateText(t, 'summary', lang),
           inLanguage: t.languages,
           license: 'https://creativecommons.org/publicdomain/zero/1.0/',
           url: absolute(`${ROUTES.templates[lang]}#${t.id}`),

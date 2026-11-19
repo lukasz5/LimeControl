@@ -1,7 +1,7 @@
 // Wspólny szkielet strony limecontrol.eu: <head>, nawigacja, stopka, trasy i tłumaczenia.
 // Używają go wszystkie generatory stron (site-src/build.mjs, limesurvey-themes/page.mjs,
 // survey-templates/page.mjs), dzięki czemu menu i stopka są identyczne na każdej podstronie
-// w obu językach.
+// we wszystkich językach (PL, EN, DE).
 
 export const SITE_URL = 'https://limecontrol.eu';
 export const APP_URL = 'https://app.limecontrol.eu';
@@ -27,18 +27,20 @@ export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=eu.
  */
 export const STORES_LIVE = { appStore: false, googlePlay: true };
 /** Podbij po zmianie site/assets/style.css lub site.js (nagłówki cache: 7 dni). */
-export const ASSET_VERSION = '4';
+export const ASSET_VERSION = '5';
 
-export const LANGS = ['pl', 'en'];
+export const LANGS = ['pl', 'en', 'de'];
+/** Nazwy języków w przełączniku (każdy we własnym języku). */
+export const LANG_NAMES = { pl: 'Polski', en: 'English', de: 'Deutsch' };
 
-/** Adres każdej podstrony w obu językach. */
+/** Adres każdej podstrony w każdym języku. */
 export const ROUTES = {
-  home: { pl: '/', en: '/en/' },
-  themes: { pl: '/szablony.html', en: '/en/themes.html' },
-  templates: { pl: '/ankiety.html', en: '/en/templates.html' },
-  plugins: { pl: '/wtyczki.html', en: '/en/plugins.html' },
-  docs: { pl: '/docs.html', en: '/en/docs.html' },
-  privacy: { pl: '/prywatnosc.html', en: '/en/privacy.html' },
+  home: { pl: '/', en: '/en/', de: '/de/' },
+  themes: { pl: '/szablony.html', en: '/en/themes.html', de: '/de/designs.html' },
+  templates: { pl: '/ankiety.html', en: '/en/templates.html', de: '/de/vorlagen.html' },
+  plugins: { pl: '/wtyczki.html', en: '/en/plugins.html', de: '/de/plugins.html' },
+  docs: { pl: '/docs.html', en: '/en/docs.html', de: '/de/docs.html' },
+  privacy: { pl: '/prywatnosc.html', en: '/en/privacy.html', de: '/de/datenschutz.html' },
 };
 
 /** Ścieżka pliku wyjściowego względem katalogu site/. */
@@ -47,16 +49,16 @@ export const outputPath = (page, lang) => {
   return route.endsWith('/') ? `${route.slice(1)}index.html` : route.slice(1);
 };
 
-/** Kotwice sekcji strony głównej (różne w PL i EN). */
+/** Kotwice sekcji strony głównej (różne w każdym języku). */
 export const HOME_ANCHORS = {
-  features: { pl: 'funkcje', en: 'features' },
-  ecosystem: { pl: 'ekosystem', en: 'ecosystem' },
-  how: { pl: 'jak-to-dziala', en: 'how-it-works' },
-  pricing: { pl: 'darmowe-i-platne', en: 'free-and-paid' },
-  fieldwork: { pl: 'cati-capi', en: 'cati-capi' },
-  security: { pl: 'bezpieczenstwo', en: 'security' },
-  hosting: { pl: 'hosting', en: 'hosting' },
-  faq: { pl: 'faq', en: 'faq' },
+  features: { pl: 'funkcje', en: 'features', de: 'funktionen' },
+  ecosystem: { pl: 'ekosystem', en: 'ecosystem', de: 'oekosystem' },
+  how: { pl: 'jak-to-dziala', en: 'how-it-works', de: 'so-funktionierts' },
+  pricing: { pl: 'darmowe-i-platne', en: 'free-and-paid', de: 'kostenlos-und-kostenpflichtig' },
+  fieldwork: { pl: 'cati-capi', en: 'cati-capi', de: 'cati-capi' },
+  security: { pl: 'bezpieczenstwo', en: 'security', de: 'sicherheit' },
+  hosting: { pl: 'hosting', en: 'hosting', de: 'hosting' },
+  faq: { pl: 'faq', en: 'faq', de: 'faq' },
 };
 
 export const url = (page, lang, anchor) => `${ROUTES[page][lang]}${anchor ? `#${anchor}` : ''}`;
@@ -73,8 +75,7 @@ const T = {
     nav: { features: 'Funkcje', themes: 'Motywy', templates: 'Szablony', plugins: 'Wtyczki', hosting: 'Hosting i wdrożenia', docs: 'Dokumentacja' },
     github: 'Kod źródłowy LimeControl na GitHubie',
     openApp: 'Otwórz aplikację',
-    switchTo: 'English',
-    switchLabel: 'Switch to English',
+    switchLabel: 'Wersja polska',
     footer: { themes: 'Motywy ankiet', templates: 'Szablony ankiet', plugins: 'Wtyczki StrefaAnkiet', docs: 'Dokumentacja', hosting: 'Hosting i wdrożenia', app: 'Aplikacja', privacy: 'Prywatność' },
     coffee: 'Postaw mi kawę',
     madeBy: 'Made with ♥ by',
@@ -89,14 +90,28 @@ const T = {
     nav: { features: 'Features', themes: 'Themes', templates: 'Templates', plugins: 'Plugins', hosting: 'Hosting & deployment', docs: 'Docs' },
     github: 'LimeControl source code on GitHub',
     openApp: 'Open the app',
-    switchTo: 'Polski',
-    switchLabel: 'Przełącz na polski',
+    switchLabel: 'English version',
     footer: { themes: 'Survey themes', templates: 'Survey templates', plugins: 'StrefaAnkiet plugins', docs: 'Documentation', hosting: 'Hosting & deployment', app: 'App', privacy: 'Privacy' },
     coffee: 'Buy me a coffee',
     madeBy: 'Made with ♥ by',
     rights: 'The app, themes, plugins and deployment kits are open-source software; the content and design of this website — all rights reserved.',
     trademark: 'LimeSurvey is a registered trademark of LimeSurvey GmbH. LimeControl and the strefabadan.pl services are independent projects and are not affiliated with LimeSurvey GmbH.',
     locale: 'en_GB',
+  },
+  de: {
+    skip: 'Zum Inhalt springen',
+    homeLabel: 'LimeControl — Startseite',
+    menu: 'Menü',
+    nav: { features: 'Funktionen', themes: 'Designs', templates: 'Vorlagen', plugins: 'Plugins', hosting: 'Hosting & Betrieb', docs: 'Doku' },
+    github: 'Quellcode von LimeControl auf GitHub',
+    openApp: 'App öffnen',
+    switchLabel: 'Deutsche Version',
+    footer: { themes: 'Umfrage-Designs', templates: 'Umfragevorlagen', plugins: 'StrefaAnkiet-Plugins', docs: 'Dokumentation', hosting: 'Hosting & Betrieb', app: 'App', privacy: 'Datenschutz' },
+    coffee: 'Spendier mir einen Kaffee',
+    madeBy: 'Made with ♥ by',
+    rights: 'App, Designs, Plugins und Deployment-Kits sind Open-Source-Software; Inhalt und Gestaltung dieser Website — alle Rechte vorbehalten.',
+    trademark: 'LimeSurvey ist eine eingetragene Marke der LimeSurvey GmbH. LimeControl und die Dienste von strefabadan.pl sind unabhängige Projekte und stehen in keiner Verbindung zur LimeSurvey GmbH.',
+    locale: 'de_DE',
   },
 };
 
@@ -105,7 +120,7 @@ const GITHUB_ICON =
 
 /**
  * <head> dokumentu.
- * @param {{ lang: 'pl'|'en', page: keyof typeof ROUTES, title: string, description: string,
+ * @param {{ lang: 'pl'|'en'|'de', page: keyof typeof ROUTES, title: string, description: string,
  *           ogTitle?: string, ogDescription?: string, ogImage?: string, jsonLd?: object, extraHead?: string }} o
  */
 export function head({ lang, page, title, description, ogTitle, ogDescription, ogImage, jsonLd, extraHead = '' }) {
@@ -130,7 +145,7 @@ ${alternates}
   <meta property="og:title" content="${esc(ogTitle || title)}" />
   <meta property="og:description" content="${esc(ogDescription || description)}" />${ogImage ? `\n  <meta property="og:image" content="${absolute(ogImage)}" />` : ''}
   <meta property="og:locale" content="${t.locale}" />
-  <meta property="og:locale:alternate" content="${T[lang === 'pl' ? 'en' : 'pl'].locale}" />
+${LANGS.filter((l) => l !== lang).map((l) => `  <meta property="og:locale:alternate" content="${T[l].locale}" />`).join('\n')}
   <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}" />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -148,7 +163,6 @@ ${jsonLd ? `\n  <script type="application/ld+json">\n${JSON.stringify(jsonLd, nu
 /** Nagłówek z nawigacją. `page` wyróżnia bieżącą podstronę. */
 export function nav({ lang, page }) {
   const t = T[lang];
-  const other = lang === 'pl' ? 'en' : 'pl';
   const item = (href, label, current) => `        <li><a href="${href}"${current ? ' aria-current="page"' : ''}>${label}</a></li>`;
   const onHome = page === 'home';
   const featuresHref = onHome ? `#${HOME_ANCHORS.features[lang]}` : homeUrl(lang, 'features');
@@ -175,7 +189,7 @@ ${[
     item(ROUTES.docs[lang], t.nav.docs, page === 'docs'),
   ].join('\n')}
         <li><a class="nav-gh" href="${GITHUB_URL}" target="_blank" rel="noopener" aria-label="${t.github}">${GITHUB_ICON}<span>GitHub</span></a></li>
-        <li><a class="nav-lang" href="${ROUTES[page][other]}" hreflang="${other}" lang="${other}" aria-label="${t.switchLabel}">${other.toUpperCase()}<span> — ${t.switchTo}</span></a></li>
+        <li class="nav-langs">${LANGS.filter((l) => l !== lang).map((l) => `<a class="nav-lang" href="${ROUTES[page][l]}" hreflang="${l}" lang="${l}" aria-label="${T[l].switchLabel}">${l.toUpperCase()}<span> — ${LANG_NAMES[l]}</span></a>`).join('')}</li>
         <li><a class="btn btn-primary btn-sm" href="${APP_URL}">${t.openApp}</a></li>
       </ul>
     </div>
@@ -186,7 +200,6 @@ ${[
 /** Stopka + skrypt strony. `note` zastępuje domyślny dopisek o autorze (np. informacją o licencji motywów). */
 export function footer({ lang, page, note, scripts = '' }) {
   const t = T[lang];
-  const other = lang === 'pl' ? 'en' : 'pl';
   const line = note || `${t.madeBy} <a href="${AUTHOR_URL}" rel="noopener">strefabadan.pl</a>.`;
   return `
   <footer class="footer">
@@ -205,7 +218,7 @@ export function footer({ lang, page, note, scripts = '' }) {
         <li><a href="${APP_URL}">${t.footer.app}</a></li>
         <li><a href="${GITHUB_URL}" rel="noopener">GitHub</a></li>
         <li><a href="${AUTHOR_URL}" rel="noopener">strefabadan.pl</a></li>
-        <li><a href="${ROUTES[page][other]}" hreflang="${other}" lang="${other}">${t.switchTo}</a></li>
+${LANGS.filter((l) => l !== lang).map((l) => `        <li><a href="${ROUTES[page][l]}" hreflang="${l}" lang="${l}">${LANG_NAMES[l]}</a></li>`).join('\n')}
       </ul>
       <a class="coffee" href="${SUPPORT_URL}" target="_blank" rel="noopener noreferrer">${t.coffee}</a>
     </div>

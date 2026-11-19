@@ -117,6 +117,7 @@ code, pre, kbd { font-family: var(--font-mono); font-size: .88em; }
 .nav-gh svg { flex: none; }
 .nav-links a.nav-lang { font: 700 .8rem/1 var(--font-display); letter-spacing: .06em; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; }
 .nav-links a.nav-lang:hover { border-color: var(--accent); }
+.nav-langs { display: flex; gap: 6px; }
 @media (min-width: 1041px) {
   .nav-gh span, .nav-lang span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
@@ -134,6 +135,7 @@ code, pre, kbd { font-family: var(--font-mono); font-size: .88em; }
   .nav-links li a:not(.btn) { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .nav-links .btn { margin-top: 14px; width: 100%; }
   .nav-links li a.nav-gh { display: flex; }
+  .nav-langs { flex-direction: column; gap: 0; }
   .nav-links li a.nav-lang { border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 12px 0; font: 500 .95rem/1.65 var(--font-sans); letter-spacing: 0; }
   .nav-logo img { height: 30px; }
 }

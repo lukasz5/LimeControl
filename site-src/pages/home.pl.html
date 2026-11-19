@@ -1,7 +1,7 @@
 <!--meta
 {
   "title": "LimeControl — aplikacja, motywy i szablony ankiet dla LimeSurvey",
-  "description": "Darmowe, otwarte narzędzia dla LimeSurvey 3.x–7.x: aplikacja PWA do zarządzania ankietami z telefonu, {{THEME_COUNT}} motywów WCAG 2.2 AA, {{TEMPLATE_COUNT}} szablonów ankiet PL/EN, wtyczki CATI/CAPI i wdrożenia Docker. Płatne są tylko usługi: konto StrefaAnkiet i hosting.",
+  "description": "Darmowe, otwarte narzędzia dla LimeSurvey 3.x–7.x: aplikacja na iOS, Androida i do przeglądarki do zarządzania ankietami z telefonu, {{THEME_COUNT}} motywów WCAG 2.2 AA, {{TEMPLATE_COUNT}} szablonów ankiet PL/EN, wtyczki CATI/CAPI i wdrożenia Docker. Płatne są tylko usługi: konto StrefaAnkiet i hosting.",
   "ogTitle": "LimeControl — LimeSurvey w Twojej kieszeni",
   "ogDescription": "Aplikacja, motywy, szablony ankiet i wdrożenia dla LimeSurvey 3.x–7.x. Darmowe i open source.",
   "jsonLd": {
@@ -9,12 +9,12 @@
     "@type": "SoftwareApplication",
     "name": "LimeControl",
     "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
+    "operatingSystem": "iOS, Android, Web",
     "url": "https://limecontrol.eu/",
     "softwareVersion": "{{VERSION}}",
     "inLanguage": ["pl", "en"],
     "license": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-    "description": "Otwarty zestaw narzędzi dla LimeSurvey: aplikacja PWA do zarządzania ankietami przez API RemoteControl 2, motywy WCAG 2.2 AA, szablony ankiet i wdrożenia Docker.",
+    "description": "Otwarty zestaw narzędzi dla LimeSurvey: aplikacja na iOS, Androida i do przeglądarki (PWA) do zarządzania ankietami przez API RemoteControl 2, motywy WCAG 2.2 AA, szablony ankiet i wdrożenia Docker.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
     "author": { "@type": "Organization", "name": "strefabadan.pl", "url": "https://strefabadan.pl" }
   }
@@ -39,7 +39,7 @@
           <ul class="hero-meta">
             <li>Darmowa i open source</li>
             <li>LimeSurvey 3.x – 7.x</li>
-            <li>PWA lub własny serwer</li>
+            <li>iOS, Android i przeglądarka</li>
             <li>Po polsku i po angielsku</li>
           </ul>
         </div>
@@ -55,7 +55,7 @@
           <div><b>3.x – 7.x</b><span>wersje LimeSurvey, w tym daty UTC w&nbsp;LS&nbsp;7</span></div>
           <div><b>{{THEME_COUNT}} motywów</b><span>WCAG 2.2 AA dla LimeSurvey 6 i&nbsp;7</span></div>
           <div><b>{{TEMPLATE_COUNT}} szablonów</b><span>ankiet po polsku i&nbsp;angielsku</span></div>
-          <div><b>PWA + Docker</b><span>w chmurze albo na własnym serwerze</span></div>
+          <div><b>iOS + Android</b><span>aplikacje natywne, a do tego PWA i własny serwer (Docker)</span></div>
         </div>
       </div>
     </section>
@@ -105,7 +105,7 @@
           <article class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
             <h3>Aplikacja LimeControl</h3>
-            <p>PWA na telefon i komputer: aktywacja ankiet, harmonogram, uczestnicy, statystyki i eksport wyników z wielu instancji LimeSurvey.</p>
+            <p>Natywna aplikacja na iOS i Androida oraz PWA na komputer: aktywacja ankiet, harmonogram, uczestnicy, statystyki i eksport wyników z wielu instancji LimeSurvey.</p>
             <a class="card-link" href="#funkcje">Zobacz funkcje →</a>
           </article>
 
@@ -219,8 +219,8 @@
 
           <article class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
-            <h3>PWA i aplikacja mobilna</h3>
-            <p>Zainstaluj aplikację na ekranie głównym jednym dotknięciem. Bezpłatna aplikacja LimeControl na iOS i Androida jest w przygotowaniu.</p>
+            <h3>Aplikacja mobilna i PWA</h3>
+            <p>Bezpłatna, natywna aplikacja na iPhone’a, iPada i Androida — bez konta. {{MOBILE_AVAILABILITY}} W przeglądarce dodasz LimeControl do ekranu głównego jako PWA.</p>
           </article>
 
           <article class="card">
@@ -298,7 +298,7 @@
             <h3>Oprogramowanie</h3>
             <p>Bez limitu ankiet, instancji i użytkowników — z otwartym kodem.</p>
             <ul>
-              <li>Aplikacja LimeControl: w przeglądarce, jako PWA i na własnym serwerze</li>
+              <li>Aplikacja LimeControl: na iOS i Androida, w przeglądarce (PWA) i na własnym serwerze</li>
               <li>{{THEME_COUNT}} motywów ankiet i {{TEMPLATE_COUNT}} szablonów ankiet</li>
               <li>Wtyczki StrefaAnkiet dla LimeSurvey</li>
               <li>Zestawy Docker dla LimeSurvey i LimeControl</li>
@@ -459,7 +459,7 @@
           </details>
           <details>
             <summary>Jak zainstalować aplikację na telefonie?</summary>
-            <p>Na Androidzie użyj przycisku „Zainstaluj PWA” w aplikacji lub menu Chrome → „Dodaj do ekranu głównego”. Na iPhonie w Safari wybierz „Udostępnij” → „Do ekranu początkowego”. Aplikacja w App Store i Google Play jest w przygotowaniu.</p>
+            <p>Zainstaluj bezpłatną aplikację mobilną LimeControl. {{MOBILE_AVAILABILITY}} Wolisz bez sklepu? Zainstaluj wersję PWA: na Androidzie przycisk „Zainstaluj PWA” lub menu Chrome → „Dodaj do ekranu głównego”, na iPhonie w Safari „Udostępnij” → „Do ekranu początkowego”. <a href="{{docs}}#instalacja">Szczegóły</a>.</p>
           </details>
           <details>
             <summary>Jakie uprawnienia musi mieć konto LimeSurvey?</summary>

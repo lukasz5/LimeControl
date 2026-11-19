@@ -1,11 +1,15 @@
-// Podstrony z motywami ankiet: site/szablony.html (PL) i site/en/themes.html (EN).
+// Podstrony z motywami ankiet: site/szablony.html (PL), site/en/themes.html (EN) i site/de/designs.html (DE).
 // Dane (palety, rozmiary paczek, kontrasty) pochodzą z limesurvey-themes/build.mjs.
 import { APP_URL, ROUTES, absolute, esc, homeUrl, layout, outputPath } from '../chrome.mjs';
+import { THEMES_DE, localized } from './data.de.mjs';
+
+const themeText = (t, field, lang) => localized(t, field, lang, THEMES_DE, 'Motiv');
 
 const kb = (n) => `${Math.max(1, Math.round(n / 1024))} kB`;
 const NUMBER_WORDS = {
   pl: { 6: 'Sześć', 7: 'Siedem', 8: 'Osiem', 9: 'Dziewięć', 10: 'Dziesięć', 11: 'Jedenaście', 12: 'Dwanaście' },
   en: { 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten', 11: 'Eleven', 12: 'Twelve' },
+  de: { 6: 'Sechs', 7: 'Sieben', 8: 'Acht', 9: 'Neun', 10: 'Zehn', 11: 'Elf', 12: 'Zwölf' },
 };
 
 const S = {
@@ -100,7 +104,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       ['Czy motywy działają z&nbsp;LimeControl?', `Tak — motyw jest ustawieniem ankiety po stronie LimeSurvey. W&nbsp;aplikacji <a href="${APP_URL}">LimeControl</a> możesz przypisać zainstalowany motyw do ankiety bez logowania do panelu.`],
     ],
     ctaH: 'Zarządzaj ankietami z telefonu',
-    ctaP: 'LimeControl aktywuje ankiety, planuje starty i&nbsp;pokazuje wyniki z&nbsp;wielu instancji LimeSurvey — za darmo.',
+    ctaP: 'LimeControl aktywuje ankiety, planuje starty i&nbsp;pokazuje wyniki z&nbsp;wielu instancji LimeSurvey — za darmo, na iOS, Androidzie i&nbsp;w&nbsp;przeglądarce.',
     ctaApp: 'Otwórz aplikację',
     ctaHome: 'Poznaj LimeControl',
     footerNote: (v) => `Motywy w wersji ${v}, licencja GPL-2.0-or-later, oparte na Fruity TwentyThree (LimeSurvey GmbH).`,
@@ -196,10 +200,106 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       ['Do the themes work with LimeControl?', `Yes — a theme is a survey setting on the LimeSurvey side. In the <a href="${APP_URL}">LimeControl</a> app you can assign an installed theme to a survey without logging in to the admin panel.`],
     ],
     ctaH: 'Manage your surveys from your phone',
-    ctaP: 'LimeControl activates surveys, schedules launches and shows results from many LimeSurvey instances — for free.',
+    ctaP: 'LimeControl activates surveys, schedules launches and shows results from many LimeSurvey instances — for free, on iOS, Android and in the browser.',
     ctaApp: 'Open the app',
     ctaHome: 'Discover LimeControl',
     footerNote: (v) => `Themes version ${v}, licensed under GPL-2.0-or-later, based on Fruity TwentyThree (LimeSurvey GmbH).`,
+  },
+  de: {
+    ratio: (r) => `${r.toFixed(1).replace('.', ',')}:1`,
+    title: 'Kostenlose Umfrage-Designs für LimeSurvey nach WCAG 2.2 — LimeControl',
+    description: (n, names) => `${n} kostenlose, responsive Umfrage-Designs für LimeSurvey 6 und 7: ${names}. Konform mit WCAG 2.2 AA, mit Interviewer-Modus für CATI/CAPI. ZIP herunterladen und in Ihrer Instanz installieren.`,
+    ogTitle: 'Kostenlose Umfrage-Designs für LimeSurvey — WCAG 2.2 AA',
+    ogDescription: (names) => `${names}. Responsiv, gut lesbar, bereit zum Import.`,
+    listName: 'Umfrage-Designs für LimeSurvey von LimeControl',
+    views: { desktop: 'Desktop', mobile: 'Smartphone', errors: 'Fehler' },
+    alts: {
+      desktop: (l) => `Das Design ${l} am Desktop: eine Einfachauswahl-Frage mit gewählter Antwort`,
+      mobile: (l) => `Das Design ${l} auf dem Smartphone (390 px breit)`,
+      errors: (l) => `Das Design ${l}: eine unbeantwortete Pflichtfrage — roter Rahmen, Symbol und Meldung`,
+    },
+    previewOf: (l) => `Vorschau des Designs ${l}`,
+    useCases: 'Einsatzbereiche',
+    palette: 'Farbpalette',
+    swatch: { primary: 'Akzent', text: 'Text', bg: 'Hintergrund' },
+    contrast: (rep, r) => `<strong>Kontrast:</strong> Text ${r(rep.body)} · Button ${r(rep.btn)} · Minimum ${r(rep.minText)}`,
+    downloadAria: (l, v, id, size) => `${l} für LimeSurvey ${v} herunterladen (lc_${id}.zip, ${size})`,
+    eyebrow: 'Umfrage-Designs für LimeSurvey',
+    h1: 'Umfragen, die <span class="lime">alle lesen können</span> — auf Smartphone und Desktop.',
+    lead: (n, install) => `${n} kostenlose Designs für LimeSurvey&nbsp;6 und&nbsp;7 nach einem getesteten Muster: große Antwortfelder, ein deutlicher Fokusrahmen, verständliche Fehler und Kontraste nach WCAG&nbsp;2.2&nbsp;AA. Die Texte für Befragte gibt es auch auf Deutsch. ZIP für Ihre Version herunterladen, im Admin-Panel importieren, fertig. <a href="#${install}">Installationsanleitung</a>.`,
+    allFor: (v, size) => `Alle Designs für LimeSurvey ${v} (${size})`,
+    meta: (versions) => ['WCAG 2.2 AA', `LimeSurvey ${versions}`, 'Responsiv ab 320 px', 'Interviewer-Modus CATI/CAPI', 'Keine externen Schriften oder Skripte', 'GPL-Lizenz'],
+    and: ' und ',
+    ids: { gallery: 'designs', a11y: 'barrierefreiheit', interviewer: 'interviewer-mode', install: 'install' },
+    galleryEyebrow: 'Galerie',
+    galleryH: 'Wählen Sie ein Design',
+    galleryP: (tested) => `Die Screenshots stammen aus einer echten LimeSurvey-Installation. Jedes Design wurde mit LimeSurvey ${tested} getestet. Schalten Sie die Vorschau um, um die Smartphone-Ansicht und eine Fehlermeldung zu sehen.`,
+    a11yEyebrow: 'Barrierefreiheit',
+    a11yH: 'Ein gemeinsames, getestetes Muster',
+    a11yP: [
+      'Alle Designs teilen ein Basis-Stylesheet (<code>lc-base.css</code>) und das Skript <code>lc-a11y.js</code>. Sie unterscheiden sich nur in Farben, Typografie, Eckenradien und Layout — und verhalten sich daher gleich und sind gleich barrierearm.',
+      'Der Kontrast jeder Palette wird beim Bauen der Pakete automatisch geprüft — ein Design, das die Schwellen verfehlt, wird nicht veröffentlicht.',
+    ],
+    a11yList: [
+      '<strong>Kontrast</strong> von mindestens 4,5:1 für Text und 3:1 für Feldrahmen und Fokus (WCAG 1.4.3, 1.4.11).',
+      '<strong>Sichtbarer Fokus</strong> — eine 3&nbsp;px-Umrandung mit Abstand für die Tastaturnavigation (2.4.7, 2.4.13).',
+      '<strong>Touch-Flächen ≥&nbsp;44&nbsp;px</strong>; die ganze Antwortkachel ist klickbar (2.5.8).',
+      '<strong>Fehler nicht nur über Farbe</strong> — Rahmen, Symbol und Text; der Fokus springt zur ersten fehlerhaften Frage und das Feld erhält <code>aria-invalid</code> (1.4.1, 3.3.1).',
+      '<strong>Native Formularelemente</strong> — sie funktionieren im Windows-Kontrastmodus und mit Screenreadern.',
+      '<strong>Reflow</strong> — kein horizontales Scrollen ab 320&nbsp;px; breite Tabellen scrollen in ihrem eigenen Container (1.4.10).',
+      '<strong>Ein Link „Zu den Fragen springen“</strong>, gekennzeichnete Pflichtfragen und ein benannter Menü-Button (2.4.1, 4.1.2).',
+      '<strong>Sechs Oberflächensprachen</strong> — Englisch, Polnisch, Deutsch, Französisch, Spanisch und Ukrainisch; gewählt nach der Umfragesprache.',
+      '<strong>Nutzerpräferenzen</strong> — <code>prefers-reduced-motion</code>, <code>forced-colors</code>, Druck.',
+      '<strong>DSGVO-freundlich</strong> — Systemschriften, keine CDNs und keine Tracking-Skripte.',
+    ],
+    ivEyebrow: 'CATI und CAPI',
+    ivH: 'Interviewer-Modus in jedem Design',
+    ivP: (templates, plugins) => `Die Designs <strong>CATI</strong> und <strong>CAPI</strong> sind für Interviewer gemacht, ihre Mechanismen funktionieren aber in jedem LimeControl-Design. Fertige Fragebögen finden Sie bei den <a href="${templates}">Umfragevorlagen</a>; Anrufwarteschlangen, Telefonie, Zuteilungen und Quoten bietet die Plattform StrefaAnkiet, die die <a href="${plugins}">kostenlosen Plugins</a> mit LimeSurvey verbinden.`,
+    ivCards: [
+      ['Skripte und Interviewer-Felder', 'Geben Sie einer Frage die CSS-Klasse <code>lc-interviewer</code> (<em>Frageeinstellungen → Darstellung → CSS-Klasse</em>), und das Design markiert sie mit gestricheltem Rahmen als vorzulesenden Text oder vom Interviewer auszufüllendes Feld.'],
+      ['Feste Navigation', 'In den Designs CATI und CAPI bleiben die Buttons <em>Zurück</em> und <em>Weiter</em> am unteren Bildschirmrand — auch auf dem Smartphone, wo sie in eine Zeile passen.'],
+      ['Tastenkürzel (CATI)', 'Die Tasten <kbd>1</kbd>–<kbd>9</kbd> wählen eine Antwort; in Matrizen springt der Fokus von selbst in die nächste Zeile. <kbd>Strg</kbd>+<kbd>Enter</kbd> ist „Weiter“, <kbd>Strg</kbd>+<kbd>Umschalt</kbd>+<kbd>Enter</kbd> ist „Zurück“. Die Kürzel lassen sich in der Navigationsleiste abschalten.'],
+      ['Ein Tablet im Feld (CAPI)', '20&nbsp;px Text, 56&nbsp;px Touch-Flächen und eine Schwarz-Weiß-Palette mit einem kräftigen Akzent — auch bei grellem Sonnenlicht lesbar.'],
+    ],
+    installEyebrow: 'Installation',
+    installH: 'Ein Design in Ihrem LimeSurvey installieren',
+    installP: 'Sie brauchen ein Superadministrator-Konto (oder die Berechtigung, Designs zu importieren) und LimeSurvey 6.x oder 7.x mit dem eingebauten Design <em>Fruity TwentyThree</em>.',
+    steps: [
+      ['ZIP für Ihre Version herunterladen', 'Die LimeSurvey-Version steht in der Fußzeile des Admin-Panels. Laden Sie die Variante <strong>7.x</strong> oder <strong>6.x</strong> herunter und <strong>benennen Sie die Datei nicht um</strong> — LimeSurvey benennt das Designverzeichnis nach der Datei (z.&nbsp;B. <code>lc_medical</code>).'],
+      ['In LimeSurvey hochladen', '<em>Konfiguration → Designs</em>, Tab <em>Umfrage-Designs</em>, Schaltfläche <strong>Hochladen &amp; installieren</strong>. ZIP-Datei wählen und bestätigen.'],
+      ['In einer Umfrage auswählen', 'In der Umfrage: <em>Umfrageeinstellungen → Allgemein → Design</em>, z.&nbsp;B. „LimeControl Medical“ wählen und speichern. In der App LimeControl genügt ein Tippen.'],
+      ['Logo hinzufügen', 'In der Umfrage unter <em>Designoptionen → Bilder</em>: <em>Logo: Ja</em> setzen und eine PNG- oder JPG-Datei hochladen.'],
+    ],
+    callout: '<strong>Warum zwei Varianten?</strong> LimeSurvey&nbsp;7 hat dem Eltern-Design neue Optionen hinzugefügt (Farben, Eckenradien, Symbole, Tabellenumbruch), und das Formular <em>Designoptionen</em> zeigt nur die im Paket beschriebenen Optionen. Aussehen und Barrierefreiheit sind in beiden Varianten identisch — nur die Optionsliste im Panel unterscheidet sich. Die Variante 6.x ist nicht als kompatibel mit LimeSurvey&nbsp;7 markiert und umgekehrt.',
+    more: [
+      ['Manuelle Installation (FTP / SSH)', `<p>Wenn das Hochladen über das Panel blockiert ist (z.&nbsp;B. durch das Limit <code>upload_max_filesize</code> oder Verzeichnisrechte):</p>
+            <pre><code><span class="c"># auf dem Server, im Stammverzeichnis von LimeSurvey</span>
+mkdir -p upload/themes/survey/lc_medical
+unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
+            <p>Die Datei <code>config.xml</code> muss direkt in <code>upload/themes/survey/lc_medical/</code> liegen. Suchen Sie das Design dann in der Liste verfügbarer Designs unter <em>Konfiguration → Designs</em> und klicken Sie auf <strong>Installieren</strong>.</p>`],
+      ['Standarddesign für neue Umfragen', `<p><em>Konfiguration → Global → Allgemein → Standarddesign</em>. Bestehende Umfragen behalten ihr Design — ändern Sie es in den Einstellungen jeder Umfrage.</p>
+            <h3>Eigene Farben und Schriften</h3>
+            <p>Öffnen Sie <em>Konfiguration → Designs → Design-Editor</em> für das Design und bearbeiten Sie <code>css/lc-theme.css</code> — alle Farben sind <code>--lc-*</code>-Variablen am Anfang der Datei. Prüfen Sie nach Änderungen den Kontrast (Text ≥&nbsp;4,5:1, Rahmen ≥&nbsp;3:1).</p>`],
+      ['Auf eine neue Version aktualisieren', `<p>LimeSurvey überschreibt beim Import kein vorhandenes Design. Am einfachsten ersetzen Sie die Dateien per FTP in <code>upload/themes/survey/lc_…</code> und klicken dann unter <em>Konfiguration → Global → Allgemein</em> auf <strong>Asset-Cache leeren</strong>.</p>
+            <p>Alternativ: Design <em>deinstallieren</em>, sein Verzeichnis vom Server löschen und das neue ZIP importieren (Umfragen müssen dem Design dann neu zugewiesen werden).</p>`],
+    ],
+    faqTitle: 'Fehlerbehebung',
+    faq: (names) => [
+      ['„Ein bereits vorhandenes Design kann nicht importiert werden“', 'Ein Design mit diesem Namen liegt bereits auf dem Server (das Verzeichnis bleibt auch nach der Deinstallation). Löschen Sie das Verzeichnis <code>upload/themes/survey/lc_…</code> oder aktualisieren Sie die Dateien manuell — siehe „Auf eine neue Version aktualisieren“.'],
+      ['Das Design hat einen seltsamen Namen wie <code>lc_medical_1</code> oder funktioniert nach dem Import nicht', `Ihr Browser hat der heruntergeladenen Datei „(1)“ angehängt. Entfernen Sie dieses Design, benennen Sie die Datei zurück in <code>lc_medical.zip</code> um und importieren Sie sie erneut. Der Dateiname muss dem Namen in <code>config.xml</code> entsprechen (${names}).`],
+      ['Ich habe LimeSurvey von 6 auf 7 aktualisiert — was ist mit dem Design?', 'Ersetzen Sie die Designdateien durch die Variante 7.x (per FTP in <code>upload/themes/survey/lc_…</code>), nutzen Sie dann <strong>Zurücksetzen</strong> neben dem Design unter <em>Konfiguration → Designs</em>, um die neue Optionsliste zu laden, und leeren Sie den Asset-Cache. Die Logo-Einstellungen müssen danach neu gewählt werden.'],
+      ['Fehler erscheinen in einem Pop-up statt neben der Frage', 'Die Designs zeigen Meldungen standardmäßig auf der Seite. Verhält sich Ihre Umfrage anders, setzen Sie <em>Designoptionen → Einfache Optionen → Pop-ups anzeigen</em> auf <strong>Auf der Seite</strong>.'],
+      ['„Das Design kann nicht importiert werden, weil fruity_twentythree nicht installiert ist“', 'Die Designs erweitern das eingebaute Design <em>Fruity TwentyThree</em> aus LimeSurvey 6 und 7. Installieren Sie es unter <em>Konfiguration → Designs</em> oder aktualisieren Sie LimeSurvey. Versionen 5.x und älter werden nicht unterstützt.'],
+      ['Die Umfrage sieht nach CSS-Änderungen gleich aus', 'LimeSurvey cacht Designdateien. Klicken Sie unter <em>Konfiguration → Global → Allgemein</em> auf <strong>Asset-Cache leeren</strong> und laden Sie die Umfrageseite ohne Browser-Cache neu.'],
+      ['Wie schalte ich die Tastenkürzel im CATI-Design ab?', 'Interviewer schalten sie mit der Schaltfläche „Kürzel“ in der Navigationsleiste ab (die Wahl merkt sich der Browser). Um sie dauerhaft zu deaktivieren, entfernen Sie die Zeile <code>--lc-hotkeys: 1;</code> aus <code>css/lc-theme.css</code>.'],
+      ['Darf ich die Designs kommerziell nutzen und verändern?', 'Ja. Die Designs stehen unter GPL-2.0-or-later (wie LimeSurvey) — Sie dürfen sie ändern, umbranden und in kommerziellen Projekten einsetzen.'],
+      ['Funktionieren die Designs mit LimeControl?', `Ja — das Design ist eine Umfrageeinstellung auf der LimeSurvey-Seite. In der App <a href="${APP_URL}">LimeControl</a> können Sie einer Umfrage ein installiertes Design zuweisen, ohne sich im Admin-Panel anzumelden.`],
+    ],
+    ctaH: 'Verwalten Sie Ihre Umfragen vom Smartphone',
+    ctaP: 'LimeControl aktiviert Umfragen, plant Starts und zeigt Ergebnisse aus vielen LimeSurvey-Instanzen — kostenlos, für iOS, Android und im Browser.',
+    ctaApp: 'App öffnen',
+    ctaHome: 'LimeControl entdecken',
+    footerNote: (v) => `Designs in Version ${v}, lizenziert unter GPL-2.0-or-later, basierend auf Fruity TwentyThree (LimeSurvey GmbH).`,
   },
 };
 
@@ -224,8 +324,8 @@ function themeCard(t, rep, variants, lang) {
             </div>
             <div class="tbody">
               <h3 id="${t.id}-title">${esc(t.label)}</h3>
-              <p>${esc(t.summary[lang])}</p>
-              <ul class="tags" aria-label="${s.useCases}">${t.useCases[lang].map((u) => `<li>${esc(u)}</li>`).join('')}</ul>
+              <p>${esc(themeText(t, 'summary', lang))}</p>
+              <ul class="tags" aria-label="${s.useCases}">${themeText(t, 'useCases', lang).map((u) => `<li>${esc(u)}</li>`).join('')}</ul>
               <ul class="swatches" aria-label="${s.palette}">
                 ${swatch(k.primary, s.swatch.primary)}${swatch(k.text, s.swatch.text)}${swatch(k.bg, s.swatch.bg)}
               </ul>
@@ -241,7 +341,7 @@ function themeCard(t, rep, variants, lang) {
 }
 
 /**
- * @param {{ cfg: object, report: object[], bundles: Record<string, number>, lang: 'pl'|'en' }} o
+ * @param {{ cfg: object, report: object[], bundles: Record<string, number>, lang: 'pl'|'en'|'de' }} o
  * @returns {{ path: string, html: string }} ścieżka względem site/ i gotowy HTML
  */
 export function renderPage({ cfg, report, bundles, lang }) {
@@ -384,7 +484,7 @@ ${cards}
         item: {
           '@type': 'SoftwareSourceCode',
           name: t.title,
-          description: t.description[lang],
+          description: themeText(t, 'description', lang),
           license: 'https://www.gnu.org/licenses/gpl-2.0.html',
           downloadUrl: absolute(`/szablony/pobierz/${variants[0].id}/lc_${t.id}.zip`),
           programmingLanguage: 'CSS',

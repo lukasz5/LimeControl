@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 /**
- * Buduje całą stronę limecontrol.eu w obu językach:
+ * Buduje całą stronę limecontrol.eu we wszystkich językach (PL, EN, DE):
  *   node site-src/build.mjs          (to samo: npm run build:site)
  *
  *   1. paczki motywów ankiet            → site/szablony/        (limesurvey-themes/build.mjs)
  *   2. pliki szablonów ankiet (.lss)    → site/ankiety/, public/szablony-ankiet/ (survey-templates/build.mjs)
  *   3. podstrony:
- *        pages/home.<lang>.html         → site/index.html,     site/en/index.html
- *        pages/docs.<lang>.html         → site/docs.html,      site/en/docs.html
- *        pages/privacy.<lang>.html      → site/prywatnosc.html, site/en/privacy.html
- *        pages/plugins.mjs              → site/wtyczki.html,   site/en/plugins.html
- *        pages/themes.mjs               → site/szablony.html,  site/en/themes.html
- *        pages/templates.mjs            → site/ankiety.html,   site/en/templates.html
+ *        pages/home.<lang>.html         → site/index.html,      site/en/index.html,     site/de/index.html
+ *        pages/docs.<lang>.html         → site/docs.html,       site/en/docs.html,      site/de/docs.html
+ *        pages/privacy.<lang>.html      → site/prywatnosc.html, site/en/privacy.html,   site/de/datenschutz.html
+ *        pages/plugins.mjs              → site/wtyczki.html,    site/en/plugins.html,   site/de/plugins.html
+ *        pages/themes.mjs               → site/szablony.html,   site/en/themes.html,    site/de/designs.html
+ *        pages/templates.mjs            → site/ankiety.html,    site/en/templates.html, site/de/vorlagen.html
  *   4. site/sitemap.xml ze wszystkimi podstronami i ich wersjami językowymi
  *
  * Kroki 1–2 to otwarte oprogramowanie (motywy i szablony); krok 3 — treść i szkielet strony — jest
@@ -60,24 +60,35 @@ const templates = buildTemplates();
  * Zdanie o dostępności aplikacji mobilnej: linki do sklepów włączonych w STORES_LIVE (chrome.mjs),
  * a gdy żaden nie jest włączony — informacja o publikacji i budowaniu ze źródeł.
  */
+const MOBILE_T = {
+  pl: {
+    and: ' i ',
+    get: (links) => `Pobierz ją bezpłatnie: ${links}.`,
+    pending: (store) => `Wersja w ${store} czeka na publikację.`,
+    none: (readme) => `Aplikacja czeka na publikację w App Store i Google Play. Do tego czasu możesz zbudować ją ze źródeł (<a href="${readme}" target="_blank" rel="noopener">instrukcja</a>) albo korzystać z wersji PWA.`,
+  },
+  en: {
+    and: ' and ',
+    get: (links) => `Get it for free: ${links}.`,
+    pending: (store) => `The ${store} version is waiting to be published.`,
+    none: (readme) => `The app is waiting to be published on the App Store and Google Play. Until then you can build it from source (<a href="${readme}" target="_blank" rel="noopener">instructions</a>) or use the PWA.`,
+  },
+  de: {
+    and: ' und ',
+    get: (links) => `Kostenlos erhältlich: ${links}.`,
+    pending: (store) => `Die Version im ${store} wartet noch auf die Veröffentlichung.`,
+    none: (readme) => `Die App wartet auf die Veröffentlichung im App Store und bei Google Play. Bis dahin können Sie sie aus dem Quellcode bauen (<a href="${readme}" target="_blank" rel="noopener">Anleitung, Englisch</a>) oder die PWA nutzen.`,
+  },
+};
+
 function mobileAvailability(lang) {
+  const t = MOBILE_T[lang];
   const live = [['App Store', APP_STORE_URL, STORES_LIVE.appStore], ['Google Play', PLAY_STORE_URL, STORES_LIVE.googlePlay]]
     .filter(([, , isLive]) => isLive)
     .map(([name, url]) => `<a href="${url}" target="_blank" rel="noopener">${name}</a>`);
-  if (live.length === 2) {
-    const links = live.join(lang === 'pl' ? ' i ' : ' and ');
-    return lang === 'pl' ? `Pobierz ją bezpłatnie: ${links}.` : `Get it for free: ${links}.`;
-  }
-  if (live.length === 1) {
-    const pending = STORES_LIVE.appStore ? 'Google Play' : 'App Store';
-    return lang === 'pl'
-      ? `Pobierz ją bezpłatnie: ${live[0]}. Wersja w ${pending} czeka na publikację.`
-      : `Get it for free: ${live[0]}. The ${pending} version is waiting to be published.`;
-  }
-  const readme = `${GITHUB_URL}/blob/main/mobile/${lang === 'pl' ? 'README.md' : 'README.en.md'}`;
-  return lang === 'pl'
-    ? `Aplikacja czeka na publikację w App Store i Google Play. Do tego czasu możesz zbudować ją ze źródeł (<a href="${readme}" target="_blank" rel="noopener">instrukcja</a>) albo korzystać z wersji PWA.`
-    : `The app is waiting to be published on the App Store and Google Play. Until then you can build it from source (<a href="${readme}" target="_blank" rel="noopener">instructions</a>) or use the PWA.`;
+  if (live.length === 2) return t.get(live.join(t.and));
+  if (live.length === 1) return `${t.get(live[0])} ${t.pending(STORES_LIVE.appStore ? 'Google Play' : 'App Store')}`;
+  return t.none(`${GITHUB_URL}/blob/main/mobile/${lang === 'pl' ? 'README.md' : 'README.en.md'}`);
 }
 
 const APPLE_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>';
@@ -85,12 +96,14 @@ const PLAY_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#00d7
 
 /** Przyciski „Pobierz z App Store / Google Play” (przed publikacją: „wkrótce”, bez linku). */
 function storeButtons(lang) {
-  const t = lang === 'pl'
-    ? { soon: 'Wkrótce w', badge: 'wkrótce', label: 'Aplikacja mobilna' }
-    : { soon: 'Coming soon to', badge: 'soon', label: 'Mobile app' };
+  const t = {
+    pl: { soon: 'Wkrótce w', badge: 'wkrótce', label: 'Aplikacja mobilna', appStore: 'Pobierz z', play: 'Pobierz z' },
+    en: { soon: 'Coming soon to', badge: 'soon', label: 'Mobile app', appStore: 'Download on the', play: 'Get it on' },
+    de: { soon: 'Bald im', badge: 'bald', label: 'Mobile App', appStore: 'Laden im', play: 'Jetzt bei' },
+  }[lang];
   const stores = [
-    ['App Store', APP_STORE_URL, APPLE_LOGO, lang === 'pl' ? 'Pobierz z' : 'Download on the', STORES_LIVE.appStore],
-    ['Google Play', PLAY_STORE_URL, PLAY_LOGO, lang === 'pl' ? 'Pobierz z' : 'Get it on', STORES_LIVE.googlePlay],
+    ['App Store', APP_STORE_URL, APPLE_LOGO, t.appStore, STORES_LIVE.appStore],
+    ['Google Play', PLAY_STORE_URL, PLAY_LOGO, t.play, STORES_LIVE.googlePlay],
   ];
   const items = stores.map(([name, url, logo, get, live]) => live
     ? `<a class="store-btn" href="${url}" target="_blank" rel="noopener">${logo}<span><small>${get}</small><b>${name}</b></span></a>`
@@ -118,17 +131,30 @@ const SCREEN_CAPTIONS = {
     participants: ['Participants and tokens', 'Add respondents and send invitations and reminders.'],
     instances: ['Many instances', 'LimeSurvey server profiles and the RPC call log.'],
   },
+  de: {
+    surveys: ['Umfragen und Statistiken', 'Antwortzahlen und Teilnehmerstatus der gewählten Umfrage als Diagramme.'],
+    summary: ['Umfragedetails', 'Antwortübersicht, Abschlussquote und Tokens — live vom Server.'],
+    list: ['Umfrageliste', 'Alle Umfragen der Instanz, gefiltert nach aktiv und inaktiv.'],
+    'link-qr': ['Link, QR-Code und CAPI-Modus', 'Link teilen, QR-Code zeigen und Interviews nacheinander auf dem Tablet führen.'],
+    templates: ['Vorlagenbibliothek', 'Fertige Fragebögen (EN/PL) mit einem Tippen importiert.'],
+    participants: ['Teilnehmer und Tokens', 'Befragte hinzufügen, Einladungen und Erinnerungen versenden.'],
+    instances: ['Mehrere Instanzen', 'LimeSurvey-Serverprofile und das RPC-Aufrufprotokoll.'],
+  },
 };
-const screenSrc = (lang, name) => `/assets/screens/${lang}/${name}.webp?v=${ASSET_VERSION}`;
+/** Die App-Oberfläche gibt es auf Polnisch und Englisch — die deutsche Seite zeigt die englischen Screenshots. */
+const SCREEN_LANG = { pl: 'pl', en: 'en', de: 'en' };
+const screenSrc = (lang, name) => `/assets/screens/${SCREEN_LANG[lang]}/${name}.webp?v=${ASSET_VERSION}`;
 
 /** Telefon w hero: prawdziwe ekrany aplikacji przenikające się co kilka sekund. */
 function heroDevice(lang) {
   const shots = ['surveys', 'list', 'templates'];
-  const label = lang === 'pl' ? 'Aplikacja LimeControl na telefonie: ' : 'The LimeControl app on a phone: ';
+  const label = { pl: 'Aplikacja LimeControl na telefonie: ', en: 'The LimeControl app on a phone: ', de: 'Die LimeControl-App auf dem Smartphone: ' }[lang];
   const imgs = shots.map((name, i) => `<img src="${screenSrc(lang, name)}" alt="${i ? '' : esc(label + SCREEN_CAPTIONS[lang][name][0])}" width="640" height="1391"${i ? ' loading="lazy" aria-hidden="true"' : ' fetchpriority="high"'} />`).join('\n              ');
-  const chips = lang === 'pl'
-    ? ['<b>+23</b> nowe odpowiedzi', '<span class="dot"></span> Ankieta aktywna']
-    : ['<b>+23</b> new responses', '<span class="dot"></span> Survey active'];
+  const chips = {
+    pl: ['<b>+23</b> nowe odpowiedzi', '<span class="dot"></span> Ankieta aktywna'],
+    en: ['<b>+23</b> new responses', '<span class="dot"></span> Survey active'],
+    de: ['<b>+23</b> neue Antworten', '<span class="dot"></span> Umfrage aktiv'],
+  }[lang];
   return `<div class="device-stage">
           <div class="device device-phone">
             <span class="device-island" aria-hidden="true"></span>
@@ -211,12 +237,13 @@ for (const lang of LANGS) {
   ]) write(rendered.path, rendered.html);
 }
 
-// ---------- 4: sitemap.xml — każda podstrona w obu językach, z alternatywami hreflang ----------
+// ---------- 4: sitemap.xml — każda podstrona w każdym języku, z alternatywami hreflang ----------
 const PRIORITY = { home: '1.0', themes: '0.9', templates: '0.9', plugins: '0.8', docs: '0.8', privacy: '0.3' };
 const urls = Object.keys(ROUTES).flatMap((page) =>
   LANGS.map((lang) => `  <url>
     <loc>${absolute(ROUTES[page][lang])}</loc>
 ${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${absolute(ROUTES[page][l])}" />`).join('\n')}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${absolute(ROUTES[page].en)}" />
     <changefreq>monthly</changefreq>
     <priority>${lang === 'pl' ? PRIORITY[page] : (Number(PRIORITY[page]) - 0.1).toFixed(1)}</priority>
   </url>`));

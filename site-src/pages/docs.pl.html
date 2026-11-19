@@ -53,7 +53,7 @@
       <section id="wprowadzenie">
         <span class="eyebrow">Dokumentacja</span>
         <h1>LimeControl — przewodnik</h1>
-        <p class="lead-docs">LimeControl to aplikacja PWA do zarządzania instancjami LimeSurvey przez oficjalne API <strong>RemoteControl 2</strong> (JSON-RPC, <code>remotecontrol_handle</code>). Działa w przeglądarce na telefonie i komputerze, można ją zainstalować na ekranie głównym albo uruchomić na własnym serwerze. Ten sam kod działa też jako <a href="#aplikacja-mobilna">aplikacja mobilna</a> na iOS i Androida — bez konta i bez ograniczeń CORS.</p>
+        <p class="lead-docs">LimeControl to aplikacja do zarządzania instancjami LimeSurvey przez oficjalne API <strong>RemoteControl 2</strong> (JSON-RPC, <code>remotecontrol_handle</code>). Działa jako natywna <a href="#aplikacja-mobilna">aplikacja mobilna</a> na iOS i Androida (bez konta i bez ograniczeń CORS), w przeglądarce na telefonie i komputerze — także zainstalowana jako PWA — oraz na Twoim własnym serwerze. To wszędzie ten sam kod.</p>
         <div class="callout">
           <p><strong>Wymagania:</strong> LimeSurvey 3.x, 5.x, 6.x lub 7.x z włączonym interfejsem JSON-RPC i konto LimeSurvey z odpowiednimi uprawnieniami. W usłudze <a href="{{APP_URL}}">app.limecontrol.eu</a> logujesz się kontem Google; <a href="#wlasny-serwer">własna instalacja</a> używa klucza dostępu.</p>
         </div>
@@ -74,7 +74,8 @@
 
       <section id="instalacja">
         <h2>Instalacja na telefonie</h2>
-        <p>LimeControl jest progresywną aplikacją webową — instaluje się bez sklepu z aplikacjami i aktualizuje automatycznie.</p>
+        <p><strong>Aplikacja mobilna:</strong> bezpłatna LimeControl na iPhone’a, iPada i Androida. {{MOBILE_AVAILABILITY}} Szczegóły w sekcji <a href="#aplikacja-mobilna">Aplikacja mobilna</a>.</p>
+        <p><strong>PWA:</strong> wersję przeglądarkową zainstalujesz bez sklepu z aplikacjami — aktualizuje się automatycznie.</p>
         <ul>
           <li><strong>Android (Chrome, Edge):</strong> przycisk <em>Zainstaluj PWA</em> w aplikacji lub menu przeglądarki → <em>Dodaj do ekranu głównego</em>.</li>
           <li><strong>iPhone / iPad (Safari):</strong> <em>Udostępnij</em> → <em>Do ekranu początkowego</em>.</li>
@@ -147,7 +148,7 @@ Header always set Access-Control-Allow-Headers "Content-Type, Accept"</pre>
 <pre>add_header Access-Control-Allow-Origin <span class="k">"https://app.limecontrol.eu"</span> always;
 add_header Access-Control-Allow-Methods "POST, OPTIONS" always;
 add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
-        <p>Jeśli nie masz dostępu do konfiguracji serwera, użyj trybu <a href="#tryby-polaczenia">przekaźnika serwerowego</a>.</p>
+        <p>Jeśli nie masz dostępu do konfiguracji serwera, użyj trybu <a href="#tryby-polaczenia">przekaźnika serwerowego</a> albo <a href="#aplikacja-mobilna">aplikacji mobilnej</a>.</p>
       </section>
 
       <section id="limesurvey-7">
@@ -167,7 +168,7 @@ add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
 
       <section id="instancje">
         <h2>Instancje</h2>
-        <p>Zakładka <strong>Instancje</strong> przechowuje profile serwerów LimeSurvey. W usłudze app.limecontrol.eu profile są zapisywane w chmurze (Cloud Firestore) i przypisane do Twojego konta Google, więc są dostępne na każdym urządzeniu. We własnej instalacji profile zostają w przeglądarce.</p>
+        <p>Zakładka <strong>Instancje</strong> przechowuje profile serwerów LimeSurvey. W usłudze app.limecontrol.eu profile są zapisywane w chmurze (Cloud Firestore) i przypisane do Twojego konta Google, więc są dostępne na każdym urządzeniu. W aplikacji mobilnej i we własnej instalacji profile zostają odpowiednio na urządzeniu i w przeglądarce.</p>
         <ul>
           <li>Wyszukiwanie i filtrowanie profili po nazwie, adresie, użytkowniku lub wtyczce logowania oraz po trybie połączenia (<em>Wszystkie</em>, <em>Bezpośredni</em>, <em>Przekaźnik</em>).</li>
           <li>Wybór wersji LimeSurvey dla każdego profilu.</li>
@@ -427,7 +428,7 @@ sudo ./install.sh</pre>
         <h2>Bezpieczeństwo i prywatność</h2>
         <ul>
           <li><strong>Logowanie Google</strong> (Firebase Authentication) chroni dostęp do Twoich profili; we własnej instalacji tę rolę pełni klucz dostępu z limitem prób logowania.</li>
-          <li><strong>Profile serwerów</strong> są zapisywane w Cloud Firestore; reguły bazy pozwalają je czytać i zmieniać wyłącznie właścicielowi konta. We własnej instalacji profile zostają w przeglądarce.</li>
+          <li><strong>Profile serwerów</strong> są zapisywane w Cloud Firestore; reguły bazy pozwalają je czytać i zmieniać wyłącznie właścicielowi konta. W aplikacji mobilnej i we własnej instalacji profile zostają odpowiednio na urządzeniu i w przeglądarce.</li>
           <li><strong>Hasła do LimeSurvey nie są zapisywane</strong> ani w Firestore, ani w <code>localStorage</code>. Opcja „Zapamiętaj hasło tylko w pamięci tej sesji” trzyma je wyłącznie w pamięci otwartej karty.</li>
           <li><strong>Tryb bezpośredni</strong> — dane ankiet trafiają wprost z serwera LimeSurvey do Twojej przeglądarki.</li>
           <li><strong>Przekaźnik i łącznik StrefaAnkiet</strong> wymagają zalogowania, mają limity zapytań, łączą się tylko przez HTTP/HTTPS, nie podążają za przekierowaniami i przypinają sprawdzony adres IP (ochrona przed SSRF i podmianą DNS).</li>
@@ -448,7 +449,7 @@ sudo ./install.sh</pre>
               <tr><td>404 lub odpowiedź HTML zamiast JSON</td><td>Interfejs JSON-RPC jest wyłączony albo adres API jest inny — wpisz pełną ścieżkę z <code>?r=admin/remotecontrol</code>.</td></tr>
               <tr><td><em>No permission</em></td><td>Konto nie ma wymaganych <a href="#uprawnienia">uprawnień</a> do danej ankiety.</td></tr>
               <tr><td>Przesunięte godziny dat</td><td>Ustaw w profilu wersję LimeSurvey 7.x (daty w UTC) lub sprawdź strefę czasową serwera.</td></tr>
-              <tr><td>Przekaźnik odrzuca adres serwera</td><td>W usłudze publicznej przekaźnik nie łączy się z adresami sieci wewnętrznej. Użyj trybu bezpośredniego albo <a href="#wlasny-serwer">własnej instalacji</a>.</td></tr>
+              <tr><td>Przekaźnik odrzuca adres serwera</td><td>W usłudze publicznej przekaźnik nie łączy się z adresami sieci wewnętrznej. Użyj trybu bezpośredniego, aplikacji mobilnej albo <a href="#wlasny-serwer">własnej instalacji</a>.</td></tr>
               <tr><td>Ankieta ma inny motyw niż wybrany</td><td>Motyw nie jest zainstalowany w LimeSurvey. Zaimportuj plik ZIP motywu (<a href="{{themes}}#instalacja">instrukcja</a>) i zapisz motyw ponownie.</td></tr>
               <tr><td>Zaproszenia nie wychodzą</td><td>Sprawdź, czy ankieta jest aktywna, ma tabelę uczestników i poprawną konfigurację poczty w LimeSurvey. Szczegóły błędu są w logu zadania harmonogramu.</td></tr>
             </tbody>
