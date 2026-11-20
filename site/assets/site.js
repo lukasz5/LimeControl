@@ -3,25 +3,89 @@
   var nav = document.querySelector('.nav');
   var toggle = document.querySelector('.nav-toggle');
   var links = document.querySelector('.nav-links');
+  var progress = document.querySelector('.nav-progress');
+  var toTop = document.querySelector('.to-top');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (nav) {
-    var onScroll = function () { nav.classList.toggle('scrolled', window.scrollY > 8); };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+  // Przewijanie: cień nawigacji, pasek postępu czytania, przycisk „na górę” (raz na klatkę)
+  var ticking = false;
+  var onScroll = function () {
+    ticking = false;
+    var y = window.scrollY;
+    if (nav) nav.classList.toggle('scrolled', y > 8);
+    if (progress) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.setProperty('--p', max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
+    }
+    if (toTop) toTop.classList.toggle('show', y > 700);
+  };
+  onScroll();
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(onScroll); }
+  }, { passive: true });
+  if (toTop) {
+    toTop.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      var logo = document.querySelector('.nav-logo');
+      if (logo) logo.focus({ preventScroll: true });
+    });
   }
 
+  // Menu mobilne (animowany hamburger)
+  var setMenu = function (open) {
+    if (!toggle || !links) return;
+    links.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', toggle.getAttribute(open ? 'data-label-close' : 'data-label-open') || '');
+    document.body.classList.toggle('nav-open', open);
+  };
   if (toggle && links) {
-    toggle.addEventListener('click', function () {
-      var open = links.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
+    toggle.addEventListener('click', function () { setMenu(!links.classList.contains('open')); });
     links.addEventListener('click', function (e) {
-      if (e.target.closest('a')) {
-        links.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
+      if (e.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (links.classList.contains('open') && !e.target.closest('.nav')) setMenu(false);
+    });
+    window.matchMedia('(min-width: 1041px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+  }
+
+  // Rozwijana lista języków
+  var langMenu = document.querySelector('.lang-menu');
+  var langBtn = langMenu && langMenu.querySelector('.lang-btn');
+  var setLang = function (open, focusBtn) {
+    if (!langBtn) return;
+    langMenu.classList.toggle('open', open);
+    langBtn.setAttribute('aria-expanded', String(open));
+    if (open) {
+      var cur = langMenu.querySelector('.lang-list a[aria-current]') || langMenu.querySelector('.lang-list a');
+      if (cur) cur.focus();
+    } else if (focusBtn) langBtn.focus();
+  };
+  if (langBtn) {
+    langBtn.addEventListener('click', function () { setLang(!langMenu.classList.contains('open')); });
+    document.addEventListener('click', function (e) {
+      if (langMenu.classList.contains('open') && !e.target.closest('.lang-menu')) setLang(false);
+    });
+    langMenu.addEventListener('focusout', function (e) {
+      if (e.relatedTarget && !langMenu.contains(e.relatedTarget)) setLang(false);
+    });
+    langMenu.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      var items = Array.prototype.slice.call(langMenu.querySelectorAll('.lang-list a'));
+      if (!langMenu.classList.contains('open')) { if (e.target === langBtn) { e.preventDefault(); setLang(true); } return; }
+      var i = items.indexOf(document.activeElement);
+      e.preventDefault();
+      items[(i + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length].focus();
     });
   }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (langMenu && langMenu.classList.contains('open')) setLang(false, true);
+    else if (links && links.classList.contains('open')) { setMenu(false); toggle.focus(); }
+  });
 
   // Dokumentacja: podświetlanie aktywnej sekcji w spisie treści
   var docLinks = document.querySelectorAll('.docs-nav a[href^="#"]');
@@ -53,8 +117,7 @@
   }
 
   // Pojawianie się sekcji i kart przy przewijaniu (po kolei w obrębie siatki)
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var targets = document.querySelectorAll('main section:not(.hero) .section-head, main .grid > *, main .steps > li, main .compat > div, main .checklist > li, main .split > *, main .cta, main .faq details, main .shot');
+  var targets = document.querySelectorAll('main section:not(.hero) .section-head, main .grid > *, main .steps > li, main .compat > div, main .checklist > li, main .split > *, main .cta, main .faq details, main .shot, .footer-grid > *');
   if (!reduce && 'IntersectionObserver' in window && targets.length) {
     var seen = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -72,8 +135,6 @@
       el.classList.add('reveal');
       seen.observe(el);
     });
-  } else {
-    document.documentElement.classList.remove('js');
   }
 
   // Galeria ekranów aplikacji: przyciski przewijania
