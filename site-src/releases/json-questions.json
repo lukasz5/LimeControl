@@ -1,0 +1,28 @@
+{
+  "repository": "https://github.com/lukasz5/limecontrol-plugin-json-questions",
+  "version": "0.1.0",
+  "status": "published",
+  "qualifiedOn": [
+    "6.15.12",
+    "6.17.19",
+    "7.11.0"
+  ],
+  "assets": {
+    "plugin": {
+      "name": "LimeControlJsonQuestions",
+      "sha256": "5395109f5fce80a2f0aba36ede56b4292ae87899a328a29734d76d9f6bc7c4fe"
+    },
+    "choice": {
+      "name": "LcJsonChoice",
+      "sha256": "e8c3d63a525fb3d9ae8f6e61b938aef45e62bb84149a8458ec87dd9855324130"
+    },
+    "matrix": {
+      "name": "LcJsonMatrix",
+      "sha256": "3985174e496de435f04af1e6549f0007a2c86c4c474c85b95248b998369890bc"
+    },
+    "followup": {
+      "name": "LcJsonFollowup",
+      "sha256": "81d778f2c5d2b57d2c8e3ef9206d52566a2e82b97df7e8420b629b0a4d04a4ab"
+    }
+  }
+}

@@ -101,6 +101,7 @@
           <p class="lead">Die StrefaAnkiet-Plugins für LimeSurvey sind kostenlos und Open Source. Sie verbinden Ihre Umfrage mit der Plattform <strong>StrefaAnkiet</strong> — bezahlt wird nur das Konto und die Dienste, die Sie nutzen: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, Interviewer im Feld und die Analyse der Ergebnisse. Befragte füllen weiterhin dieselbe LimeSurvey-Umfrage aus.</p>
           <div class="hero-cta">
             <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">Plugins anfordern</a>
+            <a class="btn btn-ghost" href="#LimeControlJsonQuestions">Abhängige JSON-Fragen</a>
             <a class="btn btn-ghost" href="https://strefaankiet.pl/#cena" rel="noopener">Preise von StrefaAnkiet</a>
           </div>
           <ul class="hero-meta">
@@ -158,9 +159,8 @@
     <section id="plugins" aria-labelledby="plugins-h">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">Das Plugin-Paket</span>
-          <h2 id="plugins-h">StrefaAnkiet für LimeSurvey</h2>
-          <p>Sechs unabhängige Bausteine — Sie installieren nur, was Sie brauchen. Die Plugins legen keine eigenen Tabellen in der LimeSurvey-Datenbank an.</p>
+          <h2 id="plugins-h">Plugin-Katalog für LimeSurvey</h2>
+          <p>Der Katalog enthält sieben Einträge. Sechs Plugins und Werkzeuge gehören zum StrefaAnkiet-Paket. Das LimeControl-Plugin für abhängige Fragen wird separat installiert.</p>
         </div>
         <div class="pgrid">
           <article class="card pcard" id="StrefaWorkspace">
@@ -231,9 +231,33 @@
               <li>Behält Codes mit führenden Nullen (z. B. 001) als Text</li>
             </ul>
           </article>
+          <article class="card pcard pcard-with-download" id="LimeControlJsonQuestions"><div class="pcard-description">
+            <span class="status is-free">Funktioniert ohne Konto</span>
+            <h3>Abhängige JSON-Fragen</h3>
+            <span class="pname">Plugin: LimeControlJsonQuestions</span>
+            <p>Bauen Sie Folgefragen auf früheren Antworten auf. Nach der Auswahl von Städten und Tätigkeiten kann die Umfrage für jede Kombination die Stunden erfassen und bei Überschreitung eines Grenzwerts nach dem Grund fragen.</p>
+            <ul>
+              <li>Drei Fragendesigns für die Auswahl je Eintrag, Tabellen und Anschlussfragen</li>
+              <li>Visueller Editor für Sichtbarkeit, Pflichtangaben und Kommentarregeln</li>
+              <li>Jeder Block belegt ein Antwortfeld, auch bei großen Matrizen</li>
+              <li>CSV-Export im Langformat und Codebuch</li>
+            </ul></div>
+            <div class="pcard-downloads">
+              <h4>Version 0.1.0</h4>
+              <p>Getestete LimeSurvey-CE-Versionen · 6.15.12, 6.17.19, 7.11.0</p>
+              <p>Aktivieren Sie das Plugin im Plugin-Manager. Importieren Sie anschließend die benötigten Designs unter Fragendesigns.</p>
+              <div class="hero-cta"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LimeControlJsonQuestions-0.1.0.zip">Plugin herunterladen (ZIP)</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-plugin-json-questions">Quellcode</a></div>
+              <ul><li><a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LcJsonChoice-0.1.0.zip">Auswahl je Eintrag (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LcJsonMatrix-0.1.0.zip">Tabelle aus früheren Antworten (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LcJsonFollowup-0.1.0.zip">Anschlussfrage (ZIP)</a></li></ul>
+              <details><summary>SHA-256-Prüfsummen</summary>
+                <dl><dt>Plugin</dt><dd><code>5395109f5fce80a2f0aba36ede56b4292ae87899a328a29734d76d9f6bc7c4fe</code></dd><dt>Auswahl je Eintrag</dt><dd><code>e8c3d63a525fb3d9ae8f6e61b938aef45e62bb84149a8458ec87dd9855324130</code></dd><dt>Tabelle aus früheren Antworten</dt><dd><code>3985174e496de435f04af1e6549f0007a2c86c4c474c85b95248b998369890bc</code></dd><dt>Anschlussfrage</dt><dd><code>81d778f2c5d2b57d2c8e3ef9206d52566a2e82b97df7e8420b629b0a4d04a4ab</code></dd></dl>
+                <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/SHA256SUMS">SHA256SUMS herunterladen</a>
+              </details>
+            </div>
+          </article>
         </div>
         <div class="callout" style="margin-top:32px">
-          <p><strong>Stand der Veröffentlichung.</strong> Das Paket liegt als Release Candidate 0.9 vor (Pilotphase), getestet mit LimeSurvey 6.15 und 7.10. Ein öffentliches Repository mit den Installationspaketen ist in Vorbereitung — bis dahin <a href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">schreiben Sie uns</a>, und wir senden Ihnen die Plugins kostenlos samt Anleitung.</p>
+          <p><strong>StrefaAnkiet-Paket.</strong> Das Paket liegt als Release Candidate 0.9 vor (Pilotphase), getestet mit LimeSurvey 6.15 und 7.10. Ein öffentliches Repository mit den Installationspaketen ist in Vorbereitung — bis dahin <a href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">schreiben Sie uns</a>, und wir senden Ihnen die Plugins kostenlos samt Anleitung.</p>
         </div>
       </div>
     </section>

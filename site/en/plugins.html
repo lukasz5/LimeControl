@@ -101,6 +101,7 @@
           <p class="lead">The StrefaAnkiet plugins for LimeSurvey are free of charge and open source. They connect your survey to the <strong>StrefaAnkiet</strong> platform — and you pay only for the account and the services you use: managed mailing through Amazon SES, VoIP telephony for CATI interviews, interviewers in the field and analysis of the results. Respondents still complete the same LimeSurvey survey.</p>
           <div class="hero-cta">
             <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet%20plugins%20for%20LimeSurvey">Request the plugins</a>
+            <a class="btn btn-ghost" href="#LimeControlJsonQuestions">Dependent JSON questions</a>
             <a class="btn btn-ghost" href="https://strefaankiet.pl/#cena" rel="noopener">StrefaAnkiet pricing</a>
           </div>
           <ul class="hero-meta">
@@ -158,9 +159,8 @@
     <section id="plugins" aria-labelledby="plugins-h">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">The plugin suite</span>
-          <h2 id="plugins-h">StrefaAnkiet for LimeSurvey</h2>
-          <p>Six independent components — you install only the ones you need. The plugins do not add their own tables to the LimeSurvey database.</p>
+          <h2 id="plugins-h">LimeSurvey plugin catalogue</h2>
+          <p>The catalogue has seven entries. Six belong to the StrefaAnkiet suite. The LimeControl plugin for dependent questions is available separately.</p>
         </div>
         <div class="pgrid">
           <article class="card pcard" id="StrefaWorkspace">
@@ -231,9 +231,33 @@
               <li>Keeps codes with leading zeros (e.g. 001) as text</li>
             </ul>
           </article>
+          <article class="card pcard pcard-with-download" id="LimeControlJsonQuestions"><div class="pcard-description">
+            <span class="status is-free">Works without an account</span>
+            <h3>Dependent JSON questions</h3>
+            <span class="pname">Plugin: LimeControlJsonQuestions</span>
+            <p>Build follow-up questions from earlier answers. After a respondent chooses cities and activities, ask how many hours they spent on each pair and request an explanation above a threshold.</p>
+            <ul>
+              <li>Three question themes for per-item choices, tables and follow-ups</li>
+              <li>A visual editor for visibility, required answers and comment rules</li>
+              <li>Each block uses one response field, including large matrices</li>
+              <li>Long-format CSV export and a codebook</li>
+            </ul></div>
+            <div class="pcard-downloads">
+              <h4>Version 0.1.0</h4>
+              <p>Tested LimeSurvey CE versions · 6.15.12, 6.17.19, 7.11.0</p>
+              <p>Activate the plugin in Plugin Manager, then import the themes you need under Question themes.</p>
+              <div class="hero-cta"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LimeControlJsonQuestions-0.1.0.zip">Download plugin (ZIP)</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-plugin-json-questions">Source code</a></div>
+              <ul><li><a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LcJsonChoice-0.1.0.zip">Choice for each item (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LcJsonMatrix-0.1.0.zip">Table from earlier answers (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/LcJsonFollowup-0.1.0.zip">Follow-up question (ZIP)</a></li></ul>
+              <details><summary>SHA-256 checksums</summary>
+                <dl><dt>Plugin</dt><dd><code>5395109f5fce80a2f0aba36ede56b4292ae87899a328a29734d76d9f6bc7c4fe</code></dd><dt>Choice for each item</dt><dd><code>e8c3d63a525fb3d9ae8f6e61b938aef45e62bb84149a8458ec87dd9855324130</code></dd><dt>Table from earlier answers</dt><dd><code>3985174e496de435f04af1e6549f0007a2c86c4c474c85b95248b998369890bc</code></dd><dt>Follow-up question</dt><dd><code>81d778f2c5d2b57d2c8e3ef9206d52566a2e82b97df7e8420b629b0a4d04a4ab</code></dd></dl>
+                <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/SHA256SUMS">Download SHA256SUMS</a>
+              </details>
+            </div>
+          </article>
         </div>
         <div class="callout" style="margin-top:32px">
-          <p><strong>Release status.</strong> The suite is at release-candidate stage 0.9 (pilot), tested on LimeSurvey 6.15 and 7.10. A public repository with the installation packages is being prepared — until then <a href="mailto:info@strefabadan.pl?subject=StrefaAnkiet%20plugins%20for%20LimeSurvey">write to us</a> and we will send you the plugins free of charge together with the guide.</p>
+          <p><strong>StrefaAnkiet suite.</strong> The suite is at release-candidate stage 0.9 (pilot), tested on LimeSurvey 6.15 and 7.10. A public repository with the installation packages is being prepared — until then <a href="mailto:info@strefabadan.pl?subject=StrefaAnkiet%20plugins%20for%20LimeSurvey">write to us</a> and we will send you the plugins free of charge together with the guide.</p>
         </div>
       </div>
     </section>
