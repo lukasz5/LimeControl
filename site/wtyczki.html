@@ -101,7 +101,7 @@
           <p class="lead">Wtyczki StrefaAnkiet dla LimeSurvey są bezpłatne i mają otwarty kod. Łączą Twoją ankietę z platformą <strong>StrefaAnkiet</strong> — a płacisz dopiero za konto i usługi, z których korzystasz: zarządzaną wysyłkę przez Amazon SES, telefonię VoIP do wywiadów CATI, pracę ankieterów w terenie i analizę wyników. Respondent nadal wypełnia tę samą ankietę LimeSurvey.</p>
           <div class="hero-cta">
             <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">Poproś o wtyczki</a>
-            <a class="btn btn-ghost" href="#json-questions">Pytania zależne JSON</a>
+            <a class="btn btn-ghost" href="#LimeControlJsonQuestions">Pytania zależne JSON</a>
             <a class="btn btn-ghost" href="https://strefaankiet.pl/#cena" rel="noopener">Cennik StrefaAnkiet</a>
           </div>
           <ul class="hero-meta">
@@ -113,30 +113,6 @@
         </div>
       </div>
     </section>
-
-    <section id="json-questions" aria-labelledby="json-questions-h">
-    <div class="container split">
-      <div>
-        <h2 id="json-questions-h">Pytania zależne JSON</h2>
-        <p>Zbuduj pytania na podstawie wcześniejszych odpowiedzi. Gdy respondent wybierze miasta i rodzaje prac, ankieta może poprosić o liczbę godzin dla każdej pary, a po przekroczeniu progu także o wyjaśnienie.</p>
-        <p class="muted">Każdy blok zajmuje jedno pole odpowiedzi LimeSurvey. Ułatwia to tworzenie rozbudowanych tabel w długich ankietach. Wtyczka działa na własnym serwerze bez konta LimeControl.</p>
-      </div>
-      <div class="card host-card">
-        <h3>LimeControl JSON Questions 0.1.0</h3>
-        <p>Zainstaluj wtyczkę w menedżerze wtyczek i włącz ją. Następnie zaimportuj wybrane motywy w sekcji motywów pytań.</p>
-        <h4>Motywy pytań</h4>
-        <ul>
-          <li>Wybór dla każdej pozycji</li>
-          <li>Tabela z wcześniejszych odpowiedzi</li>
-          <li>Pytanie uzupełniające</li>
-        </ul>
-        <p class="fineprint">Wydanie w przygotowaniu</p>
-        <div class="actions">
-          <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-plugin-json-questions">Kod źródłowy</a>
-        </div>
-      </div>
-    </div>
-  </section>
 
     <section id="darmowe-i-platne" class="section-soft" aria-labelledby="model-h">
       <div class="container">
@@ -183,9 +159,8 @@
     <section id="wtyczki" aria-labelledby="plugins-h">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">Pakiet wtyczek</span>
-          <h2 id="plugins-h">StrefaAnkiet dla LimeSurvey</h2>
-          <p>Sześć niezależnych elementów — instalujesz tylko te, których potrzebujesz. Wtyczki nie dodają własnych tabel do bazy LimeSurvey.</p>
+          <h2 id="plugins-h">Katalog wtyczek do LimeSurvey</h2>
+          <p>Katalog obejmuje siedem pozycji. Sześć wtyczek i narzędzi należy do pakietu StrefaAnkiet. Wtyczkę LimeControl do pytań zależnych instalujesz osobno.</p>
         </div>
         <div class="pgrid">
           <article class="card pcard" id="StrefaWorkspace">
@@ -256,9 +231,26 @@
               <li>Zachowuje kody z zerami wiodącymi (np. 001) jako tekst</li>
             </ul>
           </article>
+          <article class="card pcard pcard-with-download" id="LimeControlJsonQuestions"><div class="pcard-description">
+            <span class="status is-free">Działa bez konta</span>
+            <h3>Pytania zależne JSON</h3>
+            <span class="pname">Wtyczka: LimeControlJsonQuestions</span>
+            <p>Buduj kolejne pytania z wcześniejszych odpowiedzi. Po wyborze miast i rodzajów prac ankieta może zebrać liczbę godzin dla każdej pary i poprosić o wyjaśnienie po przekroczeniu progu.</p>
+            <ul>
+              <li>Osobne motywy do wyboru dla każdej pozycji, tabel i pytań uzupełniających</li>
+              <li>Warunki widoczności, wymagalności i komentarza w edytorze wizualnym</li>
+              <li>Jeden blok zajmuje jedno pole odpowiedzi, także w dużych macierzach</li>
+              <li>Eksport CSV w układzie długim oraz słownik kodów</li>
+            </ul></div>
+            <div class="pcard-downloads">
+              <h4>Wersja 0.1.0</h4>
+              <p>Wydanie w przygotowaniu</p>
+              <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-plugin-json-questions">Kod źródłowy</a>
+            </div>
+          </article>
         </div>
         <div class="callout" style="margin-top:32px">
-          <p><strong>Stan wydania.</strong> Pakiet jest w wersji kandydującej 0.9 (pilotaż), sprawdzony na LimeSurvey 6.15 i 7.10. Publiczne repozytorium z paczkami instalacyjnymi jest w przygotowaniu — do tego czasu <a href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">napisz do nas</a>, a prześlemy wtyczki bezpłatnie razem z instrukcją.</p>
+          <p><strong>Pakiet StrefaAnkiet.</strong> Pakiet jest w wersji kandydującej 0.9 (pilotaż), sprawdzony na LimeSurvey 6.15 i 7.10. Publiczne repozytorium z paczkami instalacyjnymi jest w przygotowaniu — do tego czasu <a href="mailto:info@strefabadan.pl?subject=Wtyczki%20StrefaAnkiet%20dla%20LimeSurvey">napisz do nas</a>, a prześlemy wtyczki bezpłatnie razem z instrukcją.</p>
         </div>
       </div>
     </section>
