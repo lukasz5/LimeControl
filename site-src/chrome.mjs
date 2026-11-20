@@ -39,7 +39,7 @@ export const GSC_VERIFICATION = 'CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0';
 /** Domyślny obrazek podglądu linku (1200×630) dla podstron bez własnego (generuje site-src/og-image.mjs). */
 export const defaultOgImage = (lang) => `/assets/og/${lang}.png?v=${ASSET_VERSION}`;
 /** Podbij po zmianie site/assets/style.css lub site.js (nagłówki cache: 7 dni). */
-export const ASSET_VERSION = '6';
+export const ASSET_VERSION = '7';
 
 export const LANGS = ['pl', 'en', 'de'];
 /** Nazwy języków w przełączniku (każdy we własnym języku). */
@@ -84,11 +84,16 @@ const T = {
     skip: 'Przejdź do treści',
     homeLabel: 'LimeControl — strona główna',
     menu: 'Menu',
+    menuClose: 'Zamknij menu',
+    language: 'Język',
+    toTop: 'Wróć na górę strony',
+    tagline: 'Otwarta aplikacja do zarządzania ankietami LimeSurvey — w przeglądarce i na urządzeniach mobilnych.',
+    cols: { product: 'Produkt', resources: 'Zasoby', project: 'Projekt' },
     nav: { features: 'Funkcje', themes: 'Motywy', templates: 'Szablony', plugins: 'Wtyczki', hosting: 'Hosting i wdrożenia', docs: 'Dokumentacja' },
     github: 'Kod źródłowy LimeControl na GitHubie',
     openApp: 'Otwórz aplikację',
     switchLabel: 'Wersja polska',
-    footer: { themes: 'Motywy ankiet', templates: 'Szablony ankiet', plugins: 'Wtyczki StrefaAnkiet', docs: 'Dokumentacja', hosting: 'Hosting i wdrożenia', app: 'Aplikacja', privacy: 'Prywatność' },
+    footer: { features: 'Funkcje', themes: 'Motywy ankiet', templates: 'Szablony ankiet', plugins: 'Wtyczki StrefaAnkiet', docs: 'Dokumentacja', hosting: 'Hosting i wdrożenia', app: 'Aplikacja', privacy: 'Prywatność' },
     coffee: 'Postaw mi kawę',
     madeBy: 'Made with ♥ by',
     rights: 'Aplikacja, motywy, wtyczki i wdrożenia są otwartym oprogramowaniem; treść i wygląd tej strony — wszelkie prawa zastrzeżone.',
@@ -108,11 +113,16 @@ const T = {
     skip: 'Skip to content',
     homeLabel: 'LimeControl — home page',
     menu: 'Menu',
+    menuClose: 'Close menu',
+    language: 'Language',
+    toTop: 'Back to top',
+    tagline: 'Open-source app for managing LimeSurvey surveys — in the browser and on mobile devices.',
+    cols: { product: 'Product', resources: 'Resources', project: 'Project' },
     nav: { features: 'Features', themes: 'Themes', templates: 'Templates', plugins: 'Plugins', hosting: 'Hosting & deployment', docs: 'Docs' },
     github: 'LimeControl source code on GitHub',
     openApp: 'Open the app',
     switchLabel: 'English version',
-    footer: { themes: 'Survey themes', templates: 'Survey templates', plugins: 'StrefaAnkiet plugins', docs: 'Documentation', hosting: 'Hosting & deployment', app: 'App', privacy: 'Privacy' },
+    footer: { features: 'Features', themes: 'Survey themes', templates: 'Survey templates', plugins: 'StrefaAnkiet plugins', docs: 'Documentation', hosting: 'Hosting & deployment', app: 'App', privacy: 'Privacy' },
     coffee: 'Buy me a coffee',
     madeBy: 'Made with ♥ by',
     rights: 'The app, themes, plugins and deployment kits are open-source software; the content and design of this website — all rights reserved.',
@@ -132,11 +142,16 @@ const T = {
     skip: 'Zum Inhalt springen',
     homeLabel: 'LimeControl — Startseite',
     menu: 'Menü',
+    menuClose: 'Menü schließen',
+    language: 'Sprache',
+    toTop: 'Nach oben',
+    tagline: 'Open-Source-App zur Verwaltung von LimeSurvey-Umfragen — im Browser und auf Mobilgeräten.',
+    cols: { product: 'Produkt', resources: 'Ressourcen', project: 'Projekt' },
     nav: { features: 'Funktionen', themes: 'Designs', templates: 'Vorlagen', plugins: 'Plugins', hosting: 'Hosting & Betrieb', docs: 'Doku' },
     github: 'Quellcode von LimeControl auf GitHub',
     openApp: 'App öffnen',
     switchLabel: 'Deutsche Version',
-    footer: { themes: 'Umfrage-Designs', templates: 'Umfragevorlagen', plugins: 'StrefaAnkiet-Plugins', docs: 'Dokumentation', hosting: 'Hosting & Betrieb', app: 'App', privacy: 'Datenschutz' },
+    footer: { features: 'Funktionen', themes: 'Umfrage-Designs', templates: 'Umfragevorlagen', plugins: 'StrefaAnkiet-Plugins', docs: 'Dokumentation', hosting: 'Hosting & Betrieb', app: 'App', privacy: 'Datenschutz' },
     coffee: 'Spendier mir einen Kaffee',
     madeBy: 'Made with ♥ by',
     rights: 'App, Designs, Plugins und Deployment-Kits sind Open-Source-Software; Inhalt und Gestaltung dieser Website — alle Rechte vorbehalten.',
@@ -237,8 +252,8 @@ export function nav({ lang, page }) {
         <img class="logo-light" src="/assets/logo.svg?v=${ASSET_VERSION}" alt="LimeControl" width="106" height="34" />
         <img class="logo-dark" src="/assets/logo-dark.svg?v=${ASSET_VERSION}" alt="LimeControl" width="106" height="34" />
       </a>
-      <button class="nav-toggle" aria-label="${t.menu}" aria-expanded="false" aria-controls="nav-links">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <button class="nav-toggle" type="button" aria-label="${t.menu}" aria-expanded="false" aria-controls="nav-links" data-label-open="${t.menu}" data-label-close="${t.menuClose}">
+        <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
       </button>
       <ul class="nav-links" id="nav-links">
 ${[
@@ -250,45 +265,95 @@ ${[
     item(ROUTES.docs[lang], t.nav.docs, page === 'docs'),
   ].join('\n')}
         <li><a class="nav-gh" href="${GITHUB_URL}" target="_blank" rel="noopener" aria-label="${t.github}">${GITHUB_ICON}<span>GitHub</span></a></li>
-        <li class="nav-langs">${LANGS.filter((l) => l !== lang).map((l) => `<a class="nav-lang" href="${ROUTES[page][l]}" hreflang="${l}" lang="${l}" aria-label="${T[l].switchLabel}">${l.toUpperCase()}<span> — ${LANG_NAMES[l]}</span></a>`).join('')}</li>
+${langMenu(lang, page)}
         <li><a class="btn btn-primary btn-sm" href="${APP_URL}">${t.openApp}</a></li>
       </ul>
     </div>
+    <div class="nav-progress" aria-hidden="true"></div>
   </header>
 `;
+}
+
+const GLOBE_ICON =
+  '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>';
+const CHEVRON_ICON =
+  '<svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+/**
+ * Przełącznik języka: na komputerze rozwijana lista pod przyciskiem z globusem, w menu mobilnym
+ * (i bez JS) — rząd trzech przycisków. Bieżący język jest zaznaczony, a nie ukryty.
+ */
+function langMenu(lang, page) {
+  const t = T[lang];
+  const options = LANGS.map((l) => {
+    const current = l === lang;
+    return `            <li><a href="${ROUTES[page][l]}" hreflang="${l}" lang="${l}"${current ? ' aria-current="true"' : ` aria-label="${T[l].switchLabel}"`}><b>${l.toUpperCase()}</b><span>${LANG_NAMES[l]}</span></a></li>`;
+  }).join('\n');
+  return `        <li class="lang-menu">
+          <button type="button" class="lang-btn" aria-expanded="false" aria-controls="lang-list" aria-label="${t.language}: ${LANG_NAMES[lang]}">${GLOBE_ICON}<span>${lang.toUpperCase()}</span>${CHEVRON_ICON}</button>
+          <ul class="lang-list" id="lang-list" aria-label="${t.language}">
+${options}
+          </ul>
+        </li>`;
 }
 
 /** Stopka + skrypt strony. `note` zastępuje domyślny dopisek o autorze (np. informacją o licencji motywów). */
 export function footer({ lang, page, note, scripts = '' }) {
   const t = T[lang];
   const line = note || `${t.madeBy} <a href="${AUTHOR_URL}" rel="noopener">strefabadan.pl</a>.`;
+  const link = (href, label, extra = '') => `            <li><a href="${href}"${extra}>${label}</a></li>`;
+  const col = (title, items) => `        <nav class="footer-col" aria-label="${title}">
+          <h2>${title}</h2>
+          <ul>
+${items.filter(Boolean).join('\n')}
+          </ul>
+        </nav>`;
   return `
   <footer class="footer">
-    <div class="container">
-      <a href="${ROUTES.home[lang]}" aria-label="LimeControl">
-        <img class="logo-light" src="/assets/logo.svg?v=${ASSET_VERSION}" alt="LimeControl" width="88" height="28" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=${ASSET_VERSION}" alt="LimeControl" width="88" height="28" />
-      </a>
-      <ul class="footer-links">
-        <li><a href="${ROUTES.themes[lang]}">${t.footer.themes}</a></li>
-        <li><a href="${ROUTES.templates[lang]}">${t.footer.templates}</a></li>
-        <li><a href="${ROUTES.plugins[lang]}">${t.footer.plugins}</a></li>
-        <li><a href="${homeUrl(lang, 'hosting')}">${t.footer.hosting}</a></li>
-        <li><a href="${ROUTES.docs[lang]}">${t.footer.docs}</a></li>
-        <li><a href="${ROUTES.privacy[lang]}">${t.footer.privacy}</a></li>${GA_MEASUREMENT_ID ? `\n        <li><button type="button" class="link-btn" data-cookie-settings>${t.cookies.settings}</button></li>` : ''}
-        <li><a href="${APP_URL}">${t.footer.app}</a></li>
-        <li><a href="${GITHUB_URL}" rel="noopener">GitHub</a></li>
-        <li><a href="${AUTHOR_URL}" rel="noopener">strefabadan.pl</a></li>
-${LANGS.filter((l) => l !== lang).map((l) => `        <li><a href="${ROUTES[page][l]}" hreflang="${l}" lang="${l}">${LANG_NAMES[l]}</a></li>`).join('\n')}
-      </ul>
-      <a class="coffee" href="${SUPPORT_URL}" target="_blank" rel="noopener noreferrer">${t.coffee}</a>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="footer-logo" href="${ROUTES.home[lang]}" aria-label="${t.homeLabel}">
+          <img class="logo-light" src="/assets/logo.svg?v=${ASSET_VERSION}" alt="LimeControl" width="88" height="28" loading="lazy" />
+          <img class="logo-dark" src="/assets/logo-dark.svg?v=${ASSET_VERSION}" alt="LimeControl" width="88" height="28" loading="lazy" />
+        </a>
+        <p>${t.tagline}</p>
+        <div class="footer-actions">
+          <a class="btn btn-primary btn-sm" href="${APP_URL}">${t.openApp}</a>
+          <a class="footer-icon" href="${GITHUB_URL}" target="_blank" rel="noopener" aria-label="${t.github}">${GITHUB_ICON}</a>
+        </div>
+      </div>
+${col(t.cols.product, [
+    link(homeUrl(lang, 'features'), t.footer.features),
+    link(APP_URL, t.footer.app),
+    link(homeUrl(lang, 'hosting'), t.footer.hosting),
+    link(ROUTES.docs[lang], t.footer.docs),
+  ])}
+${col(t.cols.resources, [
+    link(ROUTES.themes[lang], t.footer.themes),
+    link(ROUTES.templates[lang], t.footer.templates),
+    link(ROUTES.plugins[lang], t.footer.plugins),
+  ])}
+${col(t.cols.project, [
+    link(GITHUB_URL, 'GitHub', ' rel="noopener"'),
+    link(AUTHOR_URL, 'strefabadan.pl', ' rel="noopener"'),
+    link(SUPPORT_URL, t.coffee, ' target="_blank" rel="noopener noreferrer"'),
+    link(ROUTES.privacy[lang], t.footer.privacy),
+    GA_MEASUREMENT_ID ? `            <li><button type="button" class="link-btn" data-cookie-settings>${t.cookies.settings}</button></li>` : '',
+  ])}
     </div>
-    <div class="container" style="margin-top:20px">
-      <p style="margin:0">© <span id="year">2026</span> LimeControl · ${line} ${t.rights} ${t.trademark}</p>
+    <div class="container footer-bottom">
+      <p>© <span id="year">2026</span> LimeControl · ${line}</p>
+      <ul class="footer-langs" aria-label="${t.language}">
+${LANGS.map((l) => `        <li><a href="${ROUTES[page][l]}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${LANG_NAMES[l]}</a></li>`).join('\n')}
+      </ul>
+    </div>
+    <div class="container footer-legal">
+      <p>${t.rights} ${t.trademark}</p>
     </div>
   </footer>
 
 ${GA_MEASUREMENT_ID ? cookieBanner(lang) : ''}
+  <a class="to-top" href="#main" aria-label="${t.toTop}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
   <script src="/assets/site.js?v=${ASSET_VERSION}" defer></script>${scripts}
 </body>
 </html>
