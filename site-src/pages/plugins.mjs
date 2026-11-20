@@ -5,6 +5,7 @@ import {
   APP_URL, CONTACT_EMAIL, PLUGINS_URL, ROUTES, STREFAANKIET_PRICING_URL, STREFAANKIET_URL,
   esc, homeUrl, layout, outputPath,
 } from '../chrome.mjs';
+import { downloadPanel, jsonQuestionsRelease } from './json-questions.mjs';
 
 /** Stan pakietu wtyczek opisany na stronie — zaktualizuj przy nowym wydaniu StrefaAnkiet dla LimeSurvey. */
 const SUITE = { version: '0.9', testedOn: '6.15 i 7.10', testedOnEn: '6.15 and 7.10', testedOnDe: '6.15 und 7.10', php: '8.1' };
@@ -69,6 +70,28 @@ const PLUGINS = [
     where: { pl: 'Wiersz poleceń, poza LimeSurvey', en: 'The command line, outside LimeSurvey', de: 'Kommandozeile, außerhalb von LimeSurvey' },
   },
   {
+    id: 'LimeControlJsonQuestions',
+    group: 'open',
+    kind: 'plugin',
+    release: jsonQuestionsRelease,
+    title: { pl: 'Pytania zależne JSON', en: 'Dependent JSON questions', de: 'Abhängige JSON-Fragen' },
+    lead: {
+      pl: 'Buduj kolejne pytania z wcześniejszych odpowiedzi. Po wyborze miast i rodzajów prac ankieta może zebrać liczbę godzin dla każdej pary i poprosić o wyjaśnienie po przekroczeniu progu.',
+      en: 'Build follow-up questions from earlier answers. After a respondent chooses cities and activities, ask how many hours they spent on each pair and request an explanation above a threshold.',
+      de: 'Bauen Sie Folgefragen auf früheren Antworten auf. Nach der Auswahl von Städten und Tätigkeiten kann die Umfrage für jede Kombination die Stunden erfassen und bei Überschreitung eines Grenzwerts nach dem Grund fragen.',
+    },
+    points: {
+      pl: ['Osobne motywy do wyboru dla każdej pozycji, tabel i pytań uzupełniających', 'Warunki widoczności, wymagalności i komentarza w edytorze wizualnym', 'Jeden blok zajmuje jedno pole odpowiedzi, także w dużych macierzach; eksport CSV w układzie długim ze słownikiem kodów'],
+      en: ['Three question themes for per-item choices, tables and follow-ups', 'A visual editor for visibility, required answers and comment rules', 'Each block uses one response field, including large matrices; long-format CSV export with a codebook'],
+      de: ['Drei Fragendesigns für die Auswahl je Eintrag, Tabellen und Anschlussfragen', 'Visueller Editor für Sichtbarkeit, Pflichtangaben und Kommentarregeln', 'Jeder Block belegt ein Antwortfeld, auch bei großen Matrizen; CSV-Export im Langformat mit Codebuch'],
+    },
+    where: {
+      pl: `LimeSurvey CE (sprawdzone na ${jsonQuestionsRelease.qualifiedOn.join(', ')})`,
+      en: `LimeSurvey CE (tested on ${jsonQuestionsRelease.qualifiedOn.join(', ')})`,
+      de: `LimeSurvey CE (getestet mit ${jsonQuestionsRelease.qualifiedOn.join(', ')})`,
+    },
+  },
+  {
     id: 'StrefaWorkspace',
     group: 'strefa',
     kind: 'plugin',
@@ -121,6 +144,8 @@ const PLUGINS = [
   },
 ];
 
+const jsonQuestions = PLUGINS.find((plugin) => plugin.release === jsonQuestionsRelease);
+
 const S = {
   pl: {
     title: 'Wtyczki StrefaAnkiet dla LimeSurvey — CATI, CAPI, Amazon SES',
@@ -169,16 +194,16 @@ const S = {
     ],
     openEyebrow: 'Otwarte wtyczki',
     openH: 'Działają samodzielnie, bez konta',
-    openP: 'Instalujesz je w swoim LimeSurvey i używasz bez rejestracji i bez limitu czasu. Każdą instalujesz osobno — tylko te, których potrzebujesz.',
+    openP: 'Instalujesz je w swoim LimeSurvey i używasz bez rejestracji i bez limitu czasu. Każdą instalujesz osobno — tylko te, których potrzebujesz. Pytania zależne JSON to osobna wtyczka LimeControl z własnymi paczkami do pobrania.',
     strefaEyebrow: 'Wtyczki StrefaAnkiet',
     strefaH: 'Łączą LimeSurvey z usługami StrefyAnkiet',
     strefaP: 'Wtyczki są darmowe i mają otwarty kod, ale do działania potrzebują konta StrefaAnkiet. Respondent nadal wypełnia tę samą ankietę LimeSurvey — platforma dokłada wysyłkę, realizację wywiadów i analizy.',
     groupTag: { open: 'Bez konta', strefa: 'Konto StrefaAnkiet' },
     kind: { plugin: 'Wtyczka LimeSurvey', cli: 'Narzędzie wiersza poleceń' },
     whereLabel: { open: 'Działa w', strefa: 'Łączy z' },
-    sharedNote: 'Żadna z wtyczek nie dodaje własnych tabel do bazy LimeSurvey.',
-    releaseReady: (url) => `<strong>Pobieranie i kod źródłowy.</strong> Aktualne wydanie pakietu (${SUITE.version}) wraz z instrukcją instalacji jest dostępne w <a href="${url}" target="_blank" rel="noopener">publicznym repozytorium wtyczek</a>. Sprawdzone na LimeSurvey ${SUITE.testedOn}.`,
-    releasePending: (mailto) => `<strong>Stan wydania.</strong> Pakiet jest w wersji kandydującej ${SUITE.version} (pilotaż), sprawdzony na LimeSurvey ${SUITE.testedOn}. Publiczne repozytorium z paczkami instalacyjnymi jest w przygotowaniu — do tego czasu <a href="${mailto}">napisz do nas</a>, a prześlemy wtyczki bezpłatnie razem z instrukcją.`,
+    sharedNote: 'Wtyczki z pakietu nie dodają własnych tabel do bazy LimeSurvey.',
+    releaseReady: (url) => `<strong>Pakiet StrefaAnkiet.</strong> Aktualne wydanie pakietu (${SUITE.version}) wraz z instrukcją instalacji jest dostępne w <a href="${url}" target="_blank" rel="noopener">publicznym repozytorium wtyczek</a>. Sprawdzone na LimeSurvey ${SUITE.testedOn}.`,
+    releasePending: (mailto) => `<strong>Pakiet StrefaAnkiet.</strong> Pakiet jest w wersji kandydującej ${SUITE.version} (pilotaż), sprawdzony na LimeSurvey ${SUITE.testedOn}. Publiczne repozytorium z paczkami instalacyjnymi jest w przygotowaniu — do tego czasu <a href="${mailto}">napisz do nas</a>, a prześlemy wtyczki bezpłatnie razem z instrukcją.`,
     compareEyebrow: 'Co jest darmowe, a co płatne',
     compareH: 'Od darmowych narzędzi do usług platformy',
     compareP: 'Zacznij od tego, co darmowe. Konto StrefaAnkiet dołączasz, gdy badanie potrzebuje infrastruktury i zespołu.',
@@ -265,16 +290,16 @@ const S = {
     ],
     openEyebrow: 'Open plugins',
     openH: 'They work on their own, no account needed',
-    openP: 'You install them in your LimeSurvey and use them without signing up and with no time limit. Each one installs separately — only the ones you need.',
+    openP: 'You install them in your LimeSurvey and use them without signing up and with no time limit. Each one installs separately — only the ones you need. Dependent JSON questions is a separate LimeControl plugin with its own download packages.',
     strefaEyebrow: 'StrefaAnkiet plugins',
     strefaH: 'They connect LimeSurvey to StrefaAnkiet services',
     strefaP: 'The plugins are free and open source, but they need a StrefaAnkiet account to work. Respondents still complete the same LimeSurvey survey — the platform adds mailing, interview fieldwork and analysis.',
     groupTag: { open: 'No account', strefa: 'StrefaAnkiet account' },
     kind: { plugin: 'LimeSurvey plugin', cli: 'Command-line tool' },
     whereLabel: { open: 'Runs in', strefa: 'Connects to' },
-    sharedNote: 'None of the plugins adds its own tables to the LimeSurvey database.',
-    releaseReady: (url) => `<strong>Download and source code.</strong> The current release of the suite (${SUITE.version}) and the installation guide are available in the <a href="${url}" target="_blank" rel="noopener">public plugin repository</a>. Tested on LimeSurvey ${SUITE.testedOnEn}.`,
-    releasePending: (mailto) => `<strong>Release status.</strong> The suite is at release-candidate stage ${SUITE.version} (pilot), tested on LimeSurvey ${SUITE.testedOnEn}. A public repository with the installation packages is being prepared — until then <a href="${mailto}">write to us</a> and we will send you the plugins free of charge together with the guide.`,
+    sharedNote: 'The suite’s plugins do not add their own tables to the LimeSurvey database.',
+    releaseReady: (url) => `<strong>StrefaAnkiet suite.</strong> The current release of the suite (${SUITE.version}) and the installation guide are available in the <a href="${url}" target="_blank" rel="noopener">public plugin repository</a>. Tested on LimeSurvey ${SUITE.testedOnEn}.`,
+    releasePending: (mailto) => `<strong>StrefaAnkiet suite.</strong> The suite is at release-candidate stage ${SUITE.version} (pilot), tested on LimeSurvey ${SUITE.testedOnEn}. A public repository with the installation packages is being prepared — until then <a href="${mailto}">write to us</a> and we will send you the plugins free of charge together with the guide.`,
     compareEyebrow: 'What is free and what is paid',
     compareH: 'From free tools to platform services',
     compareP: 'Start with what is free. Add a StrefaAnkiet account when a study needs infrastructure and a team.',
@@ -361,16 +386,16 @@ const S = {
     ],
     openEyebrow: 'Offene Plugins',
     openH: 'Sie funktionieren eigenständig, ohne Konto',
-    openP: 'Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne Registrierung und ohne zeitliche Begrenzung. Jedes wird einzeln installiert — nur die, die Sie brauchen.',
+    openP: 'Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne Registrierung und ohne zeitliche Begrenzung. Jedes wird einzeln installiert — nur die, die Sie brauchen. Abhängige JSON-Fragen sind ein separates LimeControl-Plugin mit eigenen Download-Paketen.',
     strefaEyebrow: 'StrefaAnkiet-Plugins',
     strefaH: 'Sie verbinden LimeSurvey mit den Diensten von StrefaAnkiet',
     strefaP: 'Die Plugins sind kostenlos und Open Source, benötigen aber ein StrefaAnkiet-Konto. Befragte füllen weiterhin dieselbe LimeSurvey-Umfrage aus — die Plattform ergänzt Versand, Feldarbeit und Analysen.',
     groupTag: { open: 'Ohne Konto', strefa: 'StrefaAnkiet-Konto' },
     kind: { plugin: 'LimeSurvey-Plugin', cli: 'Kommandozeilen-Werkzeug' },
     whereLabel: { open: 'Läuft in', strefa: 'Verbindet mit' },
-    sharedNote: 'Keines der Plugins legt eigene Tabellen in der LimeSurvey-Datenbank an.',
-    releaseReady: (url) => `<strong>Download und Quellcode.</strong> Die aktuelle Version des Pakets (${SUITE.version}) samt Installationsanleitung finden Sie im <a href="${url}" target="_blank" rel="noopener">öffentlichen Plugin-Repository</a>. Getestet mit LimeSurvey ${SUITE.testedOnDe}.`,
-    releasePending: (mailto) => `<strong>Stand der Veröffentlichung.</strong> Das Paket liegt als Release Candidate ${SUITE.version} vor (Pilotphase), getestet mit LimeSurvey ${SUITE.testedOnDe}. Ein öffentliches Repository mit den Installationspaketen ist in Vorbereitung — bis dahin <a href="${mailto}">schreiben Sie uns</a>, und wir senden Ihnen die Plugins kostenlos samt Anleitung.`,
+    sharedNote: 'Die Plugins des Pakets legen keine eigenen Tabellen in der LimeSurvey-Datenbank an.',
+    releaseReady: (url) => `<strong>StrefaAnkiet-Paket.</strong> Die aktuelle Version des Pakets (${SUITE.version}) samt Installationsanleitung finden Sie im <a href="${url}" target="_blank" rel="noopener">öffentlichen Plugin-Repository</a>. Getestet mit LimeSurvey ${SUITE.testedOnDe}.`,
+    releasePending: (mailto) => `<strong>StrefaAnkiet-Paket.</strong> Das Paket liegt als Release Candidate ${SUITE.version} vor (Pilotphase), getestet mit LimeSurvey ${SUITE.testedOnDe}. Ein öffentliches Repository mit den Installationspaketen ist in Vorbereitung — bis dahin <a href="${mailto}">schreiben Sie uns</a>, und wir senden Ihnen die Plugins kostenlos samt Anleitung.`,
     compareEyebrow: 'Was kostenlos ist und was nicht',
     compareH: 'Von kostenlosen Werkzeugen zu Plattformdiensten',
     compareP: 'Beginnen Sie mit dem, was kostenlos ist. Ein StrefaAnkiet-Konto kommt dazu, wenn eine Studie Infrastruktur und ein Team braucht.',
@@ -418,7 +443,7 @@ export function renderPluginsPage(lang) {
   const primaryCta = PLUGINS_URL
     ? `<a class="btn btn-primary" href="${PLUGINS_URL}" target="_blank" rel="noopener">${s.ctaDownload}</a>`
     : `<a class="btn btn-primary" href="${mailto}">${s.ctaAsk}</a>`;
-  const card = (p) => `<article class="card pcard is-${p.group}" id="${p.id}">
+  const card = (p) => `<article class="card pcard is-${p.group}${p.release ? ' pcard-with-download' : ''}" id="${p.id}">${p.release ? '<div class="pcard-description">' : ''}
             <span class="status${p.group === 'open' ? ' is-free' : ''}">${s.kind[p.kind]}</span>
             <h3>${esc(p.title[lang])}</h3>
             <code class="pname">${p.id}</code>
@@ -426,7 +451,7 @@ export function renderPluginsPage(lang) {
             <ul>
               ${p.points[lang].map((x) => `<li>${esc(x)}</li>`).join('\n              ')}
             </ul>
-            <p class="pcard-foot"><span>${s.whereLabel[p.group]}</span> ${esc(p.where[lang])}</p>
+            <p class="pcard-foot"><span>${s.whereLabel[p.group]}</span> ${esc(p.where[lang])}</p>${p.release ? `</div>\n            ${downloadPanel(p.release, lang)}` : ''}
           </article>`;
   const pluginGroup = (group, id, eyebrow, h, p, cls, after = '') => `<section id="${id}"${cls ? ` class="${cls}"` : ''} aria-labelledby="${id}-h">
       <div class="container">
@@ -451,6 +476,7 @@ export function renderPluginsPage(lang) {
           <p class="lead">${s.lead}</p>
           <div class="hero-cta">
             ${primaryCta}
+            <a class="btn btn-ghost" href="#${jsonQuestions.id}">${esc(jsonQuestions.title[lang])}</a>
             <a class="btn btn-ghost" href="${STREFAANKIET_PRICING_URL}" rel="noopener">${s.ctaPricing}</a>
           </div>
           <ul class="hero-meta">
