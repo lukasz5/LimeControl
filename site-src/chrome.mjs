@@ -39,7 +39,7 @@ export const GSC_VERIFICATION = 'CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0';
 /** Domyślny obrazek podglądu linku (1200×630) dla podstron bez własnego (generuje site-src/og-image.mjs). */
 export const defaultOgImage = (lang) => `/assets/og/${lang}.png?v=${ASSET_VERSION}`;
 /** Podbij po zmianie site/assets/style.css lub site.js (nagłówki cache: 7 dni). */
-export const ASSET_VERSION = '7';
+export const ASSET_VERSION = '8';
 
 export const LANGS = ['pl', 'en', 'de'];
 /** Nazwy języków w przełączniku (każdy we własnym języku). */

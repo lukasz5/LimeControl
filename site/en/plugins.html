@@ -19,7 +19,7 @@
   <meta property="og:url" content="https://limecontrol.eu/en/plugins.html" />
   <meta property="og:title" content="Free plugins that connect LimeSurvey with StrefaAnkiet" />
   <meta property="og:description" content="The StrefaAnkiet plugins for LimeSurvey are free and open source. They connect a survey to the StrefaAnkiet platform: managed mailing through Amazon SES, VoIP telephony for CATI interviews, CAPI fieldwork and response analysis. The platform account and services are paid." />
-  <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=7" />
+  <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=8" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="LimeControl — an app for managing LimeSurvey surveys" />
@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=7" />
+  <link rel="stylesheet" href="/assets/style.css?v=8" />
   <script>document.documentElement.classList.add('js')</script>
 
   <script type="application/ld+json">
@@ -64,8 +64,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/en/" aria-label="LimeControl — home page">
-        <img class="logo-light" src="/assets/logo.svg?v=7" alt="LimeControl" width="106" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=7" alt="LimeControl" width="106" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=8" alt="LimeControl" width="106" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=8" alt="LimeControl" width="106" height="34" />
       </a>
       <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links" data-label-open="Menu" data-label-close="Close menu">
         <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -97,8 +97,8 @@
       <div class="container">
         <div>
           <span class="eyebrow">Free plugins for LimeSurvey</span>
-          <h1>Connect LimeSurvey with StrefaAnkiet. <span class="lime">The plugins are free</span>.</h1>
-          <p class="lead">The StrefaAnkiet plugins for LimeSurvey are free of charge and open source. They connect your survey to the <strong>StrefaAnkiet</strong> platform — and you pay only for the account and the services you use: managed mailing through Amazon SES, VoIP telephony for CATI interviews, interviewers in the field and analysis of the results. Respondents still complete the same LimeSurvey survey.</p>
+          <h1>Plugins for LimeSurvey. <span class="lime">Free and open source</span>.</h1>
+          <p class="lead">Two groups to choose from. <strong>Open plugins</strong> work on their own in your LimeSurvey — no account, no sign-up. <strong>StrefaAnkiet plugins</strong> connect the survey to the platform’s services: managed mailing through Amazon SES, VoIP telephony for CATI interviews, interviewers in the field and analysis of the results. The code of both groups is free — you pay only for the StrefaAnkiet account and the services you use.</p>
           <div class="hero-cta">
             <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet%20plugins%20for%20LimeSurvey">Request the plugins</a>
             <a class="btn btn-ghost" href="https://strefaankiet.pl/#cena" rel="noopener">StrefaAnkiet pricing</a>
@@ -113,7 +113,107 @@
       </div>
     </section>
 
-    <section id="free-and-paid" class="section-soft" aria-labelledby="model-h">
+    <section id="plugins" aria-labelledby="plugins-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Open plugins <span class="group-tag is-open">No account</span></span>
+          <h2 id="plugins-h">They work on their own, no account needed</h2>
+          <p>You install them in your LimeSurvey and use them without signing up and with no time limit. Each one installs separately — only the ones you need.</p>
+        </div>
+        <div class="pgrid">
+          <article class="card pcard is-open" id="StrefaSurveyExchange">
+            <span class="status is-free">LimeSurvey plugin</span>
+            <h3>Questionnaire exchange</h3>
+            <code class="pname">StrefaSurveyExchange</code>
+            <p>Downloads a questionnaire from LimeSurvey as an .lss structure or a JSON package with a field map and a difference report.</p>
+            <ul>
+              <li>Export of the structure (.lss) or a JSON package with a field-code map</li>
+              <li>A list of elements that cannot be transferred — nothing is silently simplified</li>
+              <li>Settings of other plugins are stripped from the export</li>
+            </ul>
+            <p class="pcard-foot"><span>Runs in</span> LimeSurvey (tested on 6.15 and 7.10)</p>
+          </article>
+          <article class="card pcard is-open" id="StrefaResponseExport">
+            <span class="status is-free">LimeSurvey plugin</span>
+            <h3>Response export</h3>
+            <code class="pname">StrefaResponseExport</code>
+            <p>Provides coded responses of an active survey for analysis — paginated and without technical identifiers.</p>
+            <ul>
+              <li>Skips tokens, IP addresses and the referrer</li>
+              <li>Requires read and export permissions for the specific survey</li>
+              <li>Download of attachments from file-upload questions</li>
+            </ul>
+            <p class="pcard-foot"><span>Runs in</span> LimeSurvey (tested on 6.15 and 7.10)</p>
+          </article>
+          <article class="card pcard is-open" id="StrefaConverters">
+            <span class="status is-free">Command-line tool</span>
+            <h3>LSS, JSON and CSV converters</h3>
+            <code class="pname">StrefaConverters</code>
+            <p>Standalone tools for converting questionnaires and responses — useful for migrations and archiving.</p>
+            <ul>
+              <li>LSS ↔ JSON with a SHA-256 checksum</li>
+              <li>Responses from JSON, CSV and the VV export</li>
+              <li>Keeps codes with leading zeros (e.g. 001) as text</li>
+            </ul>
+            <p class="pcard-foot"><span>Runs in</span> The command line, outside LimeSurvey</p>
+          </article>
+        </div>
+        
+      </div>
+    </section>
+
+    <section id="strefaankiet" class="section-soft" aria-labelledby="strefaankiet-h">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">StrefaAnkiet plugins <span class="group-tag is-strefa">StrefaAnkiet account</span></span>
+          <h2 id="strefaankiet-h">They connect LimeSurvey to StrefaAnkiet services</h2>
+          <p>The plugins are free and open source, but they need a StrefaAnkiet account to work. Respondents still complete the same LimeSurvey survey — the platform adds mailing, interview fieldwork and analysis.</p>
+        </div>
+        <div class="pgrid">
+          <article class="card pcard is-strefa" id="StrefaWorkspace">
+            <span class="status">LimeSurvey plugin</span>
+            <h3>Study menu</h3>
+            <code class="pname">StrefaWorkspace</code>
+            <p>Links a LimeSurvey survey to a study in StrefaAnkiet and adds shortcuts to the whole workspace to the survey menu.</p>
+            <ul>
+              <li>CAWI, CATI and CAPI fieldwork, results, analyses, respondents and team — from within the survey</li>
+              <li>An explicit mapping of the survey ID (SID) to a study</li>
+              <li>Links grant no permissions — the platform roles still apply</li>
+            </ul>
+            <p class="pcard-foot"><span>Connects to</span> The team workspace in StrefaAnkiet</p>
+          </article>
+          <article class="card pcard is-strefa" id="StrefaInvitationRelay">
+            <span class="status">LimeSurvey plugin</span>
+            <h3>Mailing through Amazon SES</h3>
+            <code class="pname">StrefaInvitationRelay</code>
+            <p>LimeSurvey invitations and reminders sent through your company’s Amazon SES channel in StrefaAnkiet — without changing how you work with participants.</p>
+            <ul>
+              <li>Recipients, tokens and content stay in LimeSurvey</li>
+              <li>Delivery confirmations, bounces and complaints in the mailing history; protection against duplicate sending</li>
+              <li>AWS keys stay on the platform side</li>
+            </ul>
+            <p class="pcard-foot"><span>Connects to</span> Managed Amazon SES</p>
+          </article>
+          <article class="card pcard is-strefa" id="StrefaResearch">
+            <span class="status">LimeSurvey plugin</span>
+            <h3>CATI and CAPI fieldwork, analysis</h3>
+            <code class="pname">StrefaResearch</code>
+            <p>A research workspace embedded in LimeSurvey: interviewer assignments, telephone fieldwork coordination and response analysis.</p>
+            <ul>
+              <li>CAPI: assignments, targets and deadlines for interviewers; the interview runs in the native LimeSurvey survey</li>
+              <li>CATI: sample, case queue, assignments, callbacks and sample quotas in one view</li>
+              <li>Analysis: dataset versions, variable dictionary, analyses in R, reports</li>
+            </ul>
+            <p class="pcard-foot"><span>Connects to</span> VoIP telephony (CATI), fieldwork (CAPI), analysis</p>
+          </article>
+        </div>
+        <div class="callout" style="margin-top:32px">
+          <p><strong>Release status.</strong> The suite is at release-candidate stage 0.9 (pilot), tested on LimeSurvey 6.15 and 7.10. A public repository with the installation packages is being prepared — until then <a href="mailto:info@strefabadan.pl?subject=StrefaAnkiet%20plugins%20for%20LimeSurvey">write to us</a> and we will send you the plugins free of charge together with the guide. None of the plugins adds its own tables to the LimeSurvey database.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="free-and-paid" aria-labelledby="model-h">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">How it works</span>
@@ -151,89 +251,6 @@
               <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet%20plugins%20for%20LimeSurvey">Let’s talk</a>
             </div>
           </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="plugins" aria-labelledby="plugins-h">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">The plugin suite</span>
-          <h2 id="plugins-h">StrefaAnkiet for LimeSurvey</h2>
-          <p>Six independent components — you install only the ones you need. The plugins do not add their own tables to the LimeSurvey database.</p>
-        </div>
-        <div class="pgrid">
-          <article class="card pcard" id="StrefaWorkspace">
-            <span class="status">Needs a StrefaAnkiet account</span>
-            <h3>Study menu</h3>
-            <span class="pname">Plugin: StrefaWorkspace</span>
-            <p>Links a LimeSurvey survey to a study in StrefaAnkiet and adds shortcuts to the whole workspace to the survey menu.</p>
-            <ul>
-              <li>CAWI, CATI and CAPI fieldwork, results, analyses, respondents and team — from within the survey</li>
-              <li>An explicit mapping of the survey ID (SID) to a study</li>
-              <li>Links grant no permissions — the platform roles still apply</li>
-            </ul>
-          </article>
-          <article class="card pcard" id="StrefaInvitationRelay">
-            <span class="status">Needs a StrefaAnkiet account</span>
-            <h3>Mailing through Amazon SES</h3>
-            <span class="pname">Plugin: StrefaInvitationRelay</span>
-            <p>LimeSurvey invitations and reminders sent through your company’s Amazon SES channel in StrefaAnkiet — without changing how you work with participants.</p>
-            <ul>
-              <li>Recipients, tokens and content stay in LimeSurvey</li>
-              <li>Delivery confirmations, bounces and complaints in the mailing history</li>
-              <li>Protection against duplicate sending</li>
-              <li>AWS keys stay on the platform side</li>
-            </ul>
-          </article>
-          <article class="card pcard" id="StrefaResearch">
-            <span class="status">Needs a StrefaAnkiet account</span>
-            <h3>CATI and CAPI fieldwork, analysis</h3>
-            <span class="pname">Plugin: StrefaResearch</span>
-            <p>A research workspace embedded in LimeSurvey: interviewer assignments, telephone fieldwork coordination and response analysis.</p>
-            <ul>
-              <li>CAPI: assignments, targets and deadlines for interviewers; the interview runs in the native LimeSurvey survey</li>
-              <li>CATI: sample, case queue, assignments, callbacks and handovers between interviewers</li>
-              <li>Sample quotas and fieldwork progress in one view</li>
-              <li>Analysis: dataset versions, variable dictionary, analyses in R, reports</li>
-            </ul>
-          </article>
-          <article class="card pcard" id="StrefaSurveyExchange">
-            <span class="status is-free">Works without an account</span>
-            <h3>Questionnaire exchange</h3>
-            <span class="pname">Plugin: StrefaSurveyExchange</span>
-            <p>Downloads a questionnaire from LimeSurvey as an .lss structure or a JSON package with a field map and a difference report.</p>
-            <ul>
-              <li>Export of the structure (.lss) or a JSON package with a field-code map</li>
-              <li>A list of elements that cannot be transferred — nothing is silently simplified</li>
-              <li>Settings of other plugins are stripped from the export</li>
-            </ul>
-          </article>
-          <article class="card pcard" id="StrefaResponseExport">
-            <span class="status is-free">Works without an account</span>
-            <h3>Response export</h3>
-            <span class="pname">Plugin: StrefaResponseExport</span>
-            <p>Provides coded responses of an active survey for analysis — paginated and without technical identifiers.</p>
-            <ul>
-              <li>Skips tokens, IP addresses and the referrer</li>
-              <li>Requires read and export permissions for the specific survey</li>
-              <li>Download of attachments from file-upload questions</li>
-            </ul>
-          </article>
-          <article class="card pcard" id="StrefaConverters">
-            <span class="status is-free">Works without an account</span>
-            <h3>Converters (command line)</h3>
-            <span class="pname">Tool package: StrefaConverters</span>
-            <p>Standalone tools for converting questionnaires and responses — useful for migrations and archiving.</p>
-            <ul>
-              <li>LSS ↔ JSON with a SHA-256 checksum</li>
-              <li>Responses from JSON, CSV and the VV export</li>
-              <li>Keeps codes with leading zeros (e.g. 001) as text</li>
-            </ul>
-          </article>
-        </div>
-        <div class="callout" style="margin-top:32px">
-          <p><strong>Release status.</strong> The suite is at release-candidate stage 0.9 (pilot), tested on LimeSurvey 6.15 and 7.10. A public repository with the installation packages is being prepared — until then <a href="mailto:info@strefabadan.pl?subject=StrefaAnkiet%20plugins%20for%20LimeSurvey">write to us</a> and we will send you the plugins free of charge together with the guide.</p>
         </div>
       </div>
     </section>
@@ -365,8 +382,8 @@
     <div class="container footer-grid">
       <div class="footer-brand">
         <a class="footer-logo" href="/en/" aria-label="LimeControl — home page">
-          <img class="logo-light" src="/assets/logo.svg?v=7" alt="LimeControl" width="88" height="28" loading="lazy" />
-          <img class="logo-dark" src="/assets/logo-dark.svg?v=7" alt="LimeControl" width="88" height="28" loading="lazy" />
+          <img class="logo-light" src="/assets/logo.svg?v=8" alt="LimeControl" width="88" height="28" loading="lazy" />
+          <img class="logo-dark" src="/assets/logo-dark.svg?v=8" alt="LimeControl" width="88" height="28" loading="lazy" />
         </a>
         <p>Open-source app for managing LimeSurvey surveys — in the browser and on mobile devices.</p>
         <div class="footer-actions">
@@ -425,6 +442,6 @@
   </div>
 
   <a class="to-top" href="#main" aria-label="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
-  <script src="/assets/site.js?v=7" defer></script>
+  <script src="/assets/site.js?v=8" defer></script>
 </body>
 </html>
