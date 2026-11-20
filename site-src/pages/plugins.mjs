@@ -5,6 +5,7 @@ import {
   APP_URL, CONTACT_EMAIL, PLUGINS_URL, ROUTES, STREFAANKIET_PRICING_URL, STREFAANKIET_URL,
   esc, homeUrl, layout, outputPath,
 } from '../chrome.mjs';
+import { jsonQuestionsAnchor, jsonQuestionsSection } from './json-questions.mjs';
 
 /** Stan pakietu wtyczek opisany na stronie — zaktualizuj przy nowym wydaniu StrefaAnkiet dla LimeSurvey. */
 const SUITE = { version: '0.9', testedOn: '6.15 i 7.10', testedOnEn: '6.15 and 7.10', testedOnDe: '6.15 und 7.10', php: '8.1' };
@@ -402,6 +403,7 @@ export function renderPluginsPage(lang) {
           <p class="lead">${s.lead}</p>
           <div class="hero-cta">
             ${primaryCta}
+            ${jsonQuestionsAnchor(lang)}
             <a class="btn btn-ghost" href="${STREFAANKIET_PRICING_URL}" rel="noopener">${s.ctaPricing}</a>
           </div>
           <ul class="hero-meta">
@@ -410,6 +412,8 @@ export function renderPluginsPage(lang) {
         </div>
       </div>
     </section>
+
+    ${jsonQuestionsSection(lang)}
 
     <section id="${s.ids.model}" class="section-soft" aria-labelledby="model-h">
       <div class="container">

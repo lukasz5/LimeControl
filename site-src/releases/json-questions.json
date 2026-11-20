@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/lukasz5/limecontrol-plugin-json-questions",
+  "version": "0.1.0",
+  "status": "pending",
+  "qualifiedOn": [],
+  "assets": {
+    "plugin": { "name": "LimeControlJsonQuestions", "sha256": null },
+    "choice": { "name": "LcJsonChoice", "sha256": null },
+    "matrix": { "name": "LcJsonMatrix", "sha256": null },
+    "followup": { "name": "LcJsonFollowup", "sha256": null }
+  }
+}
