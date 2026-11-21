@@ -6,6 +6,7 @@ import {
   esc, homeUrl, layout, outputPath,
 } from '../chrome.mjs';
 import { downloadPanel, jsonQuestionsRelease } from './json-questions.mjs';
+import { suitePanel, surveySuiteRelease } from './survey-suite.mjs';
 
 /** Stan pakietu wtyczek opisany na stronie — zaktualizuj przy nowym wydaniu StrefaAnkiet dla LimeSurvey. */
 const SUITE = { version: '0.9', testedOn: '6.15 i 7.10', testedOnEn: '6.15 and 7.10', testedOnDe: '6.15 und 7.10', php: '8.1' };
@@ -92,6 +93,102 @@ const PLUGINS = [
     },
   },
   {
+    id: 'LimeControlCrm',
+    group: 'open',
+    kind: 'plugin',
+    suite: {
+      main: 'crm',
+      guide: 'limesurvey-plugins/limecontrol-crm/README.md',
+      install: {
+        pl: 'Wgraj ZIP w menedżerze wtyczek i aktywuj. Aktywacja tworzy tabele CRM w bazie tej instalacji, a wyłączenie wtyczki zachowuje dane.',
+        en: 'Upload the ZIP in Plugin Manager and activate it. Activation creates the CRM tables in this installation’s database; deactivating the plugin keeps the data.',
+        de: 'Laden Sie die ZIP-Datei im Plugin-Manager hoch und aktivieren Sie sie. Die Aktivierung legt die CRM-Tabellen in der Datenbank dieser Installation an; beim Deaktivieren bleiben die Daten erhalten.',
+      },
+    },
+    title: { pl: 'CRM: firmy, kontakty i sprawy', en: 'CRM: companies, contacts and cases', de: 'CRM: Firmen, Kontakte und Fälle' },
+    lead: {
+      pl: 'Dodaje do panelu LimeSurvey pozycję CRM: firmy, kontakty, szanse sprzedaży, zadania i sprawy klientów. Odpowiedź z prośbą o kontakt w ankiecie zapytania tworzy szansę albo sprawę u właściwego opiekuna.',
+      en: 'Adds a CRM item to the LimeSurvey admin panel: companies, contacts, sales opportunities, tasks and customer cases. A response that asks to be contacted in an inquiry survey creates an opportunity or a case for the right owner.',
+      de: 'Ergänzt das LimeSurvey-Admin-Panel um den Menüpunkt CRM: Firmen, Kontakte, Verkaufschancen, Aufgaben und Kundenfälle. Eine Antwort mit Kontaktwunsch in einer Anfrage-Umfrage legt eine Verkaufschance oder einen Fall beim zuständigen Betreuer an.',
+    },
+    points: {
+      pl: ['Zespoły oparte na grupach użytkowników LimeSurvey: kierownik widzi zespół, pracownik własne rekordy', 'Lejek sprzedaży, historia zmian i raport kwot osobno dla każdej waluty', 'Import kontaktów z CSV z podglądem duplikatów przed zapisem'],
+      en: ['Teams built on LimeSurvey user groups: the manager sees the team, staff see their own records', 'A sales pipeline, change history and a report of amounts per currency', 'Contact import from CSV with a duplicate preview before saving'],
+      de: ['Teams auf Basis von LimeSurvey-Benutzergruppen: die Leitung sieht das Team, Mitarbeitende ihre eigenen Datensätze', 'Vertriebstrichter, Änderungsverlauf und Betragsbericht je Währung', 'Kontaktimport aus CSV mit Dublettenvorschau vor dem Speichern'],
+    },
+    where: {
+      pl: `LimeSurvey CE (sprawdzone na ${surveySuiteRelease.qualifiedOn.join(', ')})`,
+      en: `LimeSurvey CE (tested on ${surveySuiteRelease.qualifiedOn.join(', ')})`,
+      de: `LimeSurvey CE (getestet mit ${surveySuiteRelease.qualifiedOn.join(', ')})`,
+    },
+  },
+  {
+    id: 'LimeControlCrmDesk',
+    group: 'open',
+    kind: 'plugin',
+    suite: {
+      main: 'crmDesk',
+      guide: 'limesurvey-plugins/limecontrol-crm-desk/README.md',
+      install: {
+        pl: 'Najpierw zainstaluj i aktywuj CRM, potem wgraj ten ZIP. Pocztę pobiera cykliczne polecenie konsoli LimeSurvey.',
+        en: 'Install and activate the CRM first, then upload this ZIP. Mail is fetched by a scheduled LimeSurvey console command.',
+        de: 'Installieren und aktivieren Sie zuerst das CRM, dann laden Sie diese ZIP-Datei hoch. E-Mails holt ein regelmäßig ausgeführter LimeSurvey-Konsolenbefehl ab.',
+      },
+    },
+    title: { pl: 'Oferty, skrzynka zespołu i kalendarz', en: 'Quotes, team inbox and calendar', de: 'Angebote, Team-Postfach und Kalender' },
+    lead: {
+      pl: 'Rozszerzenie CRM dla handlowców i obsługi klienta: oferty w kolejnych wersjach z PDF, korespondencja ze wspólnej skrzynki przypisywana do spraw i terminy zadań w prywatnym kalendarzu.',
+      en: 'A CRM extension for sales and customer service: quotes in successive versions with a PDF, mail from a shared inbox assigned to cases, and task deadlines in a private calendar feed.',
+      de: 'Eine CRM-Erweiterung für Vertrieb und Kundenservice: Angebote in aufeinanderfolgenden Versionen mit PDF, E-Mails aus einem gemeinsamen Postfach, die Fällen zugeordnet werden, und Aufgabentermine in einem privaten Kalender-Feed.',
+    },
+    points: {
+      pl: ['Wersje oferty z pozycjami, walutą, PDF i zapisaną decyzją klienta', 'Poczta z IMAP przez TLS (tylko odczyt) lub z katalogu Maildir, bez załączników', 'Subskrypcja ICS własnych zadań; nowy adres unieważnia poprzedni'],
+      en: ['Quote versions with line items, currency, a PDF and the customer’s recorded decision', 'Mail from IMAP over TLS (read-only) or a Maildir folder, without attachments', 'An ICS subscription to your own tasks; a new address revokes the previous one'],
+      de: ['Angebotsversionen mit Positionen, Währung, PDF und erfasster Kundenentscheidung', 'E-Mails per IMAP über TLS (nur lesend) oder aus einem Maildir-Ordner, ohne Anhänge', 'ICS-Abonnement der eigenen Aufgaben; eine neue Adresse macht die vorherige ungültig'],
+    },
+    where: {
+      pl: `LimeSurvey CE z wtyczką CRM (sprawdzone na ${surveySuiteRelease.qualifiedOn.join(', ')})`,
+      en: `LimeSurvey CE with the CRM plugin (tested on ${surveySuiteRelease.qualifiedOn.join(', ')})`,
+      de: `LimeSurvey CE mit dem CRM-Plugin (getestet mit ${surveySuiteRelease.qualifiedOn.join(', ')})`,
+    },
+  },
+  {
+    id: 'LimeControlFeedback',
+    group: 'open',
+    kind: 'plugin',
+    suite: {
+      main: 'feedback',
+      extras: ['surveys', 'woocommerce', 'prestashop', 'opencart', 'shopify', 'shoper'],
+      guide: 'limesurvey-plugins/limecontrol-feedback/README.md',
+      install: {
+        pl: 'Wgraj ZIP w menedżerze wtyczek, zaimportuj szablony ankiet i zainstaluj konektor swojego sklepu. Kolejkę zaproszeń obsługuje cron LimeSurvey.',
+        en: 'Upload the ZIP in Plugin Manager, import the survey templates and install your shop’s connector. The invitation queue runs from the LimeSurvey cron.',
+        de: 'Laden Sie die ZIP-Datei im Plugin-Manager hoch, importieren Sie die Umfragevorlagen und installieren Sie den Konnektor Ihres Shops. Die Einladungswarteschlange läuft über den LimeSurvey-Cron.',
+      },
+      note: {
+        pl: 'WooCommerce 8.0, PrestaShop 8.1 i OpenCart 4.1 sprawdzono na lokalnych sklepach. Konektory Shopify i Shoper sprawdzono na odtworzonych odpowiedziach API — próba na koncie sprzedawcy jest jeszcze przed nami.',
+        en: 'WooCommerce 8.0, PrestaShop 8.1 and OpenCart 4.1 were tested on local shops. The Shopify and Shoper connectors were tested against replayed API responses — a trial on a merchant account is still to come.',
+        de: 'WooCommerce 8.0, PrestaShop 8.1 und OpenCart 4.1 wurden mit lokalen Shops getestet. Die Konnektoren für Shopify und Shoper wurden mit nachgestellten API-Antworten getestet — ein Test mit einem Händlerkonto steht noch aus.',
+      },
+    },
+    title: { pl: 'Opinie klientów sklepu', en: 'Customer feedback for online shops', de: 'Kundenfeedback für Onlineshops' },
+    lead: {
+      pl: 'Wysyła ankiety po zakupie, po doręczeniu, po czasie użytkowania produktu i po zwrocie — na podstawie zamówień ze sklepu. Raport pokazuje CSAT, NPS i oceny wariantów obok przyczyn zwrotów. Działa samodzielnie albo razem z CRM.',
+      en: 'Sends surveys after a purchase, after delivery, after a period of product use and after a return — based on the shop’s orders. The report shows CSAT, NPS and variant ratings next to return reasons. It works on its own or together with the CRM.',
+      de: 'Versendet Umfragen nach dem Kauf, nach der Zustellung, nach einer Nutzungsdauer des Produkts und nach einer Rücksendung — auf Basis der Shop-Bestellungen. Der Bericht zeigt CSAT, NPS und Variantenbewertungen neben den Rücksendegründen. Funktioniert eigenständig oder zusammen mit dem CRM.',
+    },
+    points: {
+      pl: ['Konektory WooCommerce, PrestaShop, OpenCart, Shopify i Shoper z podpisanymi zdarzeniami zamówień', 'Jedno zaproszenie na zamówienie i kampanię, minimalny odstęp między kampaniami i rezygnacja z potwierdzeniem', 'Prośba o kontakt lub zwrot w ankiecie imiennej tworzy sprawę — w samej wtyczce albo u opiekuna w CRM'],
+      en: ['WooCommerce, PrestaShop, OpenCart, Shopify and Shoper connectors with signed order events', 'One invitation per order and campaign, a minimum gap between campaigns and a confirmed opt-out', 'A contact or return request in a named survey opens a case — in the plugin itself or with the owner in the CRM'],
+      de: ['Konnektoren für WooCommerce, PrestaShop, OpenCart, Shopify und Shoper mit signierten Bestellereignissen', 'Eine Einladung pro Bestellung und Kampagne, ein Mindestabstand zwischen Kampagnen und eine bestätigte Abmeldung', 'Ein Kontakt- oder Rücksendewunsch in einer namentlichen Umfrage eröffnet einen Fall — im Plugin selbst oder beim Betreuer im CRM'],
+    },
+    where: {
+      pl: `LimeSurvey CE (sprawdzone na ${surveySuiteRelease.qualifiedOn.join(', ')}) i Twój sklep`,
+      en: `LimeSurvey CE (tested on ${surveySuiteRelease.qualifiedOn.join(', ')}) and your shop`,
+      de: `LimeSurvey CE (getestet mit ${surveySuiteRelease.qualifiedOn.join(', ')}) und Ihr Shop`,
+    },
+  },
+  {
     id: 'StrefaWorkspace',
     group: 'strefa',
     kind: 'plugin',
@@ -167,7 +264,7 @@ const S = {
     freeH: 'Wtyczki i narzędzia',
     freeP: 'Instalujesz je w swoim LimeSurvey i używasz bez ograniczeń czasowych.',
     freeList: [
-      'Sześć wtyczek i narzędzi StrefaAnkiet dla LimeSurvey — z kodem źródłowym',
+      'Sześć wtyczek i narzędzi StrefaAnkiet oraz cztery wtyczki LimeControl dla LimeSurvey — z kodem źródłowym',
       'Wymiana kwestionariuszy, eksport odpowiedzi i konwertery działają bez konta',
       `Aplikacja LimeControl (iOS, Android, web), <a href="${ROUTES.themes.pl}">motywy</a> i <a href="${ROUTES.templates.pl}">szablony ankiet</a>`,
       `Zestawy wdrożeniowe Docker dla LimeSurvey i LimeControl`,
@@ -194,7 +291,7 @@ const S = {
     ],
     openEyebrow: 'Otwarte wtyczki',
     openH: 'Działają samodzielnie, bez konta',
-    openP: 'Instalujesz je w swoim LimeSurvey i używasz bez rejestracji i bez limitu czasu. Każdą instalujesz osobno — tylko te, których potrzebujesz. Pytania zależne JSON to osobna wtyczka LimeControl z własnymi paczkami do pobrania.',
+    openP: 'Instalujesz je w swoim LimeSurvey i używasz bez rejestracji i bez limitu czasu. Każdą instalujesz osobno — tylko te, których potrzebujesz. Pytania zależne JSON, CRM i opinie klientów sklepu to osobne wtyczki LimeControl z własnymi paczkami do pobrania.',
     strefaEyebrow: 'Wtyczki StrefaAnkiet',
     strefaH: 'Łączą LimeSurvey z usługami StrefyAnkiet',
     strefaP: 'Wtyczki są darmowe i mają otwarty kod, ale do działania potrzebują konta StrefaAnkiet. Respondent nadal wypełnia tę samą ankietę LimeSurvey — platforma dokłada wysyłkę, realizację wywiadów i analizy.',
@@ -263,7 +360,7 @@ const S = {
     freeH: 'Plugins and tools',
     freeP: 'You install them in your LimeSurvey and use them with no time limit.',
     freeList: [
-      'Six StrefaAnkiet plugins and tools for LimeSurvey — with source code',
+      'Six StrefaAnkiet plugins and tools plus four LimeControl plugins for LimeSurvey — with source code',
       'Questionnaire exchange, response export and the converters work without an account',
       `The LimeControl app (iOS, Android, web), <a href="${ROUTES.themes.en}">themes</a> and <a href="${ROUTES.templates.en}">survey templates</a>`,
       'Docker deployment kits for LimeSurvey and LimeControl',
@@ -290,7 +387,7 @@ const S = {
     ],
     openEyebrow: 'Open plugins',
     openH: 'They work on their own, no account needed',
-    openP: 'You install them in your LimeSurvey and use them without signing up and with no time limit. Each one installs separately — only the ones you need. Dependent JSON questions is a separate LimeControl plugin with its own download packages.',
+    openP: 'You install them in your LimeSurvey and use them without signing up and with no time limit. Each one installs separately — only the ones you need. Dependent JSON questions, the CRM and shop customer feedback are separate LimeControl plugins with their own download packages.',
     strefaEyebrow: 'StrefaAnkiet plugins',
     strefaH: 'They connect LimeSurvey to StrefaAnkiet services',
     strefaP: 'The plugins are free and open source, but they need a StrefaAnkiet account to work. Respondents still complete the same LimeSurvey survey — the platform adds mailing, interview fieldwork and analysis.',
@@ -359,7 +456,7 @@ const S = {
     freeH: 'Plugins und Werkzeuge',
     freeP: 'Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne zeitliche Begrenzung.',
     freeList: [
-      'Sechs StrefaAnkiet-Plugins und -Werkzeuge für LimeSurvey — mit Quellcode',
+      'Sechs StrefaAnkiet-Plugins und -Werkzeuge sowie vier LimeControl-Plugins für LimeSurvey — mit Quellcode',
       'Fragebogenaustausch, Antwortexport und Konverter funktionieren ohne Konto',
       `Die App LimeControl (iOS, Android, Web), <a href="${ROUTES.themes.de}">Designs</a> und <a href="${ROUTES.templates.de}">Umfragevorlagen</a>`,
       'Docker-Deployment-Kits für LimeSurvey und LimeControl',
@@ -386,7 +483,7 @@ const S = {
     ],
     openEyebrow: 'Offene Plugins',
     openH: 'Sie funktionieren eigenständig, ohne Konto',
-    openP: 'Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne Registrierung und ohne zeitliche Begrenzung. Jedes wird einzeln installiert — nur die, die Sie brauchen. Abhängige JSON-Fragen sind ein separates LimeControl-Plugin mit eigenen Download-Paketen.',
+    openP: 'Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne Registrierung und ohne zeitliche Begrenzung. Jedes wird einzeln installiert — nur die, die Sie brauchen. Abhängige JSON-Fragen, das CRM und das Shop-Kundenfeedback sind separate LimeControl-Plugins mit eigenen Download-Paketen.',
     strefaEyebrow: 'StrefaAnkiet-Plugins',
     strefaH: 'Sie verbinden LimeSurvey mit den Diensten von StrefaAnkiet',
     strefaP: 'Die Plugins sind kostenlos und Open Source, benötigen aber ein StrefaAnkiet-Konto. Befragte füllen weiterhin dieselbe LimeSurvey-Umfrage aus — die Plattform ergänzt Versand, Feldarbeit und Analysen.',
@@ -443,7 +540,8 @@ export function renderPluginsPage(lang) {
   const primaryCta = PLUGINS_URL
     ? `<a class="btn btn-primary" href="${PLUGINS_URL}" target="_blank" rel="noopener">${s.ctaDownload}</a>`
     : `<a class="btn btn-primary" href="${mailto}">${s.ctaAsk}</a>`;
-  const card = (p) => `<article class="card pcard is-${p.group}${p.release ? ' pcard-with-download' : ''}" id="${p.id}">${p.release ? '<div class="pcard-description">' : ''}
+  const panel = (p) => (p.release ? downloadPanel(p.release, lang) : p.suite ? suitePanel(p.suite, lang) : '');
+  const card = (p) => `<article class="card pcard is-${p.group}${panel(p) ? ' pcard-with-download' : ''}" id="${p.id}">${panel(p) ? '<div class="pcard-description">' : ''}
             <span class="status${p.group === 'open' ? ' is-free' : ''}">${s.kind[p.kind]}</span>
             <h3>${esc(p.title[lang])}</h3>
             <code class="pname">${p.id}</code>
@@ -451,7 +549,7 @@ export function renderPluginsPage(lang) {
             <ul>
               ${p.points[lang].map((x) => `<li>${esc(x)}</li>`).join('\n              ')}
             </ul>
-            <p class="pcard-foot"><span>${s.whereLabel[p.group]}</span> ${esc(p.where[lang])}</p>${p.release ? `</div>\n            ${downloadPanel(p.release, lang)}` : ''}
+            <p class="pcard-foot"><span>${s.whereLabel[p.group]}</span> ${esc(p.where[lang])}</p>${panel(p) ? `</div>\n            ${panel(p)}` : ''}
           </article>`;
   const pluginGroup = (group, id, eyebrow, h, p, cls, after = '') => `<section id="${id}"${cls ? ` class="${cls}"` : ''} aria-labelledby="${id}-h">
       <div class="container">
