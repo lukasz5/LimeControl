@@ -68,6 +68,16 @@ jobs:
           curl -fsS http://127.0.0.1:18080/api/health
           curl -fsS http://127.0.0.1:18080/ | grep -q '<div id="root"'
           curl -fsS http://127.0.0.1:18081/ | grep -q 'LimeControl'
+          site=http://127.0.0.1:18081
+          curl -fsS "$site/wtyczki.html" -o "$RUNNER_TEMP/catalog.html"
+          for example in fieldwork equipment; do
+            path="/pytania-json/?example=$example"
+            grep -Fq "href=\"$path\"" "$RUNNER_TEMP/catalog.html"
+            curl -fsS "$site$path" -o "$RUNNER_TEMP/demo.html"
+            grep -Fq 'id="demo"' "$RUNNER_TEMP/demo.html"
+            curl -fsS "$site/pytania-json/examples/$example.lss" -o "$RUNNER_TEMP/example.lss"
+            grep -Fq '<LimeSurveyDocType>Survey</LimeSurveyDocType>' "$RUNNER_TEMP/example.lss"
+          done
           docker rm -f app site
 
       - name: Configure SSH
@@ -96,17 +106,3 @@ jobs:
           docker save -o bundle/images.tar \
             limecontrol-app:${{ github.sha }} limecontrol-site:${{ github.sha }}
           tar czf - -C bundle compose.yaml images.tar | ssh sb "deploy ${{ github.sha }}"
-
-      - name: Verify the public JSON Questions catalog links
-        run: |
-          site=https://limecontrol.eu
-          fetch() { curl -fsSL --max-time 20 --retry 5 --retry-all-errors "$1" -o "$2"; }
-          fetch "$site/wtyczki.html" "$RUNNER_TEMP/catalog.html"
-          for example in fieldwork equipment; do
-            path="/pytania-json/?example=$example"
-            grep -Fq "href=\"$path\"" "$RUNNER_TEMP/catalog.html"
-            fetch "$site$path" "$RUNNER_TEMP/demo.html"
-            grep -Fq 'id="demo"' "$RUNNER_TEMP/demo.html"
-            fetch "$site/pytania-json/examples/$example.lss" "$RUNNER_TEMP/example.lss"
-            grep -Fq '<LimeSurveyDocType>Survey</LimeSurveyDocType>' "$RUNNER_TEMP/example.lss"
-          done
