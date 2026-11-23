@@ -15,7 +15,7 @@ const copy = {
     version: 'Version', install: 'Activate the plugin in Plugin Manager, then import the themes you need under Question themes.',
     choice: 'Choice for each item', matrix: 'Table from earlier answers', followup: 'Follow-up question',
     plugin: 'Plugin', download: 'Download plugin', source: 'Source code', pending: 'Release in preparation',
-    demo: 'Interactive demo of version 0.2.0 (in Polish)', fieldwork: 'Fieldwork', equipment: 'Equipment readiness for class',
+    demo: 'Interactive demo of version 0.2.0', fieldwork: 'Fieldwork', equipment: 'Equipment readiness for class',
     tested: 'Tested LimeSurvey CE versions', sums: 'SHA-256 checksums', checksumFile: 'Download SHA256SUMS'
   },
   de: {
@@ -31,6 +31,8 @@ export function downloadPanel(release, lang) {
   const s = copy[lang];
   const published = release.status === 'published';
   const themes = ['choice','matrix','followup'];
+  const demoPath = lang === 'en' ? '/pytania-json/en/' : '/pytania-json/';
+  const demoLanguage = lang === 'en' ? 'en' : 'pl';
   const assets = ['plugin', ...themes];
   if (published && (!release.qualifiedOn.length || !assets.every(key => /^[a-f0-9]{64}$/.test(release.assets[key]?.sha256)))) {
     throw new Error('A published JSON Questions release must list tested versions and all four SHA-256 checksums');
@@ -51,8 +53,8 @@ export function downloadPanel(release, lang) {
               <a class="btn btn-ghost" href="${esc(release.repository)}">${s.source}</a>`}
               <h4>${s.demo}</h4>
               <ul>
-                <li><a href="/pytania-json/?example=fieldwork" hreflang="pl">${s.fieldwork}</a></li>
-                <li><a href="/pytania-json/?example=equipment" hreflang="pl">${s.equipment}</a></li>
+                <li><a href="${demoPath}?example=fieldwork" hreflang="${demoLanguage}">${s.fieldwork}</a></li>
+                <li><a href="${demoPath}?example=equipment" hreflang="${demoLanguage}">${s.equipment}</a></li>
               </ul>
             </div>`;
 }
