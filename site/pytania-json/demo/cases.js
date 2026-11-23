@@ -1,17 +1,26 @@
-// Generated from examples/*.lss and *-expected.csv by generate_cases.py.
+// Generated from the survey and CSV fixtures in examples/ by generate_cases.py.
 window.LimeControlDemoCases = {
   "fieldwork": {
-    "title": "Prace terenowe",
+    "title": {
+      "pl": "Prace terenowe",
+      "en": "Fieldwork"
+    },
     "surveyId": 817301,
     "source": {
       "code": "CITIES",
-      "title": "Wybierz lokalizacje",
+      "title": {
+        "pl": "Wybierz lokalizacje",
+        "en": "Choose locations"
+      },
       "fields": [
         {
           "path": [
             "LODZ"
           ],
-          "label": "Łódź",
+          "label": {
+            "pl": "Łódź",
+            "en": "Łódź"
+          },
           "fieldName": "817301X1X100LODZ",
           "value": "Y"
         },
@@ -19,7 +28,10 @@ window.LimeControlDemoCases = {
           "path": [
             "GDYNIA"
           ],
-          "label": "Gdynia",
+          "label": {
+            "pl": "Gdynia",
+            "en": "Gdynia"
+          },
           "fieldName": "817301X1X100GDYNIA",
           "value": "Y"
         }
@@ -28,7 +40,10 @@ window.LimeControlDemoCases = {
     "questions": [
       {
         "code": "WORK",
-        "title": "Jakie prace wykonano?",
+        "title": {
+          "pl": "Jakie prace wykonano?",
+          "en": "Which tasks were performed?"
+        },
         "definition": {
           "version": 1,
           "kind": "choice",
@@ -59,7 +74,10 @@ window.LimeControlDemoCases = {
       },
       {
         "code": "TIME",
-        "title": "Ile godzin zajęły prace?",
+        "title": {
+          "pl": "Ile godzin zajęły prace?",
+          "en": "How many hours did each task take?"
+        },
         "definition": {
           "version": 1,
           "kind": "matrix",
@@ -82,7 +100,10 @@ window.LimeControlDemoCases = {
       },
       {
         "code": "REASON",
-        "title": "Dlaczego prace trwały ponad osiem godzin?",
+        "title": {
+          "pl": "Dlaczego prace trwały ponad osiem godzin?",
+          "en": "Why did the task take more than eight hours?"
+        },
         "definition": {
           "version": 1,
           "kind": "followup",
@@ -114,93 +135,178 @@ window.LimeControlDemoCases = {
         }
       }
     ],
-    "sample": {
-      "WORK": {
-        "version": 1,
-        "revision": "572e3159713ef37a",
-        "rows": [
-          {
-            "path": [
-              "LODZ"
-            ],
-            "cells": {
-              "MEASURE": {
-                "value": true
+    "samples": {
+      "pl": {
+        "WORK": {
+          "version": 1,
+          "revision": "572e3159713ef37a",
+          "rows": [
+            {
+              "path": [
+                "LODZ"
+              ],
+              "cells": {
+                "MEASURE": {
+                  "value": true
+                }
+              }
+            },
+            {
+              "path": [
+                "GDYNIA"
+              ],
+              "cells": {
+                "SERVICE": {
+                  "value": true
+                }
               }
             }
-          },
-          {
-            "path": [
-              "GDYNIA"
-            ],
-            "cells": {
-              "SERVICE": {
-                "value": true
+          ]
+        },
+        "TIME": {
+          "version": 1,
+          "revision": "1b8a8d89b5938517",
+          "rows": [
+            {
+              "path": [
+                "LODZ",
+                "MEASURE"
+              ],
+              "cells": {
+                "HOURS": {
+                  "value": 9
+                }
+              }
+            },
+            {
+              "path": [
+                "GDYNIA",
+                "SERVICE"
+              ],
+              "cells": {
+                "HOURS": {
+                  "value": 0
+                }
               }
             }
-          }
-        ]
+          ]
+        },
+        "REASON": {
+          "version": 1,
+          "revision": "db931e029c4606fd",
+          "rows": [
+            {
+              "path": [
+                "LODZ",
+                "MEASURE"
+              ],
+              "cells": {
+                "OTHER": {
+                  "value": true,
+                  "comment": "Powtórzenie pomiaru"
+                }
+              }
+            }
+          ]
+        }
       },
-      "TIME": {
-        "version": 1,
-        "revision": "1b8a8d89b5938517",
-        "rows": [
-          {
-            "path": [
-              "LODZ",
-              "MEASURE"
-            ],
-            "cells": {
-              "HOURS": {
-                "value": 9
+      "en": {
+        "WORK": {
+          "version": 1,
+          "revision": "572e3159713ef37a",
+          "rows": [
+            {
+              "path": [
+                "LODZ"
+              ],
+              "cells": {
+                "MEASURE": {
+                  "value": true
+                }
+              }
+            },
+            {
+              "path": [
+                "GDYNIA"
+              ],
+              "cells": {
+                "SERVICE": {
+                  "value": true
+                }
               }
             }
-          },
-          {
-            "path": [
-              "GDYNIA",
-              "SERVICE"
-            ],
-            "cells": {
-              "HOURS": {
-                "value": 0
+          ]
+        },
+        "TIME": {
+          "version": 1,
+          "revision": "1b8a8d89b5938517",
+          "rows": [
+            {
+              "path": [
+                "LODZ",
+                "MEASURE"
+              ],
+              "cells": {
+                "HOURS": {
+                  "value": 9
+                }
+              }
+            },
+            {
+              "path": [
+                "GDYNIA",
+                "SERVICE"
+              ],
+              "cells": {
+                "HOURS": {
+                  "value": 0
+                }
               }
             }
-          }
-        ]
-      },
-      "REASON": {
-        "version": 1,
-        "revision": "db931e029c4606fd",
-        "rows": [
-          {
-            "path": [
-              "LODZ",
-              "MEASURE"
-            ],
-            "cells": {
-              "OTHER": {
-                "value": true,
-                "comment": "Powtórzenie pomiaru"
+          ]
+        },
+        "REASON": {
+          "version": 1,
+          "revision": "db931e029c4606fd",
+          "rows": [
+            {
+              "path": [
+                "LODZ",
+                "MEASURE"
+              ],
+              "cells": {
+                "OTHER": {
+                  "value": true,
+                  "comment": "Repeat measurement"
+                }
               }
             }
-          }
-        ]
+          ]
+        }
       }
     }
   },
   "equipment": {
-    "title": "Gotowość sprzętu do zajęć",
+    "title": {
+      "pl": "Gotowość sprzętu do zajęć",
+      "en": "Equipment readiness for class"
+    },
     "surveyId": 817304,
     "source": {
       "code": "PLACES",
-      "title": "W których miejscach przygotowujesz sprzęt?",
+      "title": {
+        "pl": "W których miejscach przygotowujesz sprzęt?",
+        "en": "Where are you preparing equipment?"
+      },
       "fields": [
         {
           "path": [
             "LIBRARY"
           ],
-          "label": "Biblioteka",
+          "label": {
+            "pl": "Biblioteka",
+            "en": "Library"
+          },
           "fieldName": "817304X1X100LIBRARY",
           "value": "Y"
         },
@@ -208,7 +314,10 @@ window.LimeControlDemoCases = {
           "path": [
             "STUDIO"
           ],
-          "label": "Pracownia",
+          "label": {
+            "pl": "Pracownia",
+            "en": "Studio"
+          },
           "fieldName": "817304X1X100STUDIO",
           "value": "Y"
         }
@@ -217,7 +326,10 @@ window.LimeControlDemoCases = {
     "questions": [
       {
         "code": "DEVICES",
-        "title": "Jakie urządzenia sprawdzasz w każdym miejscu?",
+        "title": {
+          "pl": "Jakie urządzenia sprawdzasz w każdym miejscu?",
+          "en": "Which devices are you checking at each location?"
+        },
         "definition": {
           "version": 1,
           "kind": "choice",
@@ -248,7 +360,10 @@ window.LimeControlDemoCases = {
       },
       {
         "code": "CHARGE",
-        "title": "Jaki jest poziom naładowania każdego urządzenia?",
+        "title": {
+          "pl": "Jaki jest poziom naładowania każdego urządzenia?",
+          "en": "What is the battery level of each device?"
+        },
         "definition": {
           "version": 1,
           "kind": "matrix",
@@ -273,7 +388,10 @@ window.LimeControlDemoCases = {
       },
       {
         "code": "PLAN",
-        "title": "Zaplanuj działanie dla urządzeń z niskim poziomem baterii.",
+        "title": {
+          "pl": "Zaplanuj działanie dla urządzeń z niskim poziomem baterii.",
+          "en": "Plan an action for each device with a low battery."
+        },
         "definition": {
           "version": 1,
           "kind": "followup",
@@ -305,77 +423,152 @@ window.LimeControlDemoCases = {
         }
       }
     ],
-    "sample": {
-      "DEVICES": {
-        "version": 1,
-        "revision": "b8aa06253a550eaf",
-        "rows": [
-          {
-            "path": [
-              "LIBRARY"
-            ],
-            "cells": {
-              "TABLET": {
-                "value": true
+    "samples": {
+      "pl": {
+        "DEVICES": {
+          "version": 1,
+          "revision": "b8aa06253a550eaf",
+          "rows": [
+            {
+              "path": [
+                "LIBRARY"
+              ],
+              "cells": {
+                "TABLET": {
+                  "value": true
+                }
+              }
+            },
+            {
+              "path": [
+                "STUDIO"
+              ],
+              "cells": {
+                "CAMERA": {
+                  "value": true
+                }
               }
             }
-          },
-          {
-            "path": [
-              "STUDIO"
-            ],
-            "cells": {
-              "CAMERA": {
-                "value": true
+          ]
+        },
+        "CHARGE": {
+          "version": 1,
+          "revision": "3439516541d77259",
+          "rows": [
+            {
+              "path": [
+                "LIBRARY",
+                "TABLET"
+              ],
+              "cells": {
+                "BATTERY": {
+                  "value": 0
+                }
+              }
+            },
+            {
+              "path": [
+                "STUDIO",
+                "CAMERA"
+              ],
+              "cells": {
+                "BATTERY": {
+                  "value": 100
+                }
               }
             }
-          }
-        ]
+          ]
+        },
+        "PLAN": {
+          "version": 1,
+          "revision": "6d82a30986433ce1",
+          "rows": [
+            {
+              "path": [
+                "LIBRARY",
+                "TABLET"
+              ],
+              "cells": {
+                "ACTION": {
+                  "value": "Naładuję tablet."
+                }
+              }
+            }
+          ]
+        }
       },
-      "CHARGE": {
-        "version": 1,
-        "revision": "3439516541d77259",
-        "rows": [
-          {
-            "path": [
-              "LIBRARY",
-              "TABLET"
-            ],
-            "cells": {
-              "BATTERY": {
-                "value": 0
+      "en": {
+        "DEVICES": {
+          "version": 1,
+          "revision": "b8aa06253a550eaf",
+          "rows": [
+            {
+              "path": [
+                "LIBRARY"
+              ],
+              "cells": {
+                "TABLET": {
+                  "value": true
+                }
+              }
+            },
+            {
+              "path": [
+                "STUDIO"
+              ],
+              "cells": {
+                "CAMERA": {
+                  "value": true
+                }
               }
             }
-          },
-          {
-            "path": [
-              "STUDIO",
-              "CAMERA"
-            ],
-            "cells": {
-              "BATTERY": {
-                "value": 100
+          ]
+        },
+        "CHARGE": {
+          "version": 1,
+          "revision": "3439516541d77259",
+          "rows": [
+            {
+              "path": [
+                "LIBRARY",
+                "TABLET"
+              ],
+              "cells": {
+                "BATTERY": {
+                  "value": 0
+                }
+              }
+            },
+            {
+              "path": [
+                "STUDIO",
+                "CAMERA"
+              ],
+              "cells": {
+                "BATTERY": {
+                  "value": 100
+                }
               }
             }
-          }
-        ]
-      },
-      "PLAN": {
-        "version": 1,
-        "revision": "6d82a30986433ce1",
-        "rows": [
-          {
-            "path": [
-              "LIBRARY",
-              "TABLET"
-            ],
-            "cells": {
-              "ACTION": {
-                "value": "Naładuję tablet."
+          ]
+        },
+        "PLAN": {
+          "version": 1,
+          "revision": "6d82a30986433ce1",
+          "rows": [
+            {
+              "path": [
+                "LIBRARY",
+                "TABLET"
+              ],
+              "cells": {
+                "ACTION": {
+                  "value": "I will charge the tablet."
+                }
               }
             }
-          }
-        ]
+          ]
+        }
       }
     }
   }

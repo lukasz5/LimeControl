@@ -1,0 +1,6 @@
+response_id,question_code,revision,path,column,type,value,comment
+1,DEVICES,b8aa06253a550eaf,"[""LIBRARY""]",TABLET,multi,true,
+1,DEVICES,b8aa06253a550eaf,"[""STUDIO""]",CAMERA,multi,true,
+1,CHARGE,3439516541d77259,"[""LIBRARY"",""TABLET""]",BATTERY,number,0,
+1,CHARGE,3439516541d77259,"[""STUDIO"",""CAMERA""]",BATTERY,number,100,
+1,PLAN,6d82a30986433ce1,"[""LIBRARY"",""TABLET""]",ACTION,text,I will charge the tablet.,

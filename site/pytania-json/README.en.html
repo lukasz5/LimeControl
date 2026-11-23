@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Dependent JSON questions for LimeSurvey · LimeControl</title><link rel="stylesheet" href="demo/components.css"><link rel="stylesheet" href="demo/demo.css"><link rel="stylesheet" href="docs/reading.css"></head>
-<body><header class="masthead"><div class="docframe masthead-items"><a class="brand" href="index.html"><span class="mark" aria-hidden="true">{ }</span> LimeControl</a><nav class="docnav" aria-label="Navigation"><a href="index.html">Demo</a><a href="README.html">Instrukcja</a><a href="docs/poradnik-autora.html">Poradnik</a><a href="README.en.html">English</a></nav></div></header>
+<body><header class="masthead"><div class="docframe masthead-items"><a class="brand" href="en/index.html"><span class="mark" aria-hidden="true">{ }</span> LimeControl</a><nav class="docnav" aria-label="Navigation"><a href="en/index.html">Demo</a><a href="README.en.html">Instructions</a><a href="docs/author-guide.en.html">Author guide</a><a href="README.html">Polski</a></nav></div></header>
 <main class="docframe doclayout"><article class="docs"><h1>Dependent JSON questions for LimeSurvey</h1>
 <p>This plugin and three question themes work on a self-hosted LimeSurvey Community Edition installation. Respondents select locations, specify activities for each city, enter hours in a matrix and explain values above a threshold. Survey authors configure the questions in the admin interface. Each block uses one native response column of question type U. Data stays on the survey server.</p>
 <p><a href="README.html">Polski</a> · <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases">GitHub releases</a> · <a href="https://limecontrol.eu/en/plugins.html">LimeControl catalogue</a></p>
@@ -18,17 +18,17 @@
 <tr>
 <td>Fieldwork</td>
 <td>Pick two locations and activities. Enter 9 and 0 hours. Explain the activity that took more than 8 hours.</td>
-<td><a download href="examples/fieldwork.lss">Survey LSS</a> · <a download href="examples/fieldwork-expected.csv">Expected CSV</a></td>
+<td><a download href="examples/fieldwork.lss">Survey LSS</a> · <a download href="examples/fieldwork-expected.en.csv">Expected CSV</a></td>
 </tr>
 <tr>
 <td>Equipment readiness for class</td>
 <td>Select devices in two locations. Record a battery level from 0 to 100%. Plan an action for each device at or below 20%.</td>
-<td><a download href="examples/equipment.lss">Survey LSS</a> · <a download href="examples/equipment-expected.csv">Expected CSV</a></td>
+<td><a download href="examples/equipment.lss">Survey LSS</a> · <a download href="examples/equipment-expected.en.csv">Expected CSV</a></td>
 </tr>
 </tbody>
 </table></div>
-<p><a href="demo/index.html">Open the browser demo</a> · <a href="docs/poradnik-autora.html">Step-by-step author guide in Polish</a></p>
-<p>To run the demo offline, extract the entire demo archive and open <code>demo/index.html</code> in your browser. Both forms use files from the extracted project.</p>
+<p><a href="en/index.html">Open the English demo</a> · <a href="demo/index.html">Polish demo</a> · <a href="docs/author-guide.en.html">Author guide</a></p>
+<p>To run the demo offline, extract the entire demo archive and open <code>demo/en/index.html</code> in your browser. Both forms use files from the extracted project.</p>
 <p>Version 0.2.0 adds optional inclusive minimum and maximum values to number columns. Install the four matching 0.2.0 packages to use the battery constraints in LimeSurvey. The fieldwork example also runs on version 0.1.0.</p>
 <p><img src="docs/screenshot.png" alt="Hours matrix for two activities on a real LimeSurvey installation" /></p>
 <h2 id="install-on-your-server">Install on your server</h2>
@@ -90,10 +90,10 @@
 </table></div>
 </li>
 <li>
-<p>Activate a test copy. Choose both cities, measurement in Łódź and service in Gdynia. Enter <strong>9</strong> and <strong>0</strong> hours respectively. Select Other for Łódź and enter <strong>Powtórzenie pomiaru</strong> to reproduce the comment in the expected CSV. The threshold is only exceeded in Łódź.</p>
+<p>Activate a test copy. Choose English as the survey language. Select both cities, Measurement in Łódź and Service in Gdynia. Enter <strong>9</strong> and <strong>0</strong> hours respectively. Select Other for Łódź and enter <strong>Repeat measurement</strong> to reproduce the comment in the expected CSV. The threshold is only exceeded in Łódź.</p>
 </li>
 <li>
-<p>Choose <strong>Export CSV</strong> and <strong>Codebook CSV</strong> in the survey tools. The <a download href="examples/fieldwork-expected.csv">example output</a> shows stable codes, row paths, zero and a comment. Response IDs and revision identifiers depend on the installation and saved configuration.</p>
+<p>Choose <strong>Export CSV</strong> and <strong>Codebook CSV</strong> in the survey tools. The <a download href="examples/fieldwork-expected.en.csv">example output</a> shows stable codes, row paths, zero and a comment. Response IDs and revision identifiers depend on the installation and saved configuration.</p>
 </li>
 </ol>
 <p>Rules combine comparisons using all, any and not. Configure visibility, required values, exclusive options and required comments. The editor offers preceding supported native choice questions and JSON blocks as sources. Keep stable option and column codes when changing translations or updating a definition.</p>
@@ -101,7 +101,7 @@
 <ol>
 <li>Import <code>equipment.lss</code>. In the survey admin tools, open the JSON editor. Inspect the three U questions in order. <code>DEVICES</code> takes its rows from the native multiple-choice question <code>PLACES</code>. <code>CHARGE</code> takes its rows from <code>DEVICES</code>. <code>PLAN</code> takes its rows from <code>CHARGE</code>.</li>
 <li>In <code>CHARGE</code>, the <code>BATTERY</code> column has type <strong>Number</strong>, <strong>Require a value</strong>, minimum <strong>0</strong> and maximum <strong>100</strong>. Either limit may be omitted. In <code>PLAN</code>, the rule has action <strong>Show</strong>, target <strong>*</strong>, field <strong>source · BATTERY</strong>, operator <strong>At most</strong> and value <strong>20</strong>. Its <code>ACTION</code> column is required text for each visible row.</li>
-<li>Activate a test copy and follow the participant link. Select <strong>Library</strong> and <strong>Studio</strong>, then <strong>Tablet</strong> for the library and <strong>Camera</strong> for the studio. Enter <strong>0</strong> and <strong>100</strong> respectively. Type <strong>Naładuję tablet.</strong> in the action field for the tablet to match the sample CSV exactly. Finish the survey.</li>
+<li>Activate a test copy and follow the participant link. Choose English as the survey language. Select <strong>Library</strong> and <strong>Studio</strong>, then <strong>Tablet</strong> for the library and <strong>Camera</strong> for the studio. Enter <strong>0</strong> and <strong>100</strong> respectively. Type <strong>I will charge the tablet.</strong> in the action field for the tablet to match the sample CSV exactly. Finish the survey.</li>
 <li>In <strong>Tools → LimeControl JSON · Export CSV</strong>, find the five records for your response. The <code>CHARGE</code> record at path <code>[&quot;LIBRARY&quot;,&quot;TABLET&quot;]</code> has column <code>BATTERY</code> and numeric value <code>0</code>. The <code>PLAN</code> record at the same path has your text in <code>value</code>. The camera produces no follow-up record. Use <code>question_code</code>, <code>revision</code> and <code>column</code> to match a cell to translated labels in <strong>Codebook CSV</strong>.</li>
 <li>Try 20% and 21% to see the follow-up threshold. A value of 101% exceeds the allowed input range. If 101% is accepted, check the installed plugin version and column limits, then start a fresh response to exercise the new definition.</li>
 </ol>

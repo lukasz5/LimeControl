@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Dependent JSON questions demo · LimeControl</title>
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="../../LimeControlJsonQuestions/assets/respondent.css">
+  <link rel="stylesheet" href="../demo.css">
+  <script defer src="../cases.js?v=d2f2d2995d"></script>
+  <script defer src="../../LimeControlJsonQuestions/assets/respondent.js"></script>
+  <script defer src="../app.js?v=9b859419ad"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="frame masthead-items">
+      <a class="brand" href="../../README.en.html"><span aria-hidden="true" class="mark">{ }</span> LimeControl</a>
+      <a href="../../docs/author-guide.en.html">Author guide</a>
+      <a id="demo-language" lang="pl" hreflang="pl" href="../../index.html">Polski</a>
+    </div>
+  </header>
+  <main class="frame">
+    <div class="intro">
+      <h1>Dependent JSON questions</h1>
+      <p>Change an answer to see which rows appear in the next question and how LimeSurvey records them in JSON.</p>
+    </div>
+    <noscript>Enable JavaScript to try the examples here. You can also import <a href="../../examples/fieldwork.lss">Fieldwork</a> or <a href="../../examples/equipment.lss">Equipment readiness for class</a> into LimeSurvey.</noscript>
+    <div id="demo" hidden>
+      <section class="scenario-bar" aria-label="Choose an example">
+        <div>
+          <label class="control-label" for="case">Example survey</label>
+          <select class="select" id="case"></select>
+        </div>
+        <div class="actions">
+          <button type="button" id="sample" class="btn btn-primary">Load sample answers</button>
+          <button type="button" id="clear" class="btn">Clear answers</button>
+        </div>
+      </section>
+      <p class="lcjq-sr-only" id="notice" role="status"></p>
+      <div class="workspace">
+        <div class="survey">
+          <p class="experiment" id="experiment"></p>
+          <div id="questions"></div>
+        </div>
+        <aside aria-labelledby="inspector-heading">
+          <section class="inspector">
+            <h2 id="inspector-heading">Stored response</h2>
+            <p>Each block stores its JSON in one LimeSurvey field of type U.</p>
+            <label for="block" class="control-label">Field to inspect</label>
+            <select id="block" class="select"></select>
+            <pre id="json" tabindex="0" aria-label="JSON stored in the selected field"></pre>
+            <p id="validation" role="status"></p>
+          </section>
+          <section class="downloads" aria-labelledby="files-heading">
+            <h2 id="files-heading">Example files</h2>
+            <a id="survey-file" download>Download survey (.lss)</a>
+            <a id="csv-file" download>Download expected export (.csv)</a>
+            <a href="../../README.en.html#paczki">LimeSurvey installation packages</a>
+          </section>
+        </aside>
+      </div>
+      <p class="privacy">Your answers stay in this browser tab. Opening the page again restores the sample answers.</p>
+    </div>
+  </main>
+</body>
+</html>
