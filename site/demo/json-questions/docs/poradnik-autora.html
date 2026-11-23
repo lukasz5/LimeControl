@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pl" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jak zbudować ankietę zależną i odczytać jej wynik · LimeControl</title><link rel="stylesheet" href="../demo/components.css"><link rel="stylesheet" href="../demo/demo.css"><link rel="stylesheet" href="../docs/reading.css"></head>
+<body><header class="masthead"><div class="docframe masthead-items"><a class="brand" href="../index.html"><span class="mark" aria-hidden="true">{ }</span> LimeControl</a><nav class="docnav" aria-label="Nawigacja"><a href="../index.html">Demo</a><a href="../README.html">Instrukcja</a><a href="../docs/poradnik-autora.html">Poradnik</a><a href="../README.en.html">English</a></nav></div></header>
+<main class="docframe doclayout"><article class="docs"><h1>Jak zbudować ankietę zależną i odczytać jej wynik</h1>
+<p>W przykładzie <strong>Gotowość sprzętu do zajęć</strong> respondent wskazuje miejsca, wybiera urządzenia w każdym miejscu i wpisuje ich stan naładowania. Przy 20% lub mniej podaje, co zrobi przed zajęciami. Ten sam tablet w dwóch miejscach można ocenić osobno. Łańcuch składa się z jednego zwykłego pytania LimeSurvey i trzech pytań typu <strong>Bardzo długi tekst</strong> (U).</p>
+<p><a href="../demo/index.html">Demo w przeglądarce</a> · <a download href="../examples/equipment.lss">Ankieta do importu</a> · <a download href="../examples/equipment-expected.csv">Wzorcowy CSV</a> · <a href="../README.html#instalacja">Instalacja</a></p>
+<h2 id="odtwórz-odpowiedź-wzorcową">Odtwórz odpowiedź wzorcową</h2>
+<ol>
+<li>Zainstaluj wtyczkę i trzy motywy z zestawu 0.2.0. W LimeSurvey w sekcji tworzenia ankiet wybierz import pliku LSS i wskaż <code>equipment.lss</code>. Otwórz podgląd całej ankiety, aby sprawdzić kolejność pytań. Do próby eksportu aktywuj ankietę testową i przejdź przez jej adres dla respondentów.</li>
+<li>Zaznacz <strong>Biblioteka</strong> i <strong>Pracownia</strong>. W bibliotece wybierz <strong>Tablet</strong>, w pracowni <strong>Aparat</strong>. W kolejnym pytaniu zobaczysz dwa wiersze.</li>
+<li>Wpisz <strong>0</strong> dla tabletu i <strong>100</strong> dla aparatu. Dla tabletu wpisz dokładnie <strong>Naładuję tablet.</strong> i zakończ ankietę. Pytanie o działanie pojawi się tylko przy tablecie.</li>
+<li>W ustawieniach administracyjnych ankiety wybierz <strong>Narzędzia → LimeControl JSON · Eksport CSV</strong>. W pliku odszukaj swój <code>response_id</code>. Powinno przypadać na niego pięć rekordów, po dwa dla <code>DEVICES</code> i <code>CHARGE</code> oraz jeden dla <code>PLAN</code>. Porównaj kody, ścieżki i wartości z <a download href="../examples/equipment-expected.csv">plikiem wzorcowym</a>.</li>
+</ol>
+<p>W następnej próbie wpisz <strong>20</strong> dla tabletu. Wiersz z planem działania nadal będzie widoczny. Wartość <strong>21</strong> ukryje ten wiersz. <strong>101</strong> przekroczy dopuszczalny zakres samego pytania o baterię. Próg dopytania i zakres poprawnych odpowiedzi ustawia się niezależnie.</p>
+<h2 id="skonfiguruj-ten-sam-przebieg-we-własnej-ankiecie">Skonfiguruj ten sam przebieg we własnej ankiecie</h2>
+<p>Dodaj pytania w podanej kolejności. W menu ankiety otwórz <strong>Narzędzia → LimeControl JSON · Edytor</strong>, wybierz odpowiednie pytanie U, ustaw źródło i zapisz. Źródłem może być wcześniejsza natywna lista jednokrotnego wyboru (typ L lub !), pytanie wielokrotnego wyboru (M lub P) albo wcześniejszy blok zestawu.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Kod</th>
+<th>Typ lub motyw</th>
+<th>Co ustawić</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PLACES</code></td>
+<td>Natywne pytanie wielokrotnego wyboru (M)</td>
+<td>Dodaj podpytania <code>LIBRARY</code> („Biblioteka”) i <code>STUDIO</code> („Pracownia”).</td>
+</tr>
+<tr>
+<td><code>DEVICES</code></td>
+<td>U → Wybór dla każdej pozycji</td>
+<td>Wskaż źródło <code>PLACES</code>. Dodaj opcje <code>TABLET</code> i <code>CAMERA</code> z typem „Wielokrotny wybór”.</td>
+</tr>
+<tr>
+<td><code>CHARGE</code></td>
+<td>U → Tabela z wcześniejszych odpowiedzi</td>
+<td>Wskaż <code>DEVICES</code>. Dodaj kolumnę <code>BATTERY</code>, etykietę „Naładowanie (%)” i typ „Liczba”. Zaznacz „Wymagaj wartości”, ustaw minimum 0 i maksimum 100.</td>
+</tr>
+<tr>
+<td><code>PLAN</code></td>
+<td>U → Pytanie uzupełniające</td>
+<td>Wskaż <code>CHARGE</code>. Dodaj wymaganą kolumnę tekstową <code>ACTION</code> z etykietą „Co zrobisz przed zajęciami?”. Dodaj poniższą regułę.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dla <code>PLAN</code> wybierz działanie <strong>Pokaż</strong>, cel <strong>*</strong>, pole <strong>source · BATTERY</strong>, operator <strong>Co najwyżej</strong> i wartość <strong>20</strong>. Cały wiersz ma się pojawić, gdy bateria danego urządzenia wskazuje najwyżej 20%. W zapisanej definicji reguła ma taką postać.</p>
+<pre><code class="language-json">{
+  &quot;effect&quot;: &quot;show&quot;,
+  &quot;target&quot;: &quot;*&quot;,
+  &quot;when&quot;: { &quot;field&quot;: &quot;source.BATTERY&quot;, &quot;op&quot;: &quot;lte&quot;, &quot;value&quot;: 20 }
+}
+</code></pre>
+<p>Wybór pojedynczy dopuszcza jedną aktywną opcję typu <code>single</code> w wierszu. Wybór wielokrotny pozwala zaznaczyć kilka opcji. Opcja oznaczona jako <strong>Wyłączna</strong> usuwa pozostałe aktywne wpisy w swoim wierszu. Pole <strong>Komentarz</strong> wymaga komentarza po użyciu danej opcji. Aby wymagać go warunkowo, wybierz działanie <strong>Wymagaj komentarza</strong> i określ warunek. Przykład wyboru „Inne” z komentarzem znajdziesz w <a download href="../examples/fieldwork.lss">ankiecie o pracach terenowych</a>.</p>
+<h3 id="z-czego-składa-się-warunek">Z czego składa się warunek</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Pole</th>
+<th>Jak jest oceniane</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source.BATTERY</code></td>
+<td>Wartość kolumny <code>BATTERY</code> w źródłowym wierszu tego urządzenia. Wybierasz kolumny z definicji poprzedniego bloku.</td>
+</tr>
+<tr>
+<td><code>self.KOD</code></td>
+<td>Wartość wskazanej kolumny w bieżącym wierszu. Przydaje się do odkrywania kolejnego pola w tym samym pytaniu.</td>
+</tr>
+<tr>
+<td><code>source.count</code></td>
+<td>Łączna liczba wierszy utworzonych przez źródło dla tego bloku. W macierzy przykładowej odpowiedzi wynosi 2.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Operatory liczbowe obejmują <code>gt</code> (&gt;), <code>gte</code> (≥), <code>lt</code> (&lt;) i <code>lte</code> (≤). <code>eq</code> oznacza równość. <code>selected</code> sprawdza, czy dana komórka ma aktywną wartość. Wartość liczbowa 0 jest aktywna. Grupą <strong>Wszystkie</strong> połącz warunki wymagane łącznie, a grupą <strong>Dowolny</strong> warunki, z których wystarczy jeden. <strong>Zaprzeczenie</strong> odwraca wynik jednego warunku.</p>
+<p>Cel <code>*</code> przy <strong>Pokaż</strong> oznacza cały wiersz. Przy <strong>Wymagaj wartości</strong> ten sam cel wymaga co najmniej jednej aktywnej komórki w wierszu. Wybierz kod kolumny jako cel, jeśli zależy Ci na konkretnej komórce. Kilka oddzielnych reguł <strong>Pokaż</strong> dla tego samego celu wymaga spełnienia wszystkich warunków. Wartości w ukrytych komórkach oraz ścieżki usunięte przez zmianę wcześniejszego wyboru są pomijane w eksporcie.</p>
+<h3 id="granice-liczbowe-od-wersji-020">Granice liczbowe od wersji 0.2.0</h3>
+<p>W kolumnie typu <code>number</code> obie granice są opcjonalne i włączne. Możesz podać tylko minimum, tylko maksimum albo obie wartości. Minimum i maksimum mogą być równe. Wymagalność ustawiasz osobno. Pole bez granic przyjmuje również wartości ujemne. Przykładowy zapis kolumny wygląda następująco.</p>
+<pre><code class="language-json">{
+  &quot;code&quot;: &quot;BATTERY&quot;,
+  &quot;type&quot;: &quot;number&quot;,
+  &quot;label&quot;: { &quot;pl&quot;: &quot;Naładowanie (%)&quot; },
+  &quot;required&quot;: true,
+  &quot;min&quot;: 0,
+  &quot;max&quot;: 100
+}
+</code></pre>
+<h2 id="odczytaj-odpowiedź-json-i-csv">Odczytaj odpowiedź JSON i CSV</h2>
+<p>LimeSurvey zapisuje każde pytanie U w jednej kolumnie. Odpowiedź zawiera wersję formatu, rewizję konkretnej definicji i listę wierszy. Dla pytania <code>CHARGE</code> z podanego przykładu zawartość pola jest następująca.</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: 1,
+  &quot;revision&quot;: &quot;3439516541d77259&quot;,
+  &quot;rows&quot;: [
+    { &quot;path&quot;: [&quot;LIBRARY&quot;, &quot;TABLET&quot;], &quot;cells&quot;: { &quot;BATTERY&quot;: { &quot;value&quot;: 0 } } },
+    { &quot;path&quot;: [&quot;STUDIO&quot;, &quot;CAMERA&quot;], &quot;cells&quot;: { &quot;BATTERY&quot;: { &quot;value&quot;: 100 } } }
+  ]
+}
+</code></pre>
+<p><code>path</code> identyfikuje wiersz. Pierwszy element pochodzi z wyboru miejsca. Blok <code>choice</code> dokłada kod urządzenia podczas tworzenia wiersza następnego pytania. Macierz przekazuje tę samą ścieżkę pytaniu uzupełniającemu. Dzięki temu <code>[&quot;LIBRARY&quot;,&quot;TABLET&quot;]</code> oznacza ten sam sprzęt w <code>CHARGE</code> i <code>PLAN</code>, niezależnie od języka formularza.</p>
+<p>W eksporcie wtyczki każdy rekord odpowiada jednej zapisanej komórce aktywnego wiersza. Odszukaj <code>question_code = CHARGE</code>, <code>column = BATTERY</code> i <code>path = [&quot;LIBRARY&quot;,&quot;TABLET&quot;]</code>. Wartość <code>value = 0</code> oznacza rozładowany tablet. Pusty tekst w <code>comment</code> w tym rekordzie jest prawidłowy. W pytaniu <code>PLAN</code> treść „Naładuję tablet.” trafia do <code>value</code>, bo <code>ACTION</code> jest kolumną tekstową. Przykład terenowy pokazuje komentarz w osobnym polu <code>comment</code>. <a download href="../examples/equipment-expected.csv">Wzorzec sprzętowy</a> · <a download href="../examples/fieldwork-expected.csv">Wzorzec terenowy</a></p>
+<p>Do interpretacji etykiet pobierz <strong>LimeControl JSON · Słownik CSV</strong> i połącz go z eksportem po <code>question_code</code>, <code>revision</code> i <code>column</code>. Identyfikator odpowiedzi przydziela Twoja instalacja. Zmiana definicji może zmienić rewizję, w tym po edycji etykiet. Zachowaj dotychczasowe kody przy tłumaczeniu.</p>
+<h2 id="gdy-wynik-różni-się-od-przykładu">Gdy wynik różni się od przykładu</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Objaw</th>
+<th>Co sprawdzić</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Edytor nie pokazuje źródła</td>
+<td>Ustaw źródło przed pytaniem U w kolejności grup i pytań. Sprawdź typ źródłowy oraz zapis konfiguracji wcześniejszego bloku.</td>
+</tr>
+<tr>
+<td>Zamiast urządzeń widać puste pytanie</td>
+<td>Zacznij podgląd od początku ankiety, wybierz miejsce i urządzenie. W podglądzie pojedynczego pytania brakuje wcześniejszych odpowiedzi. W pytaniu <code>PLAN</code> sprawdź też, czy przynajmniej jeden poziom baterii wynosi 20 lub mniej.</td>
+</tr>
+<tr>
+<td>Motyw jest niedostępny na liście</td>
+<td>Wgraj ZIP danego motywu w <strong>Motywach pytań</strong>. Upewnij się, że w menedżerze wtyczek aktywna jest <code>LimeControlJsonQuestions</code>.</td>
+</tr>
+<tr>
+<td>Wartość 101 przechodzi walidację</td>
+<td>Sprawdź wersję zainstalowanej wtyczki i granice <code>BATTERY</code>. Rozpocznij nową odpowiedź po zmianie definicji, aby przetestować nową rewizję.</td>
+</tr>
+<tr>
+<td>CSV zawiera całą strukturę w jednym polu</td>
+<td>Wybierz <strong>Narzędzia → LimeControl JSON · Eksport CSV</strong>. Do eksportu wtyczki potrzebujesz obu uprawnień do odpowiedzi w ankiecie, odczytu i eksportu.</td>
+</tr>
+<tr>
+<td>Wartość przekracza pojemność pola</td>
+<td>Sprawdź rozmiar zakodowanego bloku w bajtach. Podziel długie tabele lub komentarze na osobne pytania U. Każdy blok ma limit najwyżej 2 MiB, a pojemność kolumny MySQL oraz szyfrowanie mogą go obniżyć.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Przy aktualizacji z 0.1.0 wykonaj kopię bazy, ankiety i ZIP-ów, a następnie zaktualizuj cztery paczki do tej samej wersji. Istniejące kolumny bez <code>min</code> i <code>max</code> zachowują poprzedni zakres. Aby sprawdzić nową granicę, uzupełnij ją w edytorze i zapisz definicję. Otwórz nową odpowiedź oraz wznów wcześniejszą z zapisanymi wierszami. W eksporcie sprawdź obie rewizje. Zasady odpinania pytań i wyniki testów poszczególnych wydań znajdziesz w <a href="../README.html#du%C5%BCe-ankiety-dane-i-odzyskiwanie">instrukcji instalacji i utrzymania</a>.</p>
+<h2 id="paczki">Paczki instalacyjne 0.2.0</h2><ul class="files"><li><a class="btn btn-sm" download href="../packages/LimeControlJsonQuestions-0.2.0.zip">Wtyczka</a></li><li><a class="btn btn-sm" download href="../packages/LcJsonChoice-0.2.0.zip">Wybór</a></li><li><a class="btn btn-sm" download href="../packages/LcJsonMatrix-0.2.0.zip">Macierz</a></li><li><a class="btn btn-sm" download href="../packages/LcJsonFollowup-0.2.0.zip">Dopytanie</a></li><li><a class="btn btn-sm" download href="../packages/SHA256SUMS">Sumy SHA-256</a></li></ul></article><aside class="contents" aria-label="W tym dokumencie"><h2>W tym dokumencie</h2><nav><a href="#odtwórz-odpowiedź-wzorcową">Odtwórz odpowiedź wzorcową</a><a href="#skonfiguruj-ten-sam-przebieg-we-własnej-ankiecie">Skonfiguruj ten sam przebieg we własnej ankiecie</a><a href="#odczytaj-odpowiedź-json-i-csv">Odczytaj odpowiedź JSON i CSV</a><a href="#gdy-wynik-różni-się-od-przykładu">Gdy wynik różni się od przykładu</a><a href="#paczki">Paczki instalacyjne 0.2.0</a></nav></aside></main></body></html>

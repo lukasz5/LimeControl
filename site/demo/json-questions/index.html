@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Demo pytań zależnych JSON · LimeControl</title>
+  <link rel="stylesheet" href="demo/components.css">
+  <link rel="stylesheet" href="LimeControlJsonQuestions/assets/respondent.css">
+  <link rel="stylesheet" href="demo/demo.css">
+  <script defer src="demo/cases.js"></script>
+  <script defer src="LimeControlJsonQuestions/assets/respondent.js"></script>
+  <script defer src="demo/app.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="frame masthead-items">
+      <a class="brand" href="README.html"><span aria-hidden="true" class="mark">{ }</span> LimeControl</a>
+      <a href="docs/poradnik-autora.html">Poradnik autora</a>
+    </div>
+  </header>
+  <main class="frame">
+    <div class="intro">
+      <h1>Pytania zależne JSON</h1>
+      <p>Wypróbuj ankietę LimeSurvey. Zmień odpowiedź i zobacz, które wiersze pojawią się w kolejnym pytaniu i co trafi do pola JSON.</p>
+    </div>
+    <noscript>Włącz JavaScript, aby wypełnić przykłady. <a href="examples/fieldwork.lss">Pobierz ankietę do importu w LimeSurvey</a>.</noscript>
+    <div id="demo" hidden>
+      <section class="scenario-bar" aria-label="Wybór przykładu">
+        <div>
+          <label class="control-label" for="case">Przykładowa ankieta</label>
+          <select class="select" id="case"></select>
+        </div>
+        <div class="actions">
+          <button type="button" id="sample" class="btn btn-primary">Wczytaj przykładowe odpowiedzi</button>
+          <button type="button" id="clear" class="btn">Wyczyść odpowiedzi</button>
+        </div>
+      </section>
+      <p class="lcjq-sr-only" id="notice" role="status"></p>
+      <div class="workspace">
+        <div class="survey">
+          <p class="experiment" id="experiment"></p>
+          <div id="questions"></div>
+        </div>
+        <aside aria-labelledby="inspector-heading">
+          <section class="inspector">
+            <h2 id="inspector-heading">Zapis odpowiedzi</h2>
+            <p>Każdy blok zapisuje swój JSON w jednym polu typu U.</p>
+            <label for="block" class="control-label">Podgląd pola</label>
+            <select id="block" class="select"></select>
+            <pre id="json" tabindex="0" aria-label="Treść wybranego pola"></pre>
+            <p id="validation" role="status"></p>
+          </section>
+          <section class="downloads" aria-labelledby="files-heading">
+            <h2 id="files-heading">Pliki przykładu</h2>
+            <a id="survey-file" download>Ankieta do importu (.lss)</a>
+            <a id="csv-file" download>Wzorcowy eksport (.csv)</a>
+            <a href="README.html#paczki">Paczki do instalacji w LimeSurvey</a>
+          </section>
+        </aside>
+      </div>
+      <p class="privacy">Odpowiedzi z demo pozostają w otwartej karcie. Ponowne otwarcie strony wczytuje przykład od początku.</p>
+    </div>
+  </main>
+</body>
+</html>
