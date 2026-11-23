@@ -51,8 +51,8 @@ export function downloadPanel(release, lang) {
               <a class="btn btn-ghost" href="${esc(release.repository)}">${s.source}</a>`}
               <h4>${s.demo}</h4>
               <ul>
-                <li><a href="/demo/json-questions/?example=fieldwork" hreflang="pl">${s.fieldwork}</a></li>
-                <li><a href="/demo/json-questions/?example=equipment" hreflang="pl">${s.equipment}</a></li>
+                <li><a href="/pytania-json/?example=fieldwork" hreflang="pl">${s.fieldwork}</a></li>
+                <li><a href="/pytania-json/?example=equipment" hreflang="pl">${s.equipment}</a></li>
               </ul>
             </div>`;
 }
