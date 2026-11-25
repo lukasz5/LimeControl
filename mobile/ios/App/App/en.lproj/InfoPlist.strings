@@ -1,0 +1,3 @@
+/* Permission prompts shown by iOS (English). */
+"NSCameraUsageDescription" = "The camera is used only to scan a QR code with your survey server's address. Images are not saved or sent anywhere.";
+"NSFaceIDUsageDescription" = "Face ID unlocks the survey server password you chose to keep in this device's keychain.";

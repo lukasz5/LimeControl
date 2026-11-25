@@ -1,1 +1,1 @@
-First release of the LimeControl mobile app.
+Version 1.2: keep the password in the keystore and unlock it with biometrics, add a server by QR code, limecontrol:// links, pull to refresh and an offline survey list, tablet layout, German interface. Requires Android 8.0 or later.

@@ -169,7 +169,7 @@ export const TemplateLibrary: React.FC<TemplateLibraryProps> = ({ activeSession,
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400">
                     <span className="inline-flex items-center gap-1">
                       <ListChecks className="h-3.5 w-3.5" aria-hidden="true" />
-                      {plural(entry.questions, ['pytanie', 'pytania', 'pytań'], ['question', 'questions'])}
+                      {plural(entry.questions, ['pytanie', 'pytania', 'pytań'], ['question', 'questions'], ['Frage', 'Fragen'])}
                     </span>
                     <span className="inline-flex items-center gap-1">
                       <Clock className="h-3.5 w-3.5" aria-hidden="true" />

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
+import { de } from '../src/i18n/de.ts';
 import { en } from '../src/i18n/en.ts';
 import { buildJob, Scheduler } from '../server/scheduler.ts';
 import { loadSecretKey } from '../server/secretbox.ts';
@@ -13,7 +14,7 @@ function collectKeys(dir: string, out = new Set<string>()): Set<string> {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
     if (fs.statSync(full).isDirectory()) collectKeys(full, out);
-    else if (/\.(ts|tsx)$/.test(name) && !full.endsWith(path.join('i18n', 'en.ts'))) {
+    else if (/\.(ts|tsx)$/.test(name) && !full.includes(`${path.sep}i18n${path.sep}`)) {
       const source = fs.readFileSync(full, 'utf8');
       for (const m of source.matchAll(/\bt\(\s*'((?:[^'\\]|\\.)*)'/g)) out.add(m[1].replace(/\\'/g, "'").replace(/\\\\/g, '\\'));
       for (const m of source.matchAll(/\bt\(\s*"((?:[^"\\]|\\.)*)"/g)) out.add(m[1].replace(/\\"/g, '"'));
@@ -34,6 +35,17 @@ test('tłumaczenia zachowują znaczniki {0}, {1}… z tekstu polskiego', () => {
   const placeholders = (text: string) => [...text.matchAll(/\{(\d+)\}/g)].map((m) => m[1]).sort().join(',');
   const broken = Object.entries(en).filter(([pl, english]) => placeholders(pl) !== placeholders(english)).map(([pl]) => pl);
   assert.deepEqual(broken, []);
+});
+
+test('każdy tekst interfejsu ma tłumaczenie niemieckie z tymi samymi znacznikami', () => {
+  const keys = collectKeys(path.resolve('src'));
+  const missing = [...keys].filter((key) => !(key in de)).sort();
+  assert.deepEqual(missing, [], `brak tłumaczeń DE dla ${missing.length} tekstów`);
+  const placeholders = (text: string) => [...text.matchAll(/\{([A-Z0-9]+)\}/g)].map((m) => m[1]).sort().join(',');
+  const broken = Object.entries(de).filter(([pl, german]) => placeholders(pl) !== placeholders(german)).map(([pl]) => pl);
+  assert.deepEqual(broken, []);
+  const stale = Object.keys(de).filter((key) => !(key in en));
+  assert.deepEqual(stale, [], 'słownik DE ma klucze, których nie ma w EN');
 });
 
 test('zadanie harmonogramu zapisuje komunikaty w języku, w którym je utworzono', async () => {
@@ -60,5 +72,6 @@ test('komunikaty serwera istnieją w obu językach', () => {
   assert.equal(msg('job_date_invalid', 'en', 'scheduledAt'), 'Invalid date format: scheduledAt.');
   assert.equal(normalizeLang('en-GB'), 'en');
   assert.equal(normalizeLang('pl'), 'pl');
+  assert.equal(normalizeLang('de'), 'en');
   assert.equal(normalizeLang(undefined), 'pl');
 });

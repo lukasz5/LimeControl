@@ -7,8 +7,9 @@ i przygotowana do publikacji w App Store oraz Google Play. Ten dokument opisuje 
 i wydanie — krok po kroku, razem z odpowiedziami do formularzy obu sklepów.
 
 - Identyfikator aplikacji (Bundle ID / nazwa pakietu): `eu.limecontrol.app`
-- iOS 15 lub nowszy, iPhone i iPad · Android 7.0 (API 24) lub nowszy, docelowe API 36
-- Języki: polski i angielski (interfejs, opisy w sklepach, zrzuty ekranu)
+- iOS 15 lub nowszy, iPhone i iPad · Android 8.0 (API 26) lub nowszy, docelowe API 36
+- Języki: polski, angielski i niemiecki (interfejs, opisy w sklepach, zrzuty ekranu)
+- Plan rozwoju: [ROADMAP.md](ROADMAP.md)
 
 ## Czym różni się od wersji przeglądarkowej
 
@@ -16,10 +17,31 @@ i wydanie — krok po kroku, razem z odpowiedziami do formularzy obu sklepów.
 |---|---|---|
 | Konto | konto Google (usługa) lub klucz dostępu (własna instalacja) | brak — bez rejestracji i logowania |
 | Profile serwerów | w chmurze lub w przeglądarce | tylko na urządzeniu (natywna pamięć aplikacji), bez haseł |
+| Hasło do serwera | tylko w pamięci karty (opcjonalnie) | opcjonalnie w pęku kluczy systemu, odblokowywane biometrią |
+| Dodanie serwera | formularz; kod QR profilu dla aplikacji | formularz albo skan kodu QR, link `limecontrol://` |
+| Lista ankiet bez sieci | — | ostatnio pobrana lista (tytuły, stan, daty) |
 | Połączenie z serwerem ankiet | bezpośrednie (wymaga CORS) albo przez przekaźnik | bezpośrednie przez natywną warstwę sieciową — bez CORS i bez przekaźnika |
 | Harmonogram | serwer LimeControl | po połączeniu z własnym serwerem LimeControl (opcjonalnie) |
 | Eksport i udostępnianie | pobieranie pliku | systemowe okno udostępniania |
 | Motyw jasny / ciemny | przełącznik w nagłówku | motyw systemu, dopóki nie wybierzesz własnego |
+
+## Hasło, kody QR i linki
+
+- **Hasło w pęku kluczy** (`src/services/secureCredentials.ts`, wtyczka `@capgo/capacitor-native-biometric`).
+  Opcja pojawia się tylko na urządzeniu z silną biometrią (Face ID, Touch ID, odcisk palca klasy 3).
+  Wpis jest chroniony kontrolą dostępu `BIOMETRY_ANY` — odczyt zawsze wymaga potwierdzenia, dodanie
+  nowego odcisku palca go nie unieważnia, wyłączenie blokady ekranu — tak. Profil przechowuje tylko
+  flagę `biometricPassword`. Odrzucone przez serwer hasło jest usuwane automatycznie.
+- **Kod QR profilu.** Wersja przeglądarkowa pokazuje kod z linkiem
+  `limecontrol://open?server=<endpoint RPC>&user=<login>&name=<nazwa>[&plugin=<wtyczka>][&sid=<ankieta>]`.
+  Link nie zawiera hasła, a parametr `password` jest ignorowany. Z parametrem `sid` aplikacja po
+  połączeniu otwiera wskazaną ankietę.
+- **Skaner** (`@capacitor/barcode-scanner`, biblioteka ZXing — bez usług Google Play). Przyjmuje też
+  zwykły adres serwera. Wymaga Androida 8.0 (API 26).
+- **Schemat `limecontrol://`** jest zarejestrowany w `Info.plist` (`CFBundleURLTypes`) i w
+  `AndroidManifest.xml` (intent-filter z hostem `open`). Universal Links / App Links (adresy
+  `https://limecontrol.eu/…`) wymagają identyfikatora zespołu Apple i odcisku klucza podpisu Google
+  Play — to kolejny krok.
 
 Paczkę dla aplikacji mobilnej buduje `VITE_PLATFORM=native` — bez Firebase, bez service workera
 i bez czcionek pobieranych z internetu.
@@ -135,13 +157,14 @@ SHOTS_PL_ENDPOINT='https://demo-pl.example.com/index.php/admin/remotecontrol' SH
 ```
 
 Skrypt otwiera paczkę `dist-mobile/` w Chrome w rozmiarach wymaganych przez sklepy i zapisuje
-zrzuty w układzie fastlane — po polsku i po angielsku:
+zrzuty w układzie fastlane — po polsku, angielsku i niemiecku (niemieckie domyślnie z instancji
+angielskiej, bo szablony ankiet są tylko PL/EN; `SHOTS_DE_ENDPOINT` zmienia ten wybór):
 
 | Sklep | Urządzenie | Rozmiar | Katalog |
 |---|---|---|---|
-| App Store | iPhone 6,9″ | 1320×2868 | `fastlane/screenshots/<pl\|en-US>/` |
-| App Store | iPad 13″ | 2064×2752 | `fastlane/screenshots/<pl\|en-US>/` |
-| Google Play | telefon | 1080×1920 | `fastlane/metadata/android/<pl-PL\|en-US>/images/phoneScreenshots/` |
+| App Store | iPhone 6,9″ | 1320×2868 | `fastlane/screenshots/<pl\|en-US\|de-DE>/` |
+| App Store | iPad 13″ | 2064×2752 | `fastlane/screenshots/<pl\|en-US\|de-DE>/` |
+| Google Play | telefon | 1080×1920 | `fastlane/metadata/android/<pl-PL\|en-US\|de-DE>/images/phoneScreenshots/` |
 | Google Play | tablet 7″ | 1920×1080 | `…/images/sevenInchScreenshots/` |
 | Google Play | tablet 10″ | 2560×1440 | `…/images/tenInchScreenshots/` |
 
@@ -252,9 +275,9 @@ definicje w formularzu, zanim je potwierdzisz.
 
 | Formularz | Odpowiedź | Uzasadnienie |
 |---|---|---|
-| App Store: App Privacy | **Data Not Collected** | Wydawca nie otrzymuje żadnych danych: brak kont, analityki i reklam. Aplikacja łączy się wyłącznie z serwerem podanym przez użytkownika. |
+| App Store: App Privacy | **Data Not Collected** | Wydawca nie otrzymuje żadnych danych: brak kont, analityki i reklam. Aplikacja łączy się wyłącznie z serwerem podanym przez użytkownika. Hasło w pęku kluczy, obraz z aparatu i ostatnia lista ankiet nie opuszczają urządzenia, więc nie są „zbierane” w rozumieniu formularza. |
 | Google Play: Data safety | Nie zbiera i nie udostępnia danych | Jak wyżej. Dane logowania trafiają tylko do serwera użytkownika, na jego żądanie; wydawca nie ma do nich dostępu. |
-| Polityka prywatności | `https://limecontrol.eu/prywatnosc.html` · `https://limecontrol.eu/en/privacy.html` | Link jest też w stopce aplikacji. |
+| Polityka prywatności | `https://limecontrol.eu/prywatnosc.html` · `https://limecontrol.eu/en/privacy.html` · `https://limecontrol.eu/de/datenschutz.html` | Link jest też w stopce aplikacji. Wersja 1.2 opisuje aparat, biometrię i zapamiętaną listę. |
 | Szyfrowanie (App Store) | Brak własnej kryptografii | `ITSAppUsesNonExemptEncryption = false` w `Info.plist`; aplikacja używa wyłącznie HTTPS systemu. |
 | Klasyfikacja wiekowa | Najniższa (wszystkie odpowiedzi „nie”) | Brak treści wrażliwych, czatu, treści użytkowników, hazardu i przeglądarki. |
 | Grupa docelowa (Google Play) | 18 lat i więcej | Narzędzie zawodowe; nie jest kierowane do dzieci. |
@@ -262,7 +285,8 @@ definicje w formularzu, zanim je potwierdzisz.
 | Zakupy w aplikacji | Nie | Aplikacja jest bezpłatna; nie sprzedaje i nie odblokowuje niczego. |
 | Dostęp do aplikacji / konto demo | Wymaga logowania — podaj dane instancji demonstracyjnej | Tekst: [`store/review-notes.md`](store/review-notes.md). |
 | Kategoria | Biznes (dodatkowa: Produktywność) | — |
-| Uprawnienia (Android) | tylko `INTERNET` | Brak dostępu do lokalizacji, kontaktów, aparatu i plików. |
+| Uprawnienia (Android) | `INTERNET`, `CAMERA`, `USE_BIOMETRIC` (oraz dołączane przez biblioteki `USE_FINGERPRINT` i `ACCESS_NETWORK_STATE`) | Aparat tylko do skanowania kodu QR na żądanie (`android.hardware.camera` nie jest wymagany), biometria tylko do odblokowania zapisanego hasła. Brak dostępu do lokalizacji, kontaktów i plików. |
+| Uprawnienia (iOS) | `NSCameraUsageDescription`, `NSFaceIDUsageDescription` | Teksty po polsku, angielsku i niemiecku w `App/<język>.lproj/InfoPlist.strings`. |
 
 ## Zasady sklepów uwzględnione w aplikacji
 
@@ -273,8 +297,8 @@ definicje w formularzu, zanim je potwierdzisz.
   prowadzi do dokumentacji, nie do oferty — sklepy nie dopuszczają zewnętrznych płatności.
 - **Prywatność.** Link do polityki prywatności w stopce, manifest prywatności iOS
   (`PrivacyInfo.xcprivacy`), brak kopii zapasowej danych aplikacji w chmurze na Androidzie.
-- **Bezpieczeństwo.** Hasła do serwera nie są zapisywane; wydanie na Androida blokuje nieszyfrowane
-  połączenia.
+- **Bezpieczeństwo.** Hasło do serwera jest zapisywane tylko na wyraźne życzenie, w pęku kluczy
+  systemu i za biometrią; wydanie na Androida blokuje nieszyfrowane połączenia.
 - **Opisy.** Opis w App Store nie wspomina o innych platformach.
 
 ## Stan weryfikacji
@@ -285,8 +309,16 @@ CSV, import z biblioteki szablonów, przycisk „Wstecz”, motyw jasny i ciemny
 Konfiguracja `Release` kompiluje się na obu platformach (iOS bez podpisu, Android jako niepodpisany
 plik AAB).
 
+Wersja 1.2 (25 listopada 2026 r.): link `limecontrol://open?…` otwiera aplikację z wypełnionym
+formularzem w symulatorze iPada (iOS) i w emulatorze tabletu z Androidem 16; na obu widać układ
+tabletowy (lista i formularz obok siebie) i przycisk „Skanuj kod QR”. W przeglądarce sprawdzono kod QR
+profilu i interfejs po niemiecku.
+
 Jeszcze niesprawdzone:
 
+- **Wersja 1.2 na fizycznych urządzeniach:** skanowanie kodu QR aparatem i zapis hasła w pęku kluczy
+  z Face ID, Touch ID lub odciskiem palca. Symulator i emulator nie mają skonfigurowanej biometrii,
+  więc pole „Zapamiętaj hasło na tym urządzeniu” jest w nich ukryte.
 - **Android z aktualnym WebView.** Emulator ma WebView 133, w którym Capacitor zostawia odstęp na
   paski systemu. Urządzenia z WebView 140 lub nowszym (czyli większość telefonów) rysują treść pod
   paskami systemu i korzystają z tych samych reguł CSS (`env(safe-area-inset-*)`) co iOS, gdzie

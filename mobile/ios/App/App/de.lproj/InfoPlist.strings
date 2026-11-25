@@ -1,0 +1,3 @@
+/* Berechtigungshinweise von iOS (Deutsch). */
+"NSCameraUsageDescription" = "Die Kamera wird nur zum Scannen eines QR-Codes mit der Adresse Ihres Umfrageservers verwendet. Bilder werden weder gespeichert noch übertragen.";
+"NSFaceIDUsageDescription" = "Face ID entsperrt das Passwort Ihres Umfrageservers, das Sie im Schlüsselbund dieses Geräts gespeichert haben.";

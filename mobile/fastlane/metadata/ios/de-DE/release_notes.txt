@@ -1,0 +1,7 @@
+Version 1.2:
+• Serverpasswort im Schlüsselbund ablegen und mit Face ID oder Touch ID entsperren.
+• Server per QR-Code aus der Browserversion hinzufügen.
+• limecontrol://-Links öffnen die App auf einem bestimmten Server oder einer Umfrage.
+• Aktualisieren durch Herunterziehen, die letzte Umfrageliste auch offline.
+• Auf dem iPad stehen Umfrageliste und Details nebeneinander.
+• Neue Sprache der Oberfläche: Deutsch.

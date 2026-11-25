@@ -1,5 +1,4 @@
 import React, { useEffect, useId, useMemo, useState } from 'react';
-import qrcode from 'qrcode-generator';
 import { Copy, ExternalLink, Palette, QrCode, Repeat, Share2, TabletSmartphone } from 'lucide-react';
 import {
   getLanguageProperties,
@@ -8,6 +7,7 @@ import {
   setSurveyProperties,
 } from '../services/limeSurveyRpc';
 import { canShare, shareLink } from '../services/nativeBridge';
+import { QrSvg } from './QrSvg';
 import { surveyLanguages, surveyPublicUrl } from '../services/surveyLinks';
 import { loadTemplateCatalog, type TemplateTheme } from '../services/templateLibrary';
 import type { ActiveSession, LimeSurveyItem, SurveyProperties } from '../types/limesurvey';
@@ -24,35 +24,6 @@ interface SurveyToolsCardProps {
 const DEFAULT_THEME = 'fruity_twentythree';
 /** Opis linku końcowego widziany przez respondenta — w języku ankiety, nie interfejsu aplikacji. */
 const NEXT_INTERVIEW_LABEL: Record<string, string> = { pl: 'Następny wywiad', en: 'Next interview', de: 'Nächstes Interview', fr: 'Entretien suivant', es: 'Siguiente entrevista', uk: 'Наступне інтерв’ю' };
-
-/** Kod QR jako jedna ścieżka SVG (bez wstawiania HTML z biblioteki). */
-const QrSvg: React.FC<{ value: string; label: string }> = ({ value, label }) => {
-  const { size, path } = useMemo(() => {
-    const qr = qrcode(0, 'M');
-    qr.addData(value);
-    qr.make();
-    const count = qr.getModuleCount();
-    let d = '';
-    for (let row = 0; row < count; row++) {
-      for (let col = 0; col < count; col++) {
-        if (qr.isDark(row, col)) d += `M${col + 4} ${row + 4}h1v1h-1z`;
-      }
-    }
-    return { size: count + 8, path: d };
-  }, [value]);
-  return (
-    <svg
-      role="img"
-      aria-label={label}
-      viewBox={`0 0 ${size} ${size}`}
-      className="h-44 w-44 rounded-xl bg-white"
-      shapeRendering="crispEdges"
-    >
-      <rect width={size} height={size} fill="#ffffff" />
-      <path d={path} fill="#000000" />
-    </svg>
-  );
-};
 
 /** Link do ankiety, kod QR, tryb CAPI (wywiad za wywiadem) i wybór motywu. */
 export const SurveyToolsCard: React.FC<SurveyToolsCardProps> = ({ activeSession, survey, properties, onPropertiesChanged }) => {
@@ -334,7 +305,7 @@ export const SurveyToolsCard: React.FC<SurveyToolsCardProps> = ({ activeSession,
         </div>
         <p className="text-[11px] text-slate-500 dark:text-slate-400">
           {t('Motywy LimeControl trzeba najpierw zainstalować w LimeSurvey.')}{' '}
-          <a href={uiLang === 'pl' ? 'https://limecontrol.eu/szablony.html' : 'https://limecontrol.eu/en/themes.html'} target="_blank" rel="noopener" className="font-semibold text-emerald-700 dark:text-emerald-300 hover:underline underline-offset-2">
+          <a href={{ pl: 'https://limecontrol.eu/szablony.html', en: 'https://limecontrol.eu/en/themes.html', de: 'https://limecontrol.eu/de/designs.html' }[uiLang]} target="_blank" rel="noopener" className="font-semibold text-emerald-700 dark:text-emerald-300 hover:underline underline-offset-2">
             {t('Pobierz motywy')}
           </a>
         </p>

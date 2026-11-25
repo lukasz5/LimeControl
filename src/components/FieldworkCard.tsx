@@ -162,12 +162,8 @@ export const FieldworkCard: React.FC<FieldworkCardProps> = ({ activeSession, act
   const stat = 'rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 px-3 py-2.5';
   // Aplikacja mobilna odsyła do dokumentacji łącznika, przeglądarka — do strony wtyczek.
   const pluginsUrl = isNativeApp()
-    ? lang === 'pl'
-      ? 'https://limecontrol.eu/docs.html#strefaankiet'
-      : 'https://limecontrol.eu/en/docs.html#strefaankiet'
-    : lang === 'pl'
-      ? 'https://limecontrol.eu/wtyczki.html'
-      : 'https://limecontrol.eu/en/plugins.html';
+    ? { pl: 'https://limecontrol.eu/docs.html#strefaankiet', en: 'https://limecontrol.eu/en/docs.html#strefaankiet', de: 'https://limecontrol.eu/de/docs.html#strefaankiet' }[lang]
+    : { pl: 'https://limecontrol.eu/wtyczki.html', en: 'https://limecontrol.eu/en/plugins.html', de: 'https://limecontrol.eu/de/plugins.html' }[lang];
 
   return (
     <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-3.5">

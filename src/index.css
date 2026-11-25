@@ -117,3 +117,17 @@ select {
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+ * Tablet i komputer: szczegóły ankiety obok listy zostają w zasięgu wzroku i przewijają się
+ * niezależnie (nagłówek ma 4rem + wcięcie ekranu).
+ */
+@media (min-width: 768px) {
+  .detail-pane-sticky {
+    position: sticky;
+    top: calc(4rem + env(safe-area-inset-top, 0px) + 1rem);
+    max-height: calc(100dvh - 4rem - env(safe-area-inset-top, 0px) - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}

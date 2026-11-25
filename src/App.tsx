@@ -50,7 +50,19 @@ import { useAndroidBackButton } from './hooks/useAndroidBackButton';
 import { useTextEntryActive } from './hooks/useTextEntryActive';
 import { isNativeApp } from './platform';
 import { syncStatusBar } from './services/nativeBridge';
+import { findProfileForLink, type AppLink } from './services/appLinks';
+import { forgetPassword, isInvalidCredentialsError, readPassword, storePassword } from './services/secureCredentials';
+import { clearSurveySnapshot, loadSurveySnapshot, saveSurveySnapshot, type SurveySnapshot } from './services/surveyCache';
+import { useAppLinks } from './hooks/useAppLinks';
 import { t, useLang } from './i18n';
+
+/** Wynik próby połączenia z profilem instancji. */
+export type ConnectOutcome = 'connected' | 'failed' | 'needs-password';
+
+export interface ConnectOptions {
+  /** Aplikacja mobilna: zapisz wpisane hasło w pęku kluczy (biometria). */
+  rememberSecurely?: boolean;
+}
 
 const LEGACY_PROFILES_KEY = 'limecontrol_profiles_v1';
 const THEME_KEY = 'limecontrol_theme_v1';
@@ -100,6 +112,17 @@ function AppContent() {
   const [rpcTraces, setRpcTraces] = useState<RpcTraceEntry[]>([]);
   const [preselectedSid, setPreselectedSid] = useState<number | null>(null);
   const [openServerPanel, setOpenServerPanel] = useState(false);
+  const [profilesLoaded, setProfilesLoaded] = useState(false);
+  /** Link aplikacji (limecontrol://open…) albo zeskanowany kod QR czekający na obsłużenie. */
+  const [incomingLink, setIncomingLink] = useState<AppLink | null>(null);
+  /** Formularz nowej instancji wypełniony z linku. */
+  const [prefill, setPrefill] = useState<{ link: AppLink; nonce: number } | null>(null);
+  /** Prośba o połączenie z zapisanym profilem (z linku) — obsługuje ją widok instancji. */
+  const [connectRequest, setConnectRequest] = useState<{ profileId: string; nonce: number } | null>(null);
+  /** Ankieta do otwarcia po połączeniu (z linku). profileId '*' = dowolny, świeżo dodany profil. */
+  const pendingSurveyRef = useRef<{ profileId: string; sid: number } | null>(null);
+  const [focusSurveyId, setFocusSurveyId] = useState<number | null>(null);
+  const [surveySnapshot, setSurveySnapshot] = useState<SurveySnapshot | null>(null);
   // Aplikacja mobilna: gdy klawiatura ekranowa jest otwarta, dolna nawigacja zasłaniałaby formularz.
   const typing = useTextEntryActive(isNativeApp());
   useAndroidBackButton(tab === 'surveys', () => setTab('surveys'));
@@ -160,6 +183,7 @@ function AppContent() {
         setProfiles([]);
         setActiveSession(null);
         setSurveys([]);
+        setProfilesLoaded(false);
         runtimePasswordsRef.current = {};
         knownJobStatusesRef.current = null;
         setAuthLoading(false);
@@ -177,6 +201,7 @@ function AppContent() {
       unsubscribeInstances = backend.subscribeInstances(
         user.uid,
         (cloudProfiles) => {
+          setProfilesLoaded(true);
           setProfiles(
             cloudProfiles.map((item) => ({
               ...item,
@@ -203,6 +228,32 @@ function AppContent() {
       }
     };
   }, [notify, backend]);
+
+  useEffect(() => {
+    void loadSurveySnapshot().then(setSurveySnapshot);
+  }, []);
+
+  useAppLinks((link) => setIncomingLink(link));
+
+  // Link z aplikacji lub z kodu QR: otwórz pasujący profil (i ankietę) albo wypełnij formularz nowej instancji.
+  useEffect(() => {
+    if (!incomingLink || !authUser || !profilesLoaded) return;
+    const link = incomingLink;
+    setIncomingLink(null);
+    const profile = findProfileForLink(profiles, link);
+    if (profile && link.surveyId && activeSessionRef.current?.profileId === profile.id) {
+      setFocusSurveyId(link.surveyId);
+      setTab('surveys');
+      return;
+    }
+    pendingSurveyRef.current = link.surveyId ? { profileId: profile?.id ?? '*', sid: link.surveyId } : null;
+    setTab('instances');
+    if (profile) {
+      setConnectRequest({ profileId: profile.id, nonce: Date.now() });
+    } else {
+      setPrefill({ link, nonce: Date.now() });
+    }
+  }, [incomingLink, authUser, profilesLoaded, profiles]);
 
   useEffect(() => {
     return subscribeRpcTrace((entry) => {
@@ -306,6 +357,9 @@ function AppContent() {
         session.connectionMode
       );
       setSurveys(list);
+      void saveSurveySnapshot(session.profileId, session.profileName, list).then((snapshot) => {
+        if (snapshot) setSurveySnapshot(snapshot);
+      });
     } finally {
       setLoadingSurveys(false);
     }
@@ -313,15 +367,31 @@ function AppContent() {
 
   async function handleConnectProfile(
     profile: InstanceProfile,
-    overridePassword?: string
-  ) {
-    const pass =
+    overridePassword?: string,
+    options: ConnectOptions = {}
+  ): Promise<ConnectOutcome> {
+    let pass =
       overridePassword ??
-      profile.password ??
-      runtimePasswordsRef.current[profile.id] ??
-      '';
-    setConnecting(true);
+      (profile.password || runtimePasswordsRef.current[profile.id] || '');
+    let fromKeychain = false;
     setConnectionError(null);
+
+    // Hasło w pęku kluczy urządzenia: odczyt po potwierdzeniu biometrią.
+    if (!pass && profile.biometricPassword) {
+      const stored = await readPassword(profile.id, profile.name);
+      if (stored.status === 'ok') {
+        pass = stored.password;
+        fromKeychain = true;
+      } else {
+        if (stored.status === 'missing' && authUser) {
+          void backend.updateInstance(authUser.uid, profile.id, { biometricPassword: false }).catch(() => null);
+        }
+        return 'needs-password';
+      }
+    }
+    if (!pass) return 'needs-password';
+
+    setConnecting(true);
 
     try {
       const key = await getSessionKey(
@@ -334,6 +404,20 @@ function AppContent() {
 
       if (profile.savePassword) {
         runtimePasswordsRef.current[profile.id] = pass;
+      }
+
+      if (options.rememberSecurely && overridePassword && authUser) {
+        const stored = await storePassword(profile.id, profile.username, overridePassword);
+        if (stored) {
+          await backend.updateInstance(authUser.uid, profile.id, { biometricPassword: true }).catch(() => null);
+        } else {
+          notify({
+            type: 'info',
+            title: t('Nie zapisano hasła'),
+            message: t('Pęk kluczy urządzenia odrzucił zapis albo potwierdzenie zostało przerwane. Połączenie działa — hasło trzeba będzie wpisać ponownie.'),
+            dedupeKey: `keychain:${profile.id}`,
+          });
+        }
       }
 
       let sitename: string | undefined;
@@ -378,15 +462,35 @@ function AppContent() {
         message: t('{0} · użytkownik {1}', session.profileName, session.username),
         dedupeKey: `connect:${session.profileId}`,
       });
+      const pending = pendingSurveyRef.current;
+      if (pending && (pending.profileId === profile.id || pending.profileId === '*')) {
+        setFocusSurveyId(pending.sid);
+      }
+      pendingSurveyRef.current = null;
       setTab('surveys');
+      return 'connected';
     } catch (err) {
       const isCors =
         err instanceof LimeSurveyRpcError ? err.isCorsOrNetwork : false;
-      const message = err instanceof Error ? err.message : String(err);
+      let message = err instanceof Error ? err.message : String(err);
+      // Hasło w pęku kluczy jest nieaktualne (zmienione na serwerze) — usuń je, żeby nie próbować ponownie.
+      if (fromKeychain && isInvalidCredentialsError(message) && authUser) {
+        await forgetPassword(profile.id);
+        await backend.updateInstance(authUser.uid, profile.id, { biometricPassword: false }).catch(() => null);
+        message = `${message} ${t('Zapisane hasło zostało usunięte z urządzenia — wpisz aktualne hasło.')}`;
+      }
       setConnectionError({ message, isCors });
+      return 'failed';
     } finally {
       setConnecting(false);
     }
+  }
+
+  async function handleForgetPassword(profileId: string) {
+    if (!authUser) return;
+    await forgetPassword(profileId);
+    await backend.updateInstance(authUser.uid, profileId, { biometricPassword: false });
+    notify({ type: 'success', title: t('Hasło usunięte z urządzenia'), dedupeKey: `forget:${profileId}` });
   }
 
   async function handleSaveProfile(profile: InstanceProfile) {
@@ -415,6 +519,9 @@ function AppContent() {
   async function handleDeleteProfile(profileId: string) {
     if (!authUser) return;
     delete runtimePasswordsRef.current[profileId];
+    await forgetPassword(profileId);
+    await clearSurveySnapshot(profileId);
+    if (surveySnapshot?.profileId === profileId) setSurveySnapshot(null);
     await backend.deleteInstance(authUser.uid, profileId);
     if (activeSession?.profileId === profileId) {
       setActiveSession(null);
@@ -609,6 +716,14 @@ function AppContent() {
             }}
             onGoToInstances={() => setTab('instances')}
             activeProfile={activeProfile}
+            focusSurveyId={focusSurveyId}
+            onFocusHandled={() => setFocusSurveyId(null)}
+            snapshot={surveySnapshot && profiles.some((p) => p.id === surveySnapshot.profileId) ? surveySnapshot : null}
+            onConnectSnapshotProfile={() => {
+              if (!surveySnapshot) return;
+              setTab('instances');
+              setConnectRequest({ profileId: surveySnapshot.profileId, nonce: Date.now() });
+            }}
           />
         )}
 
@@ -657,6 +772,10 @@ function AppContent() {
             onSwitchLimeVersion={handleSwitchLimeVersion}
             onClearTraces={() => setRpcTraces([])}
             openServerPanel={openServerPanel}
+            onForgetPassword={handleForgetPassword}
+            onAppLink={(link) => setIncomingLink(link)}
+            prefill={prefill}
+            connectRequest={connectRequest}
           />
         )}
         <AppFooter className="mt-12 border-t border-slate-200 dark:border-slate-800 pt-6" />

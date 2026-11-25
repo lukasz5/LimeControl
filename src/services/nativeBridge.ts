@@ -71,3 +71,24 @@ export async function syncStatusBar(darkMode: boolean): Promise<void> {
     // brak wtyczki lub platforma bez paska stanu
   }
 }
+
+/**
+ * Skanuje kod QR aparatem (tylko aplikacja mobilna). Zwraca odczytany tekst albo null, gdy
+ * użytkownik zamknął skaner lub nie zgodził się na dostęp do aparatu.
+ */
+export async function scanQrCode(instructions: string): Promise<string | null> {
+  if (!isNativeApp()) return null;
+  try {
+    const { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint, CapacitorBarcodeScannerAndroidScanningLibrary } =
+      await import('@capacitor/barcode-scanner');
+    const result = await CapacitorBarcodeScanner.scanBarcode({
+      hint: CapacitorBarcodeScannerTypeHint.QR_CODE,
+      scanInstructions: instructions,
+      // ZXing działa bez usług Google Play (MLKit pobiera model z Google).
+      android: { scanningLibrary: CapacitorBarcodeScannerAndroidScanningLibrary.ZXING },
+    });
+    return result.ScanResult ? String(result.ScanResult) : null;
+  } catch {
+    return null;
+  }
+}

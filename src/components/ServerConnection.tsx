@@ -4,7 +4,12 @@ import { getBackend } from '../backend';
 import { getServerUrl, normalizeServerUrl, probeServer, setServerUrl } from '../backend/serverConnection';
 import { getLang, t } from '../i18n';
 
-const docsUrl = () => (getLang() === 'en' ? 'https://limecontrol.eu/en/docs.html#self-hosting' : 'https://limecontrol.eu/docs.html#wlasny-serwer');
+const DOCS_URL = {
+  pl: 'https://limecontrol.eu/docs.html#wlasny-serwer',
+  en: 'https://limecontrol.eu/en/docs.html#self-hosting',
+  de: 'https://limecontrol.eu/de/docs.html#self-hosting',
+} as const;
+const docsUrl = () => DOCS_URL[getLang()];
 
 /** Odłącza aplikację mobilną od serwera LimeControl i wraca do trybu „na urządzeniu”. */
 export async function disconnectServer(): Promise<void> {

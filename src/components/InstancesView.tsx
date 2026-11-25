@@ -1,10 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertTriangle,
+  Copy,
   ExternalLink,
+  Fingerprint,
   KeyRound,
   LogOut,
   Plus,
+  QrCode,
+  ScanLine,
   Search,
   Server,
   ShieldCheck,
@@ -21,6 +25,11 @@ import { isNativeApp } from '../platform';
 import { ServerConnectionCard } from './ServerConnection';
 import { BRAND } from '../config/brand';
 import { PWAInstallButton } from './PWAInstallButton';
+import { QrSvg } from './QrSvg';
+import { buildAppLink, parseAppLink, type AppLink } from '../services/appLinks';
+import { biometryInfo, type BiometryInfo } from '../services/secureCredentials';
+import { scanQrCode } from '../services/nativeBridge';
+import type { ConnectOptions, ConnectOutcome } from '../App';
 import type {
   ActiveSession,
   ConnectionMode,
@@ -36,7 +45,7 @@ interface InstancesViewProps {
   connecting: boolean;
   connectionError: { message: string; isCors: boolean } | null;
   rpcTraces: RpcTraceEntry[];
-  onConnectProfile: (profile: InstanceProfile, overridePassword?: string) => Promise<void>;
+  onConnectProfile: (profile: InstanceProfile, overridePassword?: string, options?: ConnectOptions) => Promise<ConnectOutcome>;
   onSaveProfile: (profile: InstanceProfile) => Promise<void>;
   onDeleteProfile: (profileId: string) => Promise<void>;
   onDisconnect: () => Promise<void>;
@@ -45,6 +54,14 @@ interface InstancesViewProps {
   onClearTraces: () => void;
   /** Aplikacja mobilna: otwórz od razu panel połączenia z serwerem LimeControl. */
   openServerPanel?: boolean;
+  /** Aplikacja mobilna: usuń hasło profilu z pęku kluczy. */
+  onForgetPassword?: (profileId: string) => Promise<void>;
+  /** Zeskanowany kod QR z linkiem aplikacji lub adresem serwera. */
+  onAppLink?: (link: AppLink) => void;
+  /** Wypełnij formularz nowej instancji (z linku lub kodu QR). */
+  prefill?: { link: AppLink; nonce: number } | null;
+  /** Połącz z zapisanym profilem (z linku lub kodu QR). */
+  connectRequest?: { profileId: string; nonce: number } | null;
 }
 
 type SubPanel = 'connections' | 'mobile-app' | 'server' | 'rpc-log';
@@ -63,6 +80,10 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
   onSwitchLimeVersion,
   onClearTraces,
   openServerPanel = false,
+  onForgetPassword,
+  onAppLink,
+  prefill = null,
+  connectRequest = null,
 }) => {
   const native = isNativeApp();
   // Przekaźnik działa na serwerze LimeControl — w aplikacji mobilnej bez serwera go nie ma (i nie jest potrzebny).
@@ -82,6 +103,77 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
   const [promptPassword, setPromptPassword] = useState('');
   const [profileSearch, setProfileSearch] = useState('');
   const [profileModeFilter, setProfileModeFilter] = useState<'all' | ConnectionMode>('all');
+  const [biometry, setBiometry] = useState<BiometryInfo>({ available: false, label: '' });
+  const [rememberSecurely, setRememberSecurely] = useState(false);
+  const [promptRemember, setPromptRemember] = useState(false);
+  const [qrProfile, setQrProfile] = useState<InstanceProfile | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (native) void biometryInfo().then(setBiometry);
+  }, [native]);
+
+  /** Połączenie z zapisanym profilem: hasło z pamięci sesji, z pęku kluczy albo wpisane w oknie. */
+  async function startConnect(profile: InstanceProfile) {
+    if (profile.password || profile.biometricPassword) {
+      const outcome = await onConnectProfile(profile);
+      if (outcome !== 'needs-password') return;
+    }
+    setPromptProfile(profile);
+    setPromptPassword('');
+    setPromptRemember(false);
+  }
+
+  // Link lub kod QR wskazał zapisany profil.
+  useEffect(() => {
+    if (!connectRequest) return;
+    const profile = profiles.find((p) => p.id === connectRequest.profileId);
+    if (!profile) return;
+    setSubPanel('connections');
+    void startConnect(profile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectRequest?.nonce]);
+
+  // Link lub kod QR z nowym serwerem: wypełnij formularz, hasło wpisuje użytkownik.
+  useEffect(() => {
+    if (!prefill) return;
+    const { link } = prefill;
+    setSubPanel('connections');
+    setFormError(null);
+    setBaseUrl(link.server);
+    setUsername(link.username ?? '');
+    setName(link.name ?? '');
+    setAuthPlugin(link.authPlugin ?? 'Authdb');
+    setPassword('');
+    requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (link.username) passwordRef.current?.focus({ preventScroll: true });
+    });
+  }, [prefill?.nonce]);
+
+  async function handleScan() {
+    setFormError(null);
+    const text = await scanQrCode(t('Skieruj aparat na kod QR z wersji przeglądarkowej LimeControl'));
+    if (text === null) return;
+    const link = parseAppLink(text);
+    if (!link) {
+      setFormError(t('Ten kod QR nie zawiera adresu serwera LimeSurvey ani linku LimeControl.'));
+      return;
+    }
+    onAppLink?.(link);
+  }
+
+  async function copyAppLink(profile: InstanceProfile) {
+    try {
+      await navigator.clipboard.writeText(buildAppLink(profile));
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch {
+      // schowek niedostępny — link widać pod kodem
+    }
+  }
 
   const filteredProfiles = useMemo(() => {
     const q = profileSearch.trim().toLowerCase();
@@ -124,11 +216,12 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
       };
 
       await onSaveProfile(profile);
-      await onConnectProfile(profile, password);
+      await onConnectProfile(profile, password, { rememberSecurely: native && biometry.available && rememberSecurely });
       setName('');
       setBaseUrl('');
       setUsername('');
       setPassword('');
+      setRememberSecurely(false);
     } catch (err) {
       if (err instanceof LimeSurveyRpcError) {
         setFormError(err.message);
@@ -182,8 +275,8 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
       </div>
 
       {subPanel === 'connections' && (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-7 space-y-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12 items-start">
+          <div className="md:col-span-7 space-y-4">
             {activeSession && (
               <div className="rounded-2xl border border-emerald-200 dark:border-emerald-900/70 bg-emerald-50/60 dark:bg-emerald-950/30 p-5">
                 <div className="flex flex-wrap items-start justify-between gap-4">
@@ -381,6 +474,26 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                           <span>{t('Login:')}{' '}{profile.username}</span>
                           <span aria-hidden="true">·</span>
                           <span>{t('Plugin:')}{' '}{profile.authPlugin || 'Authdb'}</span>
+                          {profile.biometricPassword && (
+                            <>
+                              <span aria-hidden="true">·</span>
+                              <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-semibold">
+                                <Fingerprint className="h-3.5 w-3.5" aria-hidden="true" />
+                                {t('Hasło w pęku kluczy')}
+                              </span>
+                              {onForgetPassword && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    void onForgetPassword(profile.id);
+                                  }}
+                                  className="underline decoration-slate-300 dark:decoration-slate-700 hover:text-slate-900 dark:hover:text-white"
+                                >
+                                  {t('Zapomnij hasło')}
+                                </button>
+                              )}
+                            </>
+                          )}
                           {relayAvailable && (
                             <>
                               <span aria-hidden="true">·</span>
@@ -428,16 +541,23 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                           type="button"
                           disabled={connecting}
                           onClick={() => {
-                            if (profile.password) {
-                              void onConnectProfile(profile);
-                            } else {
-                              setPromptProfile(profile);
-                              setPromptPassword('');
-                            }
+                            void startConnect(profile);
                           }}
                           className="min-h-[44px] rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 whitespace-nowrap shrink-0"
                         >
                           {connecting ? t('Łączenie...') : isActive ? t('Odśwież sesję') : t('Połącz')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setLinkCopied(false);
+                            setQrProfile(profile);
+                          }}
+                          aria-label={t('Kod QR profilu {0} dla aplikacji mobilnej', profile.name)}
+                          title={t('Kod QR dla aplikacji mobilnej')}
+                          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-emerald-600 hover:border-emerald-200 dark:hover:border-emerald-900"
+                        >
+                          <QrCode className="h-4 w-4" />
                         </button>
                         <button
                           type="button"
@@ -458,8 +578,9 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
           </div>
 
           <form
+            ref={formRef}
             onSubmit={handleCreateAndConnect}
-            className="lg:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4"
+            className="scroll-mt-20 md:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4"
           >
             <div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
@@ -467,12 +588,25 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
               </h3>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 {native
-                  ? t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się na tym urządzeniu (bez haseł).')
+                  ? t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się na tym urządzeniu; hasło — tylko jeśli zapiszesz je w pęku kluczy.')
                   : getBackend().mode === 'local'
                     ? t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się w tej przeglądarce (bez haseł).')
                     : t('Obsługuje LimeSurvey 3.x, 5.x, 6.x oraz 7.x z włączonym interfejsem JSON-RPC. Profile zapisują się w Cloud Firestore (bez haseł).')}
               </p>
             </div>
+
+            {native && (
+              <button
+                type="button"
+                onClick={() => {
+                  void handleScan();
+                }}
+                className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 dark:border-emerald-900/70 bg-emerald-50/60 dark:bg-emerald-950/30 px-4 text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
+              >
+                <ScanLine className="h-4 w-4" aria-hidden="true" />
+                <span>{t('Skanuj kod QR')}</span>
+              </button>
+            )}
 
             {formError && (
               <div className="rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/30 p-3 text-xs text-rose-800 dark:text-rose-200">
@@ -515,7 +649,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     {t('Login administratora')}
@@ -538,7 +672,9 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                     {t('Hasło')}
                   </label>
                   <input
+                    ref={passwordRef}
                     type="password"
+                    autoComplete="current-password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -548,7 +684,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     {t('Plugin uwierzytelniania')}
@@ -596,6 +732,9 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                 </select>
               </div>
 
+              {native && biometry.available ? (
+                <RememberSecurelyCheckbox checked={rememberSecurely} onChange={setRememberSecurely} biometry={biometry} />
+              ) : (
               <label className="flex min-h-[44px] items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                 <input
                   type="checkbox"
@@ -609,6 +748,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
                     : t('Zapamiętaj hasło tylko w pamięci tej sesji (nie jest zapisywane w bazie ani w przeglądarce)')}
                 </span>
               </label>
+              )}
             </div>
 
             <button
@@ -617,7 +757,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
               className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:opacity-50"
             >
               <Plus className="h-4 w-4" aria-hidden="true" />
-              <span>{connecting ? 'Uwierzytelnianie...' : t('Zapisz profil i połącz')}</span>
+              <span>{connecting ? t('Uwierzytelnianie...') : t('Zapisz profil i połącz')}</span>
             </button>
 
             <a
@@ -746,7 +886,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
       )}
 
       {promptProfile && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
+        <div data-no-pull className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
           {/* Formularz: klawisz „Przejdź” na klawiaturze telefonu zatwierdza hasło, gdy przyciski są zasłonięte. */}
           <form
             onSubmit={(e) => {
@@ -755,7 +895,7 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
               const target = promptProfile;
               const pass = promptPassword;
               setPromptProfile(null);
-              void onConnectProfile(target, pass);
+              void onConnectProfile(target, pass, { rememberSecurely: native && biometry.available && promptRemember });
             }}
             className="w-full max-w-md rounded-t-3xl sm:rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl border border-slate-200 dark:border-slate-800 space-y-4"
           >
@@ -780,6 +920,9 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
               placeholder={t('Hasło LimeSurvey')}
               className="w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none"
             />
+            {native && biometry.available && (
+              <RememberSecurelyCheckbox checked={promptRemember} onChange={setPromptRemember} biometry={biometry} />
+            )}
             <div className="flex gap-2">
               <button
                 type="button"
@@ -801,6 +944,79 @@ export const InstancesView: React.FC<InstancesViewProps> = ({
           </form>
         </div>
       )}
+
+      {qrProfile && (
+        <div
+          data-no-pull
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="profile-qr-title"
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setQrProfile(null);
+          }}
+        >
+          <div className="w-full max-w-md rounded-t-3xl sm:rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div className="mx-auto h-1.5 w-10 rounded-full bg-slate-300 dark:bg-slate-700 sm:hidden" />
+            <div className="flex items-center gap-2.5">
+              <QrCode className="h-5 w-5 text-emerald-600" aria-hidden="true" />
+              <h3 id="profile-qr-title" className="text-base font-bold text-slate-900 dark:text-white">
+                {t('Dodaj {0} w aplikacji mobilnej', qrProfile.name)}
+              </h3>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              {t('Zeskanuj kod przyciskiem „Skanuj kod QR” w aplikacji LimeControl (zakładka Instancje) albo aparatem telefonu. Kod zawiera adres serwera i login — bez hasła.')}
+            </p>
+            <div className="flex justify-center">
+              <QrSvg value={buildAppLink(qrProfile)} label={t('Kod QR profilu {0}', qrProfile.name)} className="h-56 w-56" />
+            </div>
+            <p className="font-mono text-[11px] text-slate-500 dark:text-slate-400 break-all">{buildAppLink(qrProfile)}</p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  void copyAppLink(qrProfile);
+                }}
+                className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
+              >
+                <Copy className="h-4 w-4" aria-hidden="true" />
+                <span>{linkCopied ? t('Skopiowano') : t('Kopiuj link')}</span>
+              </button>
+              <button
+                type="button"
+                data-back-close
+                onClick={() => setQrProfile(null)}
+                className="flex-1 min-h-[44px] rounded-xl bg-emerald-600 text-xs font-semibold text-white hover:bg-emerald-700"
+              >
+                {t('Zamknij')}
+              </button>
+            </div>
+            <div className="pb-safe sm:hidden" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+/** Zgoda na zapis hasła w pęku kluczy urządzenia (aplikacja mobilna z biometrią). */
+const RememberSecurelyCheckbox: React.FC<{ checked: boolean; onChange: (value: boolean) => void; biometry: BiometryInfo }> = ({
+  checked,
+  onChange,
+  biometry,
+}) => (
+  <label className="flex min-h-[44px] items-start gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={(e) => onChange(e.target.checked)}
+      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+    />
+    <span>
+      <span className="font-semibold">{t('Zapamiętaj hasło na tym urządzeniu ({0})', biometry.label)}</span>
+      <span className="block mt-0.5 text-slate-500 dark:text-slate-400">
+        {t('Hasło trafi do pęku kluczy systemu i będzie dostępne tylko po potwierdzeniu: {0}. Nie opuszcza urządzenia.', biometry.label)}
+      </span>
+    </span>
+  </label>
+);

@@ -1,0 +1,1 @@
+Version 1.2: Passwort im Schlüsselspeicher mit Entsperrung per Biometrie, Server per QR-Code hinzufügen, limecontrol://-Links, Aktualisieren durch Herunterziehen und Umfrageliste offline, Tablet-Layout, deutsche Oberfläche. Erfordert Android 8.0 oder neuer.

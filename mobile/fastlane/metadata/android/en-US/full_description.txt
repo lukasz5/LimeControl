@@ -1,4 +1,4 @@
-LimeControl is a free app for managing surveys on your own survey server — without logging in to the admin panel. It works with LimeSurvey 3.x–7.x servers through the official RemoteControl 2 API.
+LimeControl is a free app for managing surveys on your own survey server — straight from your phone or tablet. It works with LimeSurvey 3.x–7.x servers through the official RemoteControl 2 API.
 
 WHAT YOU CAN DO
 • Activate and close surveys, set start and end dates, copy surveys.
@@ -8,12 +8,14 @@ WHAT YOU CAN DO
 • Export responses to CSV, Excel or JSON — save the file on your device or share it.
 • Share the survey link, show a QR code and change the survey theme.
 • CAPI mode: run interviews on a tablet or phone — when one interview ends, the survey starts the next one by itself.
-• Work with many servers and switch between them with one tap.
+• Add a server by scanning a QR code from the LimeControl browser version, and work with many servers.
+• Pull the list down to refresh it. The last downloaded survey list is available offline too.
+• On a tablet, the survey list and details sit side by side.
 • See CATI and CAPI fieldwork progress from the StrefaAnkiet platform (beta, read-only).
 
 PRIVACY
 • No account and no registration. Server profiles are stored on your device only.
-• Server passwords are not stored.
+• You can keep the server password in the device keystore and unlock it with your fingerprint or face. Without your consent the password is not stored.
 • The app connects directly to your server. We collect no data; there are no ads and no tracking.
 
 REQUIREMENTS

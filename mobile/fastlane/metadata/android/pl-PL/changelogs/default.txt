@@ -1,1 +1,1 @@
-Pierwsze wydanie aplikacji mobilnej LimeControl.
+Wersja 1.2: zapis hasła w magazynie kluczy z odblokowaniem biometrią, dodawanie serwera kodem QR, linki limecontrol://, odświeżanie gestem i lista ankiet bez sieci, układ dla tabletów, język niemiecki. Wymaga Androida 8.0 lub nowszego.

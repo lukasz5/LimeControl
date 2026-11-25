@@ -3,6 +3,7 @@ import {
   BarChart3,
   CalendarClock,
   ChevronRight,
+  CloudOff,
   CopyPlus,
   Download,
   GitCompareArrows,
@@ -44,7 +45,9 @@ import { SurveyComparisonChart } from './SurveyComparisonChart';
 import { SurveySummaryCharts } from './SurveySummaryCharts';
 import { SurveySummaryRing } from './SurveySummaryRing';
 import { saveFile } from '../services/nativeBridge';
-import { t } from '../i18n';
+import type { SurveySnapshot } from '../services/surveyCache';
+import { PULL_THRESHOLD, usePullToRefresh } from '../hooks/usePullToRefresh';
+import { locale, t } from '../i18n';
 
 interface SurveysViewProps {
   activeSession: ActiveSession | null;
@@ -56,6 +59,12 @@ interface SurveysViewProps {
   onGoToInstances: () => void;
   /** Profil połączonej instancji (adres bazowy dla łącznika StrefaAnkiet). */
   activeProfile?: InstanceProfile | null;
+  /** Ankieta do otwarcia (np. z linku aplikacji); po obsłużeniu wywoływane jest onFocusHandled. */
+  focusSurveyId?: number | null;
+  onFocusHandled?: () => void;
+  /** Aplikacja mobilna: ostatnio pobrana lista ankiet, pokazywana przed połączeniem. */
+  snapshot?: SurveySnapshot | null;
+  onConnectSnapshotProfile?: () => void;
 }
 
 type StatusFilter = 'all' | 'active' | 'inactive';
@@ -69,8 +78,13 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
   onOpenParticipants,
   onGoToInstances,
   activeProfile = null,
+  focusSurveyId = null,
+  onFocusHandled,
+  snapshot = null,
+  onConnectSnapshotProfile,
 }) => {
   const { notify } = useNotifications();
+  const { pull, refreshing } = usePullToRefresh(Boolean(activeSession), onRefreshSurveys);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [selectedSurvey, setSelectedSurvey] = useState<LimeSurveyItem | null>(null);
@@ -148,6 +162,15 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       return true;
     });
   }, [surveys, filter, search]);
+
+  // Ankieta wskazana linkiem: zaznacz ją i otwórz szczegóły (na telefonie — szufladę).
+  useEffect(() => {
+    if (focusSurveyId === null || !activeSession) return;
+    setPendingSelectSid(focusSurveyId);
+    setMobileDetailOpen(true);
+    onFocusHandled?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusSurveyId, activeSession]);
 
   useEffect(() => {
     // Świeżo zaimportowana ankieta ma pierwszeństwo przed dotychczasowym zaznaczeniem.
@@ -446,6 +469,61 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
     }
   }
 
+  if (!activeSession && snapshot && snapshot.surveys.length > 0) {
+    const savedAt = new Date(snapshot.savedAt);
+    return (
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/70 dark:bg-amber-950/30 p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <CloudOff className="h-5 w-5 shrink-0 text-amber-700 dark:text-amber-400 mt-0.5" aria-hidden="true" />
+            <div>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
+                {t('Ostatnio pobrana lista: {0}', snapshot.profileName)}
+              </h2>
+              <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">
+                {Number.isNaN(savedAt.getTime())
+                  ? t('Lista zapisana na urządzeniu. Połącz się, aby ją odświeżyć i zarządzać ankietami.')
+                  : t('Stan z {0}. Połącz się, aby odświeżyć listę i zarządzać ankietami.', savedAt.toLocaleString(locale()))}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onConnectSnapshotProfile ?? onGoToInstances}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700 whitespace-nowrap shrink-0"
+          >
+            {t('Połącz')}
+          </button>
+        </div>
+        <ul className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
+          {snapshot.surveys.map((survey) => {
+            const isActive = survey.active === 'Y';
+            return (
+              <li key={survey.sid} className="px-4 py-3">
+                <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                  {survey.surveyls_title || t('Ankieta #{0}', survey.sid)}
+                </div>
+                <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
+                  <span>SID {survey.sid}</span>
+                  <span aria-hidden="true">·</span>
+                  <span className={isActive ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-amber-700 dark:text-amber-400 font-semibold'}>
+                    {isActive ? t('Aktywna') : t('Nieaktywna')}
+                  </span>
+                  {survey.expires && (
+                    <>
+                      <span aria-hidden="true">·</span>
+                      <span>{t('Koniec:')}{' '}{survey.expires.slice(0, 10)}</span>
+                    </>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
   if (!activeSession) {
     return (
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 sm:p-12 text-center space-y-4">
@@ -504,7 +582,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           onClick={() => setMobileDetailOpen(false)}
           aria-label={t('Zamknij szczegóły')}
           data-back-close
-          className="lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
         >
           <X className="h-5 w-5" />
         </button>
@@ -824,8 +902,26 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
     </div>
   ) : null;
 
+  const pullVisible = pull > 0 || refreshing;
   return (
     <div className="space-y-5">
+      {pullVisible && (
+        <div
+          className="pointer-events-none fixed left-1/2 z-40 -translate-x-1/2"
+          style={{ top: `calc(54px + env(safe-area-inset-top, 0px) + ${refreshing ? 12 : Math.max(0, pull - 28)}px)` }}
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg">
+            <RefreshCw
+              className={`h-5 w-5 ${pull >= PULL_THRESHOLD || refreshing ? 'text-emerald-600' : 'text-slate-400'} ${refreshing ? 'animate-spin' : ''}`}
+              style={refreshing ? undefined : { transform: `rotate(${Math.round((pull / PULL_THRESHOLD) * 270)}deg)` }}
+              aria-hidden="true"
+            />
+            <span className="sr-only">{refreshing ? t('Odświeżanie listy ankiet…') : t('Puść, aby odświeżyć')}</span>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -965,7 +1061,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
       )}
 
       {selectedSurvey && selectedSurvey.active === 'Y' && (
-        <div className="lg:hidden">
+        <div className="md:hidden">
           <SurveySummaryCharts
             surveyTitle={selectedSurvey.surveyls_title}
             surveyId={selectedSurvey.sid}
@@ -991,8 +1087,8 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
-        <div className="lg:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-5 lg:gap-6 items-start">
+        <div className="md:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
           {filteredSurveys.length === 0 ? (
             <div className="p-8 text-center space-y-3">
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -1180,7 +1276,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
           )}
         </div>
 
-        <div className="hidden lg:block lg:col-span-7">
+        <div className="hidden md:block md:col-span-7 detail-pane-sticky">
           {detailContent || (
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 text-center text-sm text-slate-500 dark:text-slate-400">
               {t('Wybierz ankietę z listy po lewej stronie, aby zarządzać aktywacją, statystykami i eksportem.')}
@@ -1191,7 +1287,7 @@ export const SurveysView: React.FC<SurveysViewProps> = ({
 
       {/* Mobile Bottom Sheet / Drawer for selected survey */}
       {mobileDetailOpen && selectedSurvey && (
-        <div className="lg:hidden fixed inset-0 z-50 flex items-end bg-black/50 backdrop-blur-sm">
+        <div data-no-pull className="md:hidden fixed inset-0 z-50 flex items-end bg-black/50 backdrop-blur-sm">
           <div className="w-full max-h-[88vh] overflow-y-auto rounded-t-3xl bg-slate-50 dark:bg-slate-950 p-5 pb-8 shadow-2xl border-t border-slate-200 dark:border-slate-800">
             <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-slate-300 dark:bg-slate-700" />
             {detailContent}

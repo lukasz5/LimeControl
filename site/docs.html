@@ -428,7 +428,11 @@ add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
         <h2>Aplikacja mobilna</h2>
         <p>LimeControl na iOS (iPhone i iPad) oraz Androida to ta sama aplikacja w natywnej powłoce — bezpłatna i z otwartym kodem. Pobierz ją bezpłatnie: <a href="https://play.google.com/store/apps/details?id=eu.limecontrol.app" target="_blank" rel="noopener">Google Play</a>. Wersja w App Store czeka na publikację.</p>
         <ul>
-          <li><strong>Bez konta.</strong> Nie logujesz się kontem Google ani kluczem dostępu. Profile serwerów są zapisane tylko na urządzeniu, a haseł do LimeSurvey aplikacja nie zapisuje.</li>
+          <li><strong>Bez konta.</strong> Nie logujesz się kontem Google ani kluczem dostępu. Profile serwerów są zapisane tylko na urządzeniu.</li>
+          <li><strong>Hasło z biometrią.</strong> Zaznacz „Zapamiętaj hasło na tym urządzeniu”, a hasło trafi do pęku kluczy systemu. Przy kolejnym połączeniu wystarczy Face ID, Touch ID albo odcisk palca. Bez tej opcji aplikacja nie zapisuje hasła. Usuniesz je przyciskiem „Zapomnij hasło” na karcie profilu; po zmianie hasła na serwerze aplikacja sama usunie nieaktualne.</li>
+          <li><strong>Kod QR i linki.</strong> W wersji przeglądarkowej kliknij ikonę kodu QR na karcie profilu, a w aplikacji — „Skanuj kod QR” w zakładce <strong>Instancje</strong>. Kod zawiera adres serwera i login, nigdy hasło. Linki <code>limecontrol://open?server=…&amp;user=…&amp;sid=…</code> otwierają aplikację na wskazanym serwerze, a z parametrem <code>sid</code> — na konkretnej ankiecie.</li>
+          <li><strong>Lista bez sieci.</strong> Pociągnij listę ankiet w dół, aby ją odświeżyć. Ostatnio pobrana lista (tytuły, stan, daty) jest widoczna także przed połączeniem i bez internetu.</li>
+          <li><strong>Tablety.</strong> Od szerokości iPada w pionie lista ankiet i szczegóły są obok siebie.</li>
           <li><strong>Połączenie bezpośrednie.</strong> Aplikacja łączy się z serwerem LimeSurvey z urządzenia, bez nagłówków CORS i bez przekaźnika.</li>
           <li><strong>Udostępnianie i eksport.</strong> Link do ankiety i pliki z wynikami trafiają do systemowego okna udostępniania — zapiszesz je na urządzeniu albo wyślesz dalej.</li>
           <li><strong>Szyfrowanie.</strong> Na Androidzie serwer musi być dostępny przez HTTPS. Na iOS połączenie bez szyfrowania jest dozwolone tylko z adresami w sieci lokalnej.</li>

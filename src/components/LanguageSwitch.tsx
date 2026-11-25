@@ -1,7 +1,7 @@
 import React from 'react';
 import { LANGS, setLang, t, useLang } from '../i18n';
 
-/** Przełącznik języka PL / EN. */
+/** Przełącznik języka PL / EN / DE. */
 export const LanguageSwitch: React.FC<{ className?: string }> = ({ className = '' }) => {
   const lang = useLang();
   return (

@@ -346,7 +346,12 @@ add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
         <h2>Mobile App</h2>
         <p>LimeControl für iOS (iPhone und iPad) und Android ist dieselbe App in einer nativen Hülle — kostenlos und Open Source. {{MOBILE_AVAILABILITY}}</p>
         <ul>
-          <li><strong>Kein Konto.</strong> Sie melden sich weder mit einem Google-Konto noch mit einem Zugangsschlüssel an. Serverprofile werden nur auf dem Gerät gespeichert, und die App speichert nie LimeSurvey-Passwörter.</li>
+          <li><strong>Kein Konto.</strong> Sie melden sich weder mit einem Google-Konto noch mit einem Zugangsschlüssel an. Serverprofile werden nur auf dem Gerät gespeichert.</li>
+          <li><strong>Passwort mit Biometrie.</strong> Aktivieren Sie „Passwort auf diesem Gerät merken“, dann landet das Passwort im Schlüsselbund des Systems. Beim nächsten Verbinden genügen Face ID, Touch ID oder ein Fingerabdruck. Ohne diese Option speichert die App das Passwort nicht. Sie entfernen es mit „Passwort vergessen“ auf der Profilkarte; ändert sich das Passwort auf dem Server, entfernt die App das veraltete selbst.</li>
+          <li><strong>QR-Code und Links.</strong> Klicken Sie in der Browserversion auf das QR-Code-Symbol der Profilkarte, in der App auf „QR-Code scannen“ im Tab <strong>Instanzen</strong>. Der Code enthält Serveradresse und Benutzername, nie das Passwort. Links <code>limecontrol://open?server=…&amp;user=…&amp;sid=…</code> öffnen die App auf dem angegebenen Server und mit <code>sid</code> auf einer bestimmten Umfrage.</li>
+          <li><strong>Liste offline.</strong> Ziehen Sie die Umfrageliste nach unten, um sie zu aktualisieren. Die zuletzt geladene Liste (Titel, Status, Daten) ist auch vor dem Verbinden und ohne Internet sichtbar.</li>
+          <li><strong>Tablets.</strong> Ab der Breite eines iPads im Hochformat stehen Umfrageliste und Details nebeneinander.</li>
+          <li><strong>Sprache.</strong> Die App ist auch auf Deutsch verfügbar; die Sprache folgt dem Gerät und lässt sich im Kopfbereich umschalten.</li>
           <li><strong>Direkte Verbindung.</strong> Die App verbindet sich vom Gerät aus mit dem LimeSurvey-Server, ohne CORS-Header und ohne Relay.</li>
           <li><strong>Teilen und Export.</strong> Der Umfragelink und die Ergebnisdateien gehen an das Teilen-Menü des Systems — speichern Sie sie auf dem Gerät oder senden Sie sie weiter.</li>
           <li><strong>Verschlüsselung.</strong> Unter Android muss der Server über HTTPS erreichbar sein. Unter iOS ist eine unverschlüsselte Verbindung nur zu Adressen im lokalen Netz erlaubt.</li>

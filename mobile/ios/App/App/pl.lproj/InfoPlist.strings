@@ -1,0 +1,3 @@
+/* Komunikaty uprawnień wyświetlane przez iOS (polski). */
+"NSCameraUsageDescription" = "Aparat służy wyłącznie do zeskanowania kodu QR z adresem serwera ankiet. Obraz nie jest zapisywany ani nigdzie wysyłany.";
+"NSFaceIDUsageDescription" = "Face ID odblokowuje hasło do serwera ankiet, które zapisano w pęku kluczy tego urządzenia.";
