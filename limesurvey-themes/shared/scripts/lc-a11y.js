@@ -5,6 +5,7 @@
  * - aria-required na polach pytań obowiązkowych
  * - aria-invalid + aria-describedby dla pytań z błędem
  * - fokus na pierwszym błędzie po próbie przejścia dalej
+ * - tryb ciemny Bootstrapa w motywach ciemnych (--lc-color-scheme: dark)
  * - skróty klawiszowe dla ankietera (tylko gdy motyw ustawia --lc-hotkeys: 1, np. LimeControl CATI):
  *   1–9 i 0 wybierają odpowiedź, Ctrl+Enter = dalej, Ctrl+Shift+Enter = wstecz; można je wyłączyć
  * Działa z trybem AJAX (pjax) motywu fruity_twentythree.
@@ -212,8 +213,16 @@
     if (nav.children.length > 1) nav.insertBefore(box, nav.children[1]); else nav.appendChild(box);
   }
 
+  // Motywy ciemne (--lc-color-scheme: dark): komponenty Bootstrapa 5.3 też przechodzą w tryb ciemny.
+  function colorScheme() {
+    try {
+      var scheme = window.getComputedStyle(document.documentElement).getPropertyValue('--lc-color-scheme').trim();
+      if (scheme === 'dark') document.documentElement.setAttribute('data-bs-theme', 'dark');
+    } catch (e) { /* bez wpływu na ankietę */ }
+  }
+
   function init() {
-    try { addSkipLink(); labelIconButtons(); enhanceQuestions(); addHotkeyLegend(); } catch (e) { /* nigdy nie blokuj ankiety */ }
+    try { colorScheme(); addSkipLink(); labelIconButtons(); enhanceQuestions(); addHotkeyLegend(); } catch (e) { /* nigdy nie blokuj ankiety */ }
   }
   document.addEventListener('keydown', function (e) { try { onHotkey(e); } catch (err) { /* nigdy nie blokuj ankiety */ } });
 

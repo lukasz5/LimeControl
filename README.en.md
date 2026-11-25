@@ -11,7 +11,7 @@ survey templates and ready-made deployments.
 | Part | What it contains | Directory |
 | --- | --- | --- |
 | **App** | A PWA (React + Express) for the RemoteControl 2 API: surveys, scheduler, participants, statistics, export | `src/`, `server.ts`, `server/` |
-| **Survey themes** | 8 WCAG 2.2 AA themes for LimeSurvey 6 and 7, including CATI and CAPI interviewer themes | [`limesurvey-themes/`](./limesurvey-themes/) |
+| **Survey themes** | 16 WCAG 2.2 AA themes for LimeSurvey 6 and 7, including CATI and CAPI interviewer themes, and the LimeControlBranding plugin (header and footer logos) | [`limesurvey-themes/`](./limesurvey-themes/) |
 | **Survey templates** | 12 questionnaires in English and Polish in `.lss` format, including CATI and CAPI interview skeletons | [`survey-templates/`](./survey-templates/) |
 | **Deployments** | LimeControl in your own Docker container (no Firebase) and the production service deployment | [`deploy/`](./deploy/) |
 | **Mobile app** | iOS and Android (Capacitor) — the same app with no account and no CORS restrictions | [`mobile/`](./mobile/) |
@@ -104,8 +104,11 @@ The server picks the mode: `AUTH_MODE=local|firebase`; without that variable it 
 
 ## Survey themes and templates
 
-- **Themes** — Medical, Professional, Social, Marketing, Eco, Minimalist, CATI and CAPI. Child themes of
-  `fruity_twentythree`, contrast checked at build time, separate packages for LimeSurvey 6.x and 7.x.
+- **Themes** — Medical, Professional, Social, Marketing, Eco, Minimalist, CATI and CAPI, plus themes with their
+  own typography: Editorial, Civic, Product, Studio, Logistics, Finance, Hospitality and the dark Midnight. Child
+  themes of `fruity_twentythree`, contrast checked at build time, separate packages for LimeSurvey 6.x and 7.x.
+  The [LimeControlBranding](./limesurvey-themes/plugin/LimeControlBranding/README.md) plugin adds header and
+  footer logos and a brand colour.
   Download: [limecontrol.eu/en/themes.html](https://limecontrol.eu/en/themes.html); sources and build notes:
   [limesurvey-themes/README.md](./limesurvey-themes/README.md).
 - **Survey templates** — NPS, CSAT, employee engagement, exit interview, training evaluation, event and course

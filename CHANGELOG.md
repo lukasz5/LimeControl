@@ -4,6 +4,33 @@ All notable changes to LimeControl are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/).
 The survey themes and the survey templates carry their own version numbers, noted below.
 
+## Unreleased
+
+### Added
+
+**Survey themes 1.2.0**
+- Eight themes with their own typefaces: Editorial (Literata), Civic (Brygada 1918 and Noto Sans), Product
+  (Geist), Studio (Bricolage Grotesque and DM Sans), Logistics (Barlow Condensed and Barlow), Finance
+  (IBM Plex Sans), Hospitality (Newsreader and Instrument Sans) and the dark Midnight (Inter) — sixteen
+  themes in total, all checked against WCAG 2.2 AA.
+- Fonts (SIL OFL 1.1, WOFF2) ship inside the theme packages with latin, latin-ext and cyrillic subsets; no
+  font CDN, so respondents' IP addresses are not sent to third parties.
+- Optional theme tokens for typography and colour mode: heading style, case and tracking, question font,
+  tabular numbers, a header accent stripe and `color-scheme: dark`.
+- A larger, phone-friendly file upload button and an upload list that reads as cards on small screens.
+
+**LimeControlBranding plugin 1.0.0**
+- Logos in the survey header (main and partner logo) and footer (up to 12 logos, e.g. EU funding), footer
+  text and a link, with images uploaded straight from the settings form.
+- A brand colour that replaces the theme accent and is corrected automatically to WCAG 2.2 AA contrast.
+- Defaults for all surveys, with per-survey override or opt-out; multilingual texts (`[pl] … [en] …`).
+- Admin texts in Polish, English and German.
+
+### Fixed
+
+- Survey themes: validation hints were near-black in dark themes, and the header accent stripe was hidden,
+  both by high-specificity rules in Fruity TwentyThree.
+
 ## 1.2.0 — 2026-11-25
 
 Convenience release for the mobile app: biometric sign-in, QR codes and links, an offline survey list,

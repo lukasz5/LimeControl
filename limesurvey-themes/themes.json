@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
-  "released": "2026-11-18",
+  "version": "1.2.0",
+  "released": "2026-11-25",
   "extends": "fruity_twentythree",
   "variants": [
     {
@@ -419,6 +419,450 @@
         "maxWidth": "46rem",
         "target": "56px",
         "stickyNav": true
+      }
+    },
+    {
+      "id": "editorial",
+      "title": "LimeControl Editorial",
+      "label": "Editorial",
+      "summary": {
+        "pl": "Książkowa Literata, ciepły papier i atramentowy granat — dla długich kwestionariuszy, które trzeba spokojnie przeczytać.",
+        "en": "Bookish Literata, warm paper and ink blue — for long questionnaires that people need to read calmly."
+      },
+      "description": {
+        "pl": "Motyw do czytania: szeryfowa Literata (projektowana do e-booków) w tekście i nagłówkach, 18 px, szeroka interlinia, ciepłe tło. Zgodny z WCAG 2.2 AA.",
+        "en": "A theme made for reading: the Literata serif (designed for e-books) for text and headings, 18 px, generous line height and a warm background. WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Badania naukowe i ankiety akademickie",
+          "Ankiety czytelników i wydawców",
+          "Długie formularze zgód i wywiady"
+        ],
+        "en": [
+          "Academic and scientific research",
+          "Reader and publisher surveys",
+          "Long consent forms and interviews"
+        ]
+      },
+      "fonts": {
+        "heading": "literata",
+        "body": "literata"
+      },
+      "tokens": {
+        "primary": "#24456B",
+        "primaryHover": "#1A3352",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F8F4EC",
+        "surface": "#FFFDF9",
+        "text": "#1F1B16",
+        "muted": "#5A5248",
+        "border": "#8A7F70",
+        "borderSoft": "#E6DED0",
+        "accent": "#EEF1F6",
+        "headerBg": "#FFFDF9",
+        "headerText": "#1F1B16",
+        "focus": "#24456B",
+        "danger": "#A32117",
+        "dangerBg": "#FBEAE6",
+        "radius": "6px",
+        "radiusBtn": "6px",
+        "shadow": "0 1px 2px rgba(31,27,22,.06)",
+        "font": "\"Literata\", Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "fontHeading": "\"Literata\", Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "headingWeight": "700",
+        "baseSize": "1.125rem",
+        "questionWeight": "600",
+        "headingTracking": "-0.01em"
+      }
+    },
+    {
+      "id": "civic",
+      "title": "LimeControl Civic",
+      "label": "Civic",
+      "summary": {
+        "pl": "Polska Brygada 1918 w nagłówkach i czytelna Noto Sans z cyrylicą — dla urzędów, konsultacji społecznych i instytucji kultury.",
+        "en": "The Polish Brygada 1918 for headings and legible Noto Sans with Cyrillic — for public offices, consultations and cultural institutions."
+      },
+      "description": {
+        "pl": "Motyw dla sektora publicznego: nagłówki krojem Brygada 1918 (odtworzonym na stulecie niepodległości), tekst Noto Sans z cyrylicą dla ankiet po ukraińsku, tekst 18 px. Zgodny z WCAG 2.2 AA.",
+        "en": "A public-sector theme: headings in Brygada 1918 (a typeface revived for the centenary of Polish independence), Noto Sans body text with Cyrillic for Ukrainian surveys, 18 px text. WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Konsultacje społeczne i budżet obywatelski",
+          "Urzędy i jednostki samorządu",
+          "Muzea, biblioteki i domy kultury"
+        ],
+        "en": [
+          "Public consultations and participatory budgets",
+          "Public offices and local government",
+          "Museums, libraries and cultural centres"
+        ]
+      },
+      "fonts": {
+        "heading": "brygada-1918",
+        "body": "noto-sans"
+      },
+      "tokens": {
+        "primary": "#9B1C2E",
+        "primaryHover": "#7C1624",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F6F6F4",
+        "surface": "#FFFFFF",
+        "text": "#1C1C1E",
+        "muted": "#4D4D52",
+        "border": "#7B7B82",
+        "borderSoft": "#DEDEE2",
+        "accent": "#F8E9EB",
+        "headerBg": "#FFFFFF",
+        "headerText": "#1C1C1E",
+        "focus": "#1D4ED8",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "8px",
+        "radiusBtn": "8px",
+        "shadow": "0 1px 2px rgba(28,28,30,.06), 0 2px 10px rgba(28,28,30,.04)",
+        "font": "\"Noto Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "\"Brygada 1918\", Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "headingWeight": "700",
+        "baseSize": "1.125rem",
+        "questionFont": "\"Noto Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "questionWeight": "600",
+        "headerStripe": "#9B1C2E"
+      }
+    },
+    {
+      "id": "product",
+      "title": "LimeControl Product",
+      "label": "Product",
+      "summary": {
+        "pl": "Geist, indygo i dużo światła — nowoczesny wygląd aplikacji dla badań UX, testów beta i opinii o produkcie cyfrowym.",
+        "en": "Geist, indigo and plenty of light — a modern app look for UX research, beta tests and digital product feedback."
+      },
+      "description": {
+        "pl": "Motyw produktowy: geometryczny Geist w tekście i nagłówkach, indygo, delikatne cienie i zaokrąglenia jak w aplikacji SaaS. Zgodny z WCAG 2.2 AA.",
+        "en": "A product theme: the geometric Geist typeface for text and headings, indigo, soft shadows and SaaS-style corner radii. WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Badania UX i testy użyteczności",
+          "Opinie o aplikacji i funkcjach",
+          "Onboarding i ankiety w produkcie"
+        ],
+        "en": [
+          "UX research and usability tests",
+          "App and feature feedback",
+          "Onboarding and in-product surveys"
+        ]
+      },
+      "fonts": {
+        "heading": "geist",
+        "body": "geist"
+      },
+      "tokens": {
+        "primary": "#4F46E5",
+        "primaryHover": "#4338CA",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F7F7FB",
+        "surface": "#FFFFFF",
+        "text": "#16151F",
+        "muted": "#55546A",
+        "border": "#807F96",
+        "borderSoft": "#E3E2EC",
+        "accent": "#EEEDFD",
+        "headerBg": "#FFFFFF",
+        "headerText": "#16151F",
+        "focus": "#4F46E5",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "14px",
+        "radiusBtn": "10px",
+        "shadow": "0 1px 2px rgba(22,21,31,.05), 0 8px 24px rgba(79,70,229,.06)",
+        "font": "\"Geist\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "\"Geist\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "headingWeight": "650",
+        "baseSize": "1.0625rem",
+        "headingTracking": "-0.02em"
+      }
+    },
+    {
+      "id": "studio",
+      "title": "LimeControl Studio",
+      "label": "Studio",
+      "summary": {
+        "pl": "Wyrazisty Bricolage Grotesque, czarny nagłówek i koralowy akcent — dla agencji, wydarzeń, warsztatów i badań kreatywnych.",
+        "en": "Expressive Bricolage Grotesque, a black header and a coral accent — for agencies, events, workshops and creative research."
+      },
+      "description": {
+        "pl": "Motyw kreatywny: charakterny Bricolage Grotesque w nagłówkach, DM Sans w tekście, czarny nagłówek i koralowy akcent. Zgodny z WCAG 2.2 AA.",
+        "en": "A creative theme: characterful Bricolage Grotesque headings, DM Sans body text, a black header and a coral accent. WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Ewaluacja wydarzeń i konferencji",
+          "Warsztaty i rekrutacja uczestników",
+          "Badania kreatywne i testy reklam"
+        ],
+        "en": [
+          "Event and conference evaluation",
+          "Workshops and participant sign-up",
+          "Creative research and ad tests"
+        ]
+      },
+      "fonts": {
+        "heading": "bricolage-grotesque",
+        "body": "dm-sans"
+      },
+      "tokens": {
+        "primary": "#C2410C",
+        "primaryHover": "#9A3412",
+        "onPrimary": "#FFFFFF",
+        "bg": "#FFF8F3",
+        "surface": "#FFFFFF",
+        "text": "#18120F",
+        "muted": "#5B4D45",
+        "border": "#94796B",
+        "borderSoft": "#F0E1D7",
+        "accent": "#FFEDE3",
+        "headerBg": "#18120F",
+        "headerText": "#FFFFFF",
+        "focus": "#C2410C",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "20px",
+        "radiusBtn": "999px",
+        "shadow": "0 2px 0 rgba(24,18,15,.9)",
+        "font": "\"DM Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "\"Bricolage Grotesque\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "headingWeight": "750",
+        "baseSize": "1.0625rem",
+        "headingTracking": "-0.025em"
+      }
+    },
+    {
+      "id": "logistics",
+      "title": "LimeControl Logistics",
+      "label": "Logistics",
+      "summary": {
+        "pl": "Żółty nagłówek, czerń i wąska Barlow Condensed jak na tablicach — dla firm kurierskich, transportu, magazynów i serwisu w terenie.",
+        "en": "A yellow header, black and the signage-like Barlow Condensed — for couriers, transport, warehouses and field service."
+      },
+      "description": {
+        "pl": "Motyw logistyczny: wąskie nagłówki Barlow Condensed wersalikami, tekst Barlow, żółty nagłówek, czarne przyciski i duże pola na telefon kuriera. Zgodny z WCAG 2.2 AA.",
+        "en": "A logistics theme: condensed upper-case Barlow Condensed headings, Barlow body text, a yellow header, black buttons and large fields for a courier's phone. WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Ocena doręczenia i kuriera",
+          "Reklamacje przesyłek",
+          "Audyty magazynu i floty"
+        ],
+        "en": [
+          "Delivery and courier rating",
+          "Parcel complaints",
+          "Warehouse and fleet audits"
+        ]
+      },
+      "fonts": {
+        "heading": "barlow-condensed",
+        "body": "barlow"
+      },
+      "tokens": {
+        "primary": "#141414",
+        "primaryHover": "#3A3A3A",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F3F3EF",
+        "surface": "#FFFFFF",
+        "text": "#141414",
+        "muted": "#4A4A45",
+        "border": "#76766E",
+        "borderSoft": "#DCDCD4",
+        "accent": "#FFF3C4",
+        "headerBg": "#FFCC00",
+        "headerText": "#141414",
+        "focus": "#1D4ED8",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "4px",
+        "radiusBtn": "4px",
+        "shadow": "none",
+        "font": "\"Barlow\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "\"Barlow Condensed\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "headingWeight": "700",
+        "baseSize": "1.125rem",
+        "headingTransform": "uppercase",
+        "headingTracking": "0.02em",
+        "questionFont": "\"Barlow\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "questionWeight": "600"
+      },
+      "layout": {
+        "target": "52px"
+      }
+    },
+    {
+      "id": "finance",
+      "title": "LimeControl Finance",
+      "label": "Finance",
+      "summary": {
+        "pl": "IBM Plex Sans, głęboka zieleń i cyfry tabelaryczne — dla banków, ubezpieczeń, leasingu i doradztwa finansowego.",
+        "en": "IBM Plex Sans, deep green and tabular figures — for banks, insurers, leasing and financial advice."
+      },
+      "description": {
+        "pl": "Motyw finansowy: IBM Plex Sans z cyframi tabelarycznymi (kwoty w kolumnach), głęboka zieleń budująca zaufanie, oszczędne zaokrąglenia. Zgodny z WCAG 2.2 AA.",
+        "en": "A finance theme: IBM Plex Sans with tabular figures (amounts line up in columns), a trustworthy deep green and restrained corner radii. WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Satysfakcja klientów banku",
+          "Zgłoszenia szkód i ankiety ubezpieczeniowe",
+          "Wnioski i ocena doradztwa"
+        ],
+        "en": [
+          "Bank customer satisfaction",
+          "Insurance claims and surveys",
+          "Applications and advice rating"
+        ]
+      },
+      "fonts": {
+        "heading": "ibm-plex-sans",
+        "body": "ibm-plex-sans"
+      },
+      "tokens": {
+        "primary": "#0B5D4B",
+        "primaryHover": "#084739",
+        "onPrimary": "#FFFFFF",
+        "bg": "#F3F6F5",
+        "surface": "#FFFFFF",
+        "text": "#14201D",
+        "muted": "#46524F",
+        "border": "#6E7F7A",
+        "borderSoft": "#D7E0DD",
+        "accent": "#E4F1ED",
+        "headerBg": "#0F2A24",
+        "headerText": "#FFFFFF",
+        "focus": "#0B5D4B",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "6px",
+        "radiusBtn": "6px",
+        "shadow": "0 1px 2px rgba(20,32,29,.07)",
+        "font": "\"IBM Plex Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "\"IBM Plex Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "headingWeight": "600",
+        "baseSize": "1.0625rem",
+        "numeric": "tabular-nums"
+      }
+    },
+    {
+      "id": "hospitality",
+      "title": "LimeControl Hospitality",
+      "label": "Hospitality",
+      "summary": {
+        "pl": "Elegancka kursywa Newsreader, burgund i krem — dla hoteli, restauracji, kawiarni i opinii gości.",
+        "en": "Elegant Newsreader italics, burgundy and cream — for hotels, restaurants, cafés and guest feedback."
+      },
+      "description": {
+        "pl": "Motyw dla gościnności: tytuły kursywą Newsreader, tekst Instrument Sans, burgund na kremowym tle i miękkie zaokrąglenia. Zgodny z WCAG 2.2 AA.",
+        "en": "A hospitality theme: Newsreader italic titles, Instrument Sans body text, burgundy on a cream background and soft corner radii. WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Opinie gości hotelu i restauracji",
+          "Rezerwacje i zapisy na wydarzenia",
+          "Badania turystyki i wypoczynku"
+        ],
+        "en": [
+          "Hotel and restaurant guest feedback",
+          "Bookings and event sign-ups",
+          "Tourism and leisure research"
+        ]
+      },
+      "fonts": {
+        "heading": "newsreader",
+        "body": "instrument-sans"
+      },
+      "tokens": {
+        "primary": "#7A2035",
+        "primaryHover": "#5E1828",
+        "onPrimary": "#FFFFFF",
+        "bg": "#FAF5EE",
+        "surface": "#FFFFFF",
+        "text": "#22191A",
+        "muted": "#5C4E4F",
+        "border": "#94807F",
+        "borderSoft": "#EADFD5",
+        "accent": "#F6E8EA",
+        "headerBg": "#FAF5EE",
+        "headerText": "#22191A",
+        "focus": "#7A2035",
+        "danger": "#B42318",
+        "dangerBg": "#FDECEA",
+        "radius": "16px",
+        "radiusBtn": "999px",
+        "shadow": "0 1px 2px rgba(34,25,26,.05), 0 10px 30px rgba(122,32,53,.06)",
+        "font": "\"Instrument Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "\"Newsreader\", Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "headingWeight": "500",
+        "baseSize": "1.0625rem",
+        "headingStyle": "italic",
+        "questionFont": "\"Instrument Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "questionWeight": "600"
+      }
+    },
+    {
+      "id": "midnight",
+      "title": "LimeControl Midnight",
+      "label": "Midnight",
+      "summary": {
+        "pl": "Ciemny motyw z błękitnym akcentem i Inter — dla wydarzeń wieczornych, gier, technologii i ankiet oglądanych w nocy.",
+        "en": "A dark theme with a sky-blue accent and Inter — for evening events, gaming, tech and surveys viewed at night."
+      },
+      "description": {
+        "pl": "Ciemny motyw: granatowe tło, jasny tekst, błękitny akcent i żółty fokus, natywne pola w trybie ciemnym, font Inter. Kontrast sprawdzony jak w jasnych motywach — zgodny z WCAG 2.2 AA.",
+        "en": "A dark theme: a navy background, light text, a sky-blue accent and a yellow focus ring, native dark form controls and the Inter typeface. Contrast is checked exactly as in the light themes — WCAG 2.2 AA compliant."
+      },
+      "useCases": {
+        "pl": [
+          "Wydarzenia, koncerty i festiwale",
+          "Gry i społeczności graczy",
+          "Ankiety w aplikacjach z trybem ciemnym"
+        ],
+        "en": [
+          "Events, concerts and festivals",
+          "Games and gaming communities",
+          "Surveys in apps with dark mode"
+        ]
+      },
+      "fonts": {
+        "heading": "inter",
+        "body": "inter"
+      },
+      "tokens": {
+        "primary": "#7CC4FA",
+        "primaryHover": "#A5D8FF",
+        "onPrimary": "#0B1220",
+        "bg": "#0B1220",
+        "surface": "#141C2F",
+        "text": "#E8EDF6",
+        "muted": "#AAB4C8",
+        "border": "#6E7C99",
+        "borderSoft": "#26314A",
+        "accent": "#1C2A45",
+        "headerBg": "#070C17",
+        "headerText": "#E8EDF6",
+        "focus": "#FACC15",
+        "danger": "#FDA4AF",
+        "dangerBg": "#3A1420",
+        "radius": "14px",
+        "radiusBtn": "10px",
+        "shadow": "0 1px 0 rgba(255,255,255,.04), 0 10px 30px rgba(0,0,0,.35)",
+        "font": "\"Inter\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "fontHeading": "\"Inter\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+        "headingWeight": "650",
+        "baseSize": "1.0625rem",
+        "colorScheme": "dark",
+        "headingTracking": "-0.015em"
       }
     }
   ]

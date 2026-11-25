@@ -189,6 +189,27 @@ const PLUGINS = [
     },
   },
   {
+    id: 'LimeControlBranding',
+    group: 'open',
+    kind: 'plugin',
+    title: { pl: 'Logotypy i kolor marki w ankiecie', en: 'Logos and brand colour in surveys', de: 'Logos und Markenfarbe in Umfragen' },
+    lead: {
+      pl: 'Dodaje logo w nagłówku, pasek logotypów partnerów i tekst w stopce ankiety oraz kolor marki — bez edycji szablonów. Przygotowana do motywów LimeControl.',
+      en: 'Adds a header logo, a strip of partner logos and footer text to a survey, plus a brand colour — without editing templates. Made for the LimeControl themes.',
+      de: 'Ergänzt ein Logo in der Kopfzeile, eine Leiste mit Partnerlogos und Text in der Fußzeile sowie eine Markenfarbe — ohne Vorlagen zu bearbeiten. Gemacht für die LimeControl-Designs.',
+    },
+    points: {
+      pl: ['Logotypy wgrywane prosto z formularza ustawień, z podglądem i tekstem alternatywnym', 'Ustawienia domyślne dla wszystkich ankiet albo własne w każdej ankiecie', 'Kolor marki z automatyczną korektą kontrastu do WCAG 2.2 AA'],
+      en: ['Logos uploaded straight from the settings form, with previews and alternative text', 'Defaults for all surveys or separate settings in each survey', 'A brand colour with automatic contrast correction to WCAG 2.2 AA'],
+      de: ['Logos direkt im Einstellungsformular hochladen, mit Vorschau und Alternativtext', 'Standardwerte für alle Umfragen oder eigene Einstellungen je Umfrage', 'Eine Markenfarbe mit automatischer Kontrastkorrektur nach WCAG 2.2 AA'],
+    },
+    where: { pl: 'LimeSurvey 6.x i 7.x, motywy LimeControl', en: 'LimeSurvey 6.x and 7.x, LimeControl themes', de: 'LimeSurvey 6.x und 7.x, LimeControl-Designs' },
+    more: {
+      href: Object.fromEntries(Object.entries(ROUTES.themes).map(([lang, url]) => [lang, `${url}#branding`])),
+      label: { pl: 'Pobierz i zobacz zrzuty', en: 'Download and see screenshots', de: 'Herunterladen und Screenshots ansehen' },
+    },
+  },
+  {
     id: 'StrefaWorkspace',
     group: 'strefa',
     kind: 'plugin',
@@ -307,7 +328,7 @@ const S = {
     compareHead: ['Potrzeba', 'Bezpłatnie — LimeControl i wtyczki', 'Płatnie — konto i usługi StrefaAnkiet'],
     compare: [
       ['Zarządzanie ankietami z telefonu', 'Aplikacja na iOS, Androida i web: aktywacja, harmonogram, uczestnicy, eksport', '—'],
-      ['Wygląd ankiety', 'Osiem motywów WCAG 2.2 AA, w tym CATI i CAPI', '—'],
+      ['Wygląd ankiety', 'Szesnaście motywów WCAG 2.2 AA (w tym CATI, CAPI i ciemny) i wtyczka z logotypami w nagłówku i stopce', '—'],
       ['Gotowe kwestionariusze', 'Dwanaście szablonów PL/EN, w tym szkielety CATI i CAPI', 'Biblioteka szablonów badań i raportów'],
       ['Połączenie LimeSurvey z platformą', 'Wtyczki: instalacja, aktualizacje i kod źródłowy', 'Konto organizacji z rolami zespołu'],
       ['Wysyłka zaproszeń', 'Poczta LimeSurvey, harmonogram zaproszeń i przypomnień w LimeControl', 'Zarządzany Amazon SES: nadawca we własnej domenie, potwierdzenia doręczeń, odbicia i skargi'],
@@ -403,7 +424,7 @@ const S = {
     compareHead: ['Need', 'Free — LimeControl and the plugins', 'Paid — StrefaAnkiet account and services'],
     compare: [
       ['Managing surveys from a phone', 'The iOS, Android and web app: activation, scheduling, participants, export', '—'],
-      ['Survey look', 'Eight WCAG 2.2 AA themes, including CATI and CAPI', '—'],
+      ['Survey look', 'Sixteen WCAG 2.2 AA themes (including CATI, CAPI and a dark one) and a plugin for header and footer logos', '—'],
       ['Ready-made questionnaires', 'Twelve EN/PL templates, including CATI and CAPI skeletons', 'A library of study and report templates'],
       ['Connecting LimeSurvey to the platform', 'The plugins: installation, updates and source code', 'An organisation account with team roles'],
       ['Sending invitations', 'LimeSurvey mail, scheduled invitations and reminders in LimeControl', 'Managed Amazon SES: a sender on your own domain, delivery confirmations, bounces and complaints'],
@@ -499,7 +520,7 @@ const S = {
     compareHead: ['Bedarf', 'Kostenlos — LimeControl und die Plugins', 'Kostenpflichtig — StrefaAnkiet-Konto und Dienste'],
     compare: [
       ['Umfragen vom Smartphone verwalten', 'Die App für iOS, Android und Web: Aktivierung, Zeitplan, Teilnehmer, Export', '—'],
-      ['Aussehen der Umfrage', 'Acht Designs nach WCAG 2.2 AA, darunter CATI und CAPI', '—'],
+      ['Aussehen der Umfrage', 'Sechzehn Designs nach WCAG 2.2 AA (darunter CATI, CAPI und ein dunkles) und ein Plugin für Logos in Kopf- und Fußzeile', '—'],
       ['Fertige Fragebögen', 'Zwölf Vorlagen (EN/PL), darunter Gerüste für CATI und CAPI', 'Eine Bibliothek mit Studien- und Berichtsvorlagen'],
       ['LimeSurvey mit der Plattform verbinden', 'Die Plugins: Installation, Updates und Quellcode', 'Ein Organisationskonto mit Teamrollen'],
       ['Einladungen versenden', 'LimeSurvey-Mail, geplante Einladungen und Erinnerungen in LimeControl', 'Verwaltetes Amazon SES: Absender in der eigenen Domain, Zustellbestätigungen, Bounces und Beschwerden'],
@@ -549,7 +570,7 @@ export function renderPluginsPage(lang) {
             <ul>
               ${p.points[lang].map((x) => `<li>${esc(x)}</li>`).join('\n              ')}
             </ul>
-            <p class="pcard-foot"><span>${s.whereLabel[p.group]}</span> ${esc(p.where[lang])}</p>${panel(p) ? `</div>\n            ${panel(p)}` : ''}
+            ${p.more ? `<p><a href="${p.more.href[lang]}">${esc(p.more.label[lang])}</a></p>\n            ` : ''}<p class="pcard-foot"><span>${s.whereLabel[p.group]}</span> ${esc(p.where[lang])}</p>${panel(p) ? `</div>\n            ${panel(p)}` : ''}
           </article>`;
   const pluginGroup = (group, id, eyebrow, h, p, cls, after = '') => `<section id="${id}"${cls ? ` class="${cls}"` : ''} aria-labelledby="${id}-h">
       <div class="container">

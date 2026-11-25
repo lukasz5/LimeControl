@@ -1,0 +1,25 @@
+/* LimeControlBranding — edytor w panelu administracyjnym. Licencja: GPL-2.0-or-later */
+.lcb-editor { max-width: 56rem; padding: .75rem 1rem; margin: 0 0 1rem; background: #f5f8f2; border: 1px solid #d5e3c8; border-radius: 6px; }
+.lcb-editor p { margin: 0 0 .4rem; }
+.lcb-editor p:last-child { margin-bottom: 0; }
+.lcb-hint { color: #4b5563; font-size: .9em; }
+.lcb-section { margin: 1.5rem 0 .5rem; padding-bottom: .35rem; border-bottom: 1px solid #d7dbe0; font-size: 1.1rem; font-weight: 600; }
+.lcb-image-tool { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .5rem 0 .25rem; }
+.lcb-thumb { display: block; max-height: 56px; max-width: 200px; padding: 4px; background: repeating-conic-gradient(#eef0f3 0 25%, #fff 0 50%) 50% / 14px 14px; border: 1px solid #cfd4da; border-radius: 4px; object-fit: contain; }
+.lcb-thumb[hidden] { display: none; }
+.lcb-status { font-size: .875em; color: #4b5563; }
+.lcb-status.lcb-error { color: #b42318; font-weight: 600; }
+.lcb-hidden-store { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0; pointer-events: none; overflow: hidden; }
+.lcb-logo-list { list-style: none; margin: .25rem 0 0; padding: 0; display: grid; gap: .5rem; max-width: 56rem; }
+.lcb-logo-row { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: .6rem .75rem; align-items: start; padding: .6rem; background: #fff; border: 1px solid #d7dbe0; border-radius: 6px; }
+.lcb-logo-row .lcb-thumb { max-width: 150px; }
+.lcb-logo-fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: .45rem; }
+.lcb-field { display: grid; gap: .2rem; margin: 0; font-size: .85em; font-weight: 600; }
+.lcb-warn { grid-column: 1 / -1; color: #b45309; font-size: .82em; }
+.lcb-warn[hidden] { display: none; }
+.lcb-logo-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.lcb-color-row { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.lcb-color-picker { width: 3rem; height: 2.25rem; padding: .15rem; border: 1px solid #cfd4da; border-radius: 4px; background: #fff; cursor: pointer; }
+@media (max-width: 760px) {
+  .lcb-logo-row { grid-template-columns: minmax(0, 1fr); }
+}

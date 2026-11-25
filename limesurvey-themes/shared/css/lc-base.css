@@ -28,6 +28,12 @@
   --lc-maxw: var(--lc-layout-maxw, 52rem);
   --lc-target: var(--lc-layout-target, 44px);
   --lc-card-pad: var(--lc-layout-card-pad, clamp(1rem, 3.5vw, 1.75rem));
+  /* Natywne pola wyboru, listy i paski przewijania w kolorach motywu (motywy ciemne: dark) */
+  color-scheme: var(--lc-color-scheme, light);
+  --bs-table-color: var(--lc-text);
+  --bs-emphasis-color: var(--lc-text);
+  --bs-tertiary-bg: var(--lc-accent);
+  --bs-secondary-bg: var(--lc-accent);
 }
 
 /* ---------- 2. Typografia i tło ---------- */
@@ -41,6 +47,8 @@ html body {
   font-size: var(--lc-base-size);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  font-variant-numeric: var(--lc-numeric, normal);
+  font-synthesis: none; /* bez sztucznej kursywy i pogrubień, gdy font ma tylko część odmian */
 }
 
 html body h1, html body h2, html body h3, html body h4,
@@ -50,7 +58,12 @@ html body .survey-name, html body .group-title {
   font-weight: var(--lc-heading-weight);
   color: var(--lc-text);
   line-height: 1.25;
-  letter-spacing: -0.005em;
+  letter-spacing: var(--lc-heading-tracking, -0.005em);
+}
+/* Charakter typografii motywu (kursywa, wersaliki) tylko w tytule ankiety i grup — nie w treści pytań */
+html body .survey-name, html body .group-title, html body h1, html body h2 {
+  font-style: var(--lc-heading-style, normal);
+  text-transform: var(--lc-heading-transform, none);
 }
 
 html body p, html body li, html body td, html body th, html body label { line-height: 1.6; }
@@ -92,12 +105,14 @@ html body input[type="email"]:focus, html body input[type="date"]:focus {
 
 /* ---------- 4. Nagłówek ankiety (pasek nawigacji) ---------- */
 html body .navbar,
-html body #survey-nav {
+html body #survey-nav,
+html body #survey-nav.navbar /* wygrywa z #survey-nav.navbar { box-shadow: none } z fruity_twentythree */ {
   background: var(--lc-header-bg) !important;
   color: var(--lc-header-text) !important;
   border: 0;
   border-bottom: 1px solid var(--lc-header-border, transparent);
-  box-shadow: none;
+  /* Opcjonalny pasek w kolorze akcentu pod nagłówkiem (--lc-header-stripe) */
+  box-shadow: 0 4px 0 0 var(--lc-header-stripe, transparent);
   min-height: 3.5rem;
 }
 html body .navbar .navbar-brand,
@@ -111,7 +126,9 @@ html body .navbar button {
 html body .navbar .navbar-toggler span,
 html body .navbar [class^="ri-"], html body .navbar [class*=" ri-"] { color: inherit !important; }
 html body .navbar .navbar-toggler { border-color: currentColor; min-height: var(--lc-target); min-width: var(--lc-target); }
-html body .navbar .dropdown-menu { border-radius: var(--lc-radius); border-color: var(--lc-border-soft); }
+html body .navbar .dropdown-menu,
+html body .dropdown-menu { border-radius: var(--lc-radius); border-color: var(--lc-border-soft); background: var(--lc-surface); color: var(--lc-text); }
+html body .dropdown-menu .dropdown-header { color: var(--lc-muted); }
 html body .navbar .dropdown-menu a, html body .navbar .dropdown-menu .dropdown-item { color: var(--lc-text) !important; }
 html body .navbar .dropdown-menu .dropdown-item:hover,
 html body .navbar .dropdown-menu .dropdown-item:focus { background: var(--lc-accent); }
@@ -215,8 +232,9 @@ html body .ls-privacy-block, html body .ls-privacy-body { font-size: .95rem; col
 html body .ls-privacy-head { font-size: .85rem; font-weight: 700; letter-spacing: .04em; color: var(--lc-muted); }
 html body .question-title-container .question-text,
 html body .question-title-container .ls-label-question {
-  font-family: var(--lc-font-heading);
-  font-weight: var(--lc-heading-weight);
+  font-family: var(--lc-question-font, var(--lc-font-heading));
+  font-weight: var(--lc-question-weight, var(--lc-heading-weight));
+  letter-spacing: 0;
   font-size: 1.2em;
   line-height: 1.35;
   color: var(--lc-text);
@@ -237,7 +255,9 @@ html body .ls-question-help {
   font-size: .95em;
 }
 html body .question-valid-container,
-html body .ls-em-tip { color: var(--lc-muted); font-size: .95em; }
+html body .ls-em-tip,
+/* fruity_twentythree (theme_apple.css) daje tu stały #1e1e1e — niewidoczny w motywach ciemnych */
+html body .question-container .ls-question-message { color: var(--lc-muted); font-size: .95em; }
 html body .ls-em-tip::before { color: inherit; }
 
 /* ---------- 6. Błędy walidacji (kolor + ikona + tekst + obramowanie) ---------- */
@@ -295,6 +315,12 @@ html body .form-select, html body select.form-control, html body select {
   padding-right: 2.75rem !important;
   background-position: right .9rem center;
   min-width: min(100%, 16rem);
+}
+/* Strzałka listy w kolorze tekstu motywu (widoczna także w motywach ciemnych) */
+html body .form-select:not([multiple]):not([size]) {
+  background-image: var(--lc-select-arrow, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e")) !important;
+  background-repeat: no-repeat;
+  background-size: 16px 12px;
 }
 html body .input-error .form-control,
 html body .input-error .form-select,
@@ -659,9 +685,44 @@ html body .progress .progress-bar {
 html body .top-container { background: transparent; }
 html body .top-container .progress { margin: .75rem auto; max-width: var(--lc-maxw); }
 
+/* ---------- 11a. Przesyłanie plików i zdjęć z telefonu ---------- */
+/* Przycisk otwierający okno przesyłania: duży i wyraźny, na telefonie na całą szerokość
+   (na telefonie wybór pliku od razu proponuje aparat lub galerię zdjęć). */
+html body .upload-button { margin: .25rem 0 1rem; }
+html body .upload-button .btn.upload {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+  min-height: calc(var(--lc-target) + 12px);
+  padding: .75rem 1.5rem;
+  font-size: 1.05em;
+}
+html body .upload-button .btn.upload [class*="ri-"], html body .upload-button .btn.upload .fa { font-size: 1.35em; }
+html body .uploadedfiles { width: 100%; margin-top: .5rem; border-collapse: separate; border-spacing: 0 .5rem; }
+html body .uploadedfiles th { color: var(--lc-muted); font-size: .85em; font-weight: 600; padding: 0 .5rem; }
+html body .uploadedfiles td {
+  padding: .5rem; vertical-align: middle;
+  background: var(--lc-accent); color: var(--lc-text);
+  border-top: 1px solid var(--lc-border-soft); border-bottom: 1px solid var(--lc-border-soft);
+}
+html body .uploadedfiles td:first-child { border-left: 1px solid var(--lc-border-soft); border-radius: calc(var(--lc-radius) * .7) 0 0 calc(var(--lc-radius) * .7); }
+html body .uploadedfiles td:last-child { border-right: 1px solid var(--lc-border-soft); border-radius: 0 calc(var(--lc-radius) * .7) calc(var(--lc-radius) * .7) 0; }
+html body .uploadedfiles img { max-width: 96px; max-height: 96px; border-radius: calc(var(--lc-radius) * .5); object-fit: cover; }
+html body .file-upload-modal .modal-body iframe { width: 100%; min-height: min(70vh, 34rem); border: 0; }
+@media (max-width: 575.98px) {
+  html body .upload-button .btn.upload { width: 100%; }
+  html body .uploadedfiles thead { display: none; }
+  html body .uploadedfiles tr { display: grid; grid-template-columns: 96px 1fr; gap: .25rem .75rem; margin-bottom: .5rem; }
+  html body .uploadedfiles td { border: 0 !important; border-radius: 0 !important; background: transparent; padding: 0; }
+  html body .uploadedfiles tr { background: var(--lc-accent); border: 1px solid var(--lc-border-soft); border-radius: calc(var(--lc-radius) * .7); padding: .6rem; }
+  html body .uploadedfiles td:first-child { grid-row: span 3; }
+}
+
 /* ---------- 12. Stopka, modale, inne ---------- */
-html body .modal-content { border-radius: var(--lc-radius); color: var(--lc-text); }
-html body .modal-header { border-bottom-color: var(--lc-border-soft); }
+html body .modal-content { border-radius: var(--lc-radius); color: var(--lc-text); background: var(--lc-surface); border-color: var(--lc-border-soft); }
+html body .modal-header, html body .modal-footer { border-color: var(--lc-border-soft); }
+html body .btn-close { filter: var(--lc-btn-close-filter, none); opacity: .8; min-width: 24px; min-height: 24px; }
+html body .card, html body .list-group-item, html body .well { background-color: var(--lc-surface); color: var(--lc-text); border-color: var(--lc-border-soft); }
+html body .bg-white, html body .bg-light { background-color: var(--lc-surface) !important; }
+html body .text-dark, html body .text-body { color: var(--lc-text) !important; }
 html body .ls-footer, html body footer, html body .footer { color: var(--lc-muted); }
 html body .poweredby img { opacity: .8; }
 

@@ -44,6 +44,46 @@ export const THEMES_DE = {
     description: 'Ein Design für persönliche Interviews (CAPI) und Kiosk-Stationen: große Schrift, 56 px Touch-Flächen, hoher Kontrast und feste Navigation. Konform mit WCAG 2.2 AA.',
     useCases: ['CAPI-Feldinterviews', 'Umfragen auf Tablet und Kiosk', 'Forschung im Geschäft'],
   },
+  editorial: {
+    summary: 'Literata wie im Buch, warmes Papier und Tintenblau — für lange Fragebögen, die man in Ruhe lesen soll.',
+    description: 'Ein Design zum Lesen: die Serifenschrift Literata (entworfen für E-Books) für Text und Überschriften, 18 px, großzügiger Zeilenabstand und ein warmer Hintergrund. Konform mit WCAG 2.2 AA.',
+    useCases: ['Akademische und wissenschaftliche Forschung', 'Leser- und Verlagsumfragen', 'Lange Einwilligungen und Interviews'],
+  },
+  civic: {
+    summary: 'Die polnische Brygada 1918 für Überschriften und gut lesbare Noto Sans mit Kyrillisch — für Behörden, Konsultationen und Kultureinrichtungen.',
+    description: 'Ein Design für den öffentlichen Sektor: Überschriften in Brygada 1918 (zum 100. Jahrestag der polnischen Unabhängigkeit neu aufgelegt), Fließtext in Noto Sans mit Kyrillisch für ukrainische Umfragen, 18 px Text. Konform mit WCAG 2.2 AA.',
+    useCases: ['Bürgerkonsultationen und Bürgerhaushalte', 'Behörden und Kommunen', 'Museen, Bibliotheken und Kulturzentren'],
+  },
+  product: {
+    summary: 'Geist, Indigo und viel Licht — ein moderner App-Look für UX-Forschung, Betatests und Feedback zu digitalen Produkten.',
+    description: 'Ein Produkt-Design: die geometrische Schrift Geist für Text und Überschriften, Indigo, weiche Schatten und Eckenradien im SaaS-Stil. Konform mit WCAG 2.2 AA.',
+    useCases: ['UX-Forschung und Usability-Tests', 'Feedback zu Apps und Funktionen', 'Onboarding- und In-Product-Umfragen'],
+  },
+  studio: {
+    summary: 'Ausdrucksstarke Bricolage Grotesque, eine schwarze Kopfzeile und ein Korallen-Akzent — für Agenturen, Events, Workshops und kreative Forschung.',
+    description: 'Ein kreatives Design: markante Überschriften in Bricolage Grotesque, Fließtext in DM Sans, eine schwarze Kopfzeile und ein Korallen-Akzent. Konform mit WCAG 2.2 AA.',
+    useCases: ['Evaluation von Events und Konferenzen', 'Workshops und Teilnehmeranmeldung', 'Kreative Forschung und Werbetests'],
+  },
+  logistics: {
+    summary: 'Gelbe Kopfzeile, Schwarz und die schilderartige Barlow Condensed — für Kurierdienste, Transport, Lager und Außendienst.',
+    description: 'Ein Logistik-Design: schmale Überschriften in Versalien (Barlow Condensed), Fließtext in Barlow, eine gelbe Kopfzeile, schwarze Buttons und große Felder für das Smartphone des Kuriers. Konform mit WCAG 2.2 AA.',
+    useCases: ['Bewertung von Zustellung und Kurier', 'Paketreklamationen', 'Lager- und Fuhrparkaudits'],
+  },
+  finance: {
+    summary: 'IBM Plex Sans, tiefes Grün und Ziffern mit fester Breite — für Banken, Versicherungen, Leasing und Finanzberatung.',
+    description: 'Ein Finanz-Design: IBM Plex Sans mit tabellarischen Ziffern (Beträge stehen sauber untereinander), ein vertrauenswürdiges tiefes Grün und zurückhaltende Eckenradien. Konform mit WCAG 2.2 AA.',
+    useCases: ['Kundenzufriedenheit in Banken', 'Schadenmeldungen und Versicherungsumfragen', 'Bewertung von Anträgen und Beratung'],
+  },
+  hospitality: {
+    summary: 'Elegante Newsreader-Kursive, Bordeaux und Creme — für Hotels, Restaurants, Cafés und Gästefeedback.',
+    description: 'Ein Design für das Gastgewerbe: Titel in Newsreader kursiv, Fließtext in Instrument Sans, Bordeaux auf cremefarbenem Hintergrund und weiche Eckenradien. Konform mit WCAG 2.2 AA.',
+    useCases: ['Gästefeedback in Hotel und Restaurant', 'Buchungen und Event-Anmeldungen', 'Tourismus- und Freizeitforschung'],
+  },
+  midnight: {
+    summary: 'Ein dunkles Design mit himmelblauem Akzent und Inter — für Abendveranstaltungen, Gaming, Tech und Umfragen bei Nacht.',
+    description: 'Ein dunkles Design: marineblauer Hintergrund, heller Text, ein himmelblauer Akzent und ein gelber Fokusrahmen, native dunkle Formularelemente und die Schrift Inter. Der Kontrast wird genauso geprüft wie bei den hellen Designs — konform mit WCAG 2.2 AA.',
+    useCases: ['Events, Konzerte und Festivals', 'Spiele und Gaming-Communitys', 'Umfragen in Apps mit Dark Mode'],
+  },
 };
 
 export const TEMPLATES_DE = {

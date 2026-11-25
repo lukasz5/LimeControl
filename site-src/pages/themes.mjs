@@ -7,9 +7,9 @@ const themeText = (t, field, lang) => localized(t, field, lang, THEMES_DE, 'Moti
 
 const kb = (n) => `${Math.max(1, Math.round(n / 1024))} kB`;
 const NUMBER_WORDS = {
-  pl: { 6: 'Sześć', 7: 'Siedem', 8: 'Osiem', 9: 'Dziewięć', 10: 'Dziesięć', 11: 'Jedenaście', 12: 'Dwanaście' },
-  en: { 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten', 11: 'Eleven', 12: 'Twelve' },
-  de: { 6: 'Sechs', 7: 'Sieben', 8: 'Acht', 9: 'Neun', 10: 'Zehn', 11: 'Elf', 12: 'Zwölf' },
+  pl: { 6: 'Sześć', 7: 'Siedem', 8: 'Osiem', 9: 'Dziewięć', 10: 'Dziesięć', 11: 'Jedenaście', 12: 'Dwanaście', 13: 'Trzynaście', 14: 'Czternaście', 15: 'Piętnaście', 16: 'Szesnaście', 17: 'Siedemnaście', 18: 'Osiemnaście', 19: 'Dziewiętnaście', 20: 'Dwadzieścia' },
+  en: { 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten', 11: 'Eleven', 12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen', 18: 'Eighteen', 19: 'Nineteen', 20: 'Twenty' },
+  de: { 6: 'Sechs', 7: 'Sieben', 8: 'Acht', 9: 'Neun', 10: 'Zehn', 11: 'Elf', 12: 'Zwölf', 13: 'Dreizehn', 14: 'Vierzehn', 15: 'Fünfzehn', 16: 'Sechzehn', 17: 'Siebzehn', 18: 'Achtzehn', 19: 'Neunzehn', 20: 'Zwanzig' },
 };
 
 const S = {
@@ -58,7 +58,7 @@ const S = {
       '<strong>Link „Przejdź do pytań”</strong>, opisane pytania obowiązkowe, nazwa przycisku menu (2.4.1, 4.1.2).',
       '<strong>Sześć języków interfejsu motywu</strong> — polski, angielski, niemiecki, francuski, hiszpański i&nbsp;ukraiński; wybierane według języka ankiety.',
       '<strong>Preferencje użytkownika</strong> — <code>prefers-reduced-motion</code>, <code>forced-colors</code>, druk.',
-      '<strong>RODO-friendly</strong> — fonty systemowe, żadnych CDN ani skryptów śledzących.',
+      '<strong>RODO-friendly</strong> — fonty systemowe albo fonty w&nbsp;paczce motywu, ładowane z&nbsp;Twojego serwera; żadnych CDN ani skryptów śledzących.',
     ],
     ivEyebrow: 'CATI i CAPI',
     ivH: 'Tryb ankietera w każdym motywie',
@@ -76,7 +76,7 @@ const S = {
       ['Pobierz ZIP dla swojej wersji', 'Wersję LimeSurvey widać w&nbsp;stopce panelu administracyjnego. Pobierz wariant <strong>7.x</strong> albo <strong>6.x</strong> i&nbsp;<strong>nie zmieniaj nazwy pliku</strong> — LimeSurvey nazywa katalog motywu tak jak plik (np. <code>lc_medical</code>).'],
       ['Prześlij do LimeSurvey', '<em>Konfiguracja → Motywy</em>, zakładka <em>Motywy ankiet</em>, przycisk <strong>Prześlij i&nbsp;zainstaluj</strong>. Wskaż plik ZIP i&nbsp;potwierdź.'],
       ['Wybierz w ankiecie', 'W&nbsp;ankiecie: <em>Ustawienia ankiety → Ogólne → Motyw</em>, wybierz np. „LimeControl Medical” i&nbsp;zapisz. W&nbsp;aplikacji LimeControl zrobisz to jednym dotknięciem.'],
-      ['Dodaj logo', 'W&nbsp;ankiecie <em>Opcje motywu → Obrazy</em>: ustaw <em>Logo: Tak</em> i&nbsp;wgraj plik PNG lub JPG.'],
+      ['Dodaj logo', 'Najprościej wtyczką <a href="#branding">LimeControlBranding</a>: logo w&nbsp;nagłówku, logotypy partnerów w&nbsp;stopce i&nbsp;kolor marki. Bez wtyczki: <em>Opcje motywu → Obrazy</em>, ustaw <em>Logo: Tak</em> i&nbsp;wgraj plik PNG lub JPG.'],
     ],
     callout: '<strong>Dlaczego dwa warianty?</strong> LimeSurvey&nbsp;7 dodał do motywu bazowego nowe opcje (kolory, zaokrąglenia, ikony, zawijanie tabel), a&nbsp;formularz <em>Opcje motywu</em> pokazuje tylko opcje opisane w&nbsp;paczce. Wygląd i&nbsp;dostępność są w&nbsp;obu wariantach identyczne — różni się tylko lista opcji w&nbsp;panelu. Wariant 6.x nie jest oznaczony jako zgodny z&nbsp;LimeSurvey&nbsp;7 i&nbsp;odwrotnie.',
     more: [
@@ -100,6 +100,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       ['„Nie można zaimportować motywu, ponieważ fruity_twentythree nie jest zainstalowany”', 'Motywy dziedziczą po wbudowanym motywie <em>Fruity TwentyThree</em>, dostępnym w&nbsp;LimeSurvey 6 i&nbsp;7. Zainstaluj go w&nbsp;<em>Konfiguracja → Motywy</em> albo zaktualizuj LimeSurvey. Wersje 5.x i&nbsp;starsze nie są obsługiwane.'],
       ['Po zmianach w&nbsp;CSS ankieta wygląda tak samo', 'LimeSurvey buforuje pliki motywów. Kliknij <strong>Wyczyść pamięć podręczną zasobów</strong> w&nbsp;<em>Konfiguracja → Globalne → Ogólne</em> i&nbsp;odśwież stronę ankiety z&nbsp;pominięciem cache przeglądarki.'],
       ['Jak wyłączyć skróty klawiszowe w&nbsp;motywie CATI?', 'Ankieter wyłącza je przyciskiem „Skróty” w&nbsp;pasku nawigacji (wybór jest pamiętany w&nbsp;przeglądarce). Aby wyłączyć je na stałe, usuń linię <code>--lc-hotkeys: 1;</code> z&nbsp;<code>css/lc-theme.css</code>.'],
+      ['Czy motywy pobierają fonty z&nbsp;Google Fonts?', 'Nie. Motywy z&nbsp;własną typografią mają pliki fontów w&nbsp;paczce — przeglądarka pobiera je z&nbsp;Twojego serwera LimeSurvey, więc adres IP respondenta nie trafia do podmiotów trzecich. Pozostałe motywy używają fontów systemowych. Fonty są na licencji SIL Open Font License 1.1 (pliki <code>fonts/OFL-*.txt</code> w&nbsp;paczce).'],
       ['Czy mogę używać motywów komercyjnie i&nbsp;je modyfikować?', 'Tak. Motywy są na licencji GPL-2.0-or-later (jak LimeSurvey) — możesz je zmieniać, rebrandować i&nbsp;używać w&nbsp;projektach komercyjnych.'],
       ['Czy motywy działają z&nbsp;LimeControl?', `Tak — motyw jest ustawieniem ankiety po stronie LimeSurvey. W&nbsp;aplikacji <a href="${APP_URL}">LimeControl</a> możesz przypisać zainstalowany motyw do ankiety.`],
     ],
@@ -154,7 +155,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       '<strong>A “Skip to questions” link</strong>, labelled mandatory questions and a named menu button (2.4.1, 4.1.2).',
       '<strong>Six theme interface languages</strong> — English, Polish, German, French, Spanish and Ukrainian; picked from the survey language.',
       '<strong>User preferences</strong> — <code>prefers-reduced-motion</code>, <code>forced-colors</code>, print.',
-      '<strong>GDPR-friendly</strong> — system fonts, no CDNs and no tracking scripts.',
+      '<strong>GDPR-friendly</strong> — system fonts or fonts shipped inside the theme and served from your own server; no CDNs and no tracking scripts.',
     ],
     ivEyebrow: 'CATI and CAPI',
     ivH: 'Interviewer mode in every theme',
@@ -172,7 +173,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       ['Download the ZIP for your version', 'The LimeSurvey version is shown in the footer of the admin panel. Download the <strong>7.x</strong> or <strong>6.x</strong> variant and <strong>do not rename the file</strong> — LimeSurvey names the theme directory after the file (e.g. <code>lc_medical</code>).'],
       ['Upload it to LimeSurvey', '<em>Configuration → Themes</em>, the <em>Survey themes</em> tab, the <strong>Upload &amp; install</strong> button. Choose the ZIP file and confirm.'],
       ['Select it in a survey', 'In the survey: <em>Survey settings → General → Theme</em>, choose e.g. “LimeControl Medical” and save. In the LimeControl app it takes a single tap.'],
-      ['Add your logo', 'In the survey, <em>Theme options → Images</em>: set <em>Logo: Yes</em> and upload a PNG or JPG file.'],
+      ['Add your logo', 'The easiest way is the <a href="#branding">LimeControlBranding</a> plugin: a header logo, partner logos in the footer and a brand colour. Without the plugin: <em>Theme options → Images</em>, set <em>Logo: Yes</em> and upload a PNG or JPG file.'],
     ],
     callout: '<strong>Why two variants?</strong> LimeSurvey&nbsp;7 added new options to the parent theme (colours, corner radii, icons, table wrapping), and the <em>Theme options</em> form only shows the options described in the package. Look and accessibility are identical in both variants — only the list of options in the panel differs. The 6.x variant is not marked as compatible with LimeSurvey&nbsp;7 and vice versa.',
     more: [
@@ -196,6 +197,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       ['“Cannot import the theme because fruity_twentythree is not installed”', 'The themes extend the built-in <em>Fruity TwentyThree</em> theme available in LimeSurvey 6 and 7. Install it in <em>Configuration → Themes</em> or update LimeSurvey. Versions 5.x and older are not supported.'],
       ['The survey looks the same after CSS changes', 'LimeSurvey caches theme files. Click <strong>Clear assets cache</strong> in <em>Configuration → Global → General</em> and reload the survey page bypassing the browser cache.'],
       ['How do I switch off keyboard shortcuts in the CATI theme?', 'Interviewers switch them off with the “Shortcuts” button in the navigation bar (the choice is remembered in the browser). To disable them permanently, remove the line <code>--lc-hotkeys: 1;</code> from <code>css/lc-theme.css</code>.'],
+      ['Do the themes load fonts from Google Fonts?', 'No. Themes with their own typography carry the font files inside the package — the browser loads them from your LimeSurvey server, so respondents\' IP addresses are not sent to third parties. The other themes use system fonts. The fonts are licensed under the SIL Open Font License 1.1 (<code>fonts/OFL-*.txt</code> in the package).'],
       ['May I use the themes commercially and modify them?', 'Yes. The themes are licensed under GPL-2.0-or-later (like LimeSurvey) — you may change them, rebrand them and use them in commercial projects.'],
       ['Do the themes work with LimeControl?', `Yes — a theme is a survey setting on the LimeSurvey side. In the <a href="${APP_URL}">LimeControl</a> app you can assign an installed theme to a survey.`],
     ],
@@ -250,7 +252,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       '<strong>Ein Link „Zu den Fragen springen“</strong>, gekennzeichnete Pflichtfragen und ein benannter Menü-Button (2.4.1, 4.1.2).',
       '<strong>Sechs Oberflächensprachen</strong> — Englisch, Polnisch, Deutsch, Französisch, Spanisch und Ukrainisch; gewählt nach der Umfragesprache.',
       '<strong>Nutzerpräferenzen</strong> — <code>prefers-reduced-motion</code>, <code>forced-colors</code>, Druck.',
-      '<strong>DSGVO-freundlich</strong> — Systemschriften, keine CDNs und keine Tracking-Skripte.',
+      '<strong>DSGVO-freundlich</strong> — Systemschriften oder Schriften im Designpaket, ausgeliefert von Ihrem eigenen Server; keine CDNs und keine Tracking-Skripte.',
     ],
     ivEyebrow: 'CATI und CAPI',
     ivH: 'Interviewer-Modus in jedem Design',
@@ -268,7 +270,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       ['ZIP für Ihre Version herunterladen', 'Die LimeSurvey-Version steht in der Fußzeile des Admin-Panels. Laden Sie die Variante <strong>7.x</strong> oder <strong>6.x</strong> herunter und <strong>benennen Sie die Datei nicht um</strong> — LimeSurvey benennt das Designverzeichnis nach der Datei (z.&nbsp;B. <code>lc_medical</code>).'],
       ['In LimeSurvey hochladen', '<em>Konfiguration → Designs</em>, Tab <em>Umfrage-Designs</em>, Schaltfläche <strong>Hochladen &amp; installieren</strong>. ZIP-Datei wählen und bestätigen.'],
       ['In einer Umfrage auswählen', 'In der Umfrage: <em>Umfrageeinstellungen → Allgemein → Design</em>, z.&nbsp;B. „LimeControl Medical“ wählen und speichern. In der App LimeControl genügt ein Tippen.'],
-      ['Logo hinzufügen', 'In der Umfrage unter <em>Designoptionen → Bilder</em>: <em>Logo: Ja</em> setzen und eine PNG- oder JPG-Datei hochladen.'],
+      ['Logo hinzufügen', 'Am einfachsten mit dem Plugin <a href="#branding">LimeControlBranding</a>: Logo in der Kopfzeile, Partnerlogos in der Fußzeile und eine Markenfarbe. Ohne Plugin: unter <em>Designoptionen → Bilder</em> <em>Logo: Ja</em> setzen und eine PNG- oder JPG-Datei hochladen.'],
     ],
     callout: '<strong>Warum zwei Varianten?</strong> LimeSurvey&nbsp;7 hat dem Eltern-Design neue Optionen hinzugefügt (Farben, Eckenradien, Symbole, Tabellenumbruch), und das Formular <em>Designoptionen</em> zeigt nur die im Paket beschriebenen Optionen. Aussehen und Barrierefreiheit sind in beiden Varianten identisch — nur die Optionsliste im Panel unterscheidet sich. Die Variante 6.x ist nicht als kompatibel mit LimeSurvey&nbsp;7 markiert und umgekehrt.',
     more: [
@@ -292,6 +294,7 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
       ['„Das Design kann nicht importiert werden, weil fruity_twentythree nicht installiert ist“', 'Die Designs erweitern das eingebaute Design <em>Fruity TwentyThree</em> aus LimeSurvey 6 und 7. Installieren Sie es unter <em>Konfiguration → Designs</em> oder aktualisieren Sie LimeSurvey. Versionen 5.x und älter werden nicht unterstützt.'],
       ['Die Umfrage sieht nach CSS-Änderungen gleich aus', 'LimeSurvey cacht Designdateien. Klicken Sie unter <em>Konfiguration → Global → Allgemein</em> auf <strong>Asset-Cache leeren</strong> und laden Sie die Umfrageseite ohne Browser-Cache neu.'],
       ['Wie schalte ich die Tastenkürzel im CATI-Design ab?', 'Interviewer schalten sie mit der Schaltfläche „Kürzel“ in der Navigationsleiste ab (die Wahl merkt sich der Browser). Um sie dauerhaft zu deaktivieren, entfernen Sie die Zeile <code>--lc-hotkeys: 1;</code> aus <code>css/lc-theme.css</code>.'],
+      ['Laden die Designs Schriften von Google Fonts?', 'Nein. Designs mit eigener Typografie enthalten die Schriftdateien im Paket — der Browser lädt sie von Ihrem LimeSurvey-Server, die IP-Adressen der Befragten gehen also nicht an Dritte. Die übrigen Designs nutzen Systemschriften. Die Schriften stehen unter der SIL Open Font License 1.1 (<code>fonts/OFL-*.txt</code> im Paket).'],
       ['Darf ich die Designs kommerziell nutzen und verändern?', 'Ja. Die Designs stehen unter GPL-2.0-or-later (wie LimeSurvey) — Sie dürfen sie ändern, umbranden und in kommerziellen Projekten einsetzen.'],
       ['Funktionieren die Designs mit LimeControl?', `Ja — das Design ist eine Umfrageeinstellung auf der LimeSurvey-Seite. In der App <a href="${APP_URL}">LimeControl</a> können Sie einer Umfrage ein installiertes Design zuweisen.`],
     ],
@@ -302,6 +305,160 @@ unzip lc_medical.zip -d upload/themes/survey/lc_medical</code></pre>
     footerNote: (v) => `Designs in Version ${v}, lizenziert unter GPL-2.0-or-later, basierend auf Fruity TwentyThree (LimeSurvey GmbH).`,
   },
 };
+
+/** Linia „Pismo” na karcie motywu — nazwy fontów zapisane tymi fontami (site/szablony/fonts/specimens.css). */
+const TYPE = {
+  pl: { label: 'Pismo', roles: { heading: 'nagłówki', body: 'tekst' }, system: 'fonty systemowe — nic do pobrania' },
+  en: { label: 'Type', roles: { heading: 'headings', body: 'text' }, system: 'system fonts — nothing to download' },
+  de: { label: 'Schrift', roles: { heading: 'Überschriften', body: 'Text' }, system: 'Systemschriften — nichts zu laden' },
+};
+
+/** Sekcja #branding: wtyczka LimeControlBranding (limesurvey-themes/plugin/). */
+const BRAND = {
+  pl: {
+    eyebrow: 'Wtyczka LimeControlBranding',
+    h: 'Logo w&nbsp;nagłówku i&nbsp;stopce — bez edycji kodu',
+    p: 'Darmowa wtyczka dla LimeSurvey&nbsp;6 i&nbsp;7, przygotowana do motywów LimeControl. Logotypy wgrywasz prosto z&nbsp;formularza ustawień — raz dla wszystkich ankiet albo osobno w&nbsp;każdej z&nbsp;nich.',
+    list: [
+      '<strong>Nagłówek:</strong> logo organizacji i&nbsp;drugie logo (klient, partner), trzy wysokości i&nbsp;układy, biała podkładka na ciemnym nagłówku.',
+      '<strong>Stopka:</strong> do 12 logotypów (np. pasek funduszy UE), informacja o&nbsp;administratorze danych i&nbsp;link do polityki prywatności.',
+      '<strong>Kolor marki:</strong> zastępuje akcent motywu i&nbsp;sam koryguje kontrast do progów WCAG&nbsp;2.2&nbsp;AA — także w&nbsp;ciemnym motywie Midnight.',
+      '<strong>Ankiety wielojęzyczne:</strong> teksty w&nbsp;kilku językach (<code>[pl] Partnerzy [en] Partners</code>), tekst alternatywny dla czytników ekranu.',
+      '<strong>Bezpiecznie:</strong> wgrywanie tylko dla uprawnionych użytkowników, kontrola typu pliku, żadnych zapytań do zewnętrznych serwerów.',
+    ],
+    download: (v, size) => `Pobierz wtyczkę ${v} (${size})`,
+    downloadAria: (v, size) => `Pobierz wtyczkę LimeControlBranding ${v} (LimeControlBranding.zip, ${size})`,
+    stepsH: 'Instalacja w&nbsp;trzech krokach',
+    steps: [
+      '<em>Konfiguracja → Wtyczki</em> → <strong>Prześlij i&nbsp;zainstaluj</strong>, wskaż plik <code>LimeControlBranding.zip</code>.',
+      '<strong>Aktywuj</strong> wtyczkę i&nbsp;kliknij jej nazwę na liście wtyczek: w&nbsp;zakładce <em>Ustawienia</em> wgraj logotypy i&nbsp;ustaw stopkę dla wszystkich ankiet.',
+      'W&nbsp;wybranej ankiecie, <em>Ustawienia ankiety → Proste wtyczki → LimeControlBranding</em>: własne logotypy albo wyłączenie brandingu.',
+    ],
+    note: 'Logo z&nbsp;wtyczki zastępuje logo z&nbsp;opcji motywu, więc nic się nie dubluje. Instrukcja (PL i&nbsp;EN) jest w&nbsp;pliku <code>README.md</code> w&nbsp;paczce; licencja GPL-2.0-or-later.',
+    shots: {
+      header: ['Nagłówek ankiety', 'Ankieta w motywie Civic: logo instytutu po lewej i logo partnera po prawej stronie nagłówka'],
+      footer: ['Stopka ankiety', 'Stopka ankiety: nagłówek „Partnerzy badania”, trzy logotypy, informacja o administratorze danych i link do polityki prywatności'],
+      admin: ['Ustawienia wtyczki', 'Formularz ustawień wtyczki: logotypy stopki z podglądem, tekstem alternatywnym, linkiem i przyciskami zmiany kolejności'],
+    },
+  },
+  en: {
+    eyebrow: 'LimeControlBranding plugin',
+    h: 'Your logo in the header and footer — no code editing',
+    p: 'A free plugin for LimeSurvey&nbsp;6 and&nbsp;7, made for the LimeControl themes. Upload logos straight from the settings form — once for all surveys or separately in each one.',
+    list: [
+      '<strong>Header:</strong> your organisation\'s logo and a second logo (client, partner), three heights and layouts, a white plate on a dark header.',
+      '<strong>Footer:</strong> up to 12 logos (e.g. an EU funding strip), data controller details and a link to the privacy policy.',
+      '<strong>Brand colour:</strong> replaces the theme accent and corrects its contrast to the WCAG&nbsp;2.2&nbsp;AA thresholds — also in the dark Midnight theme.',
+      '<strong>Multilingual surveys:</strong> texts in several languages (<code>[pl] Partnerzy [en] Partners</code>) and alternative text for screen readers.',
+      '<strong>Safe:</strong> uploads only for authorised users, file type checks, and no requests to external servers.',
+    ],
+    download: (v, size) => `Download the plugin ${v} (${size})`,
+    downloadAria: (v, size) => `Download the LimeControlBranding plugin ${v} (LimeControlBranding.zip, ${size})`,
+    stepsH: 'Install in three steps',
+    steps: [
+      '<em>Configuration → Plugins</em> → <strong>Upload &amp; install</strong>, choose <code>LimeControlBranding.zip</code>.',
+      '<strong>Activate</strong> the plugin and click its name in the plugin list: on the <em>Settings</em> tab, upload logos and set up the footer for all surveys.',
+      'In a survey, <em>Survey settings → Simple plugins → LimeControlBranding</em>: its own logos, or branding switched off.',
+    ],
+    note: 'The plugin\'s logo replaces the logo from the theme options, so nothing appears twice. Instructions (Polish and English) are in <code>README.md</code> inside the package; licensed under GPL-2.0-or-later.',
+    shots: {
+      header: ['Survey header', 'A survey in the Civic theme: the institute logo on the left and a partner logo on the right of the header'],
+      footer: ['Survey footer', 'The survey footer (a Polish example): a partners heading, three logos, data controller details and a privacy policy link'],
+      admin: ['Plugin settings', 'The plugin settings form: footer logos with previews, alternative text, links and reorder buttons'],
+    },
+  },
+  de: {
+    eyebrow: 'Plugin LimeControlBranding',
+    h: 'Ihr Logo in Kopf- und Fußzeile — ohne Code',
+    p: 'Ein kostenloses Plugin für LimeSurvey&nbsp;6 und&nbsp;7, gemacht für die LimeControl-Designs. Logos laden Sie direkt im Einstellungsformular hoch — einmal für alle Umfragen oder für jede Umfrage einzeln.',
+    list: [
+      '<strong>Kopfzeile:</strong> Logo Ihrer Organisation und ein zweites Logo (Kunde, Partner), drei Höhen und Anordnungen, ein weißer Hintergrund auf dunkler Kopfzeile.',
+      '<strong>Fußzeile:</strong> bis zu 12 Logos (z.&nbsp;B. eine EU-Förderleiste), Angaben zum Verantwortlichen und ein Link zur Datenschutzerklärung.',
+      '<strong>Markenfarbe:</strong> ersetzt den Akzent des Designs und korrigiert den Kontrast auf die Schwellen von WCAG&nbsp;2.2&nbsp;AA — auch im dunklen Design Midnight.',
+      '<strong>Mehrsprachige Umfragen:</strong> Texte in mehreren Sprachen (<code>[de] Partner [en] Partners</code>) und Alternativtext für Screenreader.',
+      '<strong>Sicher:</strong> Hochladen nur für berechtigte Nutzer, Prüfung des Dateityps, keine Anfragen an externe Server.',
+    ],
+    download: (v, size) => `Plugin ${v} herunterladen (${size})`,
+    downloadAria: (v, size) => `Plugin LimeControlBranding ${v} herunterladen (LimeControlBranding.zip, ${size})`,
+    stepsH: 'Installation in drei Schritten',
+    steps: [
+      '<em>Konfiguration → Plugins</em> → <strong>Hochladen &amp; installieren</strong>, Datei <code>LimeControlBranding.zip</code> wählen.',
+      'Plugin <strong>aktivieren</strong> und in der Plugin-Liste auf seinen Namen klicken: im Tab <em>Einstellungen</em> Logos hochladen und die Fußzeile für alle Umfragen einrichten.',
+      'In einer Umfrage unter <em>Umfrageeinstellungen → Einfache Plugins → LimeControlBranding</em>: eigene Logos oder Branding aus.',
+    ],
+    note: 'Das Logo des Plugins ersetzt das Logo aus den Designoptionen, es erscheint also nichts doppelt. Die Anleitung (Polnisch und Englisch) liegt als <code>README.md</code> im Paket; die Admin-Oberfläche gibt es auch auf Deutsch. Lizenz GPL-2.0-or-later.',
+    shots: {
+      header: ['Kopfzeile der Umfrage', 'Eine Umfrage im Design Civic: das Logo des Instituts links und ein Partnerlogo rechts in der Kopfzeile'],
+      footer: ['Fußzeile der Umfrage', 'Die Fußzeile der Umfrage (Beispiel auf Polnisch): eine Überschrift zu den Partnern, drei Logos, Angaben zum Verantwortlichen und ein Link zur Datenschutzerklärung'],
+      admin: ['Plugin-Einstellungen', 'Das Einstellungsformular des Plugins: Logos der Fußzeile mit Vorschau, Alternativtext, Link und Schaltflächen zum Umsortieren'],
+    },
+  },
+};
+
+/** Atrybut class z niepustych nazw (sekcje zmieniają tło naprzemiennie, zależnie od obecności sekcji wtyczki). */
+const cls = (...names) => (names.filter(Boolean).length ? ` class="${names.filter(Boolean).join(' ')}"` : '');
+
+const SHOT_SIZE = { header: [960, 450], footer: [960, 363], admin: [960, 593] };
+
+/** Rodzina z specimens.css ma przedrostek „LC ” (bez kolizji z fontami strony). */
+const specimen = (family) => `'LC ${family}', '${family}', sans-serif`;
+
+function typeLine(t, rep, lang) {
+  const s = TYPE[lang];
+  const k = t.tokens;
+  const headStyle = (family) => [
+    `font-family:${family}`,
+    `font-weight:${k.headingWeight || 700}`,
+    k.headingStyle ? `font-style:${k.headingStyle}` : '',
+    k.headingTransform ? `text-transform:${k.headingTransform}` : '',
+  ].filter(Boolean).join(';');
+  if (!rep.fonts) {
+    return `<p class="tfont"><span class="tfont-label">${s.label}</span> <span class="tfont-name" style="${esc(headStyle(k.fontHeading))}">Aa</span> ${s.system}</p>`;
+  }
+  const { heading, body } = rep.fonts;
+  const names = heading === body
+    ? `<span class="tfont-name" style="${esc(headStyle(specimen(heading)))}">${esc(heading)}</span>`
+    : `<span class="tfont-name" style="${esc(headStyle(specimen(heading)))}">${esc(heading)}</span> <span class="tfont-role">(${s.roles.heading})</span> · <span class="tfont-name" style="${esc(`font-family:${specimen(body)}`)}">${esc(body)}</span> <span class="tfont-role">(${s.roles.body})</span>`;
+  return `<p class="tfont"><span class="tfont-label">${s.label}</span> ${names}</p>`;
+}
+
+function brandSection(plugin, lang) {
+  if (!plugin) return '';
+  const b = BRAND[lang];
+  const available = (plugin.shots || []).map((f) => f.replace(/^branding-|\.jpg$/g, ''));
+  const shots = Object.keys(SHOT_SIZE).filter((k) => available.includes(k));
+  return `
+    <section id="branding" aria-labelledby="brand-h">
+      <div class="container brand-grid">
+        <div class="brand-text">
+          <span class="eyebrow">${b.eyebrow}</span>
+          <h2 id="brand-h">${b.h}</h2>
+          <p class="muted">${b.p}</p>
+          <ul class="checklist">
+            ${b.list.map((li) => `<li><span>${li}</span></li>`).join('\n            ')}
+          </ul>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="${plugin.file}" download aria-label="${esc(b.downloadAria(plugin.version, kb(plugin.size)))}">
+              ${b.download(plugin.version, kb(plugin.size))}
+              ${DOWNLOAD_ICON}
+            </a>
+          </div>
+          <h3>${b.stepsH}</h3>
+          <ol class="brand-steps">
+            ${b.steps.map((st) => `<li>${st}</li>`).join('\n            ')}
+          </ol>
+          <p class="muted brand-note">${b.note}</p>
+        </div>
+        <div class="brand-shots">
+          ${shots.map((k) => `<figure>
+            <img src="/szablony/img/branding-${k}.jpg" width="${SHOT_SIZE[k][0]}" height="${SHOT_SIZE[k][1]}" loading="lazy" decoding="async" alt="${esc(b.shots[k][1])}" />
+            <figcaption>${b.shots[k][0]}</figcaption>
+          </figure>`).join('\n          ')}
+        </div>
+      </div>
+    </section>
+`;
+}
 
 const swatch = (hex, label) =>
   `<li><span class="sw" style="background:${hex}" aria-hidden="true"></span><span>${esc(label)}<code>${hex}</code></span></li>`;
@@ -326,6 +483,7 @@ function themeCard(t, rep, variants, lang) {
               <h3 id="${t.id}-title">${esc(t.label)}</h3>
               <p>${esc(themeText(t, 'summary', lang))}</p>
               <ul class="tags" aria-label="${s.useCases}">${themeText(t, 'useCases', lang).map((u) => `<li>${esc(u)}</li>`).join('')}</ul>
+              ${typeLine(t, rep, lang)}
               <ul class="swatches" aria-label="${s.palette}">
                 ${swatch(k.primary, s.swatch.primary)}${swatch(k.text, s.swatch.text)}${swatch(k.bg, s.swatch.bg)}
               </ul>
@@ -341,10 +499,10 @@ function themeCard(t, rep, variants, lang) {
 }
 
 /**
- * @param {{ cfg: object, report: object[], bundles: Record<string, number>, lang: 'pl'|'en'|'de' }} o
+ * @param {{ cfg: object, report: object[], bundles: Record<string, number>, plugin: object|null, lang: 'pl'|'en'|'de' }} o
  * @returns {{ path: string, html: string }} ścieżka względem site/ i gotowy HTML
  */
-export function renderPage({ cfg, report, bundles, lang }) {
+export function renderPage({ cfg, report, bundles, plugin, lang }) {
   const s = S[lang];
   const variants = cfg.variants;
   const tested = variants.map((v) => v.testedOn).join(s.and);
@@ -386,8 +544,8 @@ ${cards}
         </div>
       </div>
     </section>
-
-    <section id="${s.ids.a11y}" aria-labelledby="a11y-h">
+${brandSection(plugin, lang)}
+    <section id="${s.ids.a11y}"${cls(plugin && 'section-soft')} aria-labelledby="a11y-h">
       <div class="container split">
         <div>
           <span class="eyebrow">${s.a11yEyebrow}</span>
@@ -400,7 +558,7 @@ ${cards}
       </div>
     </section>
 
-    <section id="${s.ids.interviewer}" class="section-soft" aria-labelledby="iv-h">
+    <section id="${s.ids.interviewer}"${cls(!plugin && 'section-soft')} aria-labelledby="iv-h">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">${s.ivEyebrow}</span>
@@ -416,7 +574,7 @@ ${cards}
       </div>
     </section>
 
-    <section id="${s.ids.install}" class="install-section" aria-labelledby="inst-h">
+    <section id="${s.ids.install}"${cls('install-section', plugin && 'section-soft')} aria-labelledby="inst-h">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">${s.installEyebrow}</span>
@@ -474,6 +632,7 @@ ${cards}
     ogTitle: s.ogTitle,
     ogDescription: s.ogDescription(labels),
     ogImage: '/szablony/img/medical-desktop.jpg',
+    extraHead: cfg.themes.some((t) => t.fonts) ? '\n  <link rel="stylesheet" href="/szablony/fonts/specimens.css" />' : '',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'ItemList',

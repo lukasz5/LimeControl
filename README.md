@@ -11,7 +11,7 @@ szablony ankiet i gotowe wdrożenia.
 | Element | Co zawiera | Katalog |
 | --- | --- | --- |
 | **Aplikacja** | PWA (React + Express) dla API RemoteControl 2: ankiety, harmonogram, uczestnicy, statystyki, eksport | `src/`, `server.ts`, `server/` |
-| **Motywy ankiet** | 8 motywów WCAG 2.2 AA dla LimeSurvey 6 i 7, w tym motywy ankietera CATI i CAPI | [`limesurvey-themes/`](./limesurvey-themes/) |
+| **Motywy ankiet** | 16 motywów WCAG 2.2 AA dla LimeSurvey 6 i 7, w tym motywy ankietera CATI i CAPI, oraz wtyczka LimeControlBranding (logotypy w nagłówku i stopce) | [`limesurvey-themes/`](./limesurvey-themes/) |
 | **Szablony ankiet** | 12 kwestionariuszy PL/EN w formacie `.lss`, w tym szkielety wywiadów CATI i CAPI | [`survey-templates/`](./survey-templates/) |
 | **Wdrożenia** | LimeControl we własnym kontenerze Docker (bez Firebase) i wdrożenie usługi produkcyjnej | [`deploy/`](./deploy/) |
 | **Aplikacja mobilna** | iOS i Android (Capacitor) — ta sama aplikacja bez konta i bez ograniczeń CORS | [`mobile/`](./mobile/) |
@@ -103,8 +103,11 @@ Tryb wybiera serwer: `AUTH_MODE=local|firebase`, a bez tej zmiennej — `firebas
 
 ## Motywy i szablony ankiet
 
-- **Motywy** — Medical, Professional, Social, Marketing, Eco, Minimalist, CATI i CAPI. Motywy potomne
-  `fruity_twentythree`, kontrast sprawdzany przy budowaniu, osobne paczki dla LimeSurvey 6.x i 7.x.
+- **Motywy** — Medical, Professional, Social, Marketing, Eco, Minimalist, CATI i CAPI oraz motywy z własną
+  typografią: Editorial, Civic, Product, Studio, Logistics, Finance, Hospitality i ciemny Midnight. Motywy potomne
+  `fruity_twentythree`, kontrast sprawdzany przy budowaniu, osobne paczki dla LimeSurvey 6.x i 7.x. Wtyczka
+  [LimeControlBranding](./limesurvey-themes/plugin/LimeControlBranding/README.md) dodaje logotypy w nagłówku
+  i stopce oraz kolor marki.
   Pobieranie: [limecontrol.eu/szablony.html](https://limecontrol.eu/szablony.html), źródła i opis budowania:
   [limesurvey-themes/README.md](./limesurvey-themes/README.md).
 - **Szablony ankiet** — NPS, CSAT, zaangażowanie pracowników, exit interview, ewaluacja szkolenia, ocena
