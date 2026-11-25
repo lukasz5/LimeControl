@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dependent JSON questions for LimeSurvey · LimeControl</title><link rel="stylesheet" href="demo/components.css"><link rel="stylesheet" href="demo/demo.css"><link rel="stylesheet" href="docs/reading.css"></head>
+<body><header class="masthead"><div class="docframe masthead-items"><a class="brand" href="en/index.html"><span class="mark" aria-hidden="true">{ }</span> LimeControl</a><nav class="docnav" aria-label="Navigation"><a href="en/index.html">Demo</a><a href="README.en.html">Instructions</a><a href="docs/author-guide.en.html">Author guide</a><a href="README.html">Polski</a></nav></div></header>
+<main class="docframe doclayout"><article class="docs"><h1>Dependent JSON questions for LimeSurvey</h1>
+<p>This plugin and three question themes work on a self-hosted LimeSurvey Community Edition installation. Respondents select locations, specify activities for each city, enter hours in a matrix and explain values above a threshold. Survey authors configure the questions in the admin interface. Each block uses one native response column of question type U. Data stays on the survey server.</p>
+<p><a href="README.html">Polski</a> · <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases">GitHub releases</a> · <a href="https://limecontrol.eu/en/plugins.html">LimeControl catalogue</a></p>
+<h2 id="try-the-two-surveys">Try the two surveys</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Example</th>
+<th>What to try</th>
+<th>Files for your LimeSurvey installation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fieldwork</td>
+<td>Pick two locations and activities. Enter 9 and 0 hours. Explain the activity that took more than 8 hours.</td>
+<td><a download href="examples/fieldwork.lss">Survey LSS</a> · <a download href="examples/fieldwork-expected.en.csv">Expected CSV</a></td>
+</tr>
+<tr>
+<td>Equipment readiness for class</td>
+<td>Select devices in two locations. Record a battery level from 0 to 100%. Plan an action for each device at or below 20%.</td>
+<td><a download href="examples/equipment.lss">Survey LSS</a> · <a download href="examples/equipment-expected.en.csv">Expected CSV</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="en/index.html">Open the English demo</a> · <a href="demo/index.html">Polish demo</a> · <a href="docs/author-guide.en.html">Author guide</a></p>
+<p>To run the demo offline, extract the entire demo archive and open <code>demo/en/index.html</code> in your browser. Both forms use files from the extracted project.</p>
+<p>Version 0.2.0 adds optional inclusive minimum and maximum values to number columns. Install the four matching 0.2.0 packages to use the battery constraints in LimeSurvey. The fieldwork example also runs on version 0.1.0.</p>
+<p><img src="docs/screenshot.png" alt="Hours matrix for two activities on a real LimeSurvey installation" /></p>
+<h2 id="install-on-your-server">Install on your server</h2>
+<p>Use an administrator account with permission to install extensions. The installation must allow ZIP uploads and meet LimeSurvey's PHP extension requirements. The plugin requires PHP 8.1.29 or later. The LS 7.11.0 installer requires PHP 8.2.27 or later. Integration tests use PHP 8.3. <a href="https://github.com/LimeSurvey/LimeSurvey/blob/e717e9445015c8ac6a03811877e0ac7a9a9b010a/application/models/InstallerConfigForm.php#L53">7.11.0 installer requirements</a></p>
+<h2 id="paczki">0.2.0 release candidate packages</h2><ul class="files"><li><a class="btn btn-sm" download href="packages/LimeControlJsonQuestions-0.2.0.zip">Plugin</a></li><li><a class="btn btn-sm" download href="packages/LcJsonChoice-0.2.0.zip">Choice</a></li><li><a class="btn btn-sm" download href="packages/LcJsonMatrix-0.2.0.zip">Matrix</a></li><li><a class="btn btn-sm" download href="packages/LcJsonFollowup-0.2.0.zip">Follow-up</a></li><li><a class="btn btn-sm" download href="packages/SHA256SUMS">SHA-256 checksums</a></li></ul><div class="scroll"><table>
+<thead>
+<tr>
+<th>Edition</th>
+<th>Plugin</th>
+<th>Question themes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LS 6</td>
+<td>In Configuration, open Plugin manager. Upload the LimeControlJsonQuestions ZIP, confirm installation and activate the plugin.</td>
+<td>In Configuration → Themes → Question themes, import each theme ZIP you need.</td>
+</tr>
+<tr>
+<td>LS 7</td>
+<td>Open Plugins in the installation configuration, upload the plugin ZIP, confirm installation and select Activate.</td>
+<td>Open Question themes, import the themes and check their availability on a Huge free text question.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Download files from the same release, including SHA256SUMS. In the download directory run <code>sha256sum -c SHA256SUMS</code> or <code>shasum -a 256 -c SHA256SUMS</code>. The plugin ZIP contains the LimeControlJsonQuestions directory. The other archives are LcJsonChoice, LcJsonMatrix and LcJsonFollowup. Install all three themes to run the example.</p>
+<h2 id="build-your-first-survey">Build your first survey</h2>
+<ol>
+<li>
+<p>Import the <a download href="examples/fieldwork.lss">example LSS</a>. Open the survey administration settings and choose <strong>Tools → LimeControl JSON · Editor</strong>. In LS 7.11 with the new editor, Structure opens separately. To reach the Tools menu, open <code>index.php/surveyAdministration/rendersidemenulink/surveyid/SID/subaction/generalsettings</code> on your installation and replace <code>SID</code> with the survey ID. Inspect the source question for each block and the condition on the follow-up.</p>
+</li>
+<li>
+<p>To build it from scratch, add a native choice question called CITIES with Łódź and Gdynia as options. Add three subsequent Huge free text questions called WORK, TIME and REASON. Configure each block in the editor and save it.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Theme and source</th>
+<th>Settings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WORK</td>
+<td>Choice for each item, CITIES</td>
+<td>Add MEASURE and SERVICE as multiple-choice options.</td>
+</tr>
+<tr>
+<td>TIME</td>
+<td>Table from previous answers, WORK</td>
+<td>Add a numeric HOURS column.</td>
+</tr>
+<tr>
+<td>REASON</td>
+<td>Follow-up, TIME</td>
+<td>Add OTHER with a required comment. Show the row when HOURS in its source is greater than 8.</td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li>
+<p>Activate a test copy. Choose English as the survey language. Select both cities, Measurement in Łódź and Service in Gdynia. Enter <strong>9</strong> and <strong>0</strong> hours respectively. Select Other for Łódź and enter <strong>Repeat measurement</strong> to reproduce the comment in the expected CSV. The threshold is only exceeded in Łódź.</p>
+</li>
+<li>
+<p>Choose <strong>Export CSV</strong> and <strong>Codebook CSV</strong> in the survey tools. The <a download href="examples/fieldwork-expected.en.csv">example output</a> shows stable codes, row paths, zero and a comment. Response IDs and revision identifiers depend on the installation and saved configuration.</p>
+</li>
+</ol>
+<p>Rules combine comparisons using all, any and not. Configure visibility, required values, exclusive options and required comments. The editor offers preceding supported native choice questions and JSON blocks as sources. Keep stable option and column codes when changing translations or updating a definition.</p>
+<h2 id="configure-and-check-the-equipment-survey">Configure and check the equipment survey</h2>
+<ol>
+<li>Import <code>equipment.lss</code>. In the survey admin tools, open the JSON editor. Inspect the three U questions in order. <code>DEVICES</code> takes its rows from the native multiple-choice question <code>PLACES</code>. <code>CHARGE</code> takes its rows from <code>DEVICES</code>. <code>PLAN</code> takes its rows from <code>CHARGE</code>.</li>
+<li>In <code>CHARGE</code>, the <code>BATTERY</code> column has type <strong>Number</strong>, <strong>Require a value</strong>, minimum <strong>0</strong> and maximum <strong>100</strong>. Either limit may be omitted. In <code>PLAN</code>, the rule has action <strong>Show</strong>, target <strong>*</strong>, field <strong>source · BATTERY</strong>, operator <strong>At most</strong> and value <strong>20</strong>. Its <code>ACTION</code> column is required text for each visible row.</li>
+<li>Activate a test copy and follow the participant link. Choose English as the survey language. Select <strong>Library</strong> and <strong>Studio</strong>, then <strong>Tablet</strong> for the library and <strong>Camera</strong> for the studio. Enter <strong>0</strong> and <strong>100</strong> respectively. Type <strong>I will charge the tablet.</strong> in the action field for the tablet to match the sample CSV exactly. Finish the survey.</li>
+<li>In <strong>Tools → LimeControl JSON · Export CSV</strong>, find the five records for your response. The <code>CHARGE</code> record at path <code>[&quot;LIBRARY&quot;,&quot;TABLET&quot;]</code> has column <code>BATTERY</code> and numeric value <code>0</code>. The <code>PLAN</code> record at the same path has your text in <code>value</code>. The camera produces no follow-up record. Use <code>question_code</code>, <code>revision</code> and <code>column</code> to match a cell to translated labels in <strong>Codebook CSV</strong>.</li>
+<li>Try 20% and 21% to see the follow-up threshold. A value of 101% exceeds the allowed input range. If 101% is accepted, check the installed plugin version and column limits, then start a fresh response to exercise the new definition.</li>
+</ol>
+<p>A path starts with the stable code of a selected native answer. Each choice block appends the selected option code when it supplies rows to the next question. A matrix or follow-up passes the path through. When building rules, <code>source.CODE</code> reads the corresponding upstream row, <code>self.CODE</code> reads the current row and <code>source.count</code> gives the total number of source rows. <strong>Show</strong> with target <code>*</code> controls the whole row, while <strong>Require a value</strong> with target <code>*</code> requires at least one active cell in it. A numeric zero counts as a value.</p>
+<p>If the source list is empty, put a supported choice question (L, !, M or P) or a configured JSON block before the U question. To see dependent rows, preview the full survey and make an upstream selection. If your export contains a single serialized field, use the plugin's <strong>Export CSV</strong> in survey tools with both read and export permissions for responses.</p>
+<h2 id="large-surveys-data-and-removal">Large surveys, data and removal</h2>
+<p>Each block uses one physical response column regardless of the number of visual cells. Other native questions still consume their usual columns. The tested 40 × 40 matrix used 33,622 bytes. The MySQL TEXT column allowed 65,535 bytes on the tested installations. On PostgreSQL the plugin limit was 2 MiB. For an encrypted MySQL field the plugin reserves space for the encrypted representation. Split it into smaller blocks if the size limit is reached. Native statistics and the standard response export treat type U as text. The plugin CSV exposes the individual values. The legacy report helps interpret historical answers from the EU-Consult themes. Completing an interactive block requires JavaScript and an active plugin.</p>
+<p>Before upgrading, back up the survey, database and installed archives. Number columns created in 0.1.0 keep their previous behavior until you add a minimum or maximum in the editor and save the new definition. Check a new response against the limits, then resume a response with previously saved rows and compare both revisions in the export. Before removal, export the CSV and codebook, then use <strong>Detach theme and validation</strong> for the configured questions. For a complete uninstall, download a backup of the definitions, detach blocks starting with the last question in the chain and choose <strong>Delete retained configuration</strong> for each detached question. Deactivate the plugin and remove unused themes and the plugin in their respective managers. The native U questions and their saved responses belong to the survey. The plugin creates no tables.</p>
+<h2 id="compatibility-and-development">Compatibility and development</h2>
+<p>The 0.2.0 candidate packages were tested on LimeSurvey CE 6.17.19 and 7.11.0 with PHP 8.3.28 and PostgreSQL 14.20. Both example surveys were completed on each installation, and the five exported cells per survey matched its expected CSV. The checks also covered saving numeric bounds in the editor, resuming a response and reading back a 40 × 40 matrix.</p>
+<p>These results were obtained on fresh local installations using the four archives for version 0.1.0. Every configuration passed ZIP import, survey authoring, respondent completion and resume, and export of all 1,600 cells. <a href="docs/qualification-local.json">Local qualification report</a></p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>LimeSurvey CE</th>
+<th>PHP</th>
+<th>Database</th>
+<th>SQL columns before and after adding a 40 × 40 block</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.15.12</td>
+<td>8.3.28</td>
+<td>MySQL 8.4.13</td>
+<td>47 → 48</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>6.15.12</td>
+<td>8.3.28</td>
+<td>PostgreSQL 17.11</td>
+<td>47 → 48</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>6.17.19</td>
+<td>8.3.28</td>
+<td>MySQL 8.4.13</td>
+<td>47 → 48</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>6.17.19</td>
+<td>8.3.28</td>
+<td>PostgreSQL 17.11</td>
+<td>47 → 48</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>7.11.0+261116</td>
+<td>8.3.28</td>
+<td>MySQL 8.4.13</td>
+<td>48 → 49</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>7.11.0+261116</td>
+<td>8.3.28</td>
+<td>PostgreSQL 17.11</td>
+<td>48 → 49</td>
+<td>Passed</td>
+</tr>
+</tbody>
+</table></div>
+<p>The release also includes a repeat qualification on archives downloaded from GitHub Release. It records the actual PHP and database versions and all four ZIP checksums. <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/qualification.json">Version 0.1.0 qualification report</a></p>
+<pre><code class="language-sh">composer install
+npm ci
+npx playwright install chromium
+php tests/model.php
+node tests/respondent.browser.cjs
+node tests/respondent.parity.cjs
+python3 scripts/package.py --tag v0.2.0 --output dist/0.2.0
+python3 scripts/package.py --verify --output dist/0.2.0
+python3 scripts/analyse.py /path/to/limesurvey/source
+</code></pre>
+<p>Licensed under GPL-2.0-or-later. Question themes extend LimeSurvey's native U question. Historical question themes by Łukasz Szemiako provided the original use cases. <a href="LICENSE">License</a> · <a href="SECURITY.html">Security reporting</a></p>
+</article><aside class="contents" aria-label="On this page"><h2>On this page</h2><nav><a href="#try-the-two-surveys">Try the two surveys</a><a href="#install-on-your-server">Install on your server</a><a href="#paczki">0.2.0 release candidate packages</a><a href="#build-your-first-survey">Build your first survey</a><a href="#configure-and-check-the-equipment-survey">Configure and check the equipment survey</a><a href="#large-surveys-data-and-removal">Large surveys, data and removal</a><a href="#compatibility-and-development">Compatibility and development</a></nav></aside></main></body></html>

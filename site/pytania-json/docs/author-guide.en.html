@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build a dependent survey and read its results · LimeControl</title><link rel="stylesheet" href="../demo/components.css"><link rel="stylesheet" href="../demo/demo.css"><link rel="stylesheet" href="../docs/reading.css"></head>
+<body><header class="masthead"><div class="docframe masthead-items"><a class="brand" href="../en/index.html"><span class="mark" aria-hidden="true">{ }</span> LimeControl</a><nav class="docnav" aria-label="Navigation"><a href="../en/index.html">Demo</a><a href="../README.en.html">Instructions</a><a href="../docs/author-guide.en.html">Author guide</a><a href="../docs/poradnik-autora.html">Polski</a></nav></div></header>
+<main class="docframe doclayout"><article class="docs"><h1>Build a dependent survey and read its results</h1>
+<p>In <strong>Equipment readiness for class</strong>, respondents select locations, choose which devices to check at each location and enter a battery level for each device. At 20% or below, they describe how they will prepare that device before class. A tablet at the library and a tablet in the studio can have different answers. The survey uses one native LimeSurvey question followed by three <strong>Huge free text</strong> questions (type U).</p>
+<p><a href="../en/index.html?example=equipment">Try the English demo</a> · <a download href="../examples/equipment.lss">Download the equipment survey</a> · <a download href="../examples/equipment-expected.en.csv">Expected English CSV</a> · <a href="../README.en.html#install-on-your-server">Installation instructions</a> · <a href="poradnik-autora.html">Polski</a></p>
+<h2 id="reproduce-the-sample-response">Reproduce the sample response</h2>
+<ol>
+<li>Install the plugin and all three question themes from the 0.2.0 package set. In LimeSurvey, import <code>equipment.lss</code> as a survey. Choose <strong>English</strong> in the survey language selector. Preview the entire survey to check the question order. To test the export, activate a test copy and open its participant link.</li>
+<li>Select <strong>Library</strong> and <strong>Studio</strong>. Select <strong>Tablet</strong> for the library and <strong>Camera</strong> for the studio. The matrix will have two rows.</li>
+<li>Enter <strong>0</strong> for the tablet and <strong>100</strong> for the camera. In the follow-up for the tablet, enter <strong>I will charge the tablet.</strong> and finish the survey. Only the tablet needs an action.</li>
+<li>Open <strong>Tools → LimeControl JSON · Export CSV</strong> in survey administration. Find your <code>response_id</code>. Expect five records, two for <code>DEVICES</code>, two for <code>CHARGE</code> and one for <code>PLAN</code>. Compare the codes, paths and values with the <a download href="../examples/equipment-expected.en.csv">English sample output</a>.</li>
+</ol>
+<p>Try <strong>20</strong> for the tablet in another response. The action field still appears. At <strong>21</strong> it disappears. Try <strong>101</strong> in the battery field to see a range error. The battery column sets the range of valid inputs, while a separate rule on the follow-up determines which devices need an action.</p>
+<h2 id="configure-the-questions-in-your-own-survey">Configure the questions in your own survey</h2>
+<p>Create the questions in the order shown. Under <strong>Tools → LimeControl JSON · Editor</strong>, choose each U question, set its source and save the block. The source can be an earlier native single-choice list (L or !), a multiple-choice question (M or P), or one of the earlier JSON blocks.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Type or question theme</th>
+<th>Settings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PLACES</code></td>
+<td>Native multiple choice (M)</td>
+<td>Add subquestions <code>LIBRARY</code> (“Library”) and <code>STUDIO</code> (“Studio”).</td>
+</tr>
+<tr>
+<td><code>DEVICES</code></td>
+<td>U → Choice for each item</td>
+<td>Choose <code>PLACES</code> as the source. Add <code>TABLET</code> and <code>CAMERA</code> as <strong>Multiple choice</strong> options.</td>
+</tr>
+<tr>
+<td><code>CHARGE</code></td>
+<td>U → Table from previous answers</td>
+<td>Choose <code>DEVICES</code>. Add the <strong>Number</strong> column <code>BATTERY</code>, label it “Battery level (%)”, select <strong>Require a value</strong>, and set minimum 0 and maximum 100.</td>
+</tr>
+<tr>
+<td><code>PLAN</code></td>
+<td>U → Follow-up question</td>
+<td>Choose <code>CHARGE</code>. Add the required <strong>Text</strong> column <code>ACTION</code> and label it “What will you do before class?”. Add the rule below.</td>
+</tr>
+</tbody>
+</table></div>
+<p>For <code>PLAN</code>, set the action to <strong>Show</strong>, the target to <strong>*</strong>, the field to <strong>source · BATTERY</strong>, the operator to <strong>At most</strong> and the value to <strong>20</strong>. LimeSurvey displays the row when that device has 20% charge or less. Here is the rule as stored in the definition.</p>
+<pre><code class="language-json">{
+  &quot;effect&quot;: &quot;show&quot;,
+  &quot;target&quot;: &quot;*&quot;,
+  &quot;when&quot;: { &quot;field&quot;: &quot;source.BATTERY&quot;, &quot;op&quot;: &quot;lte&quot;, &quot;value&quot;: 20 }
+}
+</code></pre>
+<p>A row can have one active <code>single</code> option and several <code>multi</code> options. Choosing an <strong>Exclusive</strong> option clears the other active entries in its row. <strong>Comment</strong> requires a comment when the respondent uses that option. For a conditional comment, choose the <strong>Require a comment</strong> action and specify its condition.</p>
+<p>To see how a comment is exported, open <strong>Fieldwork</strong>. Choose both locations, select <strong>Measurement</strong> for Łódź and <strong>Service</strong> for Gdynia, and enter <strong>9</strong> and <strong>0</strong> hours respectively. Select <strong>Other</strong> for the measurement and type <strong>Repeat measurement</strong> as the comment. The hours follow-up appears only for the activity above 8 hours. <a href="../en/index.html?example=fieldwork">Try Fieldwork</a> · <a download href="../examples/fieldwork.lss">Survey LSS</a> · <a download href="../examples/fieldwork-expected.en.csv">Expected English CSV</a></p>
+<h3 id="rule-fields-and-conditions">Rule fields and conditions</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source.BATTERY</code></td>
+<td>The value in column <code>BATTERY</code> of this device’s upstream row. Choose from columns defined in the source block.</td>
+</tr>
+<tr>
+<td><code>self.CODE</code></td>
+<td>A column in the current row. Use it to reveal another field in the same question.</td>
+</tr>
+<tr>
+<td><code>source.count</code></td>
+<td>The total number of source rows feeding this block. The sample equipment matrix has two.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Numeric operators include <code>gt</code> (&gt;), <code>gte</code> (≥), <code>lt</code> (&lt;) and <code>lte</code> (≤). Use <code>eq</code> to test equality. <code>selected</code> checks whether a cell has an active value, which includes numeric zero. <strong>All</strong> requires every condition in its group, <strong>Any</strong> requires at least one and <strong>Not</strong> inverts one condition.</p>
+<p>With the action <strong>Show</strong>, the target <code>*</code> controls the whole row. With <strong>Require a value</strong>, the same target requires at least one active cell in the row. To require a particular field, choose its column code as the target. If several <strong>Show</strong> rules target the same item, all must match. Export includes only cells that remain visible and paths that match the respondent’s current upstream selections.</p>
+<h3 id="numeric-limits-in-version-020">Numeric limits in version 0.2.0</h3>
+<p>For a <code>number</code> column you can set a minimum, a maximum, or both. Each limit is inclusive. Equal limits allow exactly one number. <strong>Require a value</strong> is a separate setting. A column without limits also accepts negative numbers. The battery column can be defined as follows.</p>
+<pre><code class="language-json">{
+  &quot;code&quot;: &quot;BATTERY&quot;,
+  &quot;type&quot;: &quot;number&quot;,
+  &quot;label&quot;: { &quot;en&quot;: &quot;Battery level (%)&quot; },
+  &quot;required&quot;: true,
+  &quot;min&quot;: 0,
+  &quot;max&quot;: 100
+}
+</code></pre>
+<h2 id="read-the-json-and-the-csv">Read the JSON and the CSV</h2>
+<p>LimeSurvey stores each U question in one response column. Each answer contains the format version, the revision of that question’s definition and a list of rows. For the sample equipment response, <code>CHARGE</code> contains the following JSON.</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: 1,
+  &quot;revision&quot;: &quot;3439516541d77259&quot;,
+  &quot;rows&quot;: [
+    { &quot;path&quot;: [&quot;LIBRARY&quot;, &quot;TABLET&quot;], &quot;cells&quot;: { &quot;BATTERY&quot;: { &quot;value&quot;: 0 } } },
+    { &quot;path&quot;: [&quot;STUDIO&quot;, &quot;CAMERA&quot;], &quot;cells&quot;: { &quot;BATTERY&quot;: { &quot;value&quot;: 100 } } }
+  ]
+}
+</code></pre>
+<p>The <code>path</code> identifies a row. Its first code comes from the selected native answer. A <code>choice</code> block appends a selected option code when it supplies rows to the next question. A matrix passes the path to the follow-up. The path <code>[&quot;LIBRARY&quot;,&quot;TABLET&quot;]</code> therefore identifies the same device in both <code>CHARGE</code> and <code>PLAN</code>, across all survey languages.</p>
+<p>Each record in the plugin CSV represents one stored cell in an active row. Find <code>question_code = CHARGE</code>, <code>column = BATTERY</code> and <code>path = [&quot;LIBRARY&quot;,&quot;TABLET&quot;]</code>. Its <code>value = 0</code> means an empty battery. In <code>PLAN</code>, “I will charge the tablet.” is the <code>value</code> of a text column. In the fieldwork survey, “Repeat measurement” is stored in the separate <code>comment</code> field on the <code>OTHER</code> cell. <a download href="../examples/equipment-expected.en.csv">Equipment CSV</a> · <a download href="../examples/fieldwork-expected.en.csv">Fieldwork CSV</a></p>
+<p>To look up the translated labels, download <strong>LimeControl JSON · Codebook CSV</strong> and join it to the response export by <code>question_code</code>, <code>revision</code> and <code>column</code>. The survey installation assigns the response ID. Editing the definition, including its labels, can change the revision. Keep the existing column and option codes when translating.</p>
+<h2 id="troubleshoot-a-different-result">Troubleshoot a different result</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>What you see</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The source is missing from the editor</td>
+<td>Put it before the U question in the survey and group order. Check its question type and save the upstream block’s configuration.</td>
+</tr>
+<tr>
+<td>A dependent question has no rows</td>
+<td>Start a full survey preview and choose a location and a device. A single-question preview starts without those selections. For <code>PLAN</code>, check that at least one device has a battery level of 20% or less.</td>
+</tr>
+<tr>
+<td>The question theme is unavailable</td>
+<td>Import that theme’s ZIP under <strong>Question themes</strong> and activate <code>LimeControlJsonQuestions</code> in the plugin manager.</td>
+</tr>
+<tr>
+<td>The battery field accepts 101</td>
+<td>Check the installed plugin version and the limits in <code>BATTERY</code>. Start a new response after saving the definition to test its new revision.</td>
+</tr>
+<tr>
+<td>The CSV contains a single field with serialized JSON</td>
+<td>Choose <strong>Tools → LimeControl JSON · Export CSV</strong>. The account needs both read and export permissions for responses in this survey.</td>
+</tr>
+<tr>
+<td>The answer exceeds field capacity</td>
+<td>Check the size of the encoded block in bytes. Split large tables or long comments across several U questions. Each block has a maximum of 2 MiB. MySQL column capacity and encryption may reduce that limit.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Before upgrading from 0.1.0, back up the database, survey and installed archives. Update all four packages to the same version. Columns without <code>min</code> or <code>max</code> retain their previous range. To introduce a new limit, set it in the editor and save. Start one new response, resume an earlier response with stored rows, then compare their revisions in the export. See the <a href="../README.en.html#large-surveys-data-and-removal">maintenance instructions</a> for detaching a question and the <a href="../README.en.html#compatibility-and-development">version-specific qualification results</a>.</p>
+<h2 id="paczki">0.2.0 release candidate packages</h2><ul class="files"><li><a class="btn btn-sm" download href="../packages/LimeControlJsonQuestions-0.2.0.zip">Plugin</a></li><li><a class="btn btn-sm" download href="../packages/LcJsonChoice-0.2.0.zip">Choice</a></li><li><a class="btn btn-sm" download href="../packages/LcJsonMatrix-0.2.0.zip">Matrix</a></li><li><a class="btn btn-sm" download href="../packages/LcJsonFollowup-0.2.0.zip">Follow-up</a></li><li><a class="btn btn-sm" download href="../packages/SHA256SUMS">SHA-256 checksums</a></li></ul></article><aside class="contents" aria-label="On this page"><h2>On this page</h2><nav><a href="#reproduce-the-sample-response">Reproduce the sample response</a><a href="#configure-the-questions-in-your-own-survey">Configure the questions in your own survey</a><a href="#read-the-json-and-the-csv">Read the JSON and the CSV</a><a href="#troubleshoot-a-different-result">Troubleshoot a different result</a><a href="#paczki">0.2.0 release candidate packages</a></nav></aside></main></body></html>

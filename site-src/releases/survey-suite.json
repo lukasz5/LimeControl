@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/lukasz5/limecontrol-survey-suite",
+  "connectorsRepository": "https://github.com/lukasz5/limecontrol-commerce-connectors",
+  "commit": "0cd5b522f8805654abde226347dcbdf09cdb758c",
+  "distPath": "limesurvey-plugins/suite/dist",
+  "version": "0.1.0",
+  "status": "published",
+  "qualifiedOn": ["6.15.12", "7.11.0"],
+  "assets": {
+    "crm": { "file": "LimeControlCrm-0.1.0.zip", "sha256": "8b219cbc0a5056ff1785e6a368def69ef521da0da811bd6b508538682cbd7757" },
+    "crmDesk": { "file": "LimeControlCrmDesk-0.1.0.zip", "sha256": "76f5dccd4a8aeb1228883b244284aca7b176ada2306c56aa08753436f4a097a9" },
+    "feedback": { "file": "LimeControlFeedback-0.1.0.zip", "sha256": "c83757fe2dbc29690ce61d0469931261d6da55ad5f4ddb1e82e202eb22143f8c" },
+    "surveys": { "file": "LimeControlSurveys-0.1.0.zip", "sha256": "6c9af457d4377099f90e129836c4feefddf867dd8b89c7826e9efc48ed8b3c52" },
+    "woocommerce": { "file": "limecontrol-feedback-woocommerce-0.1.0.zip", "sha256": "7d1b98c8abc5b81e71ff54db2677ae37caaefe3fa309eba72fd2ad8e186f249a" },
+    "prestashop": { "file": "limecontrol-feedback-prestashop-0.1.0.zip", "sha256": "f3a6c936e26b3fc30ebe8b4e0fabd8a7aeed7e604273be7f5d4e963c7bd6b65b" },
+    "opencart": { "file": "limecontrol_feedback.ocmod.zip", "sha256": "721b53f5e75323da7f5cb90259fb344e6da01e2ff264eb44eeb331fcc0ea65e0" },
+    "shopify": { "file": "limecontrol-feedback-shopify-0.1.0.zip", "sha256": "c2640ed9ad2211f03eef6d47d980c781c060536ea8c46148919b670836aa141a" },
+    "shoper": { "file": "limecontrol-feedback-shoper-0.1.0.zip", "sha256": "72fe4018aca63e840d993671b658e9f294e134dbad41a49aa9d20be87b0a956e" }
+  }
+}

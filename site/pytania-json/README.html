@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pl" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pytania zależne JSON dla LimeSurvey · LimeControl</title><link rel="stylesheet" href="demo/components.css"><link rel="stylesheet" href="demo/demo.css"><link rel="stylesheet" href="docs/reading.css"></head>
+<body><header class="masthead"><div class="docframe masthead-items"><a class="brand" href="index.html"><span class="mark" aria-hidden="true">{ }</span> LimeControl</a><nav class="docnav" aria-label="Nawigacja"><a href="index.html">Demo</a><a href="README.html">Instrukcja</a><a href="docs/poradnik-autora.html">Poradnik</a><a href="README.en.html">English</a></nav></div></header>
+<main class="docframe doclayout"><article class="docs"><h1>Pytania zależne JSON dla LimeSurvey</h1>
+<p>Zestaw dla właścicieli instalacji LimeSurvey Community Edition 6 i 7. Respondent wybiera lokalizacje, w następnym pytaniu określa prace dla każdego miasta, wpisuje godziny do macierzy i uzasadnia wyniki przekraczające próg. Autor konfiguruje ten przebieg w panelu ankiety. Jeden blok zajmuje jedno natywne pole odpowiedzi typu U. Wszystkie dane pozostają na serwerze ankiety.</p>
+<p><a href="README.en.html">English</a> · <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases">Paczki GitHub Release</a> · <a href="https://limecontrol.eu/wtyczki.html">Katalog LimeControl</a></p>
+<h2 id="wypróbuj-dwie-ankiety">Wypróbuj dwie ankiety</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Przykład</th>
+<th>Co zrobić w demie</th>
+<th>Pliki do własnej instalacji</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prace terenowe</td>
+<td>Wybierz prace w dwóch miastach. Wpisz 9 i 0 godzin. Przy wyniku ponad 8 godzin pojawi się pytanie o powód.</td>
+<td><a download href="examples/fieldwork.lss">Ankieta LSS</a> · <a download href="examples/fieldwork-expected.csv">CSV po polsku</a> · <a download href="examples/fieldwork-expected.en.csv">CSV po angielsku</a></td>
+</tr>
+<tr>
+<td>Gotowość sprzętu do zajęć</td>
+<td>Wybierz tablet i aparat. W macierzy wpisz naładowanie od 0 do 100%. Przy wyniku do 20% włącznie zaplanuj działanie przed zajęciami.</td>
+<td><a download href="examples/equipment.lss">Ankieta LSS</a> · <a download href="examples/equipment-expected.csv">CSV po polsku</a> · <a download href="examples/equipment-expected.en.csv">CSV po angielsku</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="demo/index.html">Otwórz demo po polsku</a> · <a href="en/index.html">Demo po angielsku</a> · <a href="docs/poradnik-autora.html">Poradnik autora z instrukcją odtworzenia obu typów wyników</a></p>
+<p>Aby uruchomić demo z dysku, rozpakuj całe archiwum demo i otwórz w przeglądarce plik <code>demo/index.html</code>. Oba formularze korzystają z plików zapisanych w tej samej paczce.</p>
+<p>Wersja 0.2.0 dodaje opcjonalne minimum i maksimum dla kolumn liczbowych. Obie granice są włączne. Do sprawdzenia pełnego scenariusza sprzętu na własnym serwerze zainstaluj cztery paczki 0.2.0. Przykład terenowy działa także z wydaniem 0.1.0.</p>
+<p><img src="docs/screenshot.png" alt="Macierz godzin dla prac w Łodzi i Gdyni na testowej instalacji LimeSurvey" /></p>
+<h2 id="instalacja">Instalacja</h2>
+<p>Potrzebujesz konta administracyjnego z prawem instalowania rozszerzeń, obsługi wgrywania ZIP w danej instalacji oraz PHP z rozszerzeniami wymaganymi przez LimeSurvey. Kod wtyczki wymaga PHP 8.1.29 lub nowszego. Instalator wydania LS 7.11.0 wymaga co najmniej PHP 8.2.27. Do testów integracyjnych używamy PHP 8.3. <a href="https://github.com/LimeSurvey/LimeSurvey/blob/e717e9445015c8ac6a03811877e0ac7a9a9b010a/application/models/InstallerConfigForm.php#L53">Wymagania instalatora 7.11.0</a></p>
+<h2 id="paczki">Paczki instalacyjne kandydata 0.2.0</h2><ul class="files"><li><a class="btn btn-sm" download href="packages/LimeControlJsonQuestions-0.2.0.zip">Wtyczka</a></li><li><a class="btn btn-sm" download href="packages/LcJsonChoice-0.2.0.zip">Wybór</a></li><li><a class="btn btn-sm" download href="packages/LcJsonMatrix-0.2.0.zip">Macierz</a></li><li><a class="btn btn-sm" download href="packages/LcJsonFollowup-0.2.0.zip">Dopytanie</a></li><li><a class="btn btn-sm" download href="packages/SHA256SUMS">Sumy SHA-256</a></li></ul><div class="scroll"><table>
+<thead>
+<tr>
+<th>Linia</th>
+<th>Wtyczka</th>
+<th>Motywy pytań</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LS 6</td>
+<td>W konfiguracji otwórz menedżer wtyczek. Wgraj ZIP <code>LimeControlJsonQuestions</code>, potwierdź instalację i aktywuj wtyczkę.</td>
+<td>W konfiguracji motywów otwórz <strong>Motywy pytań</strong> i zaimportuj każdy potrzebny ZIP oddzielnie.</td>
+</tr>
+<tr>
+<td>LS 7</td>
+<td>W konfiguracji instalacji otwórz <strong>Wtyczki</strong>, wgraj ZIP wtyczki, potwierdź i wybierz <strong>Aktywuj</strong>.</td>
+<td>Otwórz <strong>Motywy pytań</strong>, zaimportuj ZIP-y i sprawdź ich dostępność przy pytaniu „Bardzo długi tekst”.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pobierz wszystkie pliki tej samej wersji oraz <code>SHA256SUMS</code>. W katalogu z plikami uruchom <code>shasum -a 256 -c SHA256SUMS</code> lub <code>sha256sum -c SHA256SUMS</code>. Archiwum wtyczki ma katalog główny <code>LimeControlJsonQuestions/</code>. Trzy osobne archiwa zawierają <code>LcJsonChoice</code> (wybór), <code>LcJsonMatrix</code> (tabela) i <code>LcJsonFollowup</code> (pytanie uzupełniające). Do odtworzenia kompletnego przykładu zainstaluj wszystkie trzy.</p>
+<h2 id="pierwsza-ankieta">Pierwsza ankieta</h2>
+<ol>
+<li>
+<p>W panelu zaimportuj <a download href="examples/fieldwork.lss">ankietę demonstracyjną</a>. W ustawieniach administracyjnych ankiety otwórz <strong>Narzędzia → LimeControl JSON · Edytor</strong>. W LS 7.11 z nowym edytorem widok „Struktura” otwiera się osobno. Do menu Narzędzia prowadzi adres <code>index.php/surveyAdministration/rendersidemenulink/surveyid/SID/subaction/generalsettings</code> w Twojej instalacji. Zastąp <code>SID</code> numerem ankiety. Sprawdź źródła pytań oraz regułę ustawioną dla pytania uzupełniającego.</p>
+</li>
+<li>
+<p>Aby ułożyć ankietę samodzielnie, dodaj zwykłe pytanie wyboru o kodzie <code>CITIES</code> z opcjami Łódź i Gdynia. Dodaj później trzy pytania typu U z kodami <code>WORK</code>, <code>TIME</code> i <code>REASON</code>. W edytorze połącz je w kolejności podanej w tabeli. Zapisz każde pytanie. Etykiety można przetłumaczyć przy zachowaniu tych samych kodów.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Pytanie</th>
+<th>Motyw i źródło</th>
+<th>Konfiguracja</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WORK</td>
+<td>Wybór dla każdej pozycji, źródło CITIES</td>
+<td>Dodaj opcje wielokrotne MEASURE („Pomiar”) i SERVICE („Serwis”).</td>
+</tr>
+<tr>
+<td>TIME</td>
+<td>Tabela, źródło WORK</td>
+<td>Dodaj kolumnę liczbową HOURS („Godziny”).</td>
+</tr>
+<tr>
+<td>REASON</td>
+<td>Pytanie uzupełniające, źródło TIME</td>
+<td>Dodaj opcję OTHER („Inne”) z wymaganym komentarzem po zaznaczeniu. Pokaż cały wiersz, gdy HOURS w źródle jest większe od 8.</td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li>
+<p>Aktywuj kopię testową. Wybierz oba miasta, pomiar w Łodzi i serwis w Gdyni. Wpisz kolejno <strong>9</strong> i <strong>0</strong>. Po wybraniu „Inne” wpisz <strong>Powtórzenie pomiaru</strong>, aby odtworzyć wzorcowy eksport. Dla Gdyni pytanie o przekroczenie progu nie ma zastosowania.</p>
+</li>
+<li>
+<p>W narzędziach ankiety wybierz <strong>Eksport CSV</strong> i <strong>Słownik CSV</strong>. <a download href="examples/fieldwork-expected.csv">Oczekiwany wynik przykładu</a> pokazuje trwałe kody, ścieżkę pozycji, liczbę zero i komentarz. Identyfikator odpowiedzi i numer rewizji zależą od instalacji oraz zapisanej konfiguracji.</p>
+</li>
+</ol>
+<p>Edytor pozwala grupować porównania za pomocą „wszystkie”, „dowolny” i zaprzeczenia. Można sterować widocznością, wymaganiem wartości, wyłącznością i wymaganym komentarzem. Źródłem jest wcześniejsze obsługiwane pytanie wyboru lub blok tego zestawu. Wybierz pytanie z listy dostępnej w edytorze. Używaj stałych kodów opcji i kolumn podczas kolejnych tłumaczeń i aktualizacji.</p>
+<h2 id="duże-ankiety-dane-i-odzyskiwanie">Duże ankiety, dane i odzyskiwanie</h2>
+<p>Każdy blok ma jedną fizyczną kolumnę, również gdy wyświetla wiele wierszy i kolumn. Pozostałe natywne pytania nadal zajmują odpowiednie pola LimeSurvey. W teście macierz 40 × 40 zajęła 33 622 bajty. Na testowym MySQL pole TEXT pozwalało na 65 535 bajtów, a na PostgreSQL limit wtyczki wynosił 2 MiB. Przy szyfrowaniu pola MySQL wtyczka rezerwuje miejsce na zaszyfrowaną treść. Przy komunikacie o przekroczeniu limitu podziel kwestionariusz na mniejsze bloki. Natywna statystyka i standardowy eksport traktują odpowiedź typu U jako tekst. CSV wtyczki rozpisuje poszczególne wartości. Raport historyczny pomaga interpretować odpowiedzi zapisane przez motywy EU-Consult. Walidacja wymaga JavaScriptu w przeglądarce respondenta oraz działającej wtyczki na serwerze.</p>
+<p>Przed aktualizacją wykonaj kopię bazy, ankiety i dotychczasowych ZIP-ów. Po aktualizacji wznów odpowiedź testową i sprawdź eksport. Przed usunięciem zestawu zapisz CSV oraz słownik, a następnie skorzystaj z funkcji <strong>Odłącz motyw i walidację</strong> dla pytań objętych konfiguracją. Dla pełnego odinstalowania pobierz kopię definicji, odpinaj bloki od ostatniego pytania w łańcuchu i wybierz <strong>Usuń zachowaną konfigurację</strong> przy każdym odpiętym pytaniu. Wyłącz wtyczkę i usuń nieużywane motywy oraz wtyczkę w ich menedżerach. Podstawowe pytania typu U i zapisane w nich odpowiedzi należą do ankiety. Sama wtyczka nie tworzy tabel.</p>
+<h2 id="zgodność-i-rozwój">Zgodność i rozwój</h2>
+<p>Pakiety kandydata 0.2.0 sprawdziliśmy na LimeSurvey CE 6.17.19 oraz 7.11.0, z PHP 8.3.28 i PostgreSQL 14.20. Na obu instalacjach respondent ukończył obie przykładowe ankiety. Eksport odtworzył po pięć komórek zgodnych z każdym wzorcem CSV. Sprawdziliśmy również zapis granic w edytorze, wznowienie odpowiedzi i ponowny odczyt macierzy 40 × 40.</p>
+<p>Poniższe wyniki pochodzą z czystych lokalnych instalacji testujących cztery archiwa wersji 0.1.0. W każdej konfiguracji sprawdzono import ZIP, edytor autora, przejście i wznowienie ankiety oraz eksport wszystkich 1600 komórek. <a href="docs/qualification-local.json">Raport testów lokalnych</a></p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>LimeSurvey CE</th>
+<th>PHP</th>
+<th>Baza danych</th>
+<th>Kolumny SQL przed i po dodaniu bloku 40 × 40</th>
+<th>Wynik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.15.12</td>
+<td>8.3.28</td>
+<td>MySQL 8.4.13</td>
+<td>47 → 48</td>
+<td>Przeszedł</td>
+</tr>
+<tr>
+<td>6.15.12</td>
+<td>8.3.28</td>
+<td>PostgreSQL 17.11</td>
+<td>47 → 48</td>
+<td>Przeszedł</td>
+</tr>
+<tr>
+<td>6.17.19</td>
+<td>8.3.28</td>
+<td>MySQL 8.4.13</td>
+<td>47 → 48</td>
+<td>Przeszedł</td>
+</tr>
+<tr>
+<td>6.17.19</td>
+<td>8.3.28</td>
+<td>PostgreSQL 17.11</td>
+<td>47 → 48</td>
+<td>Przeszedł</td>
+</tr>
+<tr>
+<td>7.11.0+261116</td>
+<td>8.3.28</td>
+<td>MySQL 8.4.13</td>
+<td>48 → 49</td>
+<td>Przeszedł</td>
+</tr>
+<tr>
+<td>7.11.0+261116</td>
+<td>8.3.28</td>
+<td>PostgreSQL 17.11</td>
+<td>48 → 49</td>
+<td>Przeszedł</td>
+</tr>
+</tbody>
+</table></div>
+<p>Wydanie zawiera też raport z powtórzenia kwalifikacji na plikach pobranych z GitHub Release. Podaje dokładne wersje PHP, bazy i sumy wszystkich czterech ZIP-ów. <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/qualification.json">Raport wersji 0.1.0</a></p>
+<pre><code class="language-sh">composer install
+npm ci
+npx playwright install chromium
+php tests/model.php
+node tests/respondent.browser.cjs
+node tests/respondent.parity.cjs
+python3 scripts/package.py --tag v0.2.0 --output dist/0.2.0
+python3 scripts/package.py --verify --output dist/0.2.0
+python3 scripts/analyse.py /sciezka/do/zrodel/limesurvey
+</code></pre>
+<p>Kod wykorzystuje licencję GPL-2.0-or-later. Motywy dziedziczą po podstawowym typie U LimeSurvey. Historyczne motywy Łukasza Szemiako służyły jako wzorzec zachowania. <a href="LICENSE">Licencja</a> · <a href="SECURITY.html">Zgłaszanie problemów bezpieczeństwa</a></p>
+</article><aside class="contents" aria-label="W tym dokumencie"><h2>W tym dokumencie</h2><nav><a href="#wypróbuj-dwie-ankiety">Wypróbuj dwie ankiety</a><a href="#instalacja">Instalacja</a><a href="#paczki">Paczki instalacyjne kandydata 0.2.0</a><a href="#pierwsza-ankieta">Pierwsza ankieta</a><a href="#duże-ankiety-dane-i-odzyskiwanie">Duże ankiety, dane i odzyskiwanie</a><a href="#zgodność-i-rozwój">Zgodność i rozwój</a></nav></aside></main></body></html>

@@ -10,6 +10,7 @@ Nazwa i logo LimeControl również nie są objęte licencją otwartego oprogramo
 
 Wyjątek stanowią pliki do pobrania przechowywane w `site/`, które zachowują własne licencje:
 
+- demo i paczki wtyczki pytań JSON w `site/pytania-json/` zachowują licencję GPL-2.0-or-later projektu pytań JSON oraz dołączone licencje bibliotek,
 - paczki motywów ankiet w `site/szablony/pobierz/` — GPL-2.0-or-later (źródła w `limesurvey-themes/`),
 - pliki szablonów ankiet w `site/ankiety/pobierz/` i `site/ankiety/catalog.json` — CC0 1.0 (źródła w `survey-templates/`).
 
@@ -21,5 +22,6 @@ fair use. The LimeControl name and logo are not covered by the open-source licen
 
 The downloadable files stored under `site/` are an exception and keep their own licences:
 
+- the JSON Questions demo and packages in `site/pytania-json/` retain the JSON Questions project’s GPL-2.0-or-later licence and bundled library notices,
 - the survey theme packages in `site/szablony/pobierz/` — GPL-2.0-or-later (sources in `limesurvey-themes/`),
 - the survey template files in `site/ankiety/pobierz/` and `site/ankiety/catalog.json` — CC0 1.0 (sources in `survey-templates/`).

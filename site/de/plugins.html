@@ -98,7 +98,7 @@
         <div>
           <span class="eyebrow">Kostenlose Plugins für LimeSurvey</span>
           <h1>Plugins für LimeSurvey. <span class="lime">Kostenlos und Open Source</span>.</h1>
-          <p class="lead">Zwei Gruppen zur Auswahl. <strong>Offene Plugins</strong> funktionieren eigenständig in Ihrem LimeSurvey — ohne Konto und ohne Registrierung. <strong>StrefaAnkiet-Plugins</strong> verbinden die Umfrage mit den Diensten der Plattform: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, Interviewer im Feld und die Analyse der Ergebnisse. Der Code beider Gruppen ist kostenlos — bezahlt werden nur das StrefaAnkiet-Konto und die Dienste, die Sie nutzen.</p>
+          <p class="lead">Zwei Gruppen zur Auswahl. <strong>Offene Plugins</strong> laufen in Ihrem LimeSurvey ohne Konto und ohne Registrierung. <strong>StrefaAnkiet-Plugins</strong> verbinden die Umfrage mit den Diensten der Plattform: verwalteter Versand über Amazon SES, VoIP-Telefonie für CATI-Interviews, Interviewer im Feld und die Analyse der Ergebnisse. Der Code beider Gruppen ist kostenlos — bezahlt werden nur das StrefaAnkiet-Konto und die Dienste, die Sie nutzen.</p>
           <div class="hero-cta">
             <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=StrefaAnkiet-Plugins%20f%C3%BCr%20LimeSurvey">Plugins anfordern</a>
             <a class="btn btn-ghost" href="#LimeControlJsonQuestions">Abhängige JSON-Fragen</a>
@@ -118,8 +118,8 @@
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">Offene Plugins <span class="group-tag is-open">Ohne Konto</span></span>
-          <h2 id="plugins-h">Sie funktionieren eigenständig, ohne Konto</h2>
-          <p>Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne Registrierung und ohne zeitliche Begrenzung. Jedes wird einzeln installiert — nur die, die Sie brauchen. Abhängige JSON-Fragen sind ein separates LimeControl-Plugin mit eigenen Download-Paketen.</p>
+          <h2 id="plugins-h">Offene Plugins für Ihre eigene LimeSurvey-Installation</h2>
+          <p>Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne Registrierung und ohne zeitliche Begrenzung. Jedes wird einzeln installiert — nur die, die Sie brauchen. Abhängige JSON-Fragen, das CRM und das Shop-Kundenfeedback sind separate LimeControl-Plugins mit eigenen Download-Paketen.</p>
         </div>
         <div class="pgrid">
           <article class="card pcard is-open" id="StrefaSurveyExchange">
@@ -179,6 +179,88 @@
               <details><summary>SHA-256-Prüfsummen</summary>
                 <dl><dt>Plugin</dt><dd><code>5395109f5fce80a2f0aba36ede56b4292ae87899a328a29734d76d9f6bc7c4fe</code></dd><dt>Auswahl je Eintrag</dt><dd><code>e8c3d63a525fb3d9ae8f6e61b938aef45e62bb84149a8458ec87dd9855324130</code></dd><dt>Tabelle aus früheren Antworten</dt><dd><code>3985174e496de435f04af1e6549f0007a2c86c4c474c85b95248b998369890bc</code></dd><dt>Anschlussfrage</dt><dd><code>81d778f2c5d2b57d2c8e3ef9206d52566a2e82b97df7e8420b629b0a4d04a4ab</code></dd></dl>
                 <a href="https://github.com/lukasz5/limecontrol-plugin-json-questions/releases/download/v0.1.0/SHA256SUMS">SHA256SUMS herunterladen</a>
+              </details>
+              <h4>Interaktive Demo der Version 0.2.0 (auf Polnisch)</h4>
+              <ul>
+                <li><a href="/pytania-json/?example=fieldwork" hreflang="pl">Arbeiten vor Ort</a></li>
+                <li><a href="/pytania-json/?example=equipment" hreflang="pl">Einsatzbereitschaft der Geräte für den Unterricht</a></li>
+              </ul>
+            </div>
+          </article>
+          <article class="card pcard is-open pcard-with-download" id="LimeControlCrm"><div class="pcard-description">
+            <span class="status is-free">LimeSurvey-Plugin</span>
+            <h3>CRM: Firmen, Kontakte und Fälle</h3>
+            <code class="pname">LimeControlCrm</code>
+            <p>Ergänzt das LimeSurvey-Admin-Panel um den Menüpunkt CRM: Firmen, Kontakte, Verkaufschancen, Aufgaben und Kundenfälle. Nach dem Absenden des Anfrageformulars landet ein Kontaktwunsch beim zugewiesenen Team als Verkaufschance oder Servicefall.</p>
+            <ul>
+              <li>Teams auf Basis von LimeSurvey-Benutzergruppen: die Leitung sieht das Team, Mitarbeitende ihre eigenen Datensätze</li>
+              <li>Vertriebstrichter, Änderungsverlauf und Betragsbericht je Währung</li>
+              <li>Kontaktimport aus CSV mit Dublettenvorschau vor dem Speichern</li>
+            </ul>
+            <p class="pcard-foot"><span>Läuft in</span> LimeSurvey CE (getestet mit 6.15.12, 7.11.0)</p></div>
+            <div class="pcard-downloads">
+              <h4>Version 0.1.0</h4>
+              <p>Getestete LimeSurvey-CE-Versionen · 6.15.12, 7.11.0</p>
+              <p>Laden Sie die ZIP-Datei im Plugin-Manager hoch und aktivieren Sie sie. Die Aktivierung legt die CRM-Tabellen in der Datenbank dieser Installation an; beim Deaktivieren bleiben die Daten erhalten.</p>
+              <div class="hero-cta"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/LimeControlCrm-0.1.0.zip">Plugin herunterladen (ZIP)</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-survey-suite/blob/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/limecontrol-crm/README.md">Anleitung</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-survey-suite">Quellcode</a></div>
+              
+              <details><summary>SHA-256-Prüfsummen</summary>
+                <dl><dt>LimeControlCrm-0.1.0.zip</dt><dd><code>8b219cbc0a5056ff1785e6a368def69ef521da0da811bd6b508538682cbd7757</code></dd></dl>
+                <a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/SHA256SUMS">SHA256SUMS herunterladen</a>
+              </details>
+            </div>
+          </article>
+          <article class="card pcard is-open pcard-with-download" id="LimeControlCrmDesk"><div class="pcard-description">
+            <span class="status is-free">LimeSurvey-Plugin</span>
+            <h3>Angebote, Team-Postfach und Kalender</h3>
+            <code class="pname">LimeControlCrmDesk</code>
+            <p>Eine CRM-Erweiterung für Vertrieb und Kundenservice: Angebote in aufeinanderfolgenden Versionen mit PDF, E-Mails aus einem gemeinsamen Postfach, die Fällen zugeordnet werden, und Aufgabentermine in einem privaten Kalender-Feed.</p>
+            <ul>
+              <li>Angebotsversionen mit Positionen, Währung, PDF und erfasster Kundenentscheidung</li>
+              <li>E-Mails per IMAP über TLS (nur lesend) oder aus einem Maildir-Ordner, ohne Anhänge</li>
+              <li>ICS-Abonnement der eigenen Aufgaben; eine neue Adresse macht die vorherige ungültig</li>
+            </ul>
+            <p class="pcard-foot"><span>Läuft in</span> LimeSurvey CE mit dem CRM-Plugin (getestet mit 6.15.12, 7.11.0)</p></div>
+            <div class="pcard-downloads">
+              <h4>Version 0.1.0</h4>
+              <p>Getestete LimeSurvey-CE-Versionen · 6.15.12, 7.11.0</p>
+              <p>Installieren und aktivieren Sie zuerst das CRM, dann laden Sie diese ZIP-Datei hoch. E-Mails holt ein regelmäßig ausgeführter LimeSurvey-Konsolenbefehl ab.</p>
+              <div class="hero-cta"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/LimeControlCrmDesk-0.1.0.zip">Plugin herunterladen (ZIP)</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-survey-suite/blob/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/limecontrol-crm-desk/README.md">Anleitung</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-survey-suite">Quellcode</a></div>
+              
+              <details><summary>SHA-256-Prüfsummen</summary>
+                <dl><dt>LimeControlCrmDesk-0.1.0.zip</dt><dd><code>76f5dccd4a8aeb1228883b244284aca7b176ada2306c56aa08753436f4a097a9</code></dd></dl>
+                <a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/SHA256SUMS">SHA256SUMS herunterladen</a>
+              </details>
+            </div>
+          </article>
+          <article class="card pcard is-open pcard-with-download" id="LimeControlFeedback"><div class="pcard-description">
+            <span class="status is-free">LimeSurvey-Plugin</span>
+            <h3>Kundenfeedback für Onlineshops</h3>
+            <code class="pname">LimeControlFeedback</code>
+            <p>Versendet Umfragen nach dem Kauf, nach der Zustellung, nach einer Nutzungsdauer des Produkts und nach einer Rücksendung — auf Basis der Shop-Bestellungen. Der Bericht zeigt CSAT, NPS und Variantenbewertungen neben den Rücksendegründen. Funktioniert eigenständig oder zusammen mit dem CRM.</p>
+            <ul>
+              <li>Konnektoren für WooCommerce, PrestaShop, OpenCart, Shopify und Shoper mit signierten Bestellereignissen</li>
+              <li>Eine Einladung pro Bestellung und Kampagne, ein Mindestabstand zwischen Kampagnen und eine bestätigte Abmeldung</li>
+              <li>Stimmt der Kunde einer Kontaktaufnahme zu, eröffnet ein Rücksendewunsch oder eine niedrige Bewertung in einer namentlichen Umfrage einen Servicefall — im Plugin selbst oder im CRM</li>
+            </ul>
+            <p class="pcard-foot"><span>Läuft in</span> LimeSurvey CE (getestet mit 6.15.12, 7.11.0) und Ihr Shop</p></div>
+            <div class="pcard-downloads">
+              <h4>Version 0.1.0</h4>
+              <p>Getestete LimeSurvey-CE-Versionen · 6.15.12, 7.11.0</p>
+              <p>Laden Sie die ZIP-Datei im Plugin-Manager hoch, importieren Sie die Umfragevorlagen und installieren Sie den Konnektor Ihres Shops. Die Einladungswarteschlange läuft über den LimeSurvey-Cron.</p>
+              <div class="hero-cta"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/LimeControlFeedback-0.1.0.zip">Plugin herunterladen (ZIP)</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-survey-suite/blob/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/limecontrol-feedback/README.md">Anleitung</a>
+                <a class="btn btn-ghost" href="https://github.com/lukasz5/limecontrol-survey-suite">Quellcode</a></div>
+              <p><strong>Weitere Pakete</strong></p>
+              <ul><li><a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/LimeControlSurveys-0.1.0.zip">Sieben Umfragevorlagen PL/EN (LSS) (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/limecontrol-feedback-woocommerce-0.1.0.zip">WooCommerce-Konnektor (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/limecontrol-feedback-prestashop-0.1.0.zip">PrestaShop-Modul (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/limecontrol_feedback.ocmod.zip">OpenCart-4-Erweiterung (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/limecontrol-feedback-shopify-0.1.0.zip">Shopify-Konnektor (eigener PHP-Server) (ZIP)</a></li><li><a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/limecontrol-feedback-shoper-0.1.0.zip">Shoper-Konnektor (eigener PHP-Server) (ZIP)</a></li></ul>
+              <p>WooCommerce 8.0, PrestaShop 8.1 und OpenCart 4.1 wurden mit lokalen Shops getestet. Die Konnektoren für Shopify und Shoper wurden mit nachgestellten API-Antworten getestet — ein Test mit einem Händlerkonto steht noch aus.</p>
+              <details><summary>SHA-256-Prüfsummen</summary>
+                <dl><dt>LimeControlFeedback-0.1.0.zip</dt><dd><code>c83757fe2dbc29690ce61d0469931261d6da55ad5f4ddb1e82e202eb22143f8c</code></dd><dt>LimeControlSurveys-0.1.0.zip</dt><dd><code>6c9af457d4377099f90e129836c4feefddf867dd8b89c7826e9efc48ed8b3c52</code></dd><dt>limecontrol-feedback-woocommerce-0.1.0.zip</dt><dd><code>7d1b98c8abc5b81e71ff54db2677ae37caaefe3fa309eba72fd2ad8e186f249a</code></dd><dt>limecontrol-feedback-prestashop-0.1.0.zip</dt><dd><code>f3a6c936e26b3fc30ebe8b4e0fabd8a7aeed7e604273be7f5d4e963c7bd6b65b</code></dd><dt>limecontrol_feedback.ocmod.zip</dt><dd><code>721b53f5e75323da7f5cb90259fb344e6da01e2ff264eb44eeb331fcc0ea65e0</code></dd><dt>limecontrol-feedback-shopify-0.1.0.zip</dt><dd><code>c2640ed9ad2211f03eef6d47d980c781c060536ea8c46148919b670836aa141a</code></dd><dt>limecontrol-feedback-shoper-0.1.0.zip</dt><dd><code>72fe4018aca63e840d993671b658e9f294e134dbad41a49aa9d20be87b0a956e</code></dd></dl>
+                <a href="https://github.com/lukasz5/limecontrol-survey-suite/raw/0cd5b522f8805654abde226347dcbdf09cdb758c/limesurvey-plugins/suite/dist/SHA256SUMS">SHA256SUMS herunterladen</a>
               </details>
             </div>
           </article>
@@ -251,7 +333,7 @@
             <h3>Plugins und Werkzeuge</h3>
             <p>Sie installieren sie in Ihrem LimeSurvey und nutzen sie ohne zeitliche Begrenzung.</p>
             <ul>
-              <li>Sechs StrefaAnkiet-Plugins und -Werkzeuge für LimeSurvey — mit Quellcode</li>
+              <li>Sechs StrefaAnkiet-Plugins und -Werkzeuge sowie vier LimeControl-Plugins für LimeSurvey — mit Quellcode</li>
               <li>Fragebogenaustausch, Antwortexport und Konverter funktionieren ohne Konto</li>
               <li>Die App LimeControl (iOS, Android, Web), <a href="/de/designs.html">Designs</a> und <a href="/de/vorlagen.html">Umfragevorlagen</a></li>
               <li>Docker-Deployment-Kits für LimeSurvey und LimeControl</li>
