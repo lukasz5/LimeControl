@@ -52,6 +52,7 @@ export const ROUTES = {
   templates: { pl: '/ankiety.html', en: '/en/templates.html', de: '/de/vorlagen.html' },
   plugins: { pl: '/wtyczki.html', en: '/en/plugins.html', de: '/de/plugins.html' },
   election: { pl: '/sondaze-wyborcze/', en: '/en/election-polls/', de: '/de/wahlumfragen/' },
+  electionPoland: { pl: '/sondaze-wyborcze/polska/', en: '/en/election-polls/poland/', de: '/de/wahlumfragen/polen/' },
   docs: { pl: '/docs.html', en: '/en/docs.html', de: '/de/docs.html' },
   privacy: { pl: '/prywatnosc.html', en: '/en/privacy.html', de: '/de/datenschutz.html' },
 };
@@ -224,12 +225,13 @@ ${[jsonLd, breadcrumbs(lang, page)].filter(Boolean).map((data) => `\n  <script t
 /** Okruszki (schema.org BreadcrumbList) dla podstron: Strona główna › podstrona. */
 function breadcrumbs(lang, page) {
   if (page === 'home') return null;
-  const election = { pl: 'Sondaże wyborcze', en: 'Election polls', de: 'Wahlumfragen' };
-  const names = { ...T[lang].footer, home: 'LimeControl', election: election[lang] };
+  const poland = { pl: 'Moduł Polska', en: 'Poland module', de: 'Modul Polen' };
+  const names = { ...T[lang].footer, home: 'LimeControl', election: 'LimeControl Elections', electionPoland: poland[lang] };
+  const parents = { election: ['home', 'plugins'], electionPoland: ['home', 'plugins', 'election'] };
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: (page === 'election' ? ['home', 'plugins', page] : ['home', page]).map((p, i) => ({
+    itemListElement: [...(parents[page] ?? ['home']), page].map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       name: names[p],

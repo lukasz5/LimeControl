@@ -1,0 +1,15 @@
+.pcard-product {
+  color: var(--text);
+  text-decoration: none;
+}
+.pcard-product .pcard-foot {
+  color: var(--accent);
+}
+.pcard-product:hover .pcard-foot,
+.pcard-product:focus-visible .pcard-foot {
+  text-decoration: underline;
+}
+.pcard-product:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}

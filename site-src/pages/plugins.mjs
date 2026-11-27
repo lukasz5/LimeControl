@@ -23,18 +23,13 @@ const PLUGINS = [
     id: 'LimeControlElectionPolls',
     group: 'open',
     kind: 'plugin',
-    title: { pl: 'Sondaże wyborcze w Polsce', en: 'Election polling in Poland', de: 'Wahlumfragen in Polen' },
+    title: 'LimeControl Elections',
     lead: {
-      pl: 'Pracownia porównuje dwie fale sondażu i przygotowuje dla komitetu raport o zmianie poparcia, wydarzeniach i kosztach kampanii.',
-      en: 'Research teams compare two polling waves and report changes in support alongside campaign events and costs.',
-      de: 'Forschungsinstitute vergleichen zwei Befragungswellen und berichten über Veränderungen der Zustimmung, Wahlkampfveranstaltungen und Kosten.',
+      pl: 'Dwie fale sondażu, raport dla komitetu i exit poll. Moduł Polska zawiera karty i historyczne wyniki wyborów samorządowych z archiwum PKW.',
+      en: 'Two survey waves, committee reports and exit polls. The Poland module includes ballots and historical local election results from the Polish election authority.',
+      de: 'Zwei Befragungswellen, Berichte für Wahlkomitees und Nachwahlbefragungen. Das Modul Polen enthält Stimmzettel und historische Kommunalwahlergebnisse der polnischen Wahlkommission.',
     },
-    points: {
-      pl: ['Wyniki wyborów samorządowych PKW z 2018 i 2024 roku', 'Porównanie wybranych obszarów', 'Plan próby i analiza odmów w exit poll'],
-      en: ['Official Polish local election results for 2018 and 2024', 'Comparison of selected areas', 'Exit poll sampling and nonresponse sensitivity analysis'],
-      de: ['Amtliche polnische Kommunalwahlergebnisse für 2018 und 2024', 'Vergleich ausgewählter Gebiete', 'Stichprobenplanung und Sensitivitätsanalyse bei Teilnahmeverweigerung im Exit Poll'],
-    },
-    where: { pl: 'Własna instalacja LimeSurvey', en: 'Self-hosted LimeSurvey', de: 'Eigene LimeSurvey-Installation' },
+    action: { pl: 'Przejdź do strony wtyczki', en: 'Visit the plugin page', de: 'Zur Plugin-Seite' },
     page: 'election',
   },
   {
@@ -559,9 +554,16 @@ export function renderPluginsPage(lang) {
     ? `<a class="btn btn-primary" href="${PLUGINS_URL}" target="_blank" rel="noopener">${s.ctaDownload}</a>`
     : `<a class="btn btn-primary" href="${mailto}">${s.ctaAsk}</a>`;
   const panel = (p) => (p.release ? downloadPanel(p.release, lang) : p.suite ? suitePanel(p.suite, lang) : '');
-  const card = (p) => `<article class="card pcard is-${p.group}${panel(p) ? ' pcard-with-download' : ''}" id="${p.id}">${panel(p) ? '<div class="pcard-description">' : ''}
+  const card = (p) => {
+    if (p.page) return `<a class="card pcard is-open pcard-product" id="${p.id}" href="${ROUTES[p.page][lang]}" aria-labelledby="${p.id}-title">
+            <span class="status is-free">${s.kind[p.kind]}</span>
+            <h3 class="card-title" id="${p.id}-title">${esc(p.title)}</h3>
+            <p>${esc(p.lead[lang])}</p>
+            <strong class="pcard-foot">${esc(p.action[lang])} <b aria-hidden="true">→</b></strong>
+          </a>`;
+    return `<article class="card pcard is-${p.group}${panel(p) ? ' pcard-with-download' : ''}" id="${p.id}">${panel(p) ? '<div class="pcard-description">' : ''}
             <span class="status${p.group === 'open' ? ' is-free' : ''}">${s.kind[p.kind]}</span>
-            <h3>${p.page ? `<a href="${ROUTES[p.page][lang]}">${esc(p.title[lang])}</a>` : esc(p.title[lang])}</h3>
+            <h3>${esc(p.title[lang])}</h3>
             <code class="pname">${p.id}</code>
             <p>${esc(p.lead[lang])}</p>
             <ul>
@@ -569,6 +571,7 @@ export function renderPluginsPage(lang) {
             </ul>
             <p class="pcard-foot"><span>${s.whereLabel[p.group]}</span> ${esc(p.where[lang])}</p>${panel(p) ? `</div>\n            ${panel(p)}` : ''}
           </article>`;
+  };
   const pluginGroup = (group, id, eyebrow, h, p, cls, after = '') => `<section id="${id}"${cls ? ` class="${cls}"` : ''} aria-labelledby="${id}-h">
       <div class="container">
         <div class="section-head">
@@ -732,6 +735,7 @@ export function renderPluginsPage(lang) {
     description: s.description,
     ogTitle: s.ogTitle,
     ogDescription: s.ogDescription,
+    extraHead: '<link rel="stylesheet" href="/assets/plugin-catalog.css?v=1" />',
     body,
     footerNote: s.footerNote,
   });
