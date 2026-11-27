@@ -23,13 +23,14 @@
 .elections-country .card-actions a { font-weight: 650; }
 .elections-country .btn { white-space: normal; }
 .elections-home #download, .elections-home #report { scroll-margin-top: 5rem; }
-.elections-workflow, .elections-exit { padding-block: clamp(2rem, 5vw, 4rem); }
+.elections-workflow, .elections-report { padding-block: clamp(2rem, 5vw, 4rem); }
 .elections-phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.4rem, 4vw, 3rem); margin-top: 1.8rem; }
 .elections-phases > div { border-top: 1px solid var(--border); padding-top: 1rem; }
-.elections-phases p, .elections-exit p { margin: 0; color: var(--text-muted); }
-.elections-phases a { display: inline-block; margin-top: .7rem; font-weight: 650; }
-.elections-exit { border-top: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 1rem 2rem; align-items: baseline; }
-.elections-exit h2 { margin: 0; }
+.elections-phases p, .elections-report p { margin: 0; color: var(--text-muted); }
+.elections-report a { display: inline-block; margin-top: .7rem; font-weight: 650; }
+.elections-report { border-top: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 1rem 2rem; align-items: baseline; }
+.elections-report h2 { margin: 0; }
+.elections-report .elections-research-note { margin-top: 1rem; font-size: .94rem; }
 @media (max-width: 720px) {
-  .elections-intro-grid, .elections-phases, .elections-exit { grid-template-columns: 1fr; }
+  .elections-intro-grid, .elections-phases, .elections-report { grid-template-columns: 1fr; }
 }

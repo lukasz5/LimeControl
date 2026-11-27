@@ -114,6 +114,9 @@ for (const lang of LANGS) {
   if (!productHtml.includes('<h1>LimeControl Elections</h1>') || !productHtml.includes(`href="${moduleUrl}"`)) {
     report(product, 'brak nazwy produktu lub wejścia do modułu krajowego');
   }
+  if (!productHtml.includes(`href="${moduleUrl}#planner"`)) {
+    report(product, 'brak wejścia do przykładu planera kampanii');
+  }
   const file = join(SITE, outputPath('electionPoland', lang));
   const entry = pages.get(file);
   if (!entry) continue;

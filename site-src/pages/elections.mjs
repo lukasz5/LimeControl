@@ -4,58 +4,61 @@ const product = 'LimeControl Elections';
 
 const copy = {
   pl: {
-    title: 'LimeControl Elections – sondaże wyborcze i exit poll',
-    description: 'Porównuj dwie fale sondażu i zestawiaj zmiany poparcia z wydarzeniami oraz kosztami kampanii. Zobacz dostępny moduł Polska.',
-    lead: 'Narzędzie dla pracowni badawczych i komitetów wyborczych. Pracownia porównuje dwie fale sondażu, a komitet widzi, jak zmieniały się deklaracje wyborców w czasie kampanii.',
-    compatibility: 'Wtyczka działa we własnej instalacji LimeSurvey.',
+    title: 'LimeControl Elections – planer kampanii dla komitetu wyborczego',
+    description: 'Zaplanuj wydarzenia kampanii, przydziel zadania i terminy. Porównaj planowane i rzeczywiste wydatki komitetu. Zobacz planer w module Polska.',
+    lead: 'Prowadź kampanię komitetu w jednym kalendarzu. Przy każdym wydarzeniu widzisz, kto odpowiada za przygotowania, co trzeba zrobić na czas i ile wydano w stosunku do planu.',
+    setup: 'Planer działa w projekcie z dwiema skonfigurowanymi ankietami w LimeSurvey. Komitet może wpisywać wydarzenia i koszty jeszcze przed pierwszym wywiadem.',
     available: 'Dostępny moduł krajowy', country: 'Polska',
-    module: 'Karty i oficjalne wyniki wyborów samorządowych z archiwum PKW, od kraju po obszar objęty badaniem.',
-    open: 'Otwórz moduł Polska', files: 'Pliki do pobrania',
-    workflow: 'Od dwóch pomiarów do raportu',
+    module: 'Zobacz, jak komitet rozpisuje debatę na zadania i rozlicza wynajem sali oraz przygotowanie materiałów.',
+    planner: 'Zobacz przykład planera', files: 'Pobierz wtyczkę i przykłady',
+    workflow: 'Od wydarzenia do rozliczenia',
     parts: [
-      ['Dwie fale sondażu', 'Pracownia zadaje w obu falach te same pytania o wybór i obszar. W raporcie porównuje udziały odpowiedzi i liczebności prób.'],
-      ['Kalendarz i koszty kampanii', 'Koordynator przypisuje zadania, osoby odpowiedzialne i terminy do wydarzeń. Wpisuje planowane i rzeczywiste wydatki.'],
-      ['Raport dla komitetu', 'Komitet porównuje zmianę poparcia w wybranych obszarach i sprawdza, jakie działania przypadały na ten okres.'],
+      ['Ułóż kalendarz', 'Wpisz spotkanie lub debatę, określ daty i obszar. W widoku miesiąca sprawdzisz, co przypada na dany dzień.'],
+      ['Rozdziel zadania', 'Przypisz przygotowanie materiałów do wydarzenia, wskaż osobę lub zespół i podaj termin. Po wykonaniu zadania zmień jego status.'],
+      ['Rozlicz wydatki', 'Zapisz planowany koszt przy wydarzeniu i przy każdym płatnym zadaniu. Po realizacji wpisz kwoty rzeczywiste. Podsumowanie uwzględnia każdą pozycję raz i wskazuje brakujące kwoty.'],
     ],
-    report: 'Zobacz przykładowy raport dla dwóch powiatów',
-    exit: 'Exit poll w dniu wyborów',
-    exitText: 'Pracownia może osobno zaplanować badanie przed lokalami wyborczymi. Wybiera obwody w warstwach, ustala, co którą osobę zaprosić do wywiadu, i ocenia, jak odmowy mogły wpłynąć na wynik.',
+    reportHeading: 'Raport dla komitetu po dwóch falach',
+    reportText: 'Gdy pracownia zbierze odpowiedzi, zestawisz zmianę poparcia w wybranych obszarach z terminami i kosztami działań komitetu.',
+    report: 'Zobacz raport dla dwóch powiatów',
+    exitText: 'W dniu wyborów pracownia może również przeprowadzić exit poll.',
   },
   en: {
-    title: 'LimeControl Elections – election surveys and exit polls',
-    description: 'Compare two survey waves and see changes in support alongside campaign events and costs. Explore the Poland module.',
-    lead: 'A polling tool for research agencies and election committees. The agency compares two survey waves, and the committee sees how voting intentions changed during the campaign.',
-    compatibility: 'The plugin runs on a self-hosted LimeSurvey installation.',
+    title: 'LimeControl Elections – campaign planner for election committees',
+    description: 'Plan campaign events, assign tasks and deadlines, and compare actual spending with the budget. See the campaign planner in the Poland module.',
+    lead: 'Run your committee’s campaign from one calendar. For each event, see who is responsible, what is due and how actual spending compares with the budget.',
+    setup: 'The planner runs in a LimeSurvey project with two surveys configured. The committee can record events and costs before the first interview.',
     available: 'Available country module', country: 'Poland',
-    module: 'Historical ballots and official local election results from Poland’s National Electoral Commission, from the national level down to the area under study.',
-    open: 'Open the Poland module', files: 'Download files',
-    workflow: 'From two survey waves to a report',
+    module: 'See how a committee prepares for a debate, assigns tasks and tracks the costs of the venue and materials.',
+    planner: 'See the planner example', files: 'Download the plugin and examples',
+    workflow: 'From planning an event to checking the bill',
     parts: [
-      ['Two survey waves', 'The agency asks the same questions about voting intention and area in each wave. The report shows response shares and sample sizes side by side.'],
-      ['Campaign calendar and costs', 'The coordinator links tasks, owners and deadlines to campaign events and records budgeted and actual spending.'],
-      ['Committee report', 'The committee compares changes in support across selected areas and sees which activities took place during the same period.'],
+      ['Plan the calendar', 'Enter a meeting or debate, set the dates and select the area. The monthly calendar shows what is scheduled for each day.'],
+      ['Assign the work', 'Link a task such as preparing materials to the event, name the person or team responsible and set a deadline. Mark the task complete when it is done.'],
+      ['Track spending', 'Enter the budget for the event and any tasks with a cost. Record actual amounts as they come in. The summary counts each item once and flags missing amounts.'],
     ],
-    report: 'See a sample report for two Polish counties',
-    exit: 'Exit polling on election day',
-    exitText: 'The agency can run a separate survey outside polling stations. It samples precincts within strata, sets an interval for inviting voters and examines how refusals might affect the estimate.',
+    reportHeading: 'A committee report after two polling waves',
+    reportText: 'Once the polling team has collected responses, compare changes in support across selected areas alongside the dates and costs of campaign activities.',
+    report: 'See a report for two Polish counties',
+    exitText: 'On election day, the polling team can also run an exit poll.',
   },
   de: {
-    title: 'LimeControl Elections – Wahlumfragen und Nachwahlbefragungen',
-    description: 'Vergleichen Sie zwei Befragungswellen und betrachten Sie Veränderungen der Zustimmung im Zusammenhang mit Wahlkampfterminen und Ausgaben. Entdecken Sie das Modul für Polen.',
-    lead: 'Ein Werkzeug für Forschungsinstitute und Wahlkomitees. Das Institut vergleicht zwei Befragungswellen. Das Wahlkomitee sieht, wie sich die Wahlabsichten im Lauf des Wahlkampfs verändert haben.',
-    compatibility: 'Das Plugin läuft auf einer eigenen LimeSurvey-Installation.',
+    title: 'LimeControl Elections – Wahlkampfplaner für Wahlkomitees',
+    description: 'Planen Sie Wahlkampfveranstaltungen, verteilen Sie Aufgaben und setzen Sie Fristen. Vergleichen Sie geplante und tatsächliche Ausgaben im Modul Polen.',
+    lead: 'Koordinieren Sie den Wahlkampf Ihres Komitees in einem Kalender. Für jede Veranstaltung sehen Sie, wer zuständig ist, welche Aufgaben anstehen und wie die Ausgaben im Vergleich zum Budget ausfallen.',
+    setup: 'Der Planer läuft in einem LimeSurvey-Projekt mit zwei eingerichteten Umfragen. Das Komitee kann Veranstaltungen und Kosten bereits vor dem ersten Interview eintragen.',
     available: 'Verfügbares Ländermodul', country: 'Polen',
-    module: 'Historische Stimmzettel und amtliche Kommunalwahlergebnisse der polnischen Wahlkommission PKW, von der Landesebene bis zum Untersuchungsgebiet.',
-    open: 'Modul für Polen öffnen', files: 'Dateien herunterladen',
-    workflow: 'Von zwei Befragungswellen zum Bericht',
+    module: 'Sehen Sie, wie ein Komitee eine Debatte vorbereitet, Aufgaben verteilt und die Kosten für Saalmiete und Materialien abrechnet.',
+    planner: 'Beispiel im Wahlkampfplaner ansehen', files: 'Plugin und Beispiele herunterladen',
+    workflow: 'Von der Terminplanung bis zur Abrechnung',
     parts: [
-      ['Zwei Befragungswellen', 'Das Institut stellt in beiden Wellen dieselben Fragen zu Wahlabsicht und Gebiet. Der Bericht zeigt die Anteile der Antworten und die jeweilige Stichprobengröße.'],
-      ['Wahlkampfkalender und Kosten', 'Die Koordination ordnet den Veranstaltungen Aufgaben, Zuständige und Fristen zu und erfasst geplante und tatsächliche Ausgaben.'],
-      ['Bericht für das Wahlkomitee', 'Das Wahlkomitee vergleicht, wie sich die Zustimmung in ausgewählten Gebieten verändert hat und welche Aktivitäten in diesen Zeitraum fielen.'],
+      ['Termine planen', 'Tragen Sie eine Versammlung oder eine Debatte mit Datum und Gebiet ein. Im Monatskalender sehen Sie, was an jedem Tag ansteht.'],
+      ['Aufgaben verteilen', 'Ordnen Sie etwa die Vorbereitung der Materialien einer Veranstaltung zu. Tragen Sie die zuständige Person oder das Team und die Frist ein. Nach Abschluss markieren Sie die Aufgabe als erledigt.'],
+      ['Ausgaben abrechnen', 'Erfassen Sie die geplanten Kosten für die Veranstaltung und für einzelne Aufgaben. Tragen Sie die tatsächlichen Beträge nach. Die Übersicht zählt jeden Posten einmal und weist auf fehlende Angaben hin.'],
     ],
+    reportHeading: 'Bericht für das Komitee nach zwei Befragungswellen',
+    reportText: 'Sobald das Institut die Antworten erhoben hat, können Sie Veränderungen der Zustimmung in ausgewählten Gebieten mit den Terminen und Kosten Ihrer Wahlkampfaktivitäten vergleichen.',
     report: 'Beispielbericht für zwei polnische Kreise ansehen',
-    exit: 'Nachwahlbefragung am Wahltag',
-    exitText: 'Das Institut kann eine eigene Befragung vor den Wahllokalen durchführen. Es zieht Stimmbezirke nach Schichten, legt das Auswahlintervall fest und prüft, wie sich Teilnahmeverweigerungen auf die Schätzung auswirken könnten.',
+    exitText: 'Am Wahltag kann das Institut auch eine Nachwahlbefragung durchführen.',
   },
 };
 
@@ -68,15 +71,15 @@ export function renderElections(lang) {
         <div>
           <h1>${product}</h1>
           <p class="elections-lead">${esc(t.lead)}</p>
-          <p class="muted">${esc(t.compatibility)}</p>
+          <p class="muted">${esc(t.setup)}</p>
         </div>
         <aside class="card elections-country" id="download" aria-labelledby="country-title">
           <div class="card-body">
             <p class="elections-module-label">${esc(t.available)}</p>
-            <h2 class="card-title" id="country-title">${esc(t.country)}</h2>
+            <h2 class="card-title" id="country-title"><a href="${moduleUrl}">${esc(t.country)}</a></h2>
             <p>${esc(t.module)}</p>
             <div class="card-actions">
-              <a class="btn btn-primary" href="${moduleUrl}">${esc(t.open)}</a>
+              <a class="btn btn-primary" href="${moduleUrl}#planner">${esc(t.planner)}</a>
               <a href="${moduleUrl}#download">${esc(t.files)}</a>
             </div>
           </div>
@@ -86,22 +89,26 @@ export function renderElections(lang) {
     <div class="container">
       <section class="elections-workflow" aria-labelledby="workflow-title">
         <h2 id="workflow-title">${esc(t.workflow)}</h2>
-        <div class="elections-phases">${t.parts.map(([heading, detail], i) => `
-          <div${i === 2 ? ' id="report"' : ''}>
+        <div class="elections-phases">${t.parts.map(([heading, detail]) => `
+          <div>
             <h3>${esc(heading)}</h3>
-            <p>${esc(detail)}</p>${i === 2 ? `\n            <a href="${moduleUrl}#report">${esc(t.report)}</a>` : ''}
+            <p>${esc(detail)}</p>
           </div>`).join('')}
         </div>
       </section>
-      <section class="elections-exit" aria-labelledby="exit-title">
-        <h2 id="exit-title">${esc(t.exit)}</h2>
-        <p>${esc(t.exitText)}</p>
+      <section id="report" class="elections-report" aria-labelledby="report-title">
+        <h2 id="report-title">${esc(t.reportHeading)}</h2>
+        <div>
+          <p>${esc(t.reportText)}</p>
+          <a href="${moduleUrl}#report">${esc(t.report)}</a>
+          <p class="elections-research-note">${esc(t.exitText)}</p>
+        </div>
       </section>
     </div>
   </main>`;
   return {
     path: outputPath('election', lang),
     html: layout({ lang, page: 'election', title: t.title, description: t.description, body,
-      extraHead: '<link rel="stylesheet" href="/assets/elections.css?v=1" />' }),
+      extraHead: '<link rel="stylesheet" href="/assets/elections.css?v=2" />' }),
   };
 }

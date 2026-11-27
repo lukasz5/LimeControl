@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>LimeControl Elections – election surveys and exit polls</title>
-  <meta name="description" content="Compare two survey waves and see changes in support alongside campaign events and costs. Explore the Poland module." />
+  <title>LimeControl Elections – campaign planner for election committees</title>
+  <meta name="description" content="Plan campaign events, assign tasks and deadlines, and compare actual spending with the budget. See the campaign planner in the Poland module." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/en/election-polls/" />
@@ -17,8 +17,8 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/en/election-polls/" />
-  <meta property="og:title" content="LimeControl Elections – election surveys and exit polls" />
-  <meta property="og:description" content="Compare two survey waves and see changes in support alongside campaign events and costs. Explore the Poland module." />
+  <meta property="og:title" content="LimeControl Elections – campaign planner for election committees" />
+  <meta property="og:description" content="Plan campaign events, assign tasks and deadlines, and compare actual spending with the budget. See the campaign planner in the Poland module." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -62,7 +62,7 @@
       }
     ]
   }
-  </script><link rel="stylesheet" href="/assets/elections.css?v=1" />
+  </script><link rel="stylesheet" href="/assets/elections.css?v=2" />
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -103,17 +103,17 @@
       <div class="container elections-intro-grid">
         <div>
           <h1>LimeControl Elections</h1>
-          <p class="elections-lead">A polling tool for research agencies and election committees. The agency compares two survey waves, and the committee sees how voting intentions changed during the campaign.</p>
-          <p class="muted">The plugin runs on a self-hosted LimeSurvey installation.</p>
+          <p class="elections-lead">Run your committee’s campaign from one calendar. For each event, see who is responsible, what is due and how actual spending compares with the budget.</p>
+          <p class="muted">The planner runs in a LimeSurvey project with two surveys configured. The committee can record events and costs before the first interview.</p>
         </div>
         <aside class="card elections-country" id="download" aria-labelledby="country-title">
           <div class="card-body">
             <p class="elections-module-label">Available country module</p>
-            <h2 class="card-title" id="country-title">Poland</h2>
-            <p>Historical ballots and official local election results from Poland’s National Electoral Commission, from the national level down to the area under study.</p>
+            <h2 class="card-title" id="country-title"><a href="/en/election-polls/poland/">Poland</a></h2>
+            <p>See how a committee prepares for a debate, assigns tasks and tracks the costs of the venue and materials.</p>
             <div class="card-actions">
-              <a class="btn btn-primary" href="/en/election-polls/poland/">Open the Poland module</a>
-              <a href="/en/election-polls/poland/#download">Download files</a>
+              <a class="btn btn-primary" href="/en/election-polls/poland/#planner">See the planner example</a>
+              <a href="/en/election-polls/poland/#download">Download the plugin and examples</a>
             </div>
           </div>
         </aside>
@@ -121,26 +121,29 @@
     </header>
     <div class="container">
       <section class="elections-workflow" aria-labelledby="workflow-title">
-        <h2 id="workflow-title">From two survey waves to a report</h2>
+        <h2 id="workflow-title">From planning an event to checking the bill</h2>
         <div class="elections-phases">
           <div>
-            <h3>Two survey waves</h3>
-            <p>The agency asks the same questions about voting intention and area in each wave. The report shows response shares and sample sizes side by side.</p>
+            <h3>Plan the calendar</h3>
+            <p>Enter a meeting or debate, set the dates and select the area. The monthly calendar shows what is scheduled for each day.</p>
           </div>
           <div>
-            <h3>Campaign calendar and costs</h3>
-            <p>The coordinator links tasks, owners and deadlines to campaign events and records budgeted and actual spending.</p>
+            <h3>Assign the work</h3>
+            <p>Link a task such as preparing materials to the event, name the person or team responsible and set a deadline. Mark the task complete when it is done.</p>
           </div>
-          <div id="report">
-            <h3>Committee report</h3>
-            <p>The committee compares changes in support across selected areas and sees which activities took place during the same period.</p>
-            <a href="/en/election-polls/poland/#report">See a sample report for two Polish counties</a>
+          <div>
+            <h3>Track spending</h3>
+            <p>Enter the budget for the event and any tasks with a cost. Record actual amounts as they come in. The summary counts each item once and flags missing amounts.</p>
           </div>
         </div>
       </section>
-      <section class="elections-exit" aria-labelledby="exit-title">
-        <h2 id="exit-title">Exit polling on election day</h2>
-        <p>The agency can run a separate survey outside polling stations. It samples precincts within strata, sets an interval for inviting voters and examines how refusals might affect the estimate.</p>
+      <section id="report" class="elections-report" aria-labelledby="report-title">
+        <h2 id="report-title">A committee report after two polling waves</h2>
+        <div>
+          <p>Once the polling team has collected responses, compare changes in support across selected areas alongside the dates and costs of campaign activities.</p>
+          <a href="/en/election-polls/poland/#report">See a report for two Polish counties</a>
+          <p class="elections-research-note">On election day, the polling team can also run an exit poll.</p>
+        </div>
       </section>
     </div>
   </main>

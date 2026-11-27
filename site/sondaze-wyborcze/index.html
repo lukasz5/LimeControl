@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>LimeControl Elections – sondaże wyborcze i exit poll</title>
-  <meta name="description" content="Porównuj dwie fale sondażu i zestawiaj zmiany poparcia z wydarzeniami oraz kosztami kampanii. Zobacz dostępny moduł Polska." />
+  <title>LimeControl Elections – planer kampanii dla komitetu wyborczego</title>
+  <meta name="description" content="Zaplanuj wydarzenia kampanii, przydziel zadania i terminy. Porównaj planowane i rzeczywiste wydatki komitetu. Zobacz planer w module Polska." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/sondaze-wyborcze/" />
@@ -17,8 +17,8 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/sondaze-wyborcze/" />
-  <meta property="og:title" content="LimeControl Elections – sondaże wyborcze i exit poll" />
-  <meta property="og:description" content="Porównuj dwie fale sondażu i zestawiaj zmiany poparcia z wydarzeniami oraz kosztami kampanii. Zobacz dostępny moduł Polska." />
+  <meta property="og:title" content="LimeControl Elections – planer kampanii dla komitetu wyborczego" />
+  <meta property="og:description" content="Zaplanuj wydarzenia kampanii, przydziel zadania i terminy. Porównaj planowane i rzeczywiste wydatki komitetu. Zobacz planer w module Polska." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/pl.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -62,7 +62,7 @@
       }
     ]
   }
-  </script><link rel="stylesheet" href="/assets/elections.css?v=1" />
+  </script><link rel="stylesheet" href="/assets/elections.css?v=2" />
 </head>
 <body>
   <a class="skip" href="#main">Przejdź do treści</a>
@@ -103,17 +103,17 @@
       <div class="container elections-intro-grid">
         <div>
           <h1>LimeControl Elections</h1>
-          <p class="elections-lead">Narzędzie dla pracowni badawczych i komitetów wyborczych. Pracownia porównuje dwie fale sondażu, a komitet widzi, jak zmieniały się deklaracje wyborców w czasie kampanii.</p>
-          <p class="muted">Wtyczka działa we własnej instalacji LimeSurvey.</p>
+          <p class="elections-lead">Prowadź kampanię komitetu w jednym kalendarzu. Przy każdym wydarzeniu widzisz, kto odpowiada za przygotowania, co trzeba zrobić na czas i ile wydano w stosunku do planu.</p>
+          <p class="muted">Planer działa w projekcie z dwiema skonfigurowanymi ankietami w LimeSurvey. Komitet może wpisywać wydarzenia i koszty jeszcze przed pierwszym wywiadem.</p>
         </div>
         <aside class="card elections-country" id="download" aria-labelledby="country-title">
           <div class="card-body">
             <p class="elections-module-label">Dostępny moduł krajowy</p>
-            <h2 class="card-title" id="country-title">Polska</h2>
-            <p>Karty i oficjalne wyniki wyborów samorządowych z archiwum PKW, od kraju po obszar objęty badaniem.</p>
+            <h2 class="card-title" id="country-title"><a href="/sondaze-wyborcze/polska/">Polska</a></h2>
+            <p>Zobacz, jak komitet rozpisuje debatę na zadania i rozlicza wynajem sali oraz przygotowanie materiałów.</p>
             <div class="card-actions">
-              <a class="btn btn-primary" href="/sondaze-wyborcze/polska/">Otwórz moduł Polska</a>
-              <a href="/sondaze-wyborcze/polska/#download">Pliki do pobrania</a>
+              <a class="btn btn-primary" href="/sondaze-wyborcze/polska/#planner">Zobacz przykład planera</a>
+              <a href="/sondaze-wyborcze/polska/#download">Pobierz wtyczkę i przykłady</a>
             </div>
           </div>
         </aside>
@@ -121,26 +121,29 @@
     </header>
     <div class="container">
       <section class="elections-workflow" aria-labelledby="workflow-title">
-        <h2 id="workflow-title">Od dwóch pomiarów do raportu</h2>
+        <h2 id="workflow-title">Od wydarzenia do rozliczenia</h2>
         <div class="elections-phases">
           <div>
-            <h3>Dwie fale sondażu</h3>
-            <p>Pracownia zadaje w obu falach te same pytania o wybór i obszar. W raporcie porównuje udziały odpowiedzi i liczebności prób.</p>
+            <h3>Ułóż kalendarz</h3>
+            <p>Wpisz spotkanie lub debatę, określ daty i obszar. W widoku miesiąca sprawdzisz, co przypada na dany dzień.</p>
           </div>
           <div>
-            <h3>Kalendarz i koszty kampanii</h3>
-            <p>Koordynator przypisuje zadania, osoby odpowiedzialne i terminy do wydarzeń. Wpisuje planowane i rzeczywiste wydatki.</p>
+            <h3>Rozdziel zadania</h3>
+            <p>Przypisz przygotowanie materiałów do wydarzenia, wskaż osobę lub zespół i podaj termin. Po wykonaniu zadania zmień jego status.</p>
           </div>
-          <div id="report">
-            <h3>Raport dla komitetu</h3>
-            <p>Komitet porównuje zmianę poparcia w wybranych obszarach i sprawdza, jakie działania przypadały na ten okres.</p>
-            <a href="/sondaze-wyborcze/polska/#report">Zobacz przykładowy raport dla dwóch powiatów</a>
+          <div>
+            <h3>Rozlicz wydatki</h3>
+            <p>Zapisz planowany koszt przy wydarzeniu i przy każdym płatnym zadaniu. Po realizacji wpisz kwoty rzeczywiste. Podsumowanie uwzględnia każdą pozycję raz i wskazuje brakujące kwoty.</p>
           </div>
         </div>
       </section>
-      <section class="elections-exit" aria-labelledby="exit-title">
-        <h2 id="exit-title">Exit poll w dniu wyborów</h2>
-        <p>Pracownia może osobno zaplanować badanie przed lokalami wyborczymi. Wybiera obwody w warstwach, ustala, co którą osobę zaprosić do wywiadu, i ocenia, jak odmowy mogły wpłynąć na wynik.</p>
+      <section id="report" class="elections-report" aria-labelledby="report-title">
+        <h2 id="report-title">Raport dla komitetu po dwóch falach</h2>
+        <div>
+          <p>Gdy pracownia zbierze odpowiedzi, zestawisz zmianę poparcia w wybranych obszarach z terminami i kosztami działań komitetu.</p>
+          <a href="/sondaze-wyborcze/polska/#report">Zobacz raport dla dwóch powiatów</a>
+          <p class="elections-research-note">W dniu wyborów pracownia może również przeprowadzić exit poll.</p>
+        </div>
       </section>
     </div>
   </main>
