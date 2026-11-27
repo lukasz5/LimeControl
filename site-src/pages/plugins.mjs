@@ -20,6 +20,24 @@ const SUITE = { version: '0.9', testedOn: '6.15 i 7.10', testedOnEn: '6.15 and 7
  */
 const PLUGINS = [
   {
+    id: 'LimeControlElectionPolls',
+    group: 'open',
+    kind: 'plugin',
+    title: { pl: 'Sondaże wyborcze w Polsce', en: 'Election polling in Poland', de: 'Wahlumfragen in Polen' },
+    lead: {
+      pl: 'Pracownia porównuje dwie fale sondażu i przygotowuje dla komitetu raport o zmianie poparcia, wydarzeniach i kosztach kampanii.',
+      en: 'Research teams compare two polling waves and report changes in support alongside campaign events and costs.',
+      de: 'Forschungsinstitute vergleichen zwei Befragungswellen und berichten über Veränderungen der Zustimmung, Wahlkampfveranstaltungen und Kosten.',
+    },
+    points: {
+      pl: ['Wyniki wyborów samorządowych PKW z 2018 i 2024 roku', 'Porównanie wybranych obszarów', 'Plan próby i analiza odmów w exit poll'],
+      en: ['Official Polish local election results for 2018 and 2024', 'Comparison of selected areas', 'Exit poll sampling and nonresponse sensitivity analysis'],
+      de: ['Amtliche polnische Kommunalwahlergebnisse für 2018 und 2024', 'Vergleich ausgewählter Gebiete', 'Stichprobenplanung und Sensitivitätsanalyse bei Teilnahmeverweigerung im Exit Poll'],
+    },
+    where: { pl: 'Własna instalacja LimeSurvey', en: 'Self-hosted LimeSurvey', de: 'Eigene LimeSurvey-Installation' },
+    page: 'election',
+  },
+  {
     id: 'StrefaSurveyExchange',
     group: 'open',
     kind: 'plugin',
@@ -543,7 +561,7 @@ export function renderPluginsPage(lang) {
   const panel = (p) => (p.release ? downloadPanel(p.release, lang) : p.suite ? suitePanel(p.suite, lang) : '');
   const card = (p) => `<article class="card pcard is-${p.group}${panel(p) ? ' pcard-with-download' : ''}" id="${p.id}">${panel(p) ? '<div class="pcard-description">' : ''}
             <span class="status${p.group === 'open' ? ' is-free' : ''}">${s.kind[p.kind]}</span>
-            <h3>${esc(p.title[lang])}</h3>
+            <h3>${p.page ? `<a href="${ROUTES[p.page][lang]}">${esc(p.title[lang])}</a>` : esc(p.title[lang])}</h3>
             <code class="pname">${p.id}</code>
             <p>${esc(p.lead[lang])}</p>
             <ul>
