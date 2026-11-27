@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>LimeControl Elections – Wahlumfragen und Nachwahlbefragungen</title>
-  <meta name="description" content="Vergleichen Sie zwei Befragungswellen und betrachten Sie Veränderungen der Zustimmung im Zusammenhang mit Wahlkampfterminen und Ausgaben. Entdecken Sie das Modul für Polen." />
+  <title>LimeControl Elections – Wahlkampfplaner für Wahlkomitees</title>
+  <meta name="description" content="Planen Sie Wahlkampfveranstaltungen, verteilen Sie Aufgaben und setzen Sie Fristen. Vergleichen Sie geplante und tatsächliche Ausgaben im Modul Polen." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/de/wahlumfragen/" />
@@ -17,8 +17,8 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/de/wahlumfragen/" />
-  <meta property="og:title" content="LimeControl Elections – Wahlumfragen und Nachwahlbefragungen" />
-  <meta property="og:description" content="Vergleichen Sie zwei Befragungswellen und betrachten Sie Veränderungen der Zustimmung im Zusammenhang mit Wahlkampfterminen und Ausgaben. Entdecken Sie das Modul für Polen." />
+  <meta property="og:title" content="LimeControl Elections – Wahlkampfplaner für Wahlkomitees" />
+  <meta property="og:description" content="Planen Sie Wahlkampfveranstaltungen, verteilen Sie Aufgaben und setzen Sie Fristen. Vergleichen Sie geplante und tatsächliche Ausgaben im Modul Polen." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/de.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -62,7 +62,7 @@
       }
     ]
   }
-  </script><link rel="stylesheet" href="/assets/elections.css?v=1" />
+  </script><link rel="stylesheet" href="/assets/elections.css?v=2" />
 </head>
 <body>
   <a class="skip" href="#main">Zum Inhalt springen</a>
@@ -103,17 +103,17 @@
       <div class="container elections-intro-grid">
         <div>
           <h1>LimeControl Elections</h1>
-          <p class="elections-lead">Ein Werkzeug für Forschungsinstitute und Wahlkomitees. Das Institut vergleicht zwei Befragungswellen. Das Wahlkomitee sieht, wie sich die Wahlabsichten im Lauf des Wahlkampfs verändert haben.</p>
-          <p class="muted">Das Plugin läuft auf einer eigenen LimeSurvey-Installation.</p>
+          <p class="elections-lead">Koordinieren Sie den Wahlkampf Ihres Komitees in einem Kalender. Für jede Veranstaltung sehen Sie, wer zuständig ist, welche Aufgaben anstehen und wie die Ausgaben im Vergleich zum Budget ausfallen.</p>
+          <p class="muted">Der Planer läuft in einem LimeSurvey-Projekt mit zwei eingerichteten Umfragen. Das Komitee kann Veranstaltungen und Kosten bereits vor dem ersten Interview eintragen.</p>
         </div>
         <aside class="card elections-country" id="download" aria-labelledby="country-title">
           <div class="card-body">
             <p class="elections-module-label">Verfügbares Ländermodul</p>
-            <h2 class="card-title" id="country-title">Polen</h2>
-            <p>Historische Stimmzettel und amtliche Kommunalwahlergebnisse der polnischen Wahlkommission PKW, von der Landesebene bis zum Untersuchungsgebiet.</p>
+            <h2 class="card-title" id="country-title"><a href="/de/wahlumfragen/polen/">Polen</a></h2>
+            <p>Sehen Sie, wie ein Komitee eine Debatte vorbereitet, Aufgaben verteilt und die Kosten für Saalmiete und Materialien abrechnet.</p>
             <div class="card-actions">
-              <a class="btn btn-primary" href="/de/wahlumfragen/polen/">Modul für Polen öffnen</a>
-              <a href="/de/wahlumfragen/polen/#download">Dateien herunterladen</a>
+              <a class="btn btn-primary" href="/de/wahlumfragen/polen/#planner">Beispiel im Wahlkampfplaner ansehen</a>
+              <a href="/de/wahlumfragen/polen/#download">Plugin und Beispiele herunterladen</a>
             </div>
           </div>
         </aside>
@@ -121,26 +121,29 @@
     </header>
     <div class="container">
       <section class="elections-workflow" aria-labelledby="workflow-title">
-        <h2 id="workflow-title">Von zwei Befragungswellen zum Bericht</h2>
+        <h2 id="workflow-title">Von der Terminplanung bis zur Abrechnung</h2>
         <div class="elections-phases">
           <div>
-            <h3>Zwei Befragungswellen</h3>
-            <p>Das Institut stellt in beiden Wellen dieselben Fragen zu Wahlabsicht und Gebiet. Der Bericht zeigt die Anteile der Antworten und die jeweilige Stichprobengröße.</p>
+            <h3>Termine planen</h3>
+            <p>Tragen Sie eine Versammlung oder eine Debatte mit Datum und Gebiet ein. Im Monatskalender sehen Sie, was an jedem Tag ansteht.</p>
           </div>
           <div>
-            <h3>Wahlkampfkalender und Kosten</h3>
-            <p>Die Koordination ordnet den Veranstaltungen Aufgaben, Zuständige und Fristen zu und erfasst geplante und tatsächliche Ausgaben.</p>
+            <h3>Aufgaben verteilen</h3>
+            <p>Ordnen Sie etwa die Vorbereitung der Materialien einer Veranstaltung zu. Tragen Sie die zuständige Person oder das Team und die Frist ein. Nach Abschluss markieren Sie die Aufgabe als erledigt.</p>
           </div>
-          <div id="report">
-            <h3>Bericht für das Wahlkomitee</h3>
-            <p>Das Wahlkomitee vergleicht, wie sich die Zustimmung in ausgewählten Gebieten verändert hat und welche Aktivitäten in diesen Zeitraum fielen.</p>
-            <a href="/de/wahlumfragen/polen/#report">Beispielbericht für zwei polnische Kreise ansehen</a>
+          <div>
+            <h3>Ausgaben abrechnen</h3>
+            <p>Erfassen Sie die geplanten Kosten für die Veranstaltung und für einzelne Aufgaben. Tragen Sie die tatsächlichen Beträge nach. Die Übersicht zählt jeden Posten einmal und weist auf fehlende Angaben hin.</p>
           </div>
         </div>
       </section>
-      <section class="elections-exit" aria-labelledby="exit-title">
-        <h2 id="exit-title">Nachwahlbefragung am Wahltag</h2>
-        <p>Das Institut kann eine eigene Befragung vor den Wahllokalen durchführen. Es zieht Stimmbezirke nach Schichten, legt das Auswahlintervall fest und prüft, wie sich Teilnahmeverweigerungen auf die Schätzung auswirken könnten.</p>
+      <section id="report" class="elections-report" aria-labelledby="report-title">
+        <h2 id="report-title">Bericht für das Komitee nach zwei Befragungswellen</h2>
+        <div>
+          <p>Sobald das Institut die Antworten erhoben hat, können Sie Veränderungen der Zustimmung in ausgewählten Gebieten mit den Terminen und Kosten Ihrer Wahlkampfaktivitäten vergleichen.</p>
+          <a href="/de/wahlumfragen/polen/#report">Beispielbericht für zwei polnische Kreise ansehen</a>
+          <p class="elections-research-note">Am Wahltag kann das Institut auch eine Nachwahlbefragung durchführen.</p>
+        </div>
       </section>
     </div>
   </main>

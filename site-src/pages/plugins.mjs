@@ -25,11 +25,11 @@ const PLUGINS = [
     kind: 'plugin',
     title: 'LimeControl Elections',
     lead: {
-      pl: 'Dwie fale sondażu, raport dla komitetu i exit poll. Moduł Polska zawiera karty i historyczne wyniki wyborów samorządowych z archiwum PKW.',
-      en: 'Two survey waves, committee reports and exit polls. The Poland module includes ballots and historical local election results from the Polish election authority.',
-      de: 'Zwei Befragungswellen, Berichte für Wahlkomitees und Nachwahlbefragungen. Das Modul Polen enthält Stimmzettel und historische Kommunalwahlergebnisse der polnischen Wahlkommission.',
+      pl: 'Planer kampanii dla komitetu wyborczego. Wpisz wydarzenia do kalendarza, przydziel zadania i porównaj wydatki z planem. Moduł Polska pozwala także zestawić te działania z wynikami dwóch fal sondażu.',
+      en: 'A campaign planner for election committees. Schedule events, assign tasks and compare actual spending with the budget. The Poland module also shows campaign activities alongside two waves of polling.',
+      de: 'Ein Wahlkampfplaner für Wahlkomitees. Tragen Sie Termine ein, verteilen Sie Aufgaben und vergleichen Sie Ausgaben mit dem geplanten Budget. Im Modul Polen können Sie die Aktivitäten auch neben den Ergebnissen zweier Befragungswellen betrachten.',
     },
-    action: { pl: 'Przejdź do strony wtyczki', en: 'Visit the plugin page', de: 'Zur Plugin-Seite' },
+    action: { pl: 'Zobacz planer kampanii', en: 'Explore the campaign planner', de: 'Zum Wahlkampfplaner' },
     page: 'election',
   },
   {

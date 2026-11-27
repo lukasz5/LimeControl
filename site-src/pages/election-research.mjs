@@ -13,23 +13,21 @@ export const electionRelease = {
 
 const copy = {
   pl: {
-    title: 'LimeControl Elections – moduł Polska',
-    description: 'Przygotuj sondaż na podstawie karty z archiwum PKW. Porównaj zmianę poparcia między dwiema falami w wybranych obszarach Polski z wydarzeniami i kosztami kampanii.',
+    title: 'LimeControl Elections – planer kampanii | Moduł Polska',
+    description: 'Zaplanuj wydarzenia komitetu, przydziel zadania i porównaj wydatki z budżetem. Zobacz rozliczenie debaty w planerze kampanii i zakres pilotażu dla komitetu.',
     heading: 'Moduł Polska',
-    lead: 'Wybierz kartę z archiwum PKW i porównaj poparcie w dwóch falach sondażu. Raport dla komitetu zestawia wyniki z wybranych obszarów z kalendarzem kampanii i poniesionymi kosztami.',
-    download: 'Pobierz wtyczkę', ask: 'Zapytaj o płatny pilotaż', subject: 'Pilotaż LimeControl Elections – moduł Polska',
+    lead: 'Kto przygotuje materiały na debatę, na kiedy i za ile? W planerze komitet rozpisuje wydarzenia na zadania, wskazuje odpowiedzialnych i sprawdza, ile kosztowała realizacja.',
+    plannerAction: 'Zobacz rozliczenie debaty', pilotAction: 'Pilotaż dla komitetu', download: 'Pliki do pobrania', ask: 'Zapytaj o płatny pilotaż', subject: 'Pilotaż planera kampanii dla komitetu – LimeControl Elections, Polska',
     language: 'Wtyczka i przykładowe ankiety w języku polskim.',
-    sample: 'Dane fikcyjne', figure: 'Poparcie dla listy A', wave1: 'Fala 1', wave2: 'Fala 2',
-    areas: ['Powiat gdański', 'Powiat kartuski'], exampleLink: 'Zobacz liczebności i koszty',
-    journey: 'Od projektu badania do raportu dla komitetu',
-    steps: [
-      ['Ustal, kogo badasz', 'Wybierz obszar, głosowanie i kartę. Uzgodnij populację, sposób rekrutacji i terminy. Wyniki PKW z danego roku pomagają osadzić pomiar w lokalnym kontekście.'],
-      ['Przeprowadź dwie fale', 'Połącz dwie anonimowe ankiety z takimi samymi pytaniami o wybór i obszar. Sprawdź liczby ukończonych wywiadów i zdecydowanych w obu falach.'],
-      ['Prowadź kalendarz kampanii', 'Koordynator wpisuje wydarzenia i powiązane zadania, wskazuje osoby odpowiedzialne i terminy oraz uzupełnia koszty planowane i rzeczywiste. Dostęp do planera można nadać osobno.'],
-      ['Omów wynik z komitetem', 'Zestaw do czterech rozłącznych obszarów. Komitet może otrzymać dostęp do raportu zbiorczego. Przy małej liczbie odpowiedzi wtyczka ukrywa wynik.'],
-    ],
+    sample: 'Przykład z fikcyjnej kampanii', agenda: 'Debata w powiecie gdańskim',
+    dates: ['11 marca', '12 marca'], agendaItems: ['Przygotowanie materiałów', 'Debata o komunikacji'], owners: ['Zespół prasowy', 'Koordynatorka spotkania'],
+    planner: 'Koszt debaty od rezerwacji sali do rozliczenia',
+    plannerIntro: 'Wydarzenie i powiązane zadanie mają własne kwoty. Po debacie koordynatorka oznacza wydarzenie jako zrealizowane, a zespół uzupełnia koszt materiałów. W podsumowaniu każdy wydatek liczy się raz.',
+    budget: 'Budżet debaty · dane fikcyjne', item: 'Pozycja', budgetItems: ['Wynajem sali', 'Przygotowanie materiałów'], total: 'Razem',
+    overBudget: 'ponad plan', costNote: 'Planer pokazuje różnicę, gdy przy wszystkich pozycjach uzupełniono plan i wykonanie.',
+    wave1: 'Fala 1', wave2: 'Fala 2', areas: ['Powiat gdański', 'Powiat kartuski'],
     report: 'Ile wydał komitet i jak zmieniły się deklaracje?',
-    context: 'W każdym powiecie ukończono po 40 wywiadów w każdej fali. W każdym z tych pomiarów 25 osób wskazało listę. To wśród nich liczymy udział listy A.',
+    context: 'Po obu falach komitet może zestawić działania ze zmianą deklaracji w maksymalnie czterech rozłącznych obszarach. W tym przykładzie w każdym powiecie ukończono po 40 wywiadów w każdej fali. Każdorazowo 25 osób wskazało listę. To wśród nich liczymy udział listy A.',
     table: 'Przykładowy raport dla dwóch powiatów · dane fikcyjne',
     area: 'Obszar', delta: 'Zmiana', plan: 'Plan', actual: 'Wykonanie', none: 'Brak kwoty', pp: 'p.p.',
     shared: 'Wspólne działanie wojewódzkie', sharedDetail: 'Plan 700,13 zł, wykonanie 740,15 zł. Ten wydatek pojawia się raz dla obu powiatów.',
@@ -38,32 +36,30 @@ const copy = {
     years1: 'Sejmiki województw', scope1: 'Głosy na listy od kraju do obwodu oraz karty poszczególnych okręgów.',
     years2: 'Rady i wybory włodarzy', scope2: 'Rady gmin, miast, powiatów i dzielnic Warszawy. W wyborach wójtów, burmistrzów i prezydentów miast dostępna jest każda przeprowadzona tura.',
     caveat: 'Archiwum działa lokalnie po instalacji. W 2014 r. szczegółowość kończy się na gminie lub okręgu. Porównując lata, sprawdź granice i skład list.',
-    exit: 'W dniu głosowania: exit poll', exitLead: 'Pracownia może przygotować odrębne badanie dla konkretnej karty i tury.',
+    exit: 'Exit poll w dniu głosowania', exitLead: 'Pracownia może przygotować odrębne badanie dla konkretnej karty i tury.',
     exitSteps: ['Wylosuj obwody w warstwach i ustal, co którą osobę zapraszać po wyjściu z lokalu. Krok można dostosować do wielkości obwodu.', 'Rozlicz anonimowe karty i odmowy na każdej zmianie. Odczytaj przedział uwzględniający losowanie obwodów i sprawdź, jak odmienne preferencje osób odmawiających zmieniłyby szacunek.', 'Po uzyskaniu zweryfikowanego protokołu zastąp nim szacunek dla tego obwodu w late poll. Pierwotny szacunek pozostaje do porównania.'],
     source: 'Kod źródłowy i instrukcja wtyczki na GitHubie',
-    files: 'Uruchom projekt w LimeSurvey', install: 'Wgraj ZIP w panelu wtyczek i aktywuj wtyczkę. Zaimportuj oba pliki LSS jako oddzielne ankiety. W narzędziu Sondaże wyborcze połącz je jako fale jednego projektu.',
+    files: 'Uruchom planer w LimeSurvey', install: 'Wgraj ZIP w panelu wtyczek i aktywuj wtyczkę. Zaimportuj oba pliki LSS jako oddzielne ankiety i je aktywuj. W narzędziu Sondaże wyborcze połącz je jako dwie fale i ustaw daty wywiadów. Projekt otworzysz w menu Planery kampanii.',
     zip: 'Wtyczka z archiwum PKW', lss1: 'Przykładowa ankieta · fala 1', lss2: 'Przykładowa ankieta · fala 2', sums: 'Sumy kontrolne', tested: 'Testy lokalne na danych ćwiczeniowych', licence: 'Licencja kodu',
-    pilot: 'Pilotaż dla pracowni badawczej', paid: 'Razem konfigurujemy jedną instalację, dwie fale i dwa uzgodnione obszary. Pilotaż obejmuje konfigurację uprawnień, warsztat na danych ćwiczeniowych i wspólny odbiór raportu.',
-    enquiry: 'Podaj wersję LimeSurvey, obszary i planowany termin badania. Na tej podstawie przygotujemy wycenę. Rekrutacja, wywiady i teren exit poll wymagają osobnego uzgodnienia.',
+    pilot: 'Pilotaż planera dla komitetu', paid: 'Z administratorem łączymy dwie ankiety wymagane przez projekt i nadajemy komitetowi dostęp do planera. Koordynator może zacząć przed pierwszym wywiadem. Podczas warsztatu wpisuje wydarzenie i zadania, ustala terminy oraz samodzielnie rozlicza różnicę między planem a wydatkami.',
+    enquiry: 'Do wyceny podaj wersję LimeSurvey, termin wdrożenia i wydarzenie, które chcesz przećwiczyć. Jeśli prowadzicie sondaże, zapraszamy pracownię do przygotowania raportu po obu falach.',
   },
   en: {
-    title: 'LimeControl Elections – Poland module',
-    description: 'Design a poll using an archived Polish ballot. Compare changes in support across two survey waves with campaign events and spending in selected areas of Poland.',
+    title: 'LimeControl Elections – campaign planner | Poland module',
+    description: 'Plan committee events, assign tasks and compare actual spending with the budget. See a worked debate budget and a pilot for campaign teams.',
     heading: 'Poland module',
-    lead: 'Choose a ballot from the Polish National Electoral Commission archive and compare support across two survey waves. The committee report shows results for selected areas alongside campaign dates and spending.',
-    download: 'Download plugin', ask: 'Ask about a paid pilot', subject: 'LimeControl Elections pilot – Poland module',
+    lead: 'Who will prepare the debate materials, by when and for how much? The campaign planner lets your committee schedule events, assign tasks and see what the work actually cost.',
+    plannerAction: 'See the debate budget', pilotAction: 'Pilot for committees', download: 'Download files', ask: 'Ask about a paid pilot', subject: 'Campaign planner pilot for an election committee – LimeControl Elections, Poland',
     language: 'The plugin interface and example surveys are in Polish.',
-    sample: 'Fictional data', figure: 'Support for List A', wave1: 'Wave 1', wave2: 'Wave 2',
-    areas: ['Gdański County', 'Kartuski County'], exampleLink: 'See sample sizes and costs',
-    journey: 'From study design to the committee report',
-    steps: [
-      ['Define the population', 'Select the area, election and ballot. Agree on the target population, recruitment method and fieldwork dates. Official results from the same election year provide local context.'],
-      ['Run two survey waves', 'Link two anonymous surveys with matching questions on voting intention and area. Check the counts of completed interviews and decided respondents in both waves.'],
-      ['Keep a campaign calendar', 'The coordinator records events and related tasks, assigns owners and deadlines, and enters planned and actual costs. Planner access can be granted separately.'],
-      ['Review the results together', 'Compare up to four non-overlapping areas. The committee can receive access to an aggregate report. The plugin suppresses results when response counts are too small.'],
-    ],
+    sample: 'Fictional campaign example', agenda: 'A debate in Gdański County',
+    dates: ['11 March', '12 March'], agendaItems: ['Prepare debate materials', 'Debate on local transport'], owners: ['Press team', 'Event coordinator'],
+    planner: 'What did the debate cost?',
+    plannerIntro: 'The event and its linked task each have a budget. After the debate, the coordinator marks the event as held and the team records the cost of materials. Each expense appears once in the total.',
+    budget: 'Debate budget · fictional data', item: 'Item', budgetItems: ['Venue hire', 'Debate materials'], total: 'Total',
+    overBudget: 'over budget', costNote: 'The planner shows the difference once every item has both a budget and an actual cost.',
+    wave1: 'Wave 1', wave2: 'Wave 2', areas: ['Gdański County', 'Kartuski County'],
     report: 'What did the committee spend, and how did support change?',
-    context: 'Each county recorded 40 completed interviews per wave. In each group, 25 respondents chose a list. They form the denominator for the share of List A.',
+    context: 'After both waves, the committee can compare campaign activities and changes in voting intention across up to four non-overlapping areas. In this example each county recorded 40 completed interviews per wave. In each group, 25 respondents chose a list. They form the denominator for the share of List A.',
     table: 'Example committee report for two counties · fictional data',
     area: 'Area', delta: 'Change', plan: 'Budget', actual: 'Actual cost', none: 'Not recorded', pp: 'pp',
     shared: 'One shared regional event', sharedDetail: 'PLN 700.13 budgeted, PLN 740.15 spent. The report counts this expense once across the two counties.',
@@ -75,29 +71,27 @@ const copy = {
     exit: 'Election day exit polling', exitLead: 'A research agency can set up a separate study for a particular ballot and round.',
     exitSteps: ['Draw polling districts within strata and set the interval for inviting voters as they leave. The interval can vary with district size.', 'Record anonymous ballots and refusals by shift. Read an interval that accounts for district sampling and check how different preferences among people who declined would change the estimate.', 'Once a verified official tally is available, use it in place of the district estimate in the late poll. The original exit poll remains available for comparison.'],
     source: 'Plugin source code and setup guide on GitHub',
-    files: 'Set up the project in LimeSurvey', install: 'Upload the ZIP in the plugin manager and activate it. Import the two LSS files as separate surveys. Open Sondaże wyborcze (Election polls) and link them as two waves of one project.',
+    files: 'Set up the planner in LimeSurvey', install: 'Upload and activate the ZIP in the plugin manager. Import and activate both LSS files as separate surveys. Open Sondaże wyborcze (Election polls), link the two waves and set their fieldwork dates. Open the project from Planery kampanii (Campaign planners).',
     zip: 'Plugin and official results archive', lss1: 'Example survey · wave 1', lss2: 'Example survey · wave 2', sums: 'Checksums', tested: 'Tested locally with example data', licence: 'Code licence',
-    pilot: 'Pilot for a research agency', paid: 'Set up one installation, two waves and two agreed areas with our team. The pilot includes access configuration, a workshop using example data and a joint review of the report.',
-    enquiry: 'Tell us your LimeSurvey version, study areas and fieldwork dates for a quote. Respondent recruitment, interviewing and exit poll fieldwork are scoped separately.',
+    pilot: 'Campaign planner pilot for your committee', paid: 'Together with your administrator we link the two surveys the project requires and grant the committee access to the planner. The coordinator can start before the first interview. In the workshop they enter an event, assign tasks and deadlines, then reconcile actual spending with the budget.',
+    enquiry: 'For a quote, tell us your LimeSurvey version, preferred start date and the event you want to work through. If you run polls, your research agency can join you to prepare the report after both waves.',
   },
   de: {
-    title: 'LimeControl Elections – Modul Polen',
-    description: 'Eine Wahlumfrage mit einem Stimmzettel aus dem polnischen Wahlarchiv planen. Ergebnisse aus zwei Befragungswellen mit Wahlkampfterminen und Kosten vergleichen.',
+    title: 'LimeControl Elections – Wahlkampfplaner | Modul Polen',
+    description: 'Veranstaltungen planen, Aufgaben verteilen und Ausgaben mit dem Budget vergleichen. Sehen Sie die Abrechnung einer Debatte und das Pilotangebot für Wahlkomitees.',
     heading: 'Modul Polen',
-    lead: 'Wählen Sie einen Stimmzettel aus dem Archiv der polnischen Wahlkommission und vergleichen Sie die Wahlabsicht in zwei Befragungswellen. Der Bericht für das Wahlkomitee zeigt die Ergebnisse ausgewählter Gebiete zusammen mit Wahlkampfterminen und Ausgaben.',
-    download: 'Plugin herunterladen', ask: 'Kostenpflichtiges Pilotprojekt anfragen', subject: 'Pilotprojekt mit LimeControl Elections – Modul Polen',
+    lead: 'Wer bereitet die Unterlagen für die Debatte vor, bis wann und zu welchen Kosten? Mit dem Wahlkampfplaner legt Ihr Komitee Termine fest, verteilt Aufgaben und behält die tatsächlichen Ausgaben im Blick.',
+    plannerAction: 'Abrechnung der Debatte ansehen', pilotAction: 'Pilotprojekt für Wahlkomitees', download: 'Dateien herunterladen', ask: 'Kostenpflichtiges Pilotprojekt anfragen', subject: 'Pilotprojekt für ein Wahlkomitee mit dem Wahlkampfplaner – LimeControl Elections, Polen',
     language: 'Die Plugin-Oberfläche und die Beispielumfragen sind auf Polnisch.',
-    sample: 'Fiktive Daten', figure: 'Anteil für Liste A', wave1: 'Welle 1', wave2: 'Welle 2',
-    areas: ['Kreis Gdański', 'Kreis Kartuski'], exampleLink: 'Fallzahlen und Kosten ansehen',
-    journey: 'Vom Studiendesign zum Bericht für das Wahlkomitee',
-    steps: [
-      ['Zielgruppe festlegen', 'Wählen Sie Gebiet, Wahl und Stimmzettel. Legen Sie Grundgesamtheit, Rekrutierung und Feldzeiten fest. Die amtlichen Ergebnisse des jeweiligen Jahres liefern den lokalen Bezug.'],
-      ['Zwei Wellen durchführen', 'Verknüpfen Sie zwei anonyme Umfragen mit identischen Fragen zur Wahlabsicht und zum Gebiet. Prüfen Sie je Welle die Zahl der abgeschlossenen Interviews und der Befragten mit Listenwahl.'],
-      ['Wahlkampfkalender führen', 'Die Koordination trägt Veranstaltungen und Aufgaben ein, benennt Verantwortliche und Fristen und erfasst geplante und tatsächliche Kosten. Der Planer hat eigene Zugriffsrechte.'],
-      ['Ergebnisse besprechen', 'Vergleichen Sie bis zu vier überschneidungsfreie Gebiete. Das Wahlkomitee kann Zugriff auf den aggregierten Bericht erhalten. Bei zu kleinen Fallzahlen blendet das Plugin die Ergebnisse aus.'],
-    ],
+    sample: 'Beispiel aus einem fiktiven Wahlkampf', agenda: 'Debatte im Kreis Gdański',
+    dates: ['11. März', '12. März'], agendaItems: ['Unterlagen vorbereiten', 'Debatte zum Nahverkehr'], owners: ['Presseteam', 'Veranstaltungsleitung'],
+    planner: 'Was hat die Debatte gekostet?',
+    plannerIntro: 'Die Veranstaltung und die zugehörige Aufgabe haben jeweils ein eigenes Budget. Nach der Debatte vermerkt die Koordinatorin, dass sie stattgefunden hat. Das Team trägt die Kosten für die Unterlagen ein. Jede Ausgabe geht einmal in die Gesamtsumme ein.',
+    budget: 'Budget der Debatte · fiktive Daten', item: 'Posten', budgetItems: ['Saalmiete', 'Unterlagen für die Debatte'], total: 'Gesamt',
+    overBudget: 'über dem Budget', costNote: 'Der Planer zeigt die Abweichung an, sobald für alle Posten sowohl Plan- als auch Istkosten vorliegen.',
+    wave1: 'Welle 1', wave2: 'Welle 2', areas: ['Kreis Gdański', 'Kreis Kartuski'],
     report: 'Wie viel hat das Wahlkomitee ausgegeben und wie hat sich die Wahlabsicht verändert?',
-    context: 'Je Kreis wurden pro Welle 40 Interviews abgeschlossen. In jeder dieser Gruppen entschieden sich 25 Personen für eine Liste. Auf diese 25 bezieht sich der Anteil für Liste A.',
+    context: 'Nach beiden Wellen kann das Komitee Wahlkampfaktivitäten und Veränderungen der Wahlabsicht in bis zu vier überschneidungsfreien Gebieten vergleichen. Im Beispiel wurden je Kreis und Welle 40 Interviews abgeschlossen. In jeder dieser Gruppen entschieden sich 25 Personen für eine Liste. Auf diese 25 bezieht sich der Anteil für Liste A.',
     table: 'Beispielbericht für zwei Kreise · fiktive Daten',
     area: 'Gebiet', delta: 'Änderung', plan: 'Geplant', actual: 'Tatsächlich', none: 'Keine Angabe', pp: 'Pkt.',
     shared: 'Eine gemeinsame regionale Veranstaltung', sharedDetail: 'Geplant waren 700,13 PLN, ausgegeben wurden 740,15 PLN. Der Bericht zählt diese Ausgabe für beide Kreise zusammen einmal.',
@@ -109,10 +103,10 @@ const copy = {
     exit: 'Nachwahlbefragung am Wahltag', exitLead: 'Das Institut kann für einen bestimmten Stimmzettel und Wahlgang eine eigene Studie anlegen.',
     exitSteps: ['Ziehen Sie Stimmbezirke innerhalb der Schichten und legen Sie fest, jede wievielte Person beim Verlassen des Wahllokals eingeladen wird. Der Abstand lässt sich an die Größe des Bezirks anpassen.', 'Erfassen Sie anonyme Stimmzettel und Teilnahmeverweigerungen je Schicht. Das Intervall berücksichtigt die Bezirksauswahl. Eine Sensitivitätsanalyse zeigt, wie andere Präferenzen der Personen, die die Teilnahme abgelehnt haben, die Schätzung verändern würden.', 'Liegt eine geprüfte amtliche Niederschrift vor, ersetzt sie im Late Poll die Schätzung für diesen Bezirk. Der ursprüngliche Exit Poll bleibt zum Vergleich verfügbar.'],
     source: 'Quellcode und Installationsanleitung des Plugins auf GitHub',
-    files: 'Das Projekt in LimeSurvey einrichten', install: 'Laden Sie die ZIP-Datei in der Plugin-Verwaltung hoch und aktivieren Sie das Plugin. Importieren Sie beide LSS-Dateien als eigene Umfragen. Verknüpfen Sie sie unter Sondaże wyborcze (Wahlumfragen) als zwei Wellen eines Projekts.',
+    files: 'Planer in LimeSurvey einrichten', install: 'Laden Sie die ZIP-Datei in der Plugin-Verwaltung hoch und aktivieren Sie das Plugin. Importieren und aktivieren Sie beide LSS-Dateien als separate Umfragen. Verknüpfen Sie diese unter Sondaże wyborcze (Wahlumfragen) zu zwei Wellen und legen Sie die Erhebungstermine fest. Öffnen Sie das Projekt unter Planery kampanii (Wahlkampfplaner).',
     zip: 'Plugin mit amtlichem Wahlarchiv', lss1: 'Beispielumfrage · Welle 1', lss2: 'Beispielumfrage · Welle 2', sums: 'Prüfsummen', tested: 'Lokal mit Beispieldaten getestet', licence: 'Lizenz des Codes',
-    pilot: 'Pilotprojekt für ein Forschungsinstitut', paid: 'Gemeinsam richten wir eine Installation mit zwei Wellen und zwei vereinbarten Gebieten ein. Das Pilotprojekt umfasst die Rechtevergabe, einen Workshop mit Beispieldaten und die gemeinsame Auswertung des Berichts.',
-    enquiry: 'Nennen Sie uns Ihre LimeSurvey-Version, die Gebiete und den gewünschten Erhebungszeitraum für ein Angebot. Rekrutierung, Interviews und die Feldarbeit am Wahltag vereinbaren wir gesondert.',
+    pilot: 'Pilotprojekt für Ihr Wahlkomitee', paid: 'Gemeinsam mit Ihrer Administration verknüpfen wir die beiden für das Projekt erforderlichen Umfragen und richten den Zugang zum Planer ein. Die Wahlkampfkoordination kann vor dem ersten Interview beginnen. Im Workshop trägt sie ein Ereignis, Aufgaben und Fristen ein und gleicht die Ausgaben mit dem Budget ab.',
+    enquiry: 'Für ein Angebot nennen Sie uns Ihre LimeSurvey-Version, den gewünschten Starttermin und eine Veranstaltung für den Probelauf. Bei einer Befragung kann Ihr Institut nach beiden Wellen den Bericht mit Ihnen erstellen.',
   },
 };
 
@@ -125,15 +119,33 @@ function percent(lang, value) {
   return new Intl.NumberFormat(lang, { style: 'percent' }).format(value / 25);
 }
 
-function figure(t, lang) {
+function agenda(t) {
   return `<figure class="er-figure">
-    <figcaption><span>${esc(t.sample)}</span><strong>${esc(t.figure)}</strong></figcaption>
-    ${comparison.map(({ counts }, index) => `<div class="er-plot">
-      <strong>${esc(t.areas[index])}</strong>
-      ${counts.map((count, wave) => `<div class="er-bar er-wave-${wave + 1}"><span>${esc(wave ? t.wave2 : t.wave1)}</span><span class="er-track" aria-hidden="true"><i style="width:${count * 4}%"></i></span><b>${percent(lang, count)}</b></div>`).join('')}
-    </div>`).join('')}
-    <a href="#report">${esc(t.exampleLink)} <span aria-hidden="true">↓</span></a>
+    <figcaption><span>${esc(t.sample)}</span><strong>${esc(t.agenda)}</strong></figcaption>
+    <ol class="er-agenda">${t.agendaItems.map((item, index) => `<li>
+      <time datetime="${['2024-03-11', '2024-03-12'][index]}">${esc(t.dates[index])}</time>
+      <div><strong>${esc(item)}</strong><small>${esc(t.owners[index])}</small></div>
+    </li>`).join('')}</ol>
   </figure>`;
+}
+
+function debateBudget(t, lang) {
+  const money = new Intl.NumberFormat(lang, { style: 'currency', currency: 'PLN' });
+  const rows = [
+    { name: t.budgetItems[0], planned: 120010, actual: 130005 },
+    { name: t.budgetItems[1], planned: 25025, actual: 35010 },
+  ];
+  const planned = rows[0].planned + rows[1].planned;
+  const actual = rows[0].actual + rows[1].actual;
+  return `<div class="er-table-wrap" role="region" aria-labelledby="budget-caption" tabindex="0">
+    <table class="table er-table er-budget">
+      <caption id="budget-caption">${esc(t.budget)}</caption>
+      <thead><tr>${[t.item, t.plan, t.actual].map(label => `<th scope="col">${esc(label)}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(row => `<tr><th scope="row">${esc(row.name)}</th><td>${money.format(row.planned / 100)}</td><td>${money.format(row.actual / 100)}</td></tr>`).join('')}</tbody>
+      <tfoot><tr><th scope="row">${esc(t.total)}</th><td>${money.format(planned / 100)}</td><td>${money.format(actual / 100)}</td></tr></tfoot>
+    </table>
+  </div>
+  <p class="er-variance"><strong>${money.format((actual - planned) / 100)} ${esc(t.overBudget)}</strong> ${esc(t.costNote)}</p>`;
 }
 
 function table(t, lang) {
@@ -160,14 +172,17 @@ export function renderElectionPoland(lang) {
   const body = `<main id="main" class="er-page">
     <header class="er-hero"><div class="container er-hero-grid">
       <div><a class="eyebrow link" href="${ROUTES.election[lang]}">LimeControl Elections</a><h1>${esc(t.heading)}</h1><p class="er-lead">${esc(t.lead)}</p>
-        <div class="er-actions"><a class="btn btn-primary" href="${esc(release.directory + release.zip)}" download>${esc(t.download)} <span aria-hidden="true">↓</span></a>
-          <a class="btn btn-ghost" href="${esc(email)}">${esc(t.ask)}</a></div>
-        <p class="er-meta">${esc(t.language)}</p>
-      </div>${figure(t, lang)}
+        <div class="er-actions"><a class="btn btn-primary" href="#planner">${esc(t.plannerAction)}</a>
+          <a class="btn btn-ghost" href="#pilot">${esc(t.pilotAction)}</a></div>
+        <p class="er-meta"><a href="#download">${esc(t.download)}</a> · ${esc(t.language)}</p>
+      </div>${agenda(t)}
     </div></header>
     <div class="container er-content">
-      <section class="er-block"><h2>${esc(t.journey)}</h2>
-        <ol class="er-steps">${t.steps.map(([heading, text]) => `<li><h3>${esc(heading)}</h3><p>${esc(text)}</p></li>`).join('')}</ol>
+      <section class="er-block er-split" id="planner"><div><h2>${esc(t.planner)}</h2><p>${esc(t.plannerIntro)}</p>
+        ${debateBudget(t, lang)}
+      </div><div class="er-pilot" id="pilot"><h2>${esc(t.pilot)}</h2><p>${esc(t.paid)}</p><p>${esc(t.enquiry)}</p>
+        <a class="btn btn-primary" href="${esc(email)}">${esc(t.ask)}</a>
+      </div>
       </section>
       <section class="er-block" id="report"><h2>${esc(t.report)}</h2><p class="er-intro">${esc(t.context)}</p>
         ${table(t, lang)}
@@ -181,19 +196,17 @@ export function renderElectionPoland(lang) {
       </div><div class="er-exit"><h2>${esc(t.exit)}</h2><p>${esc(t.exitLead)}</p>
         <ul>${t.exitSteps.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
       </div></section>
-      <section class="er-block er-split" id="download"><div><h2>${esc(t.files)}</h2><p>${esc(t.install)}</p>
+      <section class="er-block er-split" id="download"><div><h2>${esc(t.files)}</h2><p>${esc(t.install)}</p></div><div>
         <ul class="er-files">${files.map(([file, label, type]) => `<li><a href="${esc(release.directory + file)}" download>${esc(label)}<span>${type} ↓</span></a></li>`).join('')}</ul>
         <p><a href="${esc(release.repository)}">${esc(t.source)}</a></p>
         <p class="er-meta">ZIP · SHA-256<br><samp>${release.sha256.match(/.{8}/g).map(esc).join('<wbr>')}</samp></p>
         <p class="er-meta">v${esc(release.version)} · ${esc(t.licence)} GPL-2.0-or-later<br>${esc(t.tested)} · LimeSurvey CE 6.17.19 / 7.11.0</p>
-      </div><div class="er-pilot"><h2>${esc(t.pilot)}</h2><p>${esc(t.paid)}</p><p>${esc(t.enquiry)}</p>
-        <a class="btn btn-primary" href="${esc(email)}">${esc(t.ask)}</a>
       </div></section>
     </div>
   </main>`;
   return {
     path: outputPath('electionPoland', lang),
     html: layout({ lang, page: 'electionPoland', title: t.title, description: t.description, body,
-      extraHead: '<link rel="stylesheet" href="/assets/election-research.css?v=1" />' }),
+      extraHead: '<link rel="stylesheet" href="/assets/election-research.css?v=2" />' }),
   };
 }

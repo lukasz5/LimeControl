@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>LimeControl Elections – Poland module</title>
-  <meta name="description" content="Design a poll using an archived Polish ballot. Compare changes in support across two survey waves with campaign events and spending in selected areas of Poland." />
+  <title>LimeControl Elections – campaign planner | Poland module</title>
+  <meta name="description" content="Plan committee events, assign tasks and compare actual spending with the budget. See a worked debate budget and a pilot for campaign teams." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/en/election-polls/poland/" />
@@ -17,8 +17,8 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/en/election-polls/poland/" />
-  <meta property="og:title" content="LimeControl Elections – Poland module" />
-  <meta property="og:description" content="Design a poll using an archived Polish ballot. Compare changes in support across two survey waves with campaign events and spending in selected areas of Poland." />
+  <meta property="og:title" content="LimeControl Elections – campaign planner | Poland module" />
+  <meta property="og:description" content="Plan committee events, assign tasks and compare actual spending with the budget. See a worked debate budget and a pilot for campaign teams." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -68,7 +68,7 @@
       }
     ]
   }
-  </script><link rel="stylesheet" href="/assets/election-research.css?v=1" />
+  </script><link rel="stylesheet" href="/assets/election-research.css?v=2" />
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -106,27 +106,37 @@
 
 <main id="main" class="er-page">
     <header class="er-hero"><div class="container er-hero-grid">
-      <div><a class="eyebrow link" href="/en/election-polls/">LimeControl Elections</a><h1>Poland module</h1><p class="er-lead">Choose a ballot from the Polish National Electoral Commission archive and compare support across two survey waves. The committee report shows results for selected areas alongside campaign dates and spending.</p>
-        <div class="er-actions"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/LimeControlElectionPolls-0.7.0.zip" download>Download plugin <span aria-hidden="true">↓</span></a>
-          <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=LimeControl%20Elections%20pilot%20%E2%80%93%20Poland%20module">Ask about a paid pilot</a></div>
-        <p class="er-meta">The plugin interface and example surveys are in Polish.</p>
+      <div><a class="eyebrow link" href="/en/election-polls/">LimeControl Elections</a><h1>Poland module</h1><p class="er-lead">Who will prepare the debate materials, by when and for how much? The campaign planner lets your committee schedule events, assign tasks and see what the work actually cost.</p>
+        <div class="er-actions"><a class="btn btn-primary" href="#planner">See the debate budget</a>
+          <a class="btn btn-ghost" href="#pilot">Pilot for committees</a></div>
+        <p class="er-meta"><a href="#download">Download files</a> · The plugin interface and example surveys are in Polish.</p>
       </div><figure class="er-figure">
-    <figcaption><span>Fictional data</span><strong>Support for List A</strong></figcaption>
-    <div class="er-plot">
-      <strong>Gdański County</strong>
-      <div class="er-bar er-wave-1"><span>Wave 1</span><span class="er-track" aria-hidden="true"><i style="width:20%"></i></span><b>20%</b></div><div class="er-bar er-wave-2"><span>Wave 2</span><span class="er-track" aria-hidden="true"><i style="width:80%"></i></span><b>80%</b></div>
-    </div><div class="er-plot">
-      <strong>Kartuski County</strong>
-      <div class="er-bar er-wave-1"><span>Wave 1</span><span class="er-track" aria-hidden="true"><i style="width:60%"></i></span><b>60%</b></div><div class="er-bar er-wave-2"><span>Wave 2</span><span class="er-track" aria-hidden="true"><i style="width:40%"></i></span><b>40%</b></div>
-    </div>
-    <a href="#report">See sample sizes and costs <span aria-hidden="true">↓</span></a>
+    <figcaption><span>Fictional campaign example</span><strong>A debate in Gdański County</strong></figcaption>
+    <ol class="er-agenda"><li>
+      <time datetime="2024-03-11">11 March</time>
+      <div><strong>Prepare debate materials</strong><small>Press team</small></div>
+    </li><li>
+      <time datetime="2024-03-12">12 March</time>
+      <div><strong>Debate on local transport</strong><small>Event coordinator</small></div>
+    </li></ol>
   </figure>
     </div></header>
     <div class="container er-content">
-      <section class="er-block"><h2>From study design to the committee report</h2>
-        <ol class="er-steps"><li><h3>Define the population</h3><p>Select the area, election and ballot. Agree on the target population, recruitment method and fieldwork dates. Official results from the same election year provide local context.</p></li><li><h3>Run two survey waves</h3><p>Link two anonymous surveys with matching questions on voting intention and area. Check the counts of completed interviews and decided respondents in both waves.</p></li><li><h3>Keep a campaign calendar</h3><p>The coordinator records events and related tasks, assigns owners and deadlines, and enters planned and actual costs. Planner access can be granted separately.</p></li><li><h3>Review the results together</h3><p>Compare up to four non-overlapping areas. The committee can receive access to an aggregate report. The plugin suppresses results when response counts are too small.</p></li></ol>
+      <section class="er-block er-split" id="planner"><div><h2>What did the debate cost?</h2><p>The event and its linked task each have a budget. After the debate, the coordinator marks the event as held and the team records the cost of materials. Each expense appears once in the total.</p>
+        <div class="er-table-wrap" role="region" aria-labelledby="budget-caption" tabindex="0">
+    <table class="table er-table er-budget">
+      <caption id="budget-caption">Debate budget · fictional data</caption>
+      <thead><tr><th scope="col">Item</th><th scope="col">Budget</th><th scope="col">Actual cost</th></tr></thead>
+      <tbody><tr><th scope="row">Venue hire</th><td>PLN 1,200.10</td><td>PLN 1,300.05</td></tr><tr><th scope="row">Debate materials</th><td>PLN 250.25</td><td>PLN 350.10</td></tr></tbody>
+      <tfoot><tr><th scope="row">Total</th><td>PLN 1,450.35</td><td>PLN 1,650.15</td></tr></tfoot>
+    </table>
+  </div>
+  <p class="er-variance"><strong>PLN 199.80 over budget</strong> The planner shows the difference once every item has both a budget and an actual cost.</p>
+      </div><div class="er-pilot" id="pilot"><h2>Campaign planner pilot for your committee</h2><p>Together with your administrator we link the two surveys the project requires and grant the committee access to the planner. The coordinator can start before the first interview. In the workshop they enter an event, assign tasks and deadlines, then reconcile actual spending with the budget.</p><p>For a quote, tell us your LimeSurvey version, preferred start date and the event you want to work through. If you run polls, your research agency can join you to prepare the report after both waves.</p>
+        <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=Campaign%20planner%20pilot%20for%20an%20election%20committee%20%E2%80%93%20LimeControl%20Elections%2C%20Poland">Ask about a paid pilot</a>
+      </div>
       </section>
-      <section class="er-block" id="report"><h2>What did the committee spend, and how did support change?</h2><p class="er-intro">Each county recorded 40 completed interviews per wave. In each group, 25 respondents chose a list. They form the denominator for the share of List A.</p>
+      <section class="er-block" id="report"><h2>What did the committee spend, and how did support change?</h2><p class="er-intro">After both waves, the committee can compare campaign activities and changes in voting intention across up to four non-overlapping areas. In this example each county recorded 40 completed interviews per wave. In each group, 25 respondents chose a list. They form the denominator for the share of List A.</p>
         <div class="er-table-wrap" role="region" aria-labelledby="er-caption" tabindex="0">
     <table class="table er-table">
       <caption id="er-caption">Example committee report for two counties · fictional data</caption>
@@ -148,13 +158,11 @@
       </div><div class="er-exit"><h2>Election day exit polling</h2><p>A research agency can set up a separate study for a particular ballot and round.</p>
         <ul><li>Draw polling districts within strata and set the interval for inviting voters as they leave. The interval can vary with district size.</li><li>Record anonymous ballots and refusals by shift. Read an interval that accounts for district sampling and check how different preferences among people who declined would change the estimate.</li><li>Once a verified official tally is available, use it in place of the district estimate in the late poll. The original exit poll remains available for comparison.</li></ul>
       </div></section>
-      <section class="er-block er-split" id="download"><div><h2>Set up the project in LimeSurvey</h2><p>Upload the ZIP in the plugin manager and activate it. Import the two LSS files as separate surveys. Open Sondaże wyborcze (Election polls) and link them as two waves of one project.</p>
+      <section class="er-block er-split" id="download"><div><h2>Set up the planner in LimeSurvey</h2><p>Upload and activate the ZIP in the plugin manager. Import and activate both LSS files as separate surveys. Open Sondaże wyborcze (Election polls), link the two waves and set their fieldwork dates. Open the project from Planery kampanii (Campaign planners).</p></div><div>
         <ul class="er-files"><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/LimeControlElectionPolls-0.7.0.zip" download>Plugin and official results archive<span>ZIP ↓</span></a></li><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/fala-1.lss" download>Example survey · wave 1<span>LSS ↓</span></a></li><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/fala-2.lss" download>Example survey · wave 2<span>LSS ↓</span></a></li><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/SHA256SUMS" download>Checksums<span>SHA-256 ↓</span></a></li></ul>
         <p><a href="https://github.com/lukasz5/limecontrol-election-polls">Plugin source code and setup guide on GitHub</a></p>
         <p class="er-meta">ZIP · SHA-256<br><samp>609a1995<wbr>5bea6f67<wbr>391d7737<wbr>36ba7b20<wbr>f4284088<wbr>9ee16245<wbr>04b0bcc8<wbr>40a4f25f</samp></p>
         <p class="er-meta">v0.7.0 · Code licence GPL-2.0-or-later<br>Tested locally with example data · LimeSurvey CE 6.17.19 / 7.11.0</p>
-      </div><div class="er-pilot"><h2>Pilot for a research agency</h2><p>Set up one installation, two waves and two agreed areas with our team. The pilot includes access configuration, a workshop using example data and a joint review of the report.</p><p>Tell us your LimeSurvey version, study areas and fieldwork dates for a quote. Respondent recruitment, interviewing and exit poll fieldwork are scoped separately.</p>
-        <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=LimeControl%20Elections%20pilot%20%E2%80%93%20Poland%20module">Ask about a paid pilot</a>
       </div></section>
     </div>
   </main>

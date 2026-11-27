@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>LimeControl Elections – moduł Polska</title>
-  <meta name="description" content="Przygotuj sondaż na podstawie karty z archiwum PKW. Porównaj zmianę poparcia między dwiema falami w wybranych obszarach Polski z wydarzeniami i kosztami kampanii." />
+  <title>LimeControl Elections – planer kampanii | Moduł Polska</title>
+  <meta name="description" content="Zaplanuj wydarzenia komitetu, przydziel zadania i porównaj wydatki z budżetem. Zobacz rozliczenie debaty w planerze kampanii i zakres pilotażu dla komitetu." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/sondaze-wyborcze/polska/" />
@@ -17,8 +17,8 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/sondaze-wyborcze/polska/" />
-  <meta property="og:title" content="LimeControl Elections – moduł Polska" />
-  <meta property="og:description" content="Przygotuj sondaż na podstawie karty z archiwum PKW. Porównaj zmianę poparcia między dwiema falami w wybranych obszarach Polski z wydarzeniami i kosztami kampanii." />
+  <meta property="og:title" content="LimeControl Elections – planer kampanii | Moduł Polska" />
+  <meta property="og:description" content="Zaplanuj wydarzenia komitetu, przydziel zadania i porównaj wydatki z budżetem. Zobacz rozliczenie debaty w planerze kampanii i zakres pilotażu dla komitetu." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/pl.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -68,7 +68,7 @@
       }
     ]
   }
-  </script><link rel="stylesheet" href="/assets/election-research.css?v=1" />
+  </script><link rel="stylesheet" href="/assets/election-research.css?v=2" />
 </head>
 <body>
   <a class="skip" href="#main">Przejdź do treści</a>
@@ -106,27 +106,37 @@
 
 <main id="main" class="er-page">
     <header class="er-hero"><div class="container er-hero-grid">
-      <div><a class="eyebrow link" href="/sondaze-wyborcze/">LimeControl Elections</a><h1>Moduł Polska</h1><p class="er-lead">Wybierz kartę z archiwum PKW i porównaj poparcie w dwóch falach sondażu. Raport dla komitetu zestawia wyniki z wybranych obszarów z kalendarzem kampanii i poniesionymi kosztami.</p>
-        <div class="er-actions"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/LimeControlElectionPolls-0.7.0.zip" download>Pobierz wtyczkę <span aria-hidden="true">↓</span></a>
-          <a class="btn btn-ghost" href="mailto:info@strefabadan.pl?subject=Pilota%C5%BC%20LimeControl%20Elections%20%E2%80%93%20modu%C5%82%20Polska">Zapytaj o płatny pilotaż</a></div>
-        <p class="er-meta">Wtyczka i przykładowe ankiety w języku polskim.</p>
+      <div><a class="eyebrow link" href="/sondaze-wyborcze/">LimeControl Elections</a><h1>Moduł Polska</h1><p class="er-lead">Kto przygotuje materiały na debatę, na kiedy i za ile? W planerze komitet rozpisuje wydarzenia na zadania, wskazuje odpowiedzialnych i sprawdza, ile kosztowała realizacja.</p>
+        <div class="er-actions"><a class="btn btn-primary" href="#planner">Zobacz rozliczenie debaty</a>
+          <a class="btn btn-ghost" href="#pilot">Pilotaż dla komitetu</a></div>
+        <p class="er-meta"><a href="#download">Pliki do pobrania</a> · Wtyczka i przykładowe ankiety w języku polskim.</p>
       </div><figure class="er-figure">
-    <figcaption><span>Dane fikcyjne</span><strong>Poparcie dla listy A</strong></figcaption>
-    <div class="er-plot">
-      <strong>Powiat gdański</strong>
-      <div class="er-bar er-wave-1"><span>Fala 1</span><span class="er-track" aria-hidden="true"><i style="width:20%"></i></span><b>20%</b></div><div class="er-bar er-wave-2"><span>Fala 2</span><span class="er-track" aria-hidden="true"><i style="width:80%"></i></span><b>80%</b></div>
-    </div><div class="er-plot">
-      <strong>Powiat kartuski</strong>
-      <div class="er-bar er-wave-1"><span>Fala 1</span><span class="er-track" aria-hidden="true"><i style="width:60%"></i></span><b>60%</b></div><div class="er-bar er-wave-2"><span>Fala 2</span><span class="er-track" aria-hidden="true"><i style="width:40%"></i></span><b>40%</b></div>
-    </div>
-    <a href="#report">Zobacz liczebności i koszty <span aria-hidden="true">↓</span></a>
+    <figcaption><span>Przykład z fikcyjnej kampanii</span><strong>Debata w powiecie gdańskim</strong></figcaption>
+    <ol class="er-agenda"><li>
+      <time datetime="2024-03-11">11 marca</time>
+      <div><strong>Przygotowanie materiałów</strong><small>Zespół prasowy</small></div>
+    </li><li>
+      <time datetime="2024-03-12">12 marca</time>
+      <div><strong>Debata o komunikacji</strong><small>Koordynatorka spotkania</small></div>
+    </li></ol>
   </figure>
     </div></header>
     <div class="container er-content">
-      <section class="er-block"><h2>Od projektu badania do raportu dla komitetu</h2>
-        <ol class="er-steps"><li><h3>Ustal, kogo badasz</h3><p>Wybierz obszar, głosowanie i kartę. Uzgodnij populację, sposób rekrutacji i terminy. Wyniki PKW z danego roku pomagają osadzić pomiar w lokalnym kontekście.</p></li><li><h3>Przeprowadź dwie fale</h3><p>Połącz dwie anonimowe ankiety z takimi samymi pytaniami o wybór i obszar. Sprawdź liczby ukończonych wywiadów i zdecydowanych w obu falach.</p></li><li><h3>Prowadź kalendarz kampanii</h3><p>Koordynator wpisuje wydarzenia i powiązane zadania, wskazuje osoby odpowiedzialne i terminy oraz uzupełnia koszty planowane i rzeczywiste. Dostęp do planera można nadać osobno.</p></li><li><h3>Omów wynik z komitetem</h3><p>Zestaw do czterech rozłącznych obszarów. Komitet może otrzymać dostęp do raportu zbiorczego. Przy małej liczbie odpowiedzi wtyczka ukrywa wynik.</p></li></ol>
+      <section class="er-block er-split" id="planner"><div><h2>Koszt debaty od rezerwacji sali do rozliczenia</h2><p>Wydarzenie i powiązane zadanie mają własne kwoty. Po debacie koordynatorka oznacza wydarzenie jako zrealizowane, a zespół uzupełnia koszt materiałów. W podsumowaniu każdy wydatek liczy się raz.</p>
+        <div class="er-table-wrap" role="region" aria-labelledby="budget-caption" tabindex="0">
+    <table class="table er-table er-budget">
+      <caption id="budget-caption">Budżet debaty · dane fikcyjne</caption>
+      <thead><tr><th scope="col">Pozycja</th><th scope="col">Plan</th><th scope="col">Wykonanie</th></tr></thead>
+      <tbody><tr><th scope="row">Wynajem sali</th><td>1200,10 zł</td><td>1300,05 zł</td></tr><tr><th scope="row">Przygotowanie materiałów</th><td>250,25 zł</td><td>350,10 zł</td></tr></tbody>
+      <tfoot><tr><th scope="row">Razem</th><td>1450,35 zł</td><td>1650,15 zł</td></tr></tfoot>
+    </table>
+  </div>
+  <p class="er-variance"><strong>199,80 zł ponad plan</strong> Planer pokazuje różnicę, gdy przy wszystkich pozycjach uzupełniono plan i wykonanie.</p>
+      </div><div class="er-pilot" id="pilot"><h2>Pilotaż planera dla komitetu</h2><p>Z administratorem łączymy dwie ankiety wymagane przez projekt i nadajemy komitetowi dostęp do planera. Koordynator może zacząć przed pierwszym wywiadem. Podczas warsztatu wpisuje wydarzenie i zadania, ustala terminy oraz samodzielnie rozlicza różnicę między planem a wydatkami.</p><p>Do wyceny podaj wersję LimeSurvey, termin wdrożenia i wydarzenie, które chcesz przećwiczyć. Jeśli prowadzicie sondaże, zapraszamy pracownię do przygotowania raportu po obu falach.</p>
+        <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=Pilota%C5%BC%20planera%20kampanii%20dla%20komitetu%20%E2%80%93%20LimeControl%20Elections%2C%20Polska">Zapytaj o płatny pilotaż</a>
+      </div>
       </section>
-      <section class="er-block" id="report"><h2>Ile wydał komitet i jak zmieniły się deklaracje?</h2><p class="er-intro">W każdym powiecie ukończono po 40 wywiadów w każdej fali. W każdym z tych pomiarów 25 osób wskazało listę. To wśród nich liczymy udział listy A.</p>
+      <section class="er-block" id="report"><h2>Ile wydał komitet i jak zmieniły się deklaracje?</h2><p class="er-intro">Po obu falach komitet może zestawić działania ze zmianą deklaracji w maksymalnie czterech rozłącznych obszarach. W tym przykładzie w każdym powiecie ukończono po 40 wywiadów w każdej fali. Każdorazowo 25 osób wskazało listę. To wśród nich liczymy udział listy A.</p>
         <div class="er-table-wrap" role="region" aria-labelledby="er-caption" tabindex="0">
     <table class="table er-table">
       <caption id="er-caption">Przykładowy raport dla dwóch powiatów · dane fikcyjne</caption>
@@ -145,16 +155,14 @@
         <dl class="er-archive"><dt><small>2018 · 2024</small>Sejmiki województw</dt><dd>Głosy na listy od kraju do obwodu oraz karty poszczególnych okręgów.</dd>
           <dt><small>2014 · 2018 · 2024</small>Rady i wybory włodarzy</dt><dd>Rady gmin, miast, powiatów i dzielnic Warszawy. W wyborach wójtów, burmistrzów i prezydentów miast dostępna jest każda przeprowadzona tura.</dd></dl>
         <p class="er-meta">Archiwum działa lokalnie po instalacji. W 2014 r. szczegółowość kończy się na gminie lub okręgu. Porównując lata, sprawdź granice i skład list.</p>
-      </div><div class="er-exit"><h2>W dniu głosowania: exit poll</h2><p>Pracownia może przygotować odrębne badanie dla konkretnej karty i tury.</p>
+      </div><div class="er-exit"><h2>Exit poll w dniu głosowania</h2><p>Pracownia może przygotować odrębne badanie dla konkretnej karty i tury.</p>
         <ul><li>Wylosuj obwody w warstwach i ustal, co którą osobę zapraszać po wyjściu z lokalu. Krok można dostosować do wielkości obwodu.</li><li>Rozlicz anonimowe karty i odmowy na każdej zmianie. Odczytaj przedział uwzględniający losowanie obwodów i sprawdź, jak odmienne preferencje osób odmawiających zmieniłyby szacunek.</li><li>Po uzyskaniu zweryfikowanego protokołu zastąp nim szacunek dla tego obwodu w late poll. Pierwotny szacunek pozostaje do porównania.</li></ul>
       </div></section>
-      <section class="er-block er-split" id="download"><div><h2>Uruchom projekt w LimeSurvey</h2><p>Wgraj ZIP w panelu wtyczek i aktywuj wtyczkę. Zaimportuj oba pliki LSS jako oddzielne ankiety. W narzędziu Sondaże wyborcze połącz je jako fale jednego projektu.</p>
+      <section class="er-block er-split" id="download"><div><h2>Uruchom planer w LimeSurvey</h2><p>Wgraj ZIP w panelu wtyczek i aktywuj wtyczkę. Zaimportuj oba pliki LSS jako oddzielne ankiety i je aktywuj. W narzędziu Sondaże wyborcze połącz je jako dwie fale i ustaw daty wywiadów. Projekt otworzysz w menu Planery kampanii.</p></div><div>
         <ul class="er-files"><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/LimeControlElectionPolls-0.7.0.zip" download>Wtyczka z archiwum PKW<span>ZIP ↓</span></a></li><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/fala-1.lss" download>Przykładowa ankieta · fala 1<span>LSS ↓</span></a></li><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/fala-2.lss" download>Przykładowa ankieta · fala 2<span>LSS ↓</span></a></li><li><a href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.7.0/SHA256SUMS" download>Sumy kontrolne<span>SHA-256 ↓</span></a></li></ul>
         <p><a href="https://github.com/lukasz5/limecontrol-election-polls">Kod źródłowy i instrukcja wtyczki na GitHubie</a></p>
         <p class="er-meta">ZIP · SHA-256<br><samp>609a1995<wbr>5bea6f67<wbr>391d7737<wbr>36ba7b20<wbr>f4284088<wbr>9ee16245<wbr>04b0bcc8<wbr>40a4f25f</samp></p>
         <p class="er-meta">v0.7.0 · Licencja kodu GPL-2.0-or-later<br>Testy lokalne na danych ćwiczeniowych · LimeSurvey CE 6.17.19 / 7.11.0</p>
-      </div><div class="er-pilot"><h2>Pilotaż dla pracowni badawczej</h2><p>Razem konfigurujemy jedną instalację, dwie fale i dwa uzgodnione obszary. Pilotaż obejmuje konfigurację uprawnień, warsztat na danych ćwiczeniowych i wspólny odbiór raportu.</p><p>Podaj wersję LimeSurvey, obszary i planowany termin badania. Na tej podstawie przygotujemy wycenę. Rekrutacja, wywiady i teren exit poll wymagają osobnego uzgodnienia.</p>
-        <a class="btn btn-primary" href="mailto:info@strefabadan.pl?subject=Pilota%C5%BC%20LimeControl%20Elections%20%E2%80%93%20modu%C5%82%20Polska">Zapytaj o płatny pilotaż</a>
       </div></section>
     </div>
   </main>
