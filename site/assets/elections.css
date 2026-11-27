@@ -1,0 +1,35 @@
+.elections-intro {
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  padding-block: clamp(2.5rem, 7vw, 5rem);
+}
+.elections-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.elections-home h1 { font-size: clamp(2.5rem, 6vw, 4.6rem); line-height: 1.04; }
+.elections-lead { font-size: clamp(1.05rem, 1.7vw, 1.24rem); max-width: 51ch; }
+.elections-intro .muted { font-size: .95rem; margin-bottom: 0; }
+.elections-country { border-inline-start: 4px solid var(--accent); }
+.elections-country p.elections-module-label {
+  margin: 0 0 .25rem;
+  color: var(--accent-strong);
+  font-size: .9rem;
+  font-weight: 650;
+}
+.elections-country .card-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem 1rem; margin-top: 1.3rem; }
+.elections-country .card-actions a { font-weight: 650; }
+.elections-country .btn { white-space: normal; }
+.elections-home #download, .elections-home #report { scroll-margin-top: 5rem; }
+.elections-workflow, .elections-exit { padding-block: clamp(2rem, 5vw, 4rem); }
+.elections-phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.4rem, 4vw, 3rem); margin-top: 1.8rem; }
+.elections-phases > div { border-top: 1px solid var(--border); padding-top: 1rem; }
+.elections-phases p, .elections-exit p { margin: 0; color: var(--text-muted); }
+.elections-phases a { display: inline-block; margin-top: .7rem; font-weight: 650; }
+.elections-exit { border-top: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 1rem 2rem; align-items: baseline; }
+.elections-exit h2 { margin: 0; }
+@media (max-width: 720px) {
+  .elections-intro-grid, .elections-phases, .elections-exit { grid-template-columns: 1fr; }
+}

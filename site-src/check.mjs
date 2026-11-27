@@ -84,6 +84,10 @@ for (const page of Object.keys(ROUTES)) {
       errors.push(`${outputPath(page, lang)}: brak wygenerowanej strony (${page}/${lang})`);
       continue;
     }
+    const canonicals = [...entry.html.matchAll(/<link rel="canonical" href="([^"]+)"/g)];
+    if (canonicals.length !== 1 || canonicals[0][1] !== SITE_URL + ROUTES[page][lang]) {
+      report(file, 'nieprawidłowy adres kanoniczny');
+    }
     for (const other of LANGS) {
       const expected = `hreflang="${other}" href="${SITE_URL}${ROUTES[page][other]}"`;
       if (!entry.html.includes(expected)) report(file, `brak <link rel="alternate" ${expected}>`);
@@ -92,23 +96,31 @@ for (const page of Object.keys(ROUTES)) {
   }
 }
 
-// The plugin repository hosts the assets. Check generated links offline on every product page.
+// The catalog tile opens the product, which leads to the country-specific release.
 const pluginRepository = 'https://github.com/lukasz5/limecontrol-election-polls';
 const releaseDirectory = `${pluginRepository}/releases/download/v${electionRelease.version}/`;
 const releaseFiles = [electionRelease.zip, 'fala-1.lss', 'fala-2.lss', 'SHA256SUMS'];
 const releaseLinks = new Set(releaseFiles.map(name => releaseDirectory + name));
 for (const lang of LANGS) {
-  const file = join(SITE, outputPath('election', lang));
+  const catalog = join(SITE, outputPath('plugins', lang));
+  const product = join(SITE, outputPath('election', lang));
+  const productUrl = ROUTES.election[lang];
+  const moduleUrl = ROUTES.electionPoland[lang];
+  const catalogLinks = pages.get(catalog)?.html.match(/<a\s[^>]*>/g) ?? [];
+  if (!catalogLinks.some(tag => tag.includes('id="LimeControlElectionPolls"') && tag.includes(`href="${productUrl}"`))) {
+    report(catalog, 'kafelek LimeControl Elections powinien otwierać stronę produktu');
+  }
+  const productHtml = pages.get(product)?.html ?? '';
+  if (!productHtml.includes('<h1>LimeControl Elections</h1>') || !productHtml.includes(`href="${moduleUrl}"`)) {
+    report(product, 'brak nazwy produktu lub wejścia do modułu krajowego');
+  }
+  const file = join(SITE, outputPath('electionPoland', lang));
   const entry = pages.get(file);
   if (!entry) continue;
   const { html } = entry;
-  const canonical = `${SITE_URL}${ROUTES.election[lang]}`;
-  const canonicalLinks = [...html.matchAll(/<link rel="canonical" href="([^"]+)"/g)];
-  if (canonicalLinks.length !== 1 || canonicalLinks[0][1] !== canonical) {
-    report(file, `oczekiwano jednego canonical dla ${canonical}`);
-  }
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? '';
   const links = [...main.matchAll(/<a\b([^>]*?)\shref="([^"]+)"([^>]*)>/g)];
+  if (!links.some(([, , href]) => href === productUrl)) report(file, 'brak powrotu do strony produktu');
   if (!links.some(([, , href]) => href === pluginRepository)) report(file, 'brak odsyłacza do repozytorium wtyczki');
   const downloads = new Set();
   for (const [, before, href, after] of links) {

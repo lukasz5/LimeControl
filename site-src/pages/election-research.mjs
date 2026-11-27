@@ -1,4 +1,4 @@
-import { CONTACT_EMAIL, esc, layout, outputPath } from '../chrome.mjs';
+import { CONTACT_EMAIL, ROUTES, esc, layout, outputPath } from '../chrome.mjs';
 
 const repository = 'https://github.com/lukasz5/limecontrol-election-polls';
 const version = '0.7.0';
@@ -13,12 +13,11 @@ export const electionRelease = {
 
 const copy = {
   pl: {
-    title: 'Sondaże wyborcze dla LimeSurvey – moduł Polska | LimeControl',
-    description: 'Przygotuj dwie fale sondażu w LimeSurvey. Porównaj zmianę poparcia, wydarzenia i koszty w wybranych obszarach Polski. Pobierz wtyczkę lub zapytaj o pilotaż.',
-    label: 'LimeSurvey · Moduł Polska',
-    heading: 'Sondaże wyborcze',
-    lead: 'Jak zmieniło się poparcie między dwiema falami? Pracownia mierzy deklaracje w LimeSurvey, a komitet widzi wynik dla swojego obszaru obok kalendarza kampanii i poniesionych kosztów.',
-    download: 'Pobierz wtyczkę', ask: 'Zapytaj o płatny pilotaż', subject: 'Pilotaż LimeControl Sondaże Wyborcze – moduł Polska',
+    title: 'LimeControl Elections – moduł Polska',
+    description: 'Przygotuj sondaż na podstawie karty z archiwum PKW. Porównaj zmianę poparcia między dwiema falami w wybranych obszarach Polski z wydarzeniami i kosztami kampanii.',
+    heading: 'Moduł Polska',
+    lead: 'Wybierz kartę z archiwum PKW i porównaj poparcie w dwóch falach sondażu. Raport dla komitetu zestawia wyniki z wybranych obszarów z kalendarzem kampanii i poniesionymi kosztami.',
+    download: 'Pobierz wtyczkę', ask: 'Zapytaj o płatny pilotaż', subject: 'Pilotaż LimeControl Elections – moduł Polska',
     language: 'Wtyczka i przykładowe ankiety w języku polskim.',
     sample: 'Dane fikcyjne', figure: 'Poparcie dla listy A', wave1: 'Fala 1', wave2: 'Fala 2',
     areas: ['Powiat gdański', 'Powiat kartuski'], exampleLink: 'Zobacz liczebności i koszty',
@@ -48,12 +47,11 @@ const copy = {
     enquiry: 'Podaj wersję LimeSurvey, obszary i planowany termin badania. Na tej podstawie przygotujemy wycenę. Rekrutacja, wywiady i teren exit poll wymagają osobnego uzgodnienia.',
   },
   en: {
-    title: 'Election polls for LimeSurvey – Poland module | LimeControl',
-    description: 'Run two survey waves in LimeSurvey, then compare changes in support with campaign events and costs across Polish areas. Download the plugin or enquire about a pilot.',
-    label: 'LimeSurvey · Poland module',
-    heading: 'Election polls in Poland',
-    lead: 'How did support change between two survey waves? A research agency measures voting intentions in LimeSurvey. The committee can see the results for its area alongside campaign dates and expenditure.',
-    download: 'Download plugin', ask: 'Ask about a paid pilot', subject: 'LimeControl election research pilot – Poland module',
+    title: 'LimeControl Elections – Poland module',
+    description: 'Design a poll using an archived Polish ballot. Compare changes in support across two survey waves with campaign events and spending in selected areas of Poland.',
+    heading: 'Poland module',
+    lead: 'Choose a ballot from the Polish National Electoral Commission archive and compare support across two survey waves. The committee report shows results for selected areas alongside campaign dates and spending.',
+    download: 'Download plugin', ask: 'Ask about a paid pilot', subject: 'LimeControl Elections pilot – Poland module',
     language: 'The plugin interface and example surveys are in Polish.',
     sample: 'Fictional data', figure: 'Support for List A', wave1: 'Wave 1', wave2: 'Wave 2',
     areas: ['Gdański County', 'Kartuski County'], exampleLink: 'See sample sizes and costs',
@@ -83,12 +81,11 @@ const copy = {
     enquiry: 'Tell us your LimeSurvey version, study areas and fieldwork dates for a quote. Respondent recruitment, interviewing and exit poll fieldwork are scoped separately.',
   },
   de: {
-    title: 'Wahlumfragen für LimeSurvey – Modul Polen | LimeControl',
-    description: 'Zwei Befragungswellen in LimeSurvey durchführen und Veränderungen in polnischen Gebieten mit Wahlkampfterminen und Kosten vergleichen. Plugin laden oder Pilotprojekt anfragen.',
-    label: 'LimeSurvey · Modul Polen',
-    heading: 'Wahlumfragen in Polen',
-    lead: 'Wie hat sich die Wahlabsicht zwischen zwei Befragungswellen verändert? Das Institut erhebt die Antworten in LimeSurvey. Das Wahlkomitee sieht die Ergebnisse für sein Gebiet zusammen mit Wahlkampfterminen und Ausgaben.',
-    download: 'Plugin herunterladen', ask: 'Kostenpflichtiges Pilotprojekt anfragen', subject: 'Pilotprojekt für LimeControl-Wahlumfragen – Modul Polen',
+    title: 'LimeControl Elections – Modul Polen',
+    description: 'Eine Wahlumfrage mit einem Stimmzettel aus dem polnischen Wahlarchiv planen. Ergebnisse aus zwei Befragungswellen mit Wahlkampfterminen und Kosten vergleichen.',
+    heading: 'Modul Polen',
+    lead: 'Wählen Sie einen Stimmzettel aus dem Archiv der polnischen Wahlkommission und vergleichen Sie die Wahlabsicht in zwei Befragungswellen. Der Bericht für das Wahlkomitee zeigt die Ergebnisse ausgewählter Gebiete zusammen mit Wahlkampfterminen und Ausgaben.',
+    download: 'Plugin herunterladen', ask: 'Kostenpflichtiges Pilotprojekt anfragen', subject: 'Pilotprojekt mit LimeControl Elections – Modul Polen',
     language: 'Die Plugin-Oberfläche und die Beispielumfragen sind auf Polnisch.',
     sample: 'Fiktive Daten', figure: 'Anteil für Liste A', wave1: 'Welle 1', wave2: 'Welle 2',
     areas: ['Kreis Gdański', 'Kreis Kartuski'], exampleLink: 'Fallzahlen und Kosten ansehen',
@@ -155,14 +152,14 @@ function table(t, lang) {
   </div>`;
 }
 
-export function renderElectionResearch(lang) {
+export function renderElectionPoland(lang) {
   const release = electionRelease;
   const t = copy[lang];
   const email = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t.subject)}`;
   const files = [[release.zip, t.zip, 'ZIP'], ['fala-1.lss', t.lss1, 'LSS'], ['fala-2.lss', t.lss2, 'LSS'], ['SHA256SUMS', t.sums, 'SHA-256']];
   const body = `<main id="main" class="er-page">
     <header class="er-hero"><div class="container er-hero-grid">
-      <div><span class="eyebrow">${esc(t.label)}</span><h1>${esc(t.heading)}</h1><p class="er-lead">${esc(t.lead)}</p>
+      <div><a class="eyebrow link" href="${ROUTES.election[lang]}">LimeControl Elections</a><h1>${esc(t.heading)}</h1><p class="er-lead">${esc(t.lead)}</p>
         <div class="er-actions"><a class="btn btn-primary" href="${esc(release.directory + release.zip)}" download>${esc(t.download)} <span aria-hidden="true">↓</span></a>
           <a class="btn btn-ghost" href="${esc(email)}">${esc(t.ask)}</a></div>
         <p class="er-meta">${esc(t.language)}</p>
@@ -195,8 +192,8 @@ export function renderElectionResearch(lang) {
     </div>
   </main>`;
   return {
-    path: outputPath('election', lang),
-    html: layout({ lang, page: 'election', title: t.title, description: t.description, body,
+    path: outputPath('electionPoland', lang),
+    html: layout({ lang, page: 'electionPoland', title: t.title, description: t.description, body,
       extraHead: '<link rel="stylesheet" href="/assets/election-research.css?v=1" />' }),
   };
 }
