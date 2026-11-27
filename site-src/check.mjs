@@ -11,9 +11,11 @@
  * Kończy się kodem 1, gdy znajdzie błąd — używane w CI (npm run check:site).
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { LANGS, ROUTES, SITE_URL, outputPath } from './chrome.mjs';
+import { electionRelease } from './pages/election-research.mjs';
 
 const SITE = join(dirname(fileURLToPath(import.meta.url)), '..', 'site');
 
@@ -89,6 +91,25 @@ for (const page of Object.keys(ROUTES)) {
     }
     if (!new RegExp(`<html lang="${lang}"[ >]`).test(entry.html)) report(file, `oczekiwano lang="${lang}"`);
   }
+}
+
+// Compare the public package with the release qualified on both LimeSurvey versions.
+const downloadDir = join(SITE, electionRelease.directory);
+const checksumFile = join(downloadDir, 'SHA256SUMS');
+if (existsSync(checksumFile)) {
+  const checksums = readFileSync(checksumFile, 'utf8').trim().split(/\r?\n/);
+  for (const name of [electionRelease.zip, 'fala-1.lss', 'fala-2.lss']) {
+    const path = join(downloadDir, name);
+    if (!existsSync(path)) {
+      report(path, 'brak pliku wydania');
+      continue;
+    }
+    const digest = createHash('sha256').update(readFileSync(path)).digest('hex');
+    if (!checksums.includes(`${digest}  ${name}`)) report(path, 'niezgodność z SHA256SUMS');
+    if (name === electionRelease.zip && digest !== electionRelease.sha256) report(path, 'ZIP różni się od zakwalifikowanego wydania');
+  }
+} else {
+  report(checksumFile, 'brak sum wydania');
 }
 
 if (errors.length) {

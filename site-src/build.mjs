@@ -37,6 +37,7 @@ import {
   absolute, esc, layout, outputPath,
 } from './chrome.mjs';
 import { renderPluginsPage } from './pages/plugins.mjs';
+import { renderElectionResearch } from './pages/election-research.mjs';
 import { renderTemplatesPage } from './pages/templates.mjs';
 import { renderPage as renderThemesPage } from './pages/themes.mjs';
 
@@ -232,13 +233,14 @@ for (const lang of LANGS) {
   for (const page of ['home', 'docs', 'privacy']) write(outputPath(page, lang), renderFragment(page, lang));
   for (const rendered of [
     renderPluginsPage(lang),
+    renderElectionResearch(lang),
     renderThemesPage({ ...themes, lang }),
     renderTemplatesPage({ ...templates, lang }),
   ]) write(rendered.path, rendered.html);
 }
 
 // ---------- 4: sitemap.xml — każda podstrona w każdym języku, z alternatywami hreflang ----------
-const PRIORITY = { home: '1.0', themes: '0.9', templates: '0.9', plugins: '0.8', docs: '0.8', privacy: '0.3' };
+const PRIORITY = { home: '1.0', themes: '0.9', templates: '0.9', plugins: '0.8', election: '0.8', docs: '0.8', privacy: '0.3' };
 const urls = Object.keys(ROUTES).flatMap((page) =>
   LANGS.map((lang) => `  <url>
     <loc>${absolute(ROUTES[page][lang])}</loc>

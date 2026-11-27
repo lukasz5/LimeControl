@@ -109,6 +109,33 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://limecontrol.eu/sondaze-wyborcze/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/sondaze-wyborcze/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/election-polls/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/wahlumfragen/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/election-polls/" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/en/election-polls/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/sondaze-wyborcze/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/election-polls/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/wahlumfragen/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/election-polls/" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/de/wahlumfragen/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/sondaze-wyborcze/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/election-polls/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://limecontrol.eu/de/wahlumfragen/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/en/election-polls/" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://limecontrol.eu/docs.html</loc>
     <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/docs.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/en/docs.html" />
