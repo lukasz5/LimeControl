@@ -1,13 +1,13 @@
 import { CONTACT_EMAIL, ROUTES, esc, layout, outputPath } from '../chrome.mjs';
 
 const repository = 'https://github.com/lukasz5/limecontrol-election-polls';
-const version = '0.9.0';
+const version = '0.10.0';
 
 export const electionRelease = {
   version,
   repository,
   zip: `LimeControlElectionPolls-${version}.zip`,
-  sha256: '9b2463b13223bc07a2c9fd59b36c6be77da92e842447c9f1ec2397c3d441a7fc',
+  sha256: 'c87ae0f3cc9720476cbb8b32906dc6d05d1e05cdfa67253982be57dda72ca67c',
   directory: `${repository}/releases/download/v${version}/`,
 };
 
@@ -22,7 +22,7 @@ const copy = {
     sample: 'Przykład z fikcyjnej kampanii', agenda: 'Debata w powiecie gdańskim',
     dates: ['11 marca', '12 marca'], agendaItems: ['Przygotowanie materiałów', 'Debata o komunikacji'], owners: ['Zespół prasowy', 'Koordynatorka spotkania'],
     routeHeading: 'Czy z drukarni zdążymy na debatę?',
-    routeExample: 'Zespół wyjeżdża z biura o 9.00. Odbiór materiałów w drukarni zajmie 15 minut, a debata w bibliotece zaczyna się o 10.30. Wpisz te przystanki i godziny. Na mapie zobaczysz całą trasę, a przy każdym odcinku odległość i czas jazdy. Sprawdź proponowaną kolejność oraz godzinę przyjazdu, zanim zapiszesz zmianę.',
+    routeExample: 'Zespół wyjeżdża z biura o 9.00. Odbiór materiałów w drukarni zajmie 15 minut, a debata w bibliotece zaczyna się o 10.30. Wpisz te przystanki i godziny. Na mapie zobaczysz całą trasę, a przy każdym odcinku odległość i czas jazdy. Sprawdź proponowaną kolejność oraz godzinę przyjazdu, zanim zapiszesz zmianę. Zatwierdź trasę, wybierz konta osób jadących na debatę i przekaż im link. Po zalogowaniu na telefonie mogą otworzyć dojazd do drukarni. Gdy oznaczą ją jako odwiedzoną, cały zespół zobaczy postęp.',
     routeEstimate: 'Podstawowy szacunek działa lokalnie. Planer mnoży odległość w linii prostej przez 1,30 i przyjmuje średnią prędkość 45 km/h. Po skonfigurowaniu usługi OSRM możesz obliczyć przejazd po sieci drogowej. Oba warianty pokazują czas oczekiwania, postoje i ewentualne spóźnienie.',
     planner: 'Koszt debaty od rezerwacji sali do rozliczenia',
     plannerIntro: 'Wydarzenie i powiązane zadanie mają własne kwoty. Po debacie koordynatorka oznacza wydarzenie jako zrealizowane, a zespół uzupełnia koszt materiałów. W podsumowaniu każdy wydatek liczy się raz.',
@@ -57,7 +57,7 @@ const copy = {
     sample: 'Fictional campaign example', agenda: 'A debate in Gdański County',
     dates: ['11 March', '12 March'], agendaItems: ['Prepare debate materials', 'Debate on local transport'], owners: ['Press team', 'Event coordinator'],
     routeHeading: 'Can the team collect the leaflets before the debate?',
-    routeExample: 'The team leaves the office at 9:00. Collecting the leaflets from the printer takes 15 minutes, and the library debate starts at 10:30. Enter the stops and times. The map shows the full route, with a distance and estimated driving time for each leg. Review the suggested order and arrival time before saving the change.',
+    routeExample: 'The team leaves the office at 9:00. Collecting the leaflets from the printer takes 15 minutes, and the library debate starts at 10:30. Enter the stops and times. The map shows the full route, with a distance and estimated driving time for each leg. Review the suggested order and arrival time before saving the change. Approve the route, select the accounts of the people going to the debate and send them the link. Once signed in on their phones, they can open directions to the print shop. Marking it as visited updates the team’s shared progress.',
     routeEstimate: 'The offline estimate uses 1.30 times the straight-line distance and an average speed of 45 km/h. With an OSRM server configured, you can calculate the journey along roads. Both options show waiting time, time at stops and any late arrivals.',
     planner: 'What did the debate cost?',
     plannerIntro: 'The event and its linked task each have a budget. After the debate, the coordinator marks the event as held and the team records the cost of materials. Each expense appears once in the total.',
@@ -92,7 +92,7 @@ const copy = {
     sample: 'Beispiel aus einem fiktiven Wahlkampf', agenda: 'Debatte im Kreis Gdański',
     dates: ['11. März', '12. März'], agendaItems: ['Unterlagen vorbereiten', 'Debatte zum Nahverkehr'], owners: ['Presseteam', 'Veranstaltungsleitung'],
     routeHeading: 'Reicht die Zeit von der Druckerei bis zur Debatte?',
-    routeExample: 'Das Team fährt um 9 Uhr im Büro los. Für die Abholung der Materialien in der Druckerei sind 15 Minuten vorgesehen. Die Debatte in der Bibliothek beginnt um 10.30 Uhr. Tragen Sie die Stationen und Zeiten ein. Die Karte zeigt die gesamte Route, die Übersicht für jede Etappe die Entfernung und die geschätzte Fahrzeit. Prüfen Sie die vorgeschlagene Reihenfolge und die Ankunftszeit, bevor Sie die Änderung speichern.',
+    routeExample: 'Das Team fährt um 9 Uhr im Büro los. Für die Abholung der Materialien in der Druckerei sind 15 Minuten vorgesehen. Die Debatte in der Bibliothek beginnt um 10.30 Uhr. Tragen Sie die Stationen und Zeiten ein. Die Karte zeigt die gesamte Route, die Übersicht für jede Etappe die Entfernung und die geschätzte Fahrzeit. Prüfen Sie die vorgeschlagene Reihenfolge und die Ankunftszeit, bevor Sie die Änderung speichern. Bestätigen Sie die Route, wählen Sie die Konten der Teammitglieder aus, die zur Debatte fahren, und geben Sie ihnen den Link. Nach der Anmeldung können sie auf dem Smartphone die Navigation zur Druckerei öffnen. Sobald sie die Druckerei als besucht markieren, sieht das ganze Team den Fortschritt.',
     routeEstimate: 'Der Planer schätzt die Strecke offline mit dem 1,30-Fachen der Luftlinie und rechnet mit durchschnittlich 45 km/h. Mit einem eingerichteten OSRM-Server können Sie die Fahrt auf dem Straßennetz berechnen. Beide Varianten zeigen Wartezeiten, Aufenthaltszeiten und mögliche Verspätungen.',
     planner: 'Was hat die Debatte gekostet?',
     plannerIntro: 'Die Veranstaltung und die zugehörige Aufgabe haben jeweils ein eigenes Budget. Nach der Debatte vermerkt die Koordinatorin, dass sie stattgefunden hat. Das Team trägt die Kosten für die Unterlagen ein. Jede Ausgabe geht einmal in die Gesamtsumme ein.',

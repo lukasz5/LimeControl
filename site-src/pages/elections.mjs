@@ -9,7 +9,7 @@ const copy = {
     lead: 'Prowadź kampanię komitetu w jednym kalendarzu. Przy każdym wydarzeniu widzisz, kto odpowiada za przygotowania, co trzeba zrobić na czas i ile wydano w stosunku do planu.',
     setup: 'Załóż kampanię w swojej instalacji LimeSurvey i od razu ułóż kalendarz, budżet i trasę spotkań. Jeśli rozpoczniesz sondaż, podłącz dwie fale do tej samej kampanii.',
     available: 'Dostępny moduł krajowy', country: 'Polska',
-    module: 'Zobacz, jak komitet rozpisuje debatę na zadania i rozlicza wynajem sali oraz przygotowanie materiałów.',
+    module: 'Zobacz, jak komitet przygotowuje debatę i udostępnia zatwierdzoną trasę wybranym osobom. Po zalogowaniu ekipa otwiera nawigację na telefonie i oznacza odwiedzone przystanki.',
     planner: 'Zobacz przykład planera', route: 'Zobacz trasę dnia', files: 'Pobierz wtyczkę i przykłady',
     workflow: 'Od wydarzenia do rozliczenia',
     parts: [
@@ -28,7 +28,7 @@ const copy = {
     lead: 'Run your committee’s campaign from one calendar. For each event, see who is responsible, what is due and how actual spending compares with the budget.',
     setup: 'Create a campaign on your LimeSurvey installation to start scheduling events, budgeting and planning a daily itinerary. You can link two survey waves to the same campaign later.',
     available: 'Available country module', country: 'Poland',
-    module: 'See how a committee prepares for a debate, assigns tasks and tracks the costs of the venue and materials.',
+    module: 'See how a committee prepares for a debate and shares the approved route with selected team members. They sign in on their phones, open directions and mark each stop as visited.',
     planner: 'See the planner example', route: 'See a day’s route', files: 'Download the plugin and examples',
     workflow: 'From planning an event to checking the bill',
     parts: [
@@ -47,7 +47,7 @@ const copy = {
     lead: 'Koordinieren Sie den Wahlkampf Ihres Komitees in einem Kalender. Für jede Veranstaltung sehen Sie, wer zuständig ist, welche Aufgaben anstehen und wie die Ausgaben im Vergleich zum Budget ausfallen.',
     setup: 'Legen Sie in Ihrer LimeSurvey-Installation einen Wahlkampf an und planen Sie Termine, Budget und Tagesrouten. Zwei Befragungswellen können Sie später mit demselben Wahlkampf verknüpfen.',
     available: 'Verfügbares Ländermodul', country: 'Polen',
-    module: 'Sehen Sie, wie ein Komitee eine Debatte vorbereitet, Aufgaben verteilt und die Kosten für Saalmiete und Materialien abrechnet.',
+    module: 'Sehen Sie, wie ein Komitee eine Debatte vorbereitet und die bestätigte Route für ausgewählte Teammitglieder freigibt. Nach der Anmeldung können diese auf dem Smartphone die Navigation öffnen und besuchte Stationen abhaken.',
     planner: 'Beispiel im Wahlkampfplaner ansehen', route: 'Beispiel für eine Tagesroute', files: 'Plugin und Beispiele herunterladen',
     workflow: 'Von der Terminplanung bis zur Abrechnung',
     parts: [
