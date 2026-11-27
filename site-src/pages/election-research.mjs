@@ -1,10 +1,14 @@
 import { CONTACT_EMAIL, esc, layout, outputPath } from '../chrome.mjs';
 
+const repository = 'https://github.com/lukasz5/limecontrol-election-polls';
+const version = '0.7.0';
+
 export const electionRelease = {
-  version: '0.7.0',
-  zip: 'LimeControlElectionPolls-0.7.0.zip',
+  version,
+  repository,
+  zip: `LimeControlElectionPolls-${version}.zip`,
   sha256: '609a19955bea6f67391d773736ba7b20f42840889ee1624504b0bcc840a4f25f',
-  directory: '/sondaze-wyborcze/pobierz/',
+  directory: `${repository}/releases/download/v${version}/`,
 };
 
 const copy = {
@@ -37,6 +41,7 @@ const copy = {
     caveat: 'Archiwum działa lokalnie po instalacji. W 2014 r. szczegółowość kończy się na gminie lub okręgu. Porównując lata, sprawdź granice i skład list.',
     exit: 'W dniu głosowania: exit poll', exitLead: 'Pracownia może przygotować odrębne badanie dla konkretnej karty i tury.',
     exitSteps: ['Wylosuj obwody w warstwach i ustal, co którą osobę zapraszać po wyjściu z lokalu. Krok można dostosować do wielkości obwodu.', 'Rozlicz anonimowe karty i odmowy na każdej zmianie. Odczytaj przedział uwzględniający losowanie obwodów i sprawdź, jak odmienne preferencje osób odmawiających zmieniłyby szacunek.', 'Po uzyskaniu zweryfikowanego protokołu zastąp nim szacunek dla tego obwodu w late poll. Pierwotny szacunek pozostaje do porównania.'],
+    source: 'Kod źródłowy i instrukcja wtyczki na GitHubie',
     files: 'Uruchom projekt w LimeSurvey', install: 'Wgraj ZIP w panelu wtyczek i aktywuj wtyczkę. Zaimportuj oba pliki LSS jako oddzielne ankiety. W narzędziu Sondaże wyborcze połącz je jako fale jednego projektu.',
     zip: 'Wtyczka z archiwum PKW', lss1: 'Przykładowa ankieta · fala 1', lss2: 'Przykładowa ankieta · fala 2', sums: 'Sumy kontrolne', tested: 'Testy lokalne na danych ćwiczeniowych', licence: 'Licencja kodu',
     pilot: 'Pilotaż dla pracowni badawczej', paid: 'Razem konfigurujemy jedną instalację, dwie fale i dwa uzgodnione obszary. Pilotaż obejmuje konfigurację uprawnień, warsztat na danych ćwiczeniowych i wspólny odbiór raportu.',
@@ -71,6 +76,7 @@ const copy = {
     caveat: 'The archive works offline after installation. For 2014 the finest available level is the municipality or constituency. Check boundaries and list composition before comparing election years.',
     exit: 'Election day exit polling', exitLead: 'A research agency can set up a separate study for a particular ballot and round.',
     exitSteps: ['Draw polling districts within strata and set the interval for inviting voters as they leave. The interval can vary with district size.', 'Record anonymous ballots and refusals by shift. Read an interval that accounts for district sampling and check how different preferences among people who declined would change the estimate.', 'Once a verified official tally is available, use it in place of the district estimate in the late poll. The original exit poll remains available for comparison.'],
+    source: 'Plugin source code and setup guide on GitHub',
     files: 'Set up the project in LimeSurvey', install: 'Upload the ZIP in the plugin manager and activate it. Import the two LSS files as separate surveys. Open Sondaże wyborcze (Election polls) and link them as two waves of one project.',
     zip: 'Plugin and official results archive', lss1: 'Example survey · wave 1', lss2: 'Example survey · wave 2', sums: 'Checksums', tested: 'Tested locally with example data', licence: 'Code licence',
     pilot: 'Pilot for a research agency', paid: 'Set up one installation, two waves and two agreed areas with our team. The pilot includes access configuration, a workshop using example data and a joint review of the report.',
@@ -105,6 +111,7 @@ const copy = {
     caveat: 'Das Archiv ist nach der Installation offline nutzbar. Für 2014 reichen die Angaben bis zur Gemeinde oder zum Wahlkreis. Prüfen Sie vor Jahresvergleichen die Gebietsgrenzen und die Zusammensetzung der Listen.',
     exit: 'Nachwahlbefragung am Wahltag', exitLead: 'Das Institut kann für einen bestimmten Stimmzettel und Wahlgang eine eigene Studie anlegen.',
     exitSteps: ['Ziehen Sie Stimmbezirke innerhalb der Schichten und legen Sie fest, jede wievielte Person beim Verlassen des Wahllokals eingeladen wird. Der Abstand lässt sich an die Größe des Bezirks anpassen.', 'Erfassen Sie anonyme Stimmzettel und Teilnahmeverweigerungen je Schicht. Das Intervall berücksichtigt die Bezirksauswahl. Eine Sensitivitätsanalyse zeigt, wie andere Präferenzen der Personen, die die Teilnahme abgelehnt haben, die Schätzung verändern würden.', 'Liegt eine geprüfte amtliche Niederschrift vor, ersetzt sie im Late Poll die Schätzung für diesen Bezirk. Der ursprüngliche Exit Poll bleibt zum Vergleich verfügbar.'],
+    source: 'Quellcode und Installationsanleitung des Plugins auf GitHub',
     files: 'Das Projekt in LimeSurvey einrichten', install: 'Laden Sie die ZIP-Datei in der Plugin-Verwaltung hoch und aktivieren Sie das Plugin. Importieren Sie beide LSS-Dateien als eigene Umfragen. Verknüpfen Sie sie unter Sondaże wyborcze (Wahlumfragen) als zwei Wellen eines Projekts.',
     zip: 'Plugin mit amtlichem Wahlarchiv', lss1: 'Beispielumfrage · Welle 1', lss2: 'Beispielumfrage · Welle 2', sums: 'Prüfsummen', tested: 'Lokal mit Beispieldaten getestet', licence: 'Lizenz des Codes',
     pilot: 'Pilotprojekt für ein Forschungsinstitut', paid: 'Gemeinsam richten wir eine Installation mit zwei Wellen und zwei vereinbarten Gebieten ein. Das Pilotprojekt umfasst die Rechtevergabe, einen Workshop mit Beispieldaten und die gemeinsame Auswertung des Berichts.',
@@ -156,7 +163,7 @@ export function renderElectionResearch(lang) {
   const body = `<main id="main" class="er-page">
     <header class="er-hero"><div class="container er-hero-grid">
       <div><span class="eyebrow">${esc(t.label)}</span><h1>${esc(t.heading)}</h1><p class="er-lead">${esc(t.lead)}</p>
-        <div class="er-actions"><a class="btn btn-primary" href="${release.directory}${release.zip}" download>${esc(t.download)} <span aria-hidden="true">↓</span></a>
+        <div class="er-actions"><a class="btn btn-primary" href="${esc(release.directory + release.zip)}" download>${esc(t.download)} <span aria-hidden="true">↓</span></a>
           <a class="btn btn-ghost" href="${esc(email)}">${esc(t.ask)}</a></div>
         <p class="er-meta">${esc(t.language)}</p>
       </div>${figure(t, lang)}
@@ -178,8 +185,10 @@ export function renderElectionResearch(lang) {
         <ul>${t.exitSteps.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
       </div></section>
       <section class="er-block er-split" id="download"><div><h2>${esc(t.files)}</h2><p>${esc(t.install)}</p>
-        <ul class="er-files">${files.map(([file, label, type]) => `<li><a href="${release.directory}${file}" download>${esc(label)}<span>${type} ↓</span></a></li>`).join('')}</ul>
-        <p class="er-meta">v${release.version} · ${esc(t.licence)} GPL-2.0-or-later<br>${esc(t.tested)} · LimeSurvey CE 6.17.19 / 7.11.0</p>
+        <ul class="er-files">${files.map(([file, label, type]) => `<li><a href="${esc(release.directory + file)}" download>${esc(label)}<span>${type} ↓</span></a></li>`).join('')}</ul>
+        <p><a href="${esc(release.repository)}">${esc(t.source)}</a></p>
+        <p class="er-meta">ZIP · SHA-256<br><samp>${release.sha256.match(/.{8}/g).map(esc).join('<wbr>')}</samp></p>
+        <p class="er-meta">v${esc(release.version)} · ${esc(t.licence)} GPL-2.0-or-later<br>${esc(t.tested)} · LimeSurvey CE 6.17.19 / 7.11.0</p>
       </div><div class="er-pilot"><h2>${esc(t.pilot)}</h2><p>${esc(t.paid)}</p><p>${esc(t.enquiry)}</p>
         <a class="btn btn-primary" href="${esc(email)}">${esc(t.ask)}</a>
       </div></section>

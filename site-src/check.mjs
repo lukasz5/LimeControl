@@ -11,7 +11,6 @@
  * Kończy się kodem 1, gdy znajdzie błąd — używane w CI (npm run check:site).
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { createHash } from 'node:crypto';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { LANGS, ROUTES, SITE_URL, outputPath } from './chrome.mjs';
@@ -93,23 +92,36 @@ for (const page of Object.keys(ROUTES)) {
   }
 }
 
-// Compare the public package with the release qualified on both LimeSurvey versions.
-const downloadDir = join(SITE, electionRelease.directory);
-const checksumFile = join(downloadDir, 'SHA256SUMS');
-if (existsSync(checksumFile)) {
-  const checksums = readFileSync(checksumFile, 'utf8').trim().split(/\r?\n/);
-  for (const name of [electionRelease.zip, 'fala-1.lss', 'fala-2.lss']) {
-    const path = join(downloadDir, name);
-    if (!existsSync(path)) {
-      report(path, 'brak pliku wydania');
-      continue;
-    }
-    const digest = createHash('sha256').update(readFileSync(path)).digest('hex');
-    if (!checksums.includes(`${digest}  ${name}`)) report(path, 'niezgodność z SHA256SUMS');
-    if (name === electionRelease.zip && digest !== electionRelease.sha256) report(path, 'ZIP różni się od zakwalifikowanego wydania');
+// The plugin repository hosts the assets. Check generated links offline on every product page.
+const pluginRepository = 'https://github.com/lukasz5/limecontrol-election-polls';
+const releaseDirectory = `${pluginRepository}/releases/download/v${electionRelease.version}/`;
+const releaseFiles = [electionRelease.zip, 'fala-1.lss', 'fala-2.lss', 'SHA256SUMS'];
+const releaseLinks = new Set(releaseFiles.map(name => releaseDirectory + name));
+for (const lang of LANGS) {
+  const file = join(SITE, outputPath('election', lang));
+  const entry = pages.get(file);
+  if (!entry) continue;
+  const { html } = entry;
+  const canonical = `${SITE_URL}${ROUTES.election[lang]}`;
+  const canonicalLinks = [...html.matchAll(/<link rel="canonical" href="([^"]+)"/g)];
+  if (canonicalLinks.length !== 1 || canonicalLinks[0][1] !== canonical) {
+    report(file, `oczekiwano jednego canonical dla ${canonical}`);
   }
-} else {
-  report(checksumFile, 'brak sum wydania');
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? '';
+  const links = [...main.matchAll(/<a\b([^>]*?)\shref="([^"]+)"([^>]*)>/g)];
+  if (!links.some(([, , href]) => href === pluginRepository)) report(file, 'brak odsyłacza do repozytorium wtyczki');
+  const downloads = new Set();
+  for (const [, before, href, after] of links) {
+    if (!/\sdownload(?:\s|=|$)/.test(before + after) && !href.includes('/releases/download/')) continue;
+    downloads.add(href);
+    if (!releaseLinks.has(href)) report(file, `niepoprawny adres pliku wydania: ${href}`);
+  }
+  for (const href of releaseLinks) {
+    if (!downloads.has(href)) report(file, `brak odsyłacza do ${href}`);
+  }
+  if (!main.replaceAll('<wbr>', '').includes(`<samp>${electionRelease.sha256}</samp>`)) {
+    report(file, 'brak sumy SHA-256 zakwalifikowanego pakietu ZIP');
+  }
 }
 
 if (errors.length) {
