@@ -243,14 +243,26 @@ for (const lang of LANGS) {
 
 // ---------- 4: sitemap.xml — każda podstrona w każdym języku, z alternatywami hreflang ----------
 const PRIORITY = { home: '1.0', themes: '0.9', templates: '0.9', plugins: '0.8', election: '0.8', electionPoland: '0.8', docs: '0.8', privacy: '0.3' };
-const urls = Object.keys(ROUTES).flatMap((page) =>
+const localizedUrls = (routes) => Object.entries(routes).map(([lang, path]) =>
+  `    <xhtml:link rel="alternate" hreflang="${lang}" href="${absolute(path)}" />`).join('\n');
+
+const urls = Object.entries(ROUTES).flatMap(([page, routes]) =>
   LANGS.map((lang) => `  <url>
-    <loc>${absolute(ROUTES[page][lang])}</loc>
-${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${absolute(ROUTES[page][l])}" />`).join('\n')}
-    <xhtml:link rel="alternate" hreflang="x-default" href="${absolute(ROUTES[page].en)}" />
+    <loc>${absolute(routes[lang])}</loc>
+${localizedUrls(routes)}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${absolute(routes.en)}" />
     <changefreq>monthly</changefreq>
     <priority>${lang === 'pl' ? PRIORITY[page] : (Number(PRIORITY[page]) - 0.1).toFixed(1)}</priority>
   </url>`));
+
+const jsonDemoRoutes = { pl: '/pytania-json/', en: '/pytania-json/en/' };
+for (const path of Object.values(jsonDemoRoutes)) {
+  urls.push(`  <url>
+    <loc>${absolute(path)}</loc>
+${localizedUrls(jsonDemoRoutes)}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${absolute(jsonDemoRoutes.en)}" />
+  </url>`);
+}
 writeFileSync(join(SITE, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls.join('\n')}
