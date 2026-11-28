@@ -1,5 +1,5 @@
 /**
- * Komunikaty serwera w dwóch językach (polski i angielski).
+ * Komunikaty serwera w dwóch językach (polski i angielski; interfejs niemiecki dostaje angielskie).
  *
  * Aplikacja wysyła swój język w nagłówku X-LimeControl-Lang; zadania harmonogramu zapamiętują
  * język, w którym zostały utworzone, bo ich wynik powstaje później, bez udziału przeglądarki.
@@ -146,8 +146,9 @@ export function msg(key: string, lang: Lang = 'pl', ...args: unknown[]): string 
   return (entry[lang] || entry.pl)(...args);
 }
 
+/** Komunikaty serwera są po polsku i angielsku; interfejs niemiecki dostaje angielskie. */
 export function normalizeLang(value: unknown): Lang {
-  return typeof value === 'string' && /^en\b/i.test(value.trim()) ? 'en' : 'pl';
+  return typeof value === 'string' && /^(en|de)\b/i.test(value.trim()) ? 'en' : 'pl';
 }
 
 /** Język odpowiedzi: nagłówek aplikacji, a w razie jego braku — Accept-Language przeglądarki. */

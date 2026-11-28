@@ -25,7 +25,9 @@ It manages surveys through the server's official RemoteControl 2 (JSON-RPC) API.
 The app has no accounts of its own and nothing to buy: there is no registration, no in-app
 purchase, no subscription, no advertising and no analytics or tracking. The user enters the
 address of their own survey server and signs in with that server's user name and password.
-Server profiles are stored on the device only; the password is never stored.
+Server profiles are stored on the device only. The password is stored only if the user ticks
+"Remember the password on this device": it then goes into the iOS Keychain and is unlocked with
+Face ID or Touch ID. It never leaves the device.
 
 DEMO SERVER FOR REVIEW
 
@@ -54,13 +56,20 @@ WHAT TO LOOK AT
   send invitations or reminders.
 - "Schedule" tab: scheduling runs on an optional self-hosted LimeControl server, so the tab only
   explains how to connect one. It is not needed to use the app.
+- "Instances" tab, "Scan QR code" button: scans a QR code shown by the LimeControl browser
+  version (profile card, QR icon) and fills in the server address and user name. This is the only
+  use of the camera. Scanning is optional — the form can be filled in by hand.
+- Pull the survey list down to refresh it. After a connection, the last survey list stays
+  visible on the "Surveys" tab even before signing in again.
 
 NATIVE FUNCTIONALITY
 
 The app is not a wrapper around a website: there is no LimeControl web service behind it. It
 connects directly from the device to the user's server through the native networking layer,
-stores server profiles in native storage, shares links and exports files through the system
-share sheet, follows the system light or dark appearance and respects the screen's safe areas.
+stores server profiles in native storage, keeps the password (optionally) in the Keychain behind
+Face ID / Touch ID, scans QR codes with the camera, opens limecontrol:// links, shares links and
+exports files through the system share sheet, follows the system light or dark appearance, uses a
+split layout on iPad and respects the screen's safe areas.
 
 TRADEMARK NOTE
 

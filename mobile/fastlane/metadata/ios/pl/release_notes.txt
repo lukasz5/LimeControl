@@ -1,1 +1,7 @@
-Pierwsze wydanie aplikacji mobilnej LimeControl.
+Wersja 1.2:
+• Hasło do serwera można zapisać w pęku kluczy i odblokowywać Face ID lub Touch ID.
+• Dodawanie serwera przez skanowanie kodu QR z wersji przeglądarkowej.
+• Linki limecontrol:// otwierają aplikację na wskazanym serwerze lub ankiecie.
+• Odświeżanie listy gestem pociągnięcia i ostatnia lista ankiet dostępna bez sieci.
+• Na iPadzie lista i szczegóły ankiety obok siebie.
+• Nowy język interfejsu: niemiecki.

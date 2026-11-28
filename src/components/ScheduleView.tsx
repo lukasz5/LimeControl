@@ -345,10 +345,10 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12 items-start">
         <form
           onSubmit={handleCreateSchedule}
-          className="lg:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4"
+          className="md:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4"
         >
           <div className="flex items-center gap-2">
             <CalendarClock className="h-5 w-5 text-emerald-600" aria-hidden="true" />
@@ -537,7 +537,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
           </button>
         </form>
 
-        <div className="lg:col-span-7 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
+        <div className="md:col-span-7 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
           <div className="px-5 py-4 flex items-center justify-between">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               {t('Kolejka zadań serwera (')}{jobs.length})

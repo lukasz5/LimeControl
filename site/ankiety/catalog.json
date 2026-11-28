@@ -87,6 +87,38 @@
     {
       "id": "lc_capi",
       "label": "CAPI"
+    },
+    {
+      "id": "lc_editorial",
+      "label": "Editorial"
+    },
+    {
+      "id": "lc_civic",
+      "label": "Civic"
+    },
+    {
+      "id": "lc_product",
+      "label": "Product"
+    },
+    {
+      "id": "lc_studio",
+      "label": "Studio"
+    },
+    {
+      "id": "lc_logistics",
+      "label": "Logistics"
+    },
+    {
+      "id": "lc_finance",
+      "label": "Finance"
+    },
+    {
+      "id": "lc_hospitality",
+      "label": "Hospitality"
+    },
+    {
+      "id": "lc_midnight",
+      "label": "Midnight"
     }
   ],
   "templates": [

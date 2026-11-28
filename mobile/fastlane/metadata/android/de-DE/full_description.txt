@@ -1,0 +1,30 @@
+LimeControl ist eine kostenlose App zur Verwaltung von Umfragen auf Ihrem eigenen Umfrageserver — direkt vom Telefon oder Tablet. Sie arbeitet mit LimeSurvey-3.x–7.x-Servern über die offizielle RemoteControl-2-API.
+
+WAS SIE TUN KÖNNEN
+• Umfragen aktivieren und schließen, Start- und Enddaten festlegen, Umfragen kopieren.
+• Fertige Fragebögen aus einer Bibliothek mit 12 Vorlagen auf Englisch und Polnisch importieren: NPS, CSAT, Mitarbeiterengagement, Evaluationen, CATI- und CAPI-Interviews.
+• Zusammenfassungen von Antworten und Teilnehmern in Diagrammen ansehen und zwei Umfragen vergleichen.
+• Teilnehmer verwalten: Befragte hinzufügen, Einladungen und Erinnerungen versenden, E-Mail-Texte mit Vorschau bearbeiten.
+• Antworten als CSV, Excel oder JSON exportieren — die Datei auf dem Gerät speichern oder teilen.
+• Den Umfragelink teilen, einen QR-Code zeigen und das Design der Umfrage ändern.
+• CAPI-Modus: Interviews auf Tablet oder Telefon führen — nach dem Ende startet die Umfrage selbst das nächste Interview.
+• Einen Server per QR-Code aus der Browserversion von LimeControl hinzufügen und mit vielen Servern arbeiten.
+• Liste nach unten ziehen, um sie zu aktualisieren. Die zuletzt geladene Umfrageliste ist auch offline verfügbar.
+• Auf dem Tablet stehen Umfrageliste und Details nebeneinander.
+• Fortschritt der CATI- und CAPI-Feldarbeit von der Plattform StrefaAnkiet ansehen (Beta, nur lesend).
+
+DATENSCHUTZ
+• Kein Konto und keine Registrierung. Serverprofile werden nur auf Ihrem Gerät gespeichert.
+• Das Serverpasswort können Sie im Schlüsselspeicher des Geräts ablegen und per Fingerabdruck oder Gesicht entsperren. Ohne Ihre Zustimmung wird das Passwort nicht gespeichert.
+• Die App verbindet sich direkt mit Ihrem Server. Wir erheben keine Daten; es gibt keine Werbung und kein Tracking.
+
+VORAUSSETZUNGEN
+• Ein LimeSurvey-Server 3.x, 5.x, 6.x oder 7.x mit aktivierter JSON-RPC-Schnittstelle, erreichbar über HTTPS.
+• Ein Konto auf diesem Server mit Berechtigungen für Umfragen.
+
+OPTIONAL
+• Verbinden Sie die App mit Ihrem eigenen LimeControl-Server, um Aktivierungen, Einladungen und Erinnerungen zu planen — Aufträge laufen auch bei ausgeschaltetem Telefon.
+
+LimeControl ist Open-Source-Software. Quellcode, Dokumentation, Umfragedesigns und Vorlagen: https://limecontrol.eu/de/
+
+LimeSurvey ist eine eingetragene Marke der LimeSurvey GmbH. LimeControl ist ein unabhängiges Projekt und steht in keiner Verbindung zur LimeSurvey GmbH.

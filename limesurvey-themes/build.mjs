@@ -6,7 +6,8 @@
  * 1. Sprawdza kontrast kolorów każdego motywu (WCAG 2.2 AA) — przerywa przy błędzie.
  * 2. Tworzy limesurvey-themes/dist/<ls6|ls7>/lc_<id>/ (config.xml, css, scripts, files, views).
  * 3. Pakuje ZIP-y do site/szablony/pobierz/<ls6|ls7>/ (nazwa pliku = nazwa motywu w LS).
- * 4. Kopiuje zrzuty z previews/ do site/szablony/img/.
+ * 4. Kopiuje zrzuty z previews/ do site/szablony/img/ i fonty motywów do site/szablony/fonts/ (próbki na stronie).
+ * 5. Pakuje wtyczkę LimeControlBranding (logotypy w nagłówku i stopce) do site/szablony/pobierz/.
  *
  * Podstrony z motywami (PL i EN) generuje osobno site-src/build.mjs — `npm run build:site`.
  *
@@ -23,6 +24,9 @@ const REPO = join(ROOT, '..');
 const DIST = join(ROOT, 'dist');
 const SITE = join(REPO, 'site', 'szablony');
 const cfg = JSON.parse(readFileSync(join(ROOT, 'themes.json'), 'utf8'));
+// Fonty (SIL OFL 1.1) skopiowane z pakietów @fontsource przez fonts/vendor.mjs — pakowane do motywów, bez CDN.
+const FONTS = JSON.parse(readFileSync(join(ROOT, 'fonts', 'fonts.json'), 'utf8'));
+const PLUGIN = { name: 'LimeControlBranding', dir: join(ROOT, 'plugin', 'LimeControlBranding') };
 
 // ---------- kontrast WCAG ----------
 const hexToRgb = (h) => { const n = h.replace('#', ''); return [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16)); };
@@ -95,10 +99,62 @@ const themeCss = (t) => {
   --lc-font: ${k.font};
   --lc-font-heading: ${k.fontHeading};
   --lc-heading-weight: ${k.headingWeight};
-  --lc-base-size: ${k.baseSize};${layoutCss(t.layout)}
+  --lc-base-size: ${k.baseSize};
+  /* Strzałka list rozwijanych w kolorze tekstu */
+  --lc-select-arrow: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23${k.text.replace('#', '')}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");${k.colorScheme === 'dark' ? `
+  /* Motyw ciemny: jasny przycisk zamykania okien (Bootstrap rysuje go na ciemno) */
+  --lc-btn-close-filter: invert(1) grayscale(100%) brightness(200%);` : ''}${typeCss(k)}${layoutCss(t.layout)}
 }
 `;
 };
+
+/** Opcjonalne tokeny typografii i trybu kolorów (themes.json → tokens). Brak pola = wartość domyślna z lc-base.css. */
+function typeCss(k) {
+  const map = [
+    ['colorScheme', 'color-scheme', 'Tryb kolorów natywnych pól i pasków przewijania (light / dark)'],
+    ['headingStyle', 'heading-style', 'Styl tytułu ankiety i grup (normal / italic)'],
+    ['headingTransform', 'heading-transform', 'Wielkość liter tytułu ankiety i grup (none / uppercase)'],
+    ['headingTracking', 'heading-tracking', 'Odstęp między literami tytułu ankiety i grup'],
+    ['questionFont', 'question-font', 'Font treści pytań (domyślnie font nagłówków)'],
+    ['questionWeight', 'question-weight', 'Grubość treści pytań (domyślnie grubość nagłówków)'],
+    ['numeric', 'numeric', 'Cyfry w polach liczbowych i tabelach (np. tabular-nums)'],
+    ['headerStripe', 'header-stripe', 'Pasek w kolorze akcentu pod nagłówkiem'],
+  ].filter(([key]) => k[key]);
+  if (!map.length) return '';
+  return ['', '', '  /* Typografia i tryb kolorów */', ...map.map(([key, name, note]) => `  --lc-${name}: ${k[key]}; /* ${note} */`)].join('\n');
+}
+
+/** Arkusz @font-face dla fontów motywu (themes.json → fonts). Pliki leżą w katalogu fonts/ paczki. */
+function themeFonts(t) {
+  if (!t.fonts) return [];
+  const slugs = [...new Set(Object.values(t.fonts))];
+  return slugs.map((slug) => {
+    const f = FONTS[slug];
+    if (!f) throw new Error(`Motyw ${t.id}: nieznany font „${slug}” (brak w fonts/fonts.json)`);
+    return { slug, ...f };
+  });
+}
+
+function fontsCss(t, prefix = '../fonts/') {
+  const fonts = themeFonts(t);
+  const roles = Object.entries(t.fonts).map(([role, slug]) => `${role}: ${FONTS[slug].family}`).join(', ');
+  const faces = fonts.flatMap((f) => f.faces.map((face) => `@font-face {
+  font-family: '${f.family}';
+  font-style: ${face.style};
+  font-weight: ${face.weight};
+  font-display: swap;
+  src: url(${prefix}${face.file}) format('woff2');
+  unicode-range: ${face.unicodeRange};
+}`));
+  return `/*!
+ * ${t.title} — fonty motywu (lc-fonts.css): ${roles}
+ * ${fonts.map((f) => `${f.family} ${f.version}`).join(', ')} — SIL Open Font License 1.1 (fonts/OFL-*.txt).
+ * Pliki są w paczce motywu: przeglądarka nie łączy się z żadnym zewnętrznym serwerem fontów.
+ * Pobierane są tylko potrzebne zestawy znaków (łaciński, łaciński rozszerzony, cyrylica).
+ */
+${faces.join('\n\n')}
+`;
+}
 
 /** Opcjonalne ustawienia układu motywu (themes.json → layout) jako zmienne CSS czytane przez lc-base.css. */
 function layoutCss(layout) {
@@ -175,12 +231,12 @@ function optionsXml(t, variant) {
   return xml.replace(/^/gm, '    ').trimStart();
 }
 
-function engineXml(variant) {
+function engineXml(t, variant) {
   const raw = readFileSync(join(ROOT, 'base', `${variant.id}-engine.xml`), 'utf8');
   let xml = raw.slice(raw.indexOf('-->') + 3).trim();
   // Edytor motywów: zamiast CSS/JS motywu bazowego pokazujemy pliki tego motywu.
   xml = xml.replace(/^[ \t]*<file type="(css|js)">[^<]*<\/file>\r?\n/gm, '');
-  const own = ['./css/lc-theme.css', './css/lc-base.css', './scripts/lc-a11y.js']
+  const own = [...(t.fonts ? ['./css/lc-fonts.css'] : []), './css/lc-theme.css', './css/lc-base.css', './scripts/lc-a11y.js']
     .map((f) => `                    <file type="${f.endsWith('.js') ? 'js' : 'css'}">${f}</file>\n`).join('');
   xml = xml.replace(/<(\w+)>(\s*<screen_title[\s\S]*?)<\/\1>/g, (m, tag, body) => `<${tag}>${body.replace(/\s*$/, '\n')}${own}                </${tag}>`);
   return xml.replace(/^/gm, '    ').trimStart();
@@ -217,7 +273,8 @@ const configXml = (t, variant) => `<?xml version="1.0" encoding="UTF-8"?>
 
     <!-- Pliki motywu bazowego są dziedziczone; poniższe ładowane są po nich, więc nadpisują jego style. -->
     <files>
-        <css>
+        <css>${t.fonts ? `
+            <add>css/lc-fonts.css</add>` : ''}
             <add>css/lc-theme.css</add>
             <add>css/lc-base.css</add>
         </css>
@@ -228,7 +285,7 @@ const configXml = (t, variant) => `<?xml version="1.0" encoding="UTF-8"?>
 
     <!-- Silnik jak w fruity_twentythree z LimeSurvey ${variant.testedOn}; <optionspage>core</optionspage>
          jest wymagane, żeby formularz „Opcje motywu” pokazał opcje. -->
-    ${engineXml(variant)}
+    ${engineXml(t, variant)}
 
     <!-- Opcje jak w fruity_twentythree z LimeSurvey ${variant.testedOn}, z domyślnymi wartościami dobranymi pod dostępność. -->
     ${optionsXml(t, variant)}
@@ -262,8 +319,12 @@ in Configuration → Themes.
 
 ### Customisation
 
-- Colours and fonts: css/lc-theme.css (the --lc-* variables).
+- Colours and fonts: css/lc-theme.css (the --lc-* variables).${t.fonts ? `
+- Typography: ${fontRoles(t, 'en')}. The font files are inside the package (fonts/, SIL Open Font License 1.1) —
+  respondents' browsers do not contact any external font server.` : ''}
 - Logo: in a survey, Theme options → Images → Logo: Yes (upload a PNG/JPG).
+- Several logos in the header, a logo strip in the footer (e.g. partners or EU funding) and your brand
+  colour: the free LimeControlBranding plugin — https://limecontrol.eu/en/themes.html#branding
 - Your own CSS tweaks: Theme editor → css/custom.css.
 - Interviewer instructions: give a question the CSS class "lc-interviewer"
   (Question settings → Display → CSS class) to highlight it as a script or an interviewer-only field.
@@ -295,8 +356,12 @@ Konfiguracja → Motywy kliknij „Zainstaluj” przy motywie.
 
 ### Dostosowanie
 
-- Kolory i fonty: css/lc-theme.css (zmienne --lc-*).
+- Kolory i fonty: css/lc-theme.css (zmienne --lc-*).${t.fonts ? `
+- Typografia: ${fontRoles(t, 'pl')}. Pliki fontów są w paczce (fonts/, licencja SIL Open Font License 1.1) —
+  przeglądarka respondenta nie łączy się z żadnym zewnętrznym serwerem fontów.` : ''}
 - Logo: w ankiecie Opcje motywu → Obrazy → Logo: Tak (wgraj PNG/JPG).
+- Kilka logotypów w nagłówku, pasek logotypów w stopce (np. partnerzy, fundusze UE) i kolor marki:
+  darmowa wtyczka LimeControlBranding — https://limecontrol.eu/szablony.html#branding
 - Własne poprawki CSS: Edytor motywów → css/custom.css.
 - Wskazówki dla ankietera: nadaj pytaniu klasę CSS „lc-interviewer”
   (Ustawienia pytania → Wyświetlanie → Klasa CSS), aby wyróżnić je jako skrypt lub pole ankietera.
@@ -308,6 +373,30 @@ Kontrast tekstu >= 4.5:1, obramowań i fokusu >= 3:1, natywne pola wyboru
 błędy oznaczone kolorem, obramowaniem i tekstem, aria-invalid/aria-required,
 komunikaty walidacji na stronie, obsługa prefers-reduced-motion i forced-colors.
 `;
+
+/** „nagłówki: Newsreader, tekst: Instrument Sans” — opis par fontów do README i strony. */
+export function fontRoles(t, lang) {
+  if (!t.fonts) return '';
+  const names = { pl: { heading: 'nagłówki', body: 'tekst' }, en: { heading: 'headings', body: 'body text' }, de: { heading: 'Überschriften', body: 'Fließtext' } }[lang];
+  if (t.fonts.heading === t.fonts.body) return FONTS[t.fonts.body].family;
+  return Object.entries(t.fonts).map(([role, slug]) => `${names[role] || role}: ${FONTS[slug].family}`).join(', ');
+}
+
+/** Pakuje wtyczkę LimeControlBranding: ZIP z katalogiem wtyczki w korzeniu (jak oczekuje menedżer wtyczek LS). */
+function buildPlugin(log) {
+  if (!existsSync(PLUGIN.dir)) return null;
+  const configXml = readFileSync(join(PLUGIN.dir, 'config.xml'), 'utf8');
+  const version = (configXml.match(/<version>([^<]+)<\/version>/) || [])[1];
+  const outDir = join(SITE, 'pobierz');
+  mkdirSync(outDir, { recursive: true });
+  const zip = join(outDir, `${PLUGIN.name}.zip`);
+  const files = stampedFiles(PLUGIN.dir, PLUGIN.name);
+  execFileSync('zip', ['-qX', zip, ...files], { cwd: dirname(PLUGIN.dir), env: ZIP_ENV });
+  utimesSync(zip, today, today);
+  const size = statSync(zip).size;
+  log(`✓ ${PLUGIN.name}.zip ${version}  ${(size / 1024).toFixed(1)} kB`);
+  return { name: PLUGIN.name, version, size, file: `/szablony/pobierz/${PLUGIN.name}.zip` };
+}
 
 // ---------- build ----------
 /**
@@ -334,6 +423,14 @@ export function build({ quiet = false } = {}) {
       if (existsSync(img)) copyFileSync(img, join(SITE, 'img', `${t.id}-${v}.jpg`));
     }
 
+    // Fonty motywu: do paczki (fonts/) i na stronę (próbki pisma w galerii).
+    const fonts = themeFonts(t);
+    for (const f of fonts) {
+      mkdirSync(join(SITE, 'fonts'), { recursive: true });
+      for (const face of f.faces) copyFileSync(join(ROOT, 'fonts', f.slug, face.file), join(SITE, 'fonts', face.file));
+    }
+    rep.fonts = t.fonts ? Object.fromEntries(Object.entries(t.fonts).map(([role, slug]) => [role, FONTS[slug].family])) : null;
+
     for (const variant of VARIANTS) {
       const dir = join(DIST, variant.id, `lc_${t.id}`);
       for (const d of ['css', 'scripts', 'files', 'views']) mkdirSync(join(dir, d), { recursive: true });
@@ -342,6 +439,14 @@ export function build({ quiet = false } = {}) {
       // LS wymaga katalogu views/ także w motywie potomnym (widoki dziedziczone z fruity_twentythree).
       writeFileSync(join(dir, 'views/README.md'), `Views are inherited from the ${cfg.extends} theme.\nTo override a view, copy its .twig file here from the parent theme (e.g. with the LimeSurvey theme editor).\n\nWidoki są dziedziczone z motywu ${cfg.extends}.\nAby nadpisać widok, skopiuj tu plik .twig z motywu bazowego (np. przez Edytor motywów w LimeSurvey).\n`);
       writeFileSync(join(dir, 'css/lc-theme.css'), themeCss(t));
+      if (fonts.length) {
+        mkdirSync(join(dir, 'fonts'), { recursive: true });
+        writeFileSync(join(dir, 'css/lc-fonts.css'), fontsCss(t));
+        for (const f of fonts) {
+          copyFileSync(join(ROOT, 'fonts', f.slug, 'OFL.txt'), join(dir, 'fonts', `OFL-${f.slug}.txt`));
+          for (const face of f.faces) copyFileSync(join(ROOT, 'fonts', f.slug, face.file), join(dir, 'fonts', face.file));
+        }
+      }
       copyFileSync(join(ROOT, 'shared/css/lc-base.css'), join(dir, 'css/lc-base.css'));
       copyFileSync(join(ROOT, 'shared/scripts/lc-a11y.js'), join(dir, 'scripts/lc-a11y.js'));
       if (existsSync(preview)) copyFileSync(preview, join(dir, 'files/preview.png'));
@@ -368,7 +473,24 @@ export function build({ quiet = false } = {}) {
     log(`✓ ${variant.id}/limecontrol-motywy-ankiet-${variant.id}.zip  ${(bundles[variant.id] / 1024).toFixed(1)} kB`);
   }
 
-  return { cfg, report, bundles };
+  // Arkusz z próbkami pisma dla galerii na stronie (te same pliki woff2 co w paczkach).
+  // Rodziny z przedrostkiem „LC ”, żeby nie mieszały się z fontami samej strony (np. DM Sans).
+  const specimen = cfg.themes.filter((t) => t.fonts).map((t) => fontsCss(t, '/szablony/fonts/')
+    .replace(/^\/\*![\s\S]*?\*\/\n/, '')
+    .replace(/font-family: '([^']+)'/g, "font-family: 'LC $1'"));
+  const uniqueFaces = [...new Set(specimen.join('\n\n').split(/\n\n(?=@font-face)/).map((b) => b.trim()))].filter(Boolean);
+  if (uniqueFaces.length) {
+    writeFileSync(join(SITE, 'fonts', 'specimens.css'), `/* Fonty motywów LimeControl (SIL OFL 1.1) — próbki pisma w galerii motywów. */\n${uniqueFaces.join('\n\n')}\n`);
+    utimesSync(join(SITE, 'fonts', 'specimens.css'), today, today);
+  }
+
+  const plugin = buildPlugin(log);
+  // Zrzuty wtyczki (sekcja #branding na stronie): previews/branding-*.jpg → site/szablony/img/.
+  if (plugin) {
+    plugin.shots = readdirSync(join(ROOT, 'previews')).filter((f) => /^branding-[a-z]+\.jpg$/.test(f)).sort();
+    for (const f of plugin.shots) copyFileSync(join(ROOT, 'previews', f), join(SITE, 'img', f));
+  }
+  return { cfg, report, bundles, plugin, fonts: FONTS };
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) build();

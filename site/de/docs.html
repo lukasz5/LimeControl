@@ -19,7 +19,7 @@
   <meta property="og:url" content="https://limecontrol.eu/de/docs.html" />
   <meta property="og:title" content="LimeControl-Dokumentation" />
   <meta property="og:description" content="LimeSurvey-Einrichtung, App-Funktionen, CATI/CAPI-Interviews und LimeControl auf dem eigenen Server." />
-  <meta property="og:image" content="https://limecontrol.eu/assets/og/de.png?v=9" />
+  <meta property="og:image" content="https://limecontrol.eu/assets/og/de.png?v=10" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="LimeControl — eine App zur Verwaltung von LimeSurvey-Umfragen" />
@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=9" />
+  <link rel="stylesheet" href="/assets/style.css?v=10" />
   <script>document.documentElement.classList.add('js')</script>
 
   <script type="application/ld+json">
@@ -64,8 +64,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/de/" aria-label="LimeControl — Startseite">
-        <img class="logo-light" src="/assets/logo.svg?v=9" alt="LimeControl" width="106" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=9" alt="LimeControl" width="106" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=10" alt="LimeControl" width="106" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=10" alt="LimeControl" width="106" height="34" />
       </a>
       <button class="nav-toggle" type="button" aria-label="Menü" aria-expanded="false" aria-controls="nav-links" data-label-open="Menü" data-label-close="Menü schließen">
         <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -146,7 +146,7 @@
         <div class="callout">
           <p><strong>Sprache der App:</strong> Die Oberfläche von LimeControl gibt es auf Englisch und Polnisch. Bezeichnungen von Schaltflächen und Tabs stehen in dieser Anleitung daher auf Englisch, so wie Sie sie in der App sehen (z.&nbsp;B. <strong>Instances</strong>, <strong>Surveys</strong>).</p>
         </div>
-        <p>Die App gehört zu einem Open-Source-Werkzeugkasten, der außerdem <a href="/de/designs.html">Umfrage-Designs</a>, <a href="/de/vorlagen.html">Umfragevorlagen</a> und <a href="#own-limesurvey">Deployment-Kits</a> umfasst. In dieser Anleitung beschriebene App-Version: <strong>1.1.0</strong>.</p>
+        <p>Die App gehört zu einem Open-Source-Werkzeugkasten, der außerdem <a href="/de/designs.html">Umfrage-Designs</a>, <a href="/de/vorlagen.html">Umfragevorlagen</a> und <a href="#own-limesurvey">Deployment-Kits</a> umfasst. In dieser Anleitung beschriebene App-Version: <strong>1.2.0</strong>.</p>
       </section>
 
       <section id="quick-start">
@@ -432,7 +432,12 @@ add_header Access-Control-Allow-Headers "Content-Type, Accept" always;</pre>
         <h2>Mobile App</h2>
         <p>LimeControl für iOS (iPhone und iPad) und Android ist dieselbe App in einer nativen Hülle — kostenlos und Open Source. Kostenlos erhältlich: <a href="https://play.google.com/store/apps/details?id=eu.limecontrol.app" target="_blank" rel="noopener">Google Play</a>. Die Version im App Store wartet noch auf die Veröffentlichung.</p>
         <ul>
-          <li><strong>Kein Konto.</strong> Sie melden sich weder mit einem Google-Konto noch mit einem Zugangsschlüssel an. Serverprofile werden nur auf dem Gerät gespeichert, und die App speichert nie LimeSurvey-Passwörter.</li>
+          <li><strong>Kein Konto.</strong> Sie melden sich weder mit einem Google-Konto noch mit einem Zugangsschlüssel an. Serverprofile werden nur auf dem Gerät gespeichert.</li>
+          <li><strong>Passwort mit Biometrie.</strong> Aktivieren Sie „Passwort auf diesem Gerät merken“, dann landet das Passwort im Schlüsselbund des Systems. Beim nächsten Verbinden genügen Face ID, Touch ID oder ein Fingerabdruck. Ohne diese Option speichert die App das Passwort nicht. Sie entfernen es mit „Passwort vergessen“ auf der Profilkarte; ändert sich das Passwort auf dem Server, entfernt die App das veraltete selbst.</li>
+          <li><strong>QR-Code und Links.</strong> Klicken Sie in der Browserversion auf das QR-Code-Symbol der Profilkarte, in der App auf „QR-Code scannen“ im Tab <strong>Instanzen</strong>. Der Code enthält Serveradresse und Benutzername, nie das Passwort. Links <code>limecontrol://open?server=…&amp;user=…&amp;sid=…</code> öffnen die App auf dem angegebenen Server und mit <code>sid</code> auf einer bestimmten Umfrage.</li>
+          <li><strong>Liste offline.</strong> Ziehen Sie die Umfrageliste nach unten, um sie zu aktualisieren. Die zuletzt geladene Liste (Titel, Status, Daten) ist auch vor dem Verbinden und ohne Internet sichtbar.</li>
+          <li><strong>Tablets.</strong> Ab der Breite eines iPads im Hochformat stehen Umfrageliste und Details nebeneinander.</li>
+          <li><strong>Sprache.</strong> Die App ist auch auf Deutsch verfügbar; die Sprache folgt dem Gerät und lässt sich im Kopfbereich umschalten.</li>
           <li><strong>Direkte Verbindung.</strong> Die App verbindet sich vom Gerät aus mit dem LimeSurvey-Server, ohne CORS-Header und ohne Relay.</li>
           <li><strong>Teilen und Export.</strong> Der Umfragelink und die Ergebnisdateien gehen an das Teilen-Menü des Systems — speichern Sie sie auf dem Gerät oder senden Sie sie weiter.</li>
           <li><strong>Verschlüsselung.</strong> Unter Android muss der Server über HTTPS erreichbar sein. Unter iOS ist eine unverschlüsselte Verbindung nur zu Adressen im lokalen Netz erlaubt.</li>
@@ -573,8 +578,8 @@ sudo ./install.sh</pre>
     <div class="container footer-grid">
       <div class="footer-brand">
         <a class="footer-logo" href="/de/" aria-label="LimeControl — Startseite">
-          <img class="logo-light" src="/assets/logo.svg?v=9" alt="LimeControl" width="88" height="28" loading="lazy" />
-          <img class="logo-dark" src="/assets/logo-dark.svg?v=9" alt="LimeControl" width="88" height="28" loading="lazy" />
+          <img class="logo-light" src="/assets/logo.svg?v=10" alt="LimeControl" width="88" height="28" loading="lazy" />
+          <img class="logo-dark" src="/assets/logo-dark.svg?v=10" alt="LimeControl" width="88" height="28" loading="lazy" />
         </a>
         <p>Open-Source-App zur Verwaltung von LimeSurvey-Umfragen — im Browser und auf Mobilgeräten.</p>
         <div class="footer-actions">
@@ -633,6 +638,6 @@ sudo ./install.sh</pre>
   </div>
 
   <a class="to-top" href="#main" aria-label="Nach oben"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
-  <script src="/assets/site.js?v=9" defer></script>
+  <script src="/assets/site.js?v=10" defer></script>
 </body>
 </html>

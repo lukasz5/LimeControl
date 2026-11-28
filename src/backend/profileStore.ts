@@ -6,7 +6,7 @@ import type { BackendUser, InstancePatch } from './types';
 /**
  * Profile instancji LimeSurvey przechowywane na urządzeniu — wspólne dla własnej instalacji
  * (tryb local) i aplikacji mobilnej (tryb device). Zapisywane są wyłącznie dane połączenia,
- * nigdy hasło.
+ * nigdy hasło — co najwyżej flaga, że aplikacja mobilna trzyma je w pęku kluczy urządzenia.
  */
 export const KEY_INSTANCES = 'limecontrol_local_instances_v1';
 
@@ -31,6 +31,7 @@ export function normalizeProfile(raw: Partial<InstanceProfile>): InstanceProfile
     limeVersion,
     siteName: raw.siteName ? String(raw.siteName).slice(0, 160) : undefined,
     lastConnectedAt: raw.lastConnectedAt ? String(raw.lastConnectedAt).slice(0, 64) : undefined,
+    ...(raw.biometricPassword === true ? { biometricPassword: true } : {}),
   };
 }
 
@@ -100,6 +101,7 @@ export async function updateInstance(_uid: string, instanceId: string, patch: In
       ...(patch.limeVersion ? { limeVersion: patch.limeVersion } : {}),
       ...(patch.lastConnectedAt ? { lastConnectedAt: patch.lastConnectedAt } : {}),
       ...(patch.siteName ? { siteName: patch.siteName } : {}),
+      ...(patch.biometricPassword !== undefined ? { biometricPassword: patch.biometricPassword } : {}),
     });
   });
   await persist(list);

@@ -1,0 +1,147 @@
+/*!
+ * LimeControlBranding — logotypy w nagłówku i stopce ankiety.
+ * Kolory i zaokrąglenia pochodzą z tokenów motywów LimeControl (--lc-*); inne motywy dostają wartości domyślne.
+ * Licencja: GPL-2.0-or-later
+ */
+
+/* ---------- Nagłówek ---------- */
+.lc-brand-header {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  gap: .75rem 1.25rem;
+  min-width: 0;
+  padding: .45rem 0;
+  --lcb-h: 44px;
+}
+.lc-brand-split { justify-content: space-between; }
+.lc-brand-start { justify-content: flex-start; }
+.lc-brand-center { justify-content: center; }
+.lc-brand-size-s { --lcb-h: 32px; }
+.lc-brand-size-m { --lcb-h: 44px; }
+.lc-brand-size-l { --lcb-h: 60px; }
+.lc-brand-header .lc-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(42vw, 22rem);
+  border-radius: calc(var(--lc-radius, 8px) * .6);
+  text-decoration: none !important;
+}
+/* Obraz mieści się w swoim elemencie (także na podkładce), gdy logotypy muszą się zmieścić obok siebie */
+.lc-brand-header img {
+  display: block;
+  height: var(--lcb-h);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+.lc-brand-plate .lc-brand-logo { background: #fff; padding: .3rem .6rem; }
+.lc-brand-header a.lc-brand-logo:focus-visible {
+  outline: 3px solid var(--lc-header-text, currentColor) !important;
+  outline-offset: 3px !important;
+  box-shadow: none !important;
+}
+/* Logo z opcji motywu (fruity_twentythree) zastępują logotypy wtyczki — bez dublowania */
+.lc-brand-has-header #survey-nav .logo-container,
+.lc-brand-has-header .navbar .navbar-brand.logo-container { display: none !important; }
+/* Menu ankiety (…) zostaje przy prawej krawędzi, obok logotypów */
+#survey-nav .container-fluid:has(> .lc-brand-header) { flex-wrap: nowrap; gap: .75rem; }
+#survey-nav .container-fluid > .lc-brand-header + #navbar-menu { margin-left: 0 !important; flex: 0 0 auto; }
+.lc-brand-standalone { max-width: var(--lc-maxw, 52rem); margin: 0 auto 1rem; padding: .75rem 0; }
+
+@media (max-width: 575.98px) {
+  .lc-brand-size-m { --lcb-h: 36px; }
+  .lc-brand-size-l { --lcb-h: 46px; }
+  .lc-brand-header { gap: .5rem .75rem; }
+  .lc-brand-header .lc-brand-logo { max-width: 40vw; }
+  .lc-brand-plate .lc-brand-logo { padding: .25rem .45rem; }
+}
+
+/* ---------- Stopka ---------- */
+.lc-brand-footer {
+  padding: 0 1rem 2.5rem;
+  color: var(--lc-muted, #555);
+  font-size: .9375rem;
+  --lcb-fh: 56px;
+}
+.lc-brand-fsize-s { --lcb-fh: 40px; }
+.lc-brand-fsize-m { --lcb-fh: 56px; }
+.lc-brand-fsize-l { --lcb-fh: 80px; }
+.lc-brand-footer-inner {
+  max-width: var(--lc-maxw, 52rem);
+  margin: 0 auto;
+  padding: 1.25rem clamp(1rem, 3vw, 1.75rem);
+  display: grid;
+  justify-items: center;
+  gap: .9rem;
+  text-align: center;
+}
+.lc-brand-footer--card .lc-brand-footer-inner {
+  background: var(--lc-surface, #fff);
+  border: 1px solid var(--lc-border-soft, #e2e2e2);
+  border-radius: var(--lc-radius, 10px);
+  box-shadow: var(--lc-shadow, none);
+}
+/* Biała karta: logotypy funduszy UE i partnerów wymagają zwykle białego tła — także w motywach ciemnych */
+.lc-brand-footer--white .lc-brand-footer-inner {
+  background: #fff;
+  color: #3d3d3d;
+  border: 1px solid #dcdcdc;
+  border-radius: var(--lc-radius, 10px);
+}
+.lc-brand-footer--white .lc-brand-footer-title { color: #1a1a1a; }
+.lc-brand-footer--white a { color: #0047a3 !important; }
+.lc-brand-footer--white a:focus-visible { outline-color: #0047a3 !important; }
+.lc-brand-footer-title {
+  margin: 0;
+  color: var(--lc-text, #222);
+  font-family: var(--lc-font, inherit);
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: .01em;
+}
+.lc-brand-logos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem 1.75rem;
+}
+.lc-brand-logos li { margin: 0; padding: 0; }
+.lc-brand-footer-logo { display: inline-block; border-radius: 4px; }
+.lc-brand-logos img {
+  display: block;
+  height: var(--lcb-fh);
+  width: auto;
+  max-width: min(100%, 30rem);
+  object-fit: contain;
+}
+.lc-brand-footer-text { margin: 0; max-width: 62ch; line-height: 1.55; }
+.lc-brand-footer-links { margin: 0; }
+.lc-brand-footer a { color: var(--lc-primary, #0050b3); text-decoration: underline; text-underline-offset: .18em; }
+.lc-brand-footer a:focus-visible { outline: 3px solid var(--lc-focus, #0050b3); outline-offset: 2px; }
+@media (max-width: 575.98px) {
+  .lc-brand-footer { padding: 0 .75rem 1.75rem; }
+  .lc-brand-logos { gap: .75rem 1.25rem; }
+  .lc-brand-logos img { max-width: 100%; height: auto; max-height: var(--lcb-fh); }
+}
+
+.lcb-sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+@media (forced-colors: active) {
+  .lc-brand-plate .lc-brand-logo, .lc-brand-footer--white .lc-brand-footer-inner { forced-color-adjust: none; }
+}
+@media print {
+  .lc-brand-header, .lc-brand-footer { display: flex !important; }
+  .lc-brand-footer { display: block !important; }
+  .lc-brand-footer-inner { box-shadow: none !important; }
+}

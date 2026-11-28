@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
- * Zrzuty ekranu aplikacji mobilnej dla App Store i Google Play, w języku polskim i angielskim.
+ * Zrzuty ekranu aplikacji mobilnej dla App Store i Google Play, po polsku, angielsku i niemiecku.
  *
  *   npm run build:mobile
  *   SHOTS_PL_ENDPOINT='https://demo-pl.example.com/index.php/admin/remotecontrol' \
  *   SHOTS_EN_ENDPOINT='https://demo-en.example.com/index.php/admin/remotecontrol' \
+ *   SHOTS_DE_ENDPOINT='https://demo-en.example.com/index.php/admin/remotecontrol' \
  *   LS_USER=admin LS_PASSWORD='…' \
  *     node mobile/store/screenshots.mjs [--playwright /ścieżka/do/playwright/index.mjs] [--only ios-phone,ios-tablet] [--lang pl]
  *
@@ -14,8 +15,11 @@
  * sklepy, łączy się z instancją demonstracyjną (dane: seed-demo.mjs) i zapisuje zrzuty w układzie
  * katalogów fastlane, gotowe do wysłania poleceniami `fastlane ios metadata` / `fastlane android metadata`:
  *
- *   mobile/fastlane/screenshots/<pl|en-US>/                                   App Store (iPhone 6,9″, iPad 13″)
- *   mobile/fastlane/metadata/android/<pl-PL|en-US>/images/<typ>Screenshots/   Google Play (telefon, tablet 7″ i 10″)
+ *   mobile/fastlane/screenshots/<pl|en-US|de-DE>/                                   App Store (iPhone 6,9″, iPad 13″)
+ *   mobile/fastlane/metadata/android/<pl-PL|en-US|de-DE>/images/<typ>Screenshots/   Google Play (telefon, tablet 7″ i 10″)
+ *
+ * Szablony ankiet są tylko po polsku i angielsku, więc zrzuty niemieckie domyślnie używają instancji
+ * angielskiej (SHOTS_DE_ENDPOINT nadpisuje ten wybór).
  *
  * Adres instancji jest na zrzutach zastępowany adresem przykładowym (example.com).
  *
@@ -37,10 +41,11 @@ const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : n
 const only = option('--only');
 const user = process.env.LS_USER;
 const password = process.env.LS_PASSWORD;
-const ENDPOINTS = { pl: process.env.SHOTS_PL_ENDPOINT, en: process.env.SHOTS_EN_ENDPOINT || process.env.SHOTS_PL_ENDPOINT };
+const EN_ENDPOINT = process.env.SHOTS_EN_ENDPOINT || process.env.SHOTS_PL_ENDPOINT;
+const ENDPOINTS = { pl: process.env.SHOTS_PL_ENDPOINT, en: EN_ENDPOINT, de: process.env.SHOTS_DE_ENDPOINT || EN_ENDPOINT };
 if (!existsSync(join(DIST, 'index.html'))) throw new Error('Brak dist-mobile/ — uruchom najpierw: npm run build:mobile');
 if (!user || !password || !ENDPOINTS.pl) {
-  console.error('Ustaw SHOTS_PL_ENDPOINT (oraz opcjonalnie SHOTS_EN_ENDPOINT), LS_USER i LS_PASSWORD.');
+  console.error('Ustaw SHOTS_PL_ENDPOINT (oraz opcjonalnie SHOTS_EN_ENDPOINT i SHOTS_DE_ENDPOINT), LS_USER i LS_PASSWORD.');
   process.exit(2);
 }
 
@@ -53,8 +58,10 @@ try {
   process.exit(2);
 }
 
-const IOS_LOCALE = { pl: 'pl', en: 'en-US' };
-const ANDROID_LOCALE = { pl: 'pl-PL', en: 'en-US' };
+const IOS_LOCALE = { pl: 'pl', en: 'en-US', de: 'de-DE' };
+const ANDROID_LOCALE = { pl: 'pl-PL', en: 'en-US', de: 'de-DE' };
+/** Język przeglądarki: formaty dat i godzin w polach formularzy. */
+const BROWSER_LOCALE = { pl: 'pl-PL', en: 'en-GB', de: 'de-DE' };
 /** App Store rozpoznaje urządzenie po rozdzielczości pliku, więc zrzuty obu urządzeń leżą w jednym katalogu języka. */
 const iosShot = (prefix) => (lang, name) => join(FASTLANE, 'screenshots', IOS_LOCALE[lang], `${prefix}_${name}.png`);
 const androidShot = (type) => (lang, name) => join(FASTLANE, 'metadata', 'android', ANDROID_LOCALE[lang], 'images', type, `${name}.png`);
@@ -64,17 +71,17 @@ const androidShot = (type) => (lang, name) => join(FASTLANE, 'metadata', 'androi
  * Google Play przyjmuje zrzuty w proporcjach 16:9 lub 9:16 (tablety: bok co najmniej 1080 px).
  */
 /**
- * `sheet`: poniżej 1024 px szerokości aplikacja pokazuje szczegóły ankiety w wysuwanym panelu
- * (telefony i tablet 7″); szersze ekrany mają listę i szczegóły obok siebie.
+ * `sheet`: poniżej 768 px szerokości aplikacja pokazuje szczegóły ankiety w wysuwanym panelu
+ * (telefony); tablety i szersze ekrany mają listę i szczegóły obok siebie.
  */
 const DEVICES = [
   { id: 'ios-phone', file: iosShot('iphone-6.9'), platform: 'ios', width: 440, height: 956, scale: 3, phone: true, sheet: true }, // 1320×2868
   { id: 'ios-tablet', file: iosShot('ipad-13'), platform: 'ios', width: 1032, height: 1376, scale: 2, phone: false, sheet: false }, // 2064×2752
   { id: 'android-phone', file: androidShot('phoneScreenshots'), platform: 'android', width: 360, height: 640, scale: 3, phone: true, sheet: true }, // 1080×1920
-  { id: 'android-tablet-7', file: androidShot('sevenInchScreenshots'), platform: 'android', width: 960, height: 540, scale: 2, phone: false, sheet: true }, // 1920×1080
+  { id: 'android-tablet-7', file: androidShot('sevenInchScreenshots'), platform: 'android', width: 960, height: 540, scale: 2, phone: false, sheet: false }, // 1920×1080
   { id: 'android-tablet-10', file: androidShot('tenInchScreenshots'), platform: 'android', width: 1280, height: 720, scale: 2, phone: false, sheet: false }, // 2560×1440
 ].filter((d) => !only || only.split(',').includes(d.id));
-const LANGS = ['pl', 'en'].filter((l) => !option('--lang') || option('--lang') === l);
+const LANGS = ['pl', 'en', 'de'].filter((l) => !option('--lang') || option('--lang') === l);
 
 const TEXT = {
   pl: {
@@ -111,6 +118,23 @@ const TEXT = {
     first: /NPS/,
     dismiss: 'Dismiss notification',
   },
+  de: {
+    host: 'umfragen.example.com',
+    profile: 'Forschung 2026',
+    connect: 'Verbinden',
+    password: 'LimeSurvey-Passwort',
+    surveys: 'Umfragen der Instanz',
+    library: 'Vorlagenbibliothek',
+    libraryTitle: 'Bibliothek der Umfragevorlagen',
+    closeLibrary: 'Vorlagenbibliothek schließen',
+    tools: 'Link, CAPI-Modus und Design',
+    qr: 'QR-Code',
+    closeDetails: 'Details schließen',
+    tabs: { surveys: 'Umfragen', participants: 'Teilnehmer', instances: 'Instanzen' },
+    participants: 'Teilnehmerliste',
+    first: /NPS/,
+    dismiss: 'Benachrichtigung schließen',
+  },
 };
 
 // ---------- serwer plików dist-mobile ----------
@@ -136,7 +160,7 @@ const launch = (lang) => {
   const executablePath = process.env[`SHOTS_CHROME_${lang.toUpperCase()}`];
   return chromium.launch({
     ...(executablePath ? { executablePath } : { channel: 'chrome' }),
-    args: ['--disable-web-security', `--lang=${lang === 'pl' ? 'pl-PL' : 'en-GB'}`],
+    args: ['--disable-web-security', `--lang=${BROWSER_LOCALE[lang]}`],
   });
 };
 
@@ -157,7 +181,7 @@ try {
         deviceScaleFactor: device.scale,
         isMobile: device.phone,
         hasTouch: true,
-        locale: lang === 'pl' ? 'pl-PL' : 'en-GB',
+        locale: BROWSER_LOCALE[lang],
         timezoneId: 'Europe/Warsaw',
       });
       // Aplikacja ma się zachowywać jak w natywnej powłoce: bez logowania, profile na urządzeniu.

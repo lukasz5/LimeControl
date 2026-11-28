@@ -12,6 +12,8 @@ export interface InstanceProfile {
   /** Runtime-only memory password (never stored in localStorage or Firestore). */
   password?: string;
   savePassword?: boolean;
+  /** Aplikacja mobilna: hasło jest w pęku kluczy urządzenia, odblokowywane biometrią (sama flaga, nie hasło). */
+  biometricPassword?: boolean;
   authPlugin: string;
   connectionMode: ConnectionMode;
   limeVersion: LimeSurveyVersion;

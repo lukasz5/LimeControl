@@ -14,5 +14,6 @@ export const BRAND = {
   privacyUrl: {
     pl: 'https://limecontrol.eu/prywatnosc.html',
     en: 'https://limecontrol.eu/en/privacy.html',
+    de: 'https://limecontrol.eu/de/datenschutz.html',
   },
 } as const;

@@ -19,7 +19,7 @@
   <meta property="og:url" content="https://limecontrol.eu/en/privacy.html" />
   <meta property="og:title" content="LimeControl privacy policy" />
   <meta property="og:description" content="No ads, website statistics only with consent. Survey data stays on your LimeSurvey server." />
-  <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=9" />
+  <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=10" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="LimeControl — an app for managing LimeSurvey surveys" />
@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css?v=9" />
+  <link rel="stylesheet" href="/assets/style.css?v=10" />
   <script>document.documentElement.classList.add('js')</script>
 
   <script type="application/ld+json">
@@ -64,8 +64,8 @@
   <header class="nav">
     <div class="container">
       <a class="nav-logo" href="/en/" aria-label="LimeControl — home page">
-        <img class="logo-light" src="/assets/logo.svg?v=9" alt="LimeControl" width="106" height="34" />
-        <img class="logo-dark" src="/assets/logo-dark.svg?v=9" alt="LimeControl" width="106" height="34" />
+        <img class="logo-light" src="/assets/logo.svg?v=10" alt="LimeControl" width="106" height="34" />
+        <img class="logo-dark" src="/assets/logo-dark.svg?v=10" alt="LimeControl" width="106" height="34" />
       </a>
       <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links" data-label-open="Menu" data-label-close="Close menu">
         <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -115,7 +115,7 @@
       <section id="summary">
         <span class="eyebrow">Privacy</span>
         <h1>LimeControl privacy policy</h1>
-        <p class="updated">Version 1.1 · effective from 19 November 2026</p>
+        <p class="updated">Version 1.2 · effective from 25 November 2026</p>
         <p class="lead-docs">LimeControl is a tool for managing <em>your</em> LimeSurvey server. Survey data and respondents’ answers stay on that server — we neither collect nor store them.</p>
         <ul>
           <li>We show no ads and do not sell data. We collect visit statistics for the limecontrol.eu website (Google Analytics) only with your consent; the apps contain no tracking tools.</li>
@@ -189,10 +189,11 @@
         <ul>
           <li><strong>No account.</strong> The app for iOS and Android requires no registration or sign-in with us.</li>
           <li><strong>Data on the device.</strong> Server profiles (name, address, user name, settings) and preferences are saved only in the app’s storage on your device. They disappear when you uninstall it.</li>
-          <li><strong>Passwords.</strong> The LimeSurvey password is not stored; you can only keep it until you close the app.</li>
+          <li><strong>Passwords.</strong> The LimeSurvey password is stored only if you choose so — in the system keychain (iOS Keychain, Android Keystore), from which the app can read it only after biometric confirmation (Face ID, Touch ID, fingerprint). The password never leaves the device, is not included in backups and is never passed to us. Remove it with “Forget password” or together with the profile. Without this option you can only keep the password until you close the app.</li>
           <li><strong>Connections.</strong> The app connects directly to the LimeSurvey server you specify. If you connect it to your own LimeControl server, the access key for it is kept on the device.</li>
           <li><strong>No tracking.</strong> The app contains no ads, analytics tools or tracking libraries and sends us no usage data.</li>
-          <li><strong>Permissions.</strong> The app does not ask for access to location, contacts, the camera or the microphone. You save or share exported files through the system share sheet.</li>
+          <li><strong>Permissions.</strong> The camera is used only when you tap “Scan QR code”, and only to read a code with a server address — the image is neither saved nor sent. Biometrics are used solely to unlock a saved password; the app has no access to biometric data, as the system handles the confirmation. The app does not ask for access to location, contacts or the microphone. You save or share exported files through the system share sheet.</li>
+          <li><strong>Last survey list.</strong> So that the list is visible offline, the app keeps the titles, IDs, status and dates of surveys from the last connection on the device — no responses and no participant data.</li>
         </ul>
       </section>
 
@@ -245,8 +246,8 @@
     <div class="container footer-grid">
       <div class="footer-brand">
         <a class="footer-logo" href="/en/" aria-label="LimeControl — home page">
-          <img class="logo-light" src="/assets/logo.svg?v=9" alt="LimeControl" width="88" height="28" loading="lazy" />
-          <img class="logo-dark" src="/assets/logo-dark.svg?v=9" alt="LimeControl" width="88" height="28" loading="lazy" />
+          <img class="logo-light" src="/assets/logo.svg?v=10" alt="LimeControl" width="88" height="28" loading="lazy" />
+          <img class="logo-dark" src="/assets/logo-dark.svg?v=10" alt="LimeControl" width="88" height="28" loading="lazy" />
         </a>
         <p>Open-source app for managing LimeSurvey surveys — in the browser and on mobile devices.</p>
         <div class="footer-actions">
@@ -305,6 +306,6 @@
   </div>
 
   <a class="to-top" href="#main" aria-label="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
-  <script src="/assets/site.js?v=9" defer></script>
+  <script src="/assets/site.js?v=10" defer></script>
 </body>
 </html>

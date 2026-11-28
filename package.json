@@ -1,6 +1,6 @@
 {
   "name": "limecontrol",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "LimeControl — open-source app, survey themes, survey templates and deployment tooling for LimeSurvey (RemoteControl 2).",
   "private": true,
   "license": "GPL-2.0-or-later",
@@ -32,12 +32,14 @@
   "dependencies": {
     "@capacitor/android": "^8.6.2",
     "@capacitor/app": "^8.1.2",
+    "@capacitor/barcode-scanner": "^3.1.4",
     "@capacitor/core": "^8.6.2",
     "@capacitor/filesystem": "^8.1.5",
     "@capacitor/ios": "^8.6.2",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/share": "^8.0.3",
     "@capacitor/status-bar": "^8.0.4",
+    "@capgo/capacitor-native-biometric": "^8.9.3",
     "@firebase/eslint-plugin-security-rules": "^0.0.2",
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.3.3",

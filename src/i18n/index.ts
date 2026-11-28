@@ -1,22 +1,27 @@
 import { useSyncExternalStore } from 'react';
+import { de } from './de';
 import { en } from './en';
 
-export type Lang = 'pl' | 'en';
-export const LANGS: Lang[] = ['pl', 'en'];
+export type Lang = 'pl' | 'en' | 'de';
+export const LANGS: Lang[] = ['pl', 'en', 'de'];
+
+function isLang(value: unknown): value is Lang {
+  return value === 'pl' || value === 'en' || value === 'de';
+}
 
 const STORAGE_KEY = 'limecontrol_lang_v1';
 
 function detectInitial(): Lang {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'pl' || saved === 'en') return saved;
+    if (isLang(saved)) return saved;
   } catch {
     /* brak dostępu do storage */
   }
-  if (typeof navigator !== 'undefined' && !/^pl\b/i.test(navigator.language || '')) {
-    return 'en';
-  }
-  return 'pl';
+  const browser = typeof navigator !== 'undefined' ? navigator.language || '' : '';
+  if (/^pl\b/i.test(browser) || !browser) return 'pl';
+  if (/^de\b/i.test(browser)) return 'de';
+  return 'en';
 }
 
 let current: Lang = detectInitial();
@@ -51,25 +56,26 @@ export function useLang(): Lang {
 
 /** Locale dla dat i liczb (Intl / toLocaleString). */
 export function locale(): string {
-  return current === 'pl' ? 'pl-PL' : 'en-GB';
+  return current === 'pl' ? 'pl-PL' : current === 'de' ? 'de-DE' : 'en-GB';
 }
 
 /**
  * Tłumaczenie. Kluczem jest tekst polski; `{0}`, `{1}`… zastępowane argumentami.
- * Brak tłumaczenia → tekst polski.
+ * Brak tłumaczenia niemieckiego → tekst angielski; brak angielskiego → tekst polski.
  */
 export function t(key: string, ...args: unknown[]): string {
-  const raw = current === 'pl' ? key : (en[key] ?? key);
+  const raw = current === 'pl' ? key : current === 'de' ? (de[key] ?? en[key] ?? key) : (en[key] ?? key);
   if (!args.length) return raw;
   return raw.replace(/\{(\d+)\}/g, (m, i) => (Number(i) < args.length ? String(args[Number(i)]) : m));
 }
 
 /**
- * Odmiana rzeczownika przez liczby: plural(3, ['pytanie', 'pytania', 'pytań'], ['question', 'questions'])
- * → „3 pytania” / “3 questions”.
+ * Odmiana rzeczownika przez liczby: plural(3, ['pytanie', 'pytania', 'pytań'], ['question', 'questions'], ['Frage', 'Fragen'])
+ * → „3 pytania” / “3 questions” / „3 Fragen”. Bez form niemieckich — angielskie.
  */
-export function plural(count: number, pl: [string, string, string], english: [string, string]): string {
-  if (current === 'en') return `${count} ${count === 1 ? english[0] : english[1]}`;
+export function plural(count: number, pl: [string, string, string], english: [string, string], german?: [string, string]): string {
+  if (current === 'de' && german) return `${count} ${count === 1 ? german[0] : german[1]}`;
+  if (current !== 'pl') return `${count} ${count === 1 ? english[0] : english[1]}`;
   const mod10 = count % 10;
   const mod100 = count % 100;
   const form = count === 1 ? pl[0] : mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20) ? pl[1] : pl[2];

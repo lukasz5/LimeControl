@@ -24,6 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- Linki limecontrol://open?… (kod QR z wersji przeglądarkowej, link do ankiety). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="limecontrol" android:host="open" />
+            </intent-filter>
+
         </activity>
 
         <provider
@@ -40,4 +48,9 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Odblokowanie hasła zapisanego w Android Keystore (tylko gdy użytkownik je zapisze). -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <!-- Skanowanie kodu QR z adresem serwera — na żądanie użytkownika. Aparat nie jest wymagany do instalacji. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 </manifest>

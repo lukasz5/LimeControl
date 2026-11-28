@@ -7,8 +7,9 @@ and prepared for the App Store and Google Play. This document covers building, s
 releasing — step by step, including suggested answers to both stores' forms.
 
 - App identifier (Bundle ID / package name): `eu.limecontrol.app`
-- iOS 15 or later, iPhone and iPad · Android 7.0 (API 24) or later, target API 36
-- Languages: Polish and English (interface, store listings, screenshots)
+- iOS 15 or later, iPhone and iPad · Android 8.0 (API 26) or later, target API 36
+- Languages: Polish, English and German (interface, store listings, screenshots)
+- Roadmap: [ROADMAP.en.md](ROADMAP.en.md)
 
 ## How it differs from the browser version
 
@@ -16,10 +17,31 @@ releasing — step by step, including suggested answers to both stores' forms.
 |---|---|---|
 | Account | Google account (hosted service) or access key (self-hosted) | none — no registration, no sign-in |
 | Server profiles | in the cloud or in the browser | on the device only (native app storage), without passwords |
+| Server password | only in the tab's memory (optional) | optionally in the system keychain, unlocked with biometrics |
+| Adding a server | form; profile QR code for the app | form or QR code scan, `limecontrol://` link |
+| Offline survey list | — | last downloaded list (titles, status, dates) |
 | Connection to the survey server | direct (needs CORS) or through the relay | direct through the native networking layer — no CORS, no relay |
 | Scheduler | LimeControl server | after connecting your own LimeControl server (optional) |
 | Export and sharing | file download | system share sheet |
 | Light / dark theme | switch in the header | follows the system until you pick one |
+
+## Password, QR codes and links
+
+- **Password in the keychain** (`src/services/secureCredentials.ts`, the `@capgo/capacitor-native-biometric`
+  plugin). The option appears only on devices with strong biometrics (Face ID, Touch ID, a class 3
+  fingerprint). The entry uses the `BIOMETRY_ANY` access control — every read needs a confirmation,
+  enrolling a new fingerprint keeps it, turning off the screen lock removes it. The profile only keeps
+  the `biometricPassword` flag. A password the server rejects is removed automatically.
+- **Profile QR code.** The browser version shows a code with the link
+  `limecontrol://open?server=<RPC endpoint>&user=<user name>&name=<name>[&plugin=<plugin>][&sid=<survey>]`.
+  The link never holds the password, and a `password` parameter is ignored. With `sid` the app opens
+  that survey after connecting.
+- **Scanner** (`@capacitor/barcode-scanner`, the ZXing library — no Google Play services). It also
+  accepts a plain server address. Needs Android 8.0 (API 26).
+- **The `limecontrol://` scheme** is registered in `Info.plist` (`CFBundleURLTypes`) and in
+  `AndroidManifest.xml` (an intent filter with the `open` host). Universal Links / App Links
+  (`https://limecontrol.eu/…` addresses) need the Apple team ID and the Google Play signing key
+  fingerprint — that is the next step.
 
 The mobile bundle is built with `VITE_PLATFORM=native` — without Firebase, without a service worker
 and without fonts loaded from the internet.
@@ -135,13 +157,15 @@ SHOTS_PL_ENDPOINT='https://demo-pl.example.com/index.php/admin/remotecontrol' SH
 ```
 
 The script opens the `dist-mobile/` bundle in Chrome at the sizes the stores require and saves the
-screenshots in the fastlane layout — in Polish and in English:
+screenshots in the fastlane layout — in Polish, English and German (German ones come from the
+English instance by default, because survey templates exist only in Polish and English;
+`SHOTS_DE_ENDPOINT` overrides that):
 
 | Store | Device | Size | Directory |
 |---|---|---|---|
-| App Store | iPhone 6.9″ | 1320×2868 | `fastlane/screenshots/<pl\|en-US>/` |
-| App Store | iPad 13″ | 2064×2752 | `fastlane/screenshots/<pl\|en-US>/` |
-| Google Play | phone | 1080×1920 | `fastlane/metadata/android/<pl-PL\|en-US>/images/phoneScreenshots/` |
+| App Store | iPhone 6.9″ | 1320×2868 | `fastlane/screenshots/<pl\|en-US\|de-DE>/` |
+| App Store | iPad 13″ | 2064×2752 | `fastlane/screenshots/<pl\|en-US\|de-DE>/` |
+| Google Play | phone | 1080×1920 | `fastlane/metadata/android/<pl-PL\|en-US\|de-DE>/images/phoneScreenshots/` |
 | Google Play | 7″ tablet | 1920×1080 | `…/images/sevenInchScreenshots/` |
 | Google Play | 10″ tablet | 2560×1440 | `…/images/tenInchScreenshots/` |
 
@@ -252,9 +276,9 @@ the definitions in each form before confirming them.
 
 | Form | Answer | Why |
 |---|---|---|
-| App Store: App Privacy | **Data Not Collected** | The publisher receives no data: no accounts, analytics or ads. The app connects only to the server the user enters. |
+| App Store: App Privacy | **Data Not Collected** | The publisher receives no data: no accounts, analytics or ads. The app connects only to the server the user enters. The keychain password, the camera image and the last survey list never leave the device, so they are not “collected” as the form defines it. |
 | Google Play: Data safety | Collects and shares no data | As above. Sign-in details go only to the user's own server, at the user's request; the publisher has no access to them. |
-| Privacy policy | `https://limecontrol.eu/en/privacy.html` · `https://limecontrol.eu/prywatnosc.html` | The link is also in the app footer. |
+| Privacy policy | `https://limecontrol.eu/en/privacy.html` · `https://limecontrol.eu/prywatnosc.html` · `https://limecontrol.eu/de/datenschutz.html` | The link is also in the app footer. Version 1.2 covers the camera, biometrics and the saved list. |
 | Encryption (App Store) | No proprietary cryptography | `ITSAppUsesNonExemptEncryption = false` in `Info.plist`; the app only uses the system's HTTPS. |
 | Age rating | Lowest (every answer “no”) | No sensitive content, chat, user-generated content, gambling or web browser. |
 | Target audience (Google Play) | 18 and over | A professional tool; not directed at children. |
@@ -262,7 +286,8 @@ the definitions in each form before confirming them.
 | In-app purchases | No | The app is free; it sells and unlocks nothing. |
 | App access / demo account | Sign-in required — provide the demo instance details | Text: [`store/review-notes.md`](store/review-notes.md). |
 | Category | Business (secondary: Productivity) | — |
-| Permissions (Android) | `INTERNET` only | No access to location, contacts, camera or files. |
+| Permissions (Android) | `INTERNET`, `CAMERA`, `USE_BIOMETRIC` (plus `USE_FINGERPRINT` and `ACCESS_NETWORK_STATE` added by libraries) | The camera only scans a QR code on request (`android.hardware.camera` is not required); biometrics only unlock a saved password. No access to location, contacts or files. |
+| Permissions (iOS) | `NSCameraUsageDescription`, `NSFaceIDUsageDescription` | Texts in Polish, English and German in `App/<language>.lproj/InfoPlist.strings`. |
 
 ## Store rules reflected in the app
 
@@ -273,8 +298,8 @@ the definitions in each form before confirming them.
   leads to the documentation, not to an offer — the stores do not allow external payments.
 - **Privacy.** A privacy policy link in the footer, the iOS privacy manifest
   (`PrivacyInfo.xcprivacy`), no cloud backup of app data on Android.
-- **Security.** Server passwords are never stored; the Android release build blocks unencrypted
-  connections.
+- **Security.** The server password is stored only on explicit request, in the system keychain and
+  behind biometrics; the Android release build blocks unencrypted connections.
 - **Listings.** The App Store description does not mention other platforms.
 
 ## Verification status
@@ -284,8 +309,16 @@ Android 16 emulator — connecting to a server, survey list and details, sharing
 from the template library, the Back button, light and dark appearance following the system. The
 `Release` configuration compiles on both platforms (iOS without signing, Android as an unsigned AAB).
 
+Version 1.2 (25 November 2026): a `limecontrol://open?…` link opens the app with the form filled in,
+in the iPad simulator (iOS) and in an Android 16 tablet emulator; both show the tablet layout (list
+and form side by side) and the "Scan QR code" button. The profile QR code and the German interface
+were checked in the browser.
+
 Not verified yet:
 
+- **Version 1.2 on physical devices:** scanning a QR code with the camera and keeping the password
+  in the keychain with Face ID, Touch ID or a fingerprint. The simulator and the emulator have no
+  biometrics set up, so the "Remember the password on this device" option is hidden there.
 - **Android with a current WebView.** The emulator ships WebView 133, where Capacitor leaves room
   for the system bars. Devices with WebView 140 or later (most phones) draw the content under the
   system bars and use the same CSS rules (`env(safe-area-inset-*)`) as iOS, where they were

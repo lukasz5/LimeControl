@@ -18,6 +18,15 @@
         "revision" : "549c18ad9d9bb70d05df37cc3f6f7aa7f5d0ee52",
         "version" : "2.0.1"
       }
+    },
+    {
+      "identity" : "osbarcodelib-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/OutSystems/OSBarcodeLib-iOS.git",
+      "state" : {
+        "revision" : "c4cfe4de0d8e9803478e4624bafcf1e914d9eaf2",
+        "version" : "3.0.1"
+      }
     }
   ],
   "version" : 3

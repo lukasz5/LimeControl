@@ -1,1 +1,7 @@
-First release of the LimeControl mobile app.
+Version 1.2:
+• Keep the server password in the keychain and unlock it with Face ID or Touch ID.
+• Add a server by scanning a QR code from the browser version.
+• limecontrol:// links open the app on a given server or survey.
+• Pull to refresh, and the last survey list is available offline.
+• On iPad, the survey list and details sit side by side.
+• New interface language: German.

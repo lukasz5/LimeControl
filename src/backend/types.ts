@@ -15,6 +15,7 @@ export interface InstancePatch {
   limeVersion?: LimeSurveyVersion;
   lastConnectedAt?: string;
   siteName?: string;
+  biometricPassword?: boolean;
 }
 
 /**
@@ -23,7 +24,8 @@ export interface InstancePatch {
  *  - local: klucz dostępu do własnej instalacji, profile w pamięci przeglądarki,
  *  - device: aplikacja mobilna bez konta i bez serwera — profile na urządzeniu, połączenia
  *    bezpośrednio z LimeSurvey (harmonogram i przekaźnik wymagają serwera, więc są niedostępne).
- * Hasła do LimeSurvey nie są zapisywane w żadnym z trybów.
+ * Hasła do LimeSurvey nie są zapisywane w profilach w żadnym z trybów; aplikacja mobilna może je
+ * zapisać w pęku kluczy urządzenia (src/services/secureCredentials.ts).
  */
 export interface Backend {
   readonly mode: AuthMode;

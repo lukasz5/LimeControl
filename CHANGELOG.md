@@ -4,6 +4,72 @@ All notable changes to LimeControl are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/).
 The survey themes and the survey templates carry their own version numbers, noted below.
 
+## Unreleased
+
+### Added
+
+**Survey themes 1.2.0**
+- Eight themes with their own typefaces: Editorial (Literata), Civic (Brygada 1918 and Noto Sans), Product
+  (Geist), Studio (Bricolage Grotesque and DM Sans), Logistics (Barlow Condensed and Barlow), Finance
+  (IBM Plex Sans), Hospitality (Newsreader and Instrument Sans) and the dark Midnight (Inter) — sixteen
+  themes in total, all checked against WCAG 2.2 AA.
+- Fonts (SIL OFL 1.1, WOFF2) ship inside the theme packages with latin, latin-ext and cyrillic subsets; no
+  font CDN, so respondents' IP addresses are not sent to third parties.
+- Optional theme tokens for typography and colour mode: heading style, case and tracking, question font,
+  tabular numbers, a header accent stripe and `color-scheme: dark`.
+- A larger, phone-friendly file upload button and an upload list that reads as cards on small screens.
+
+**LimeControlBranding plugin 1.0.0**
+- Logos in the survey header (main and partner logo) and footer (up to 12 logos, e.g. EU funding), footer
+  text and a link, with images uploaded straight from the settings form.
+- A brand colour that replaces the theme accent and is corrected automatically to WCAG 2.2 AA contrast.
+- Defaults for all surveys, with per-survey override or opt-out; multilingual texts (`[pl] … [en] …`).
+- Admin texts in Polish, English and German.
+
+### Fixed
+
+- Survey themes: validation hints were near-black in dark themes, and the header accent stripe was hidden,
+  both by high-specificity rules in Fruity TwentyThree.
+
+## 1.2.0 — 2026-11-25
+
+Convenience release for the mobile app: biometric sign-in, QR codes and links, an offline survey list,
+a tablet layout and a German interface.
+
+### Added
+
+**Mobile app (iOS and Android)**
+- Optional saved password: kept in the iOS Keychain or Android Keystore and unlocked with Face ID, Touch ID
+  or a fingerprint (`BIOMETRY_ANY` access control). The profile stores only a flag; a password the server
+  rejects is removed automatically, and "Forget password" removes it by hand.
+- "Scan QR code" on the Instances tab fills in the server address and user name from a QR code or a plain
+  server address.
+- `limecontrol://open?server=…&user=…&name=…&sid=…` links open the app on a saved profile (connecting
+  straight away) or fill in the new-instance form; with `sid` the survey opens after connecting.
+- Pull to refresh on the survey list, and the last downloaded survey list (titles, status, dates) shown
+  before connecting and offline.
+- Permission texts for the camera and Face ID in Polish, English and German.
+
+**App (all platforms)**
+- German interface (`de`), chosen automatically for German-language devices and browsers; links to the
+  German website pages.
+- QR code for the mobile app on every instance profile card, with a copyable `limecontrol://` link
+  (never containing the password).
+- Tablet layout: from 768 px the survey list and details sit side by side and the details pane scrolls on
+  its own; the instances, schedule and participants views use two columns from the same width.
+
+**Store listings and website**
+- German App Store and Google Play listings and German screenshots in `mobile/store/screenshots.mjs`.
+- Mobile app roadmap (`mobile/ROADMAP.md`, `mobile/ROADMAP.en.md`).
+- Privacy policy 1.2 (PL, EN, DE): camera, biometrics and the saved survey list in the mobile app.
+
+### Changed
+
+- Android 8.0 (API 26) is now the minimum version, required by the QR code scanner.
+- Server messages for the German interface are in English (`X-LimeControl-Lang: de`).
+- Store listings no longer say "without logging in to the admin panel", in line with the website.
+- The untranslated "Signing in..." label in the instance form now follows the interface language.
+
 ## 1.1.0 — 2026-11-18
 
 LimeControl becomes a complete set of free, open-source tools — the app, survey themes, survey templates
