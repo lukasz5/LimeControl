@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>LimeControl Elections – campaign planner for election committees</title>
-  <meta name="description" content="Plan campaign events, assign tasks and deadlines, and compare actual spending with the budget. See the campaign planner in the Poland module." />
+  <meta name="description" content="Choose a country and campaign area, schedule events and tasks, set a budget and look up official election results in 29 country archives." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/en/election-polls/" />
@@ -18,7 +18,7 @@
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/en/election-polls/" />
   <meta property="og:title" content="LimeControl Elections – campaign planner for election committees" />
-  <meta property="og:description" content="Plan campaign events, assign tasks and deadlines, and compare actual spending with the budget. See the campaign planner in the Poland module." />
+  <meta property="og:description" content="Choose a country and campaign area, schedule events and tasks, set a budget and look up official election results in 29 country archives." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/en.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -104,11 +104,12 @@
         <div>
           <h1>LimeControl Elections</h1>
           <p class="elections-lead">Run your committee’s campaign from one calendar. For each event, see who is responsible, what is due and how actual spending compares with the budget.</p>
-          <p class="muted">Create a campaign on your LimeSurvey installation to start scheduling events, budgeting and planning a daily itinerary. You can link two survey waves to the same campaign later.</p>
+          <p class="muted">When you create a campaign, choose the country and the area you cover. You can plan a daily route and assign events to places in that country’s directory. You can link two polling waves later. The planner interface is in Polish.</p>
+          <p id="download"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.11.0/LimeControlElectionPolls-0.11.0.zip" download>Download the plugin 0.11.0 (ZIP)</a></p>
         </div>
-        <aside class="card elections-country" id="download" aria-labelledby="country-title">
+        <aside class="card elections-country" aria-labelledby="country-title">
           <div class="card-body">
-            <p class="elections-module-label">Available country module</p>
+            <p class="elections-module-label">Campaign example</p>
             <h2 class="card-title" id="country-title"><a href="/en/election-polls/poland/">Poland</a></h2>
             <p>See how a committee prepares for a debate and shares the approved route with selected team members. They sign in on their phones, open directions and mark each stop as visited.</p>
             <div class="card-actions">
@@ -138,12 +139,18 @@
           </div>
         </div>
       </section>
+      <section class="elections-report" aria-labelledby="archive-title">
+        <h2 id="archive-title">Which election results can you look up?</h2>
+        <div><p>The planner covers all 27 EU countries, Switzerland and the United States. Select an election and an area in the campaign archive. Each results table links to its official source.</p>
+          <p class="elections-research-note">Germany’s 2025 Bundestag election includes first and second votes nationwide, for all 16 states and for all 299 constituencies. France’s 2022 presidential election covers both rounds and all 107 units in each official departmental file. The Romanian 2025 presidential runoff includes the national result and a sample of three counties (județe).</p>
+        </div>
+      </section>
       <section id="report" class="elections-report" aria-labelledby="report-title">
         <h2 id="report-title">A committee report after two polling waves</h2>
         <div>
-          <p>Once the polling team has collected responses, compare changes in support across selected areas alongside the dates and costs of campaign activities.</p>
+          <p>After both surveys, compare the change in support across the campaign area with the dates and costs of your activities. The Poland module also supports comparisons between selected counties or municipalities when both surveys use matching geography questions.</p>
           <a href="/en/election-polls/poland/#report">See a report for two Polish counties</a>
-          <p class="elections-research-note">On election day, the polling team can also run an exit poll.</p>
+          <p class="elections-research-note">In Poland, the polling team can also run an exit poll with a stratified sample of polling districts.</p>
         </div>
       </section>
     </div>

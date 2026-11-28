@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>LimeControl Elections – Wahlkampfplaner für Wahlkomitees</title>
-  <meta name="description" content="Planen Sie Wahlkampfveranstaltungen, verteilen Sie Aufgaben und setzen Sie Fristen. Vergleichen Sie geplante und tatsächliche Ausgaben im Modul Polen." />
+  <meta name="description" content="Wählen Sie Land und Wahlkampfgebiet, planen Sie Veranstaltungen, Aufgaben und Budget. Rufen Sie amtliche Wahlergebnisse in 29 Länderarchiven ab." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/de/wahlumfragen/" />
@@ -18,7 +18,7 @@
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/de/wahlumfragen/" />
   <meta property="og:title" content="LimeControl Elections – Wahlkampfplaner für Wahlkomitees" />
-  <meta property="og:description" content="Planen Sie Wahlkampfveranstaltungen, verteilen Sie Aufgaben und setzen Sie Fristen. Vergleichen Sie geplante und tatsächliche Ausgaben im Modul Polen." />
+  <meta property="og:description" content="Wählen Sie Land und Wahlkampfgebiet, planen Sie Veranstaltungen, Aufgaben und Budget. Rufen Sie amtliche Wahlergebnisse in 29 Länderarchiven ab." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/de.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -104,11 +104,12 @@
         <div>
           <h1>LimeControl Elections</h1>
           <p class="elections-lead">Koordinieren Sie den Wahlkampf Ihres Komitees in einem Kalender. Für jede Veranstaltung sehen Sie, wer zuständig ist, welche Aufgaben anstehen und wie die Ausgaben im Vergleich zum Budget ausfallen.</p>
-          <p class="muted">Legen Sie in Ihrer LimeSurvey-Installation einen Wahlkampf an und planen Sie Termine, Budget und Tagesrouten. Zwei Befragungswellen können Sie später mit demselben Wahlkampf verknüpfen.</p>
+          <p class="muted">Wählen Sie beim Anlegen Ihres Wahlkampfs das Land und Ihr Einsatzgebiet. Sie können Tagesrouten planen und Veranstaltungen den Gebieten aus dem Landesverzeichnis zuordnen. Zwei Befragungswellen lassen sich später verknüpfen. Die Bedienoberfläche ist auf Polnisch.</p>
+          <p id="download"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.11.0/LimeControlElectionPolls-0.11.0.zip" download>Plugin herunterladen 0.11.0 (ZIP)</a></p>
         </div>
-        <aside class="card elections-country" id="download" aria-labelledby="country-title">
+        <aside class="card elections-country" aria-labelledby="country-title">
           <div class="card-body">
-            <p class="elections-module-label">Verfügbares Ländermodul</p>
+            <p class="elections-module-label">Wahlkampfbeispiel</p>
             <h2 class="card-title" id="country-title"><a href="/de/wahlumfragen/polen/">Polen</a></h2>
             <p>Sehen Sie, wie ein Komitee eine Debatte vorbereitet und die bestätigte Route für ausgewählte Teammitglieder freigibt. Nach der Anmeldung können diese auf dem Smartphone die Navigation öffnen und besuchte Stationen abhaken.</p>
             <div class="card-actions">
@@ -138,12 +139,18 @@
           </div>
         </div>
       </section>
+      <section class="elections-report" aria-labelledby="archive-title">
+        <h2 id="archive-title">Welche Wahlergebnisse sind für Ihr Land verfügbar?</h2>
+        <div><p>Der Planer umfasst alle 27 EU-Staaten, die Schweiz und die USA. Wählen Sie im Archiv Ihres Wahlkampfs eine Wahl und ein Gebiet. Bei jeder Ergebnistabelle finden Sie den Link zur amtlichen Quelle.</p>
+          <p class="elections-research-note">Für die Bundestagswahl 2025 liegen Erst- und Zweitstimmen für das Bundesgebiet, alle 16 Länder und alle 299 Wahlkreise vor. Das französische Archiv enthält beide Runden der Präsidentschaftswahl 2022 mit jeweils allen 107 Gebietseinheiten der amtlichen Départementstatistik. Für die rumänische Stichwahl 2025 stehen das landesweite Ergebnis und Beispiele aus drei Kreisen (județe) zur Verfügung.</p>
+        </div>
+      </section>
       <section id="report" class="elections-report" aria-labelledby="report-title">
         <h2 id="report-title">Bericht für das Komitee nach zwei Befragungswellen</h2>
         <div>
-          <p>Sobald das Institut die Antworten erhoben hat, können Sie Veränderungen der Zustimmung in ausgewählten Gebieten mit den Terminen und Kosten Ihrer Wahlkampfaktivitäten vergleichen.</p>
+          <p>Nach beiden Befragungen können Sie die Veränderung der Zustimmung im gesamten Wahlkampfgebiet mit den Terminen und Kosten Ihrer Aktivitäten vergleichen. Im Modul Polen sind auch Vergleiche zwischen ausgewählten Kreisen oder Gemeinden möglich, wenn beide Umfragen dieselben Gebietsangaben erfassen.</p>
           <a href="/de/wahlumfragen/polen/#report">Beispielbericht für zwei polnische Kreise ansehen</a>
-          <p class="elections-research-note">Am Wahltag kann das Institut auch eine Nachwahlbefragung durchführen.</p>
+          <p class="elections-research-note">In Polen kann das Institut zudem eine Nachwahlbefragung mit einer geschichteten Stichprobe von Stimmbezirken durchführen.</p>
         </div>
       </section>
     </div>
