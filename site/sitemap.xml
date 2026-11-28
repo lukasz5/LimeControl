@@ -216,4 +216,16 @@
     <changefreq>monthly</changefreq>
     <priority>0.2</priority>
   </url>
+  <url>
+    <loc>https://limecontrol.eu/pytania-json/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/pytania-json/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/pytania-json/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/pytania-json/en/" />
+  </url>
+  <url>
+    <loc>https://limecontrol.eu/pytania-json/en/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://limecontrol.eu/pytania-json/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limecontrol.eu/pytania-json/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://limecontrol.eu/pytania-json/en/" />
+  </url>
 </urlset>

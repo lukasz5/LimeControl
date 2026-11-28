@@ -71,6 +71,17 @@ jobs:
           site=http://127.0.0.1:18081
           curl -fsS "$site/wtyczki.html" -o "$RUNNER_TEMP/catalog.html"
           curl -fsS "$site/en/plugins.html" -o "$RUNNER_TEMP/catalog.en.html"
+          curl -fsS -D "$RUNNER_TEMP/sitemap.headers" "$site/sitemap.xml" -o "$RUNNER_TEMP/sitemap.xml"
+          grep -Eiq '^Content-Type: application/xml([[:space:];]|$)' "$RUNNER_TEMP/sitemap.headers"
+          for demo in /pytania-json/ /pytania-json/en/; do
+            canonical="https://limecontrol.eu$demo"
+            grep -Fq "<loc>$canonical</loc>" "$RUNNER_TEMP/sitemap.xml"
+            curl -fsS "$site${demo}?example=equipment" -o "$RUNNER_TEMP/demo-seo.html"
+            grep -Fq "rel=\"canonical\" href=\"$canonical\"" "$RUNNER_TEMP/demo-seo.html"
+            curl -fsS -D "$RUNNER_TEMP/redirect.headers" "$site${demo}index.html?example=equipment" -o /dev/null
+            grep -Eq '^HTTP/1\.1 301 ' "$RUNNER_TEMP/redirect.headers"
+            grep -Fiq "Location: ${demo}?example=equipment" "$RUNNER_TEMP/redirect.headers"
+          done
           for example in fieldwork equipment; do
             path="/pytania-json/?example=$example"
             grep -Fq "href=\"$path\"" "$RUNNER_TEMP/catalog.html"
