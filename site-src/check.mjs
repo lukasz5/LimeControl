@@ -114,6 +114,9 @@ for (const lang of LANGS) {
   if (!productHtml.includes('<h1>LimeControl Elections</h1>') || !productHtml.includes(`href="${moduleUrl}"`)) {
     report(product, 'brak nazwy produktu lub wejścia do modułu krajowego');
   }
+  if (!productHtml.includes(`href="${releaseDirectory}${electionRelease.zip}"`)) {
+    report(product, 'brak bezpośredniego odsyłacza do instalatora wspólnego planera');
+  }
   if (!productHtml.includes(`href="${moduleUrl}#planner"`)) {
     report(product, 'brak wejścia do przykładu planera kampanii');
   }

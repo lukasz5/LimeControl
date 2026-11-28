@@ -1,13 +1,13 @@
 import { CONTACT_EMAIL, ROUTES, esc, layout, outputPath } from '../chrome.mjs';
 
 const repository = 'https://github.com/lukasz5/limecontrol-election-polls';
-const version = '0.10.0';
+const version = '0.11.0';
 
 export const electionRelease = {
   version,
   repository,
   zip: `LimeControlElectionPolls-${version}.zip`,
-  sha256: 'c87ae0f3cc9720476cbb8b32906dc6d05d1e05cdfa67253982be57dda72ca67c',
+  sha256: 'a959488a254ac8dcb9a5f2e52c312033ab4ac0de14ac87126e178a85f66656fc',
   directory: `${repository}/releases/download/v${version}/`,
 };
 
@@ -42,7 +42,7 @@ const copy = {
     exit: 'Exit poll w dniu głosowania', exitLead: 'Pracownia może przygotować odrębne badanie dla konkretnej karty i tury.',
     exitSteps: ['Wylosuj obwody w warstwach i ustal, co którą osobę zapraszać po wyjściu z lokalu. Krok można dostosować do wielkości obwodu.', 'Rozlicz anonimowe karty i odmowy na każdej zmianie. Odczytaj przedział uwzględniający losowanie obwodów i sprawdź, jak odmienne preferencje osób odmawiających zmieniłyby szacunek.', 'Po uzyskaniu zweryfikowanego protokołu zastąp nim szacunek dla tego obwodu w late poll. Pierwotny szacunek pozostaje do porównania.'],
     source: 'Kod źródłowy i instrukcja wtyczki na GitHubie',
-    files: 'Uruchom planer w LimeSurvey', install: 'Zainstaluj ZIP w panelu wtyczek i aktywuj wtyczkę. Otwórz Planery kampanii i utwórz kampanię. Wpisz pierwsze wydarzenie, zaplanuj zadania i przystanki na trasie. Aby później przećwiczyć sondaż, zaimportuj i aktywuj obie przykładowe ankiety, a następnie podłącz fale w tej kampanii.',
+    files: 'Uruchom planer w LimeSurvey', install: 'Zainstaluj ZIP w panelu wtyczek i aktywuj wtyczkę. Otwórz Planery kampanii, wybierz Polskę i wskaż obszar kampanii w wykazie PKW. Wpisz pierwsze wydarzenie, zaplanuj zadania i przystanki na trasie. Aby później przećwiczyć sondaż, zaimportuj i aktywuj obie przykładowe ankiety, a następnie podłącz fale w tej kampanii.',
     zip: 'Wtyczka z archiwum PKW', lss1: 'Przykładowa ankieta · fala 1', lss2: 'Przykładowa ankieta · fala 2', sums: 'Sumy kontrolne', tested: 'Testy lokalne na danych ćwiczeniowych', licence: 'Licencja kodu',
     pilot: 'Pilotaż planera dla komitetu', paid: 'Zakładamy kampanię i nadajemy zespołowi dostęp do planera. Koordynator ćwiczy na jednym dniu kampanii. Wpisuje spotkanie i zadania, układa kolejność przystanków i rozlicza wydatki. Fale sondażu można dołączyć później.',
     enquiry: 'Do wyceny podaj wersję LimeSurvey, termin wdrożenia i wydarzenie, które chcesz przećwiczyć. Jeśli prowadzicie sondaże, zapraszamy pracownię do przygotowania raportu po obu falach.',
@@ -77,7 +77,7 @@ const copy = {
     exit: 'Election day exit polling', exitLead: 'A research agency can set up a separate study for a particular ballot and round.',
     exitSteps: ['Draw polling districts within strata and set the interval for inviting voters as they leave. The interval can vary with district size.', 'Record anonymous ballots and refusals by shift. Read an interval that accounts for district sampling and check how different preferences among people who declined would change the estimate.', 'Once a verified official tally is available, use it in place of the district estimate in the late poll. The original exit poll remains available for comparison.'],
     source: 'Plugin source code and setup guide on GitHub',
-    files: 'Set up the planner in LimeSurvey', install: 'Install and activate the ZIP in the plugin manager. Open Planery kampanii (Campaign planners) and create a campaign. Schedule an event, assign tasks and plan your stops. To practise linking waves later, import and activate the two example surveys and attach them to the same campaign.',
+    files: 'Set up the planner in LimeSurvey', install: 'Install and activate the ZIP in the plugin manager. Open Planery kampanii (Campaign planners), choose Polska (Poland) and select your area from the Polish electoral commission’s territorial directory. Schedule an event, assign tasks and plan your stops. To practise linking waves later, import and activate the two example surveys and attach them to the same campaign.',
     zip: 'Plugin and official results archive', lss1: 'Example survey · wave 1', lss2: 'Example survey · wave 2', sums: 'Checksums', tested: 'Tested locally with example data', licence: 'Code licence',
     pilot: 'Campaign planner pilot for your committee', paid: 'We set up a campaign and give the committee access to its planner. The coordinator practises with one campaign day, scheduling a meeting, assigning tasks, ordering stops and checking spending against the budget. Survey waves can be linked later.',
     enquiry: 'For a quote, tell us your LimeSurvey version, preferred start date and the event you want to work through. If you run polls, your research agency can join you to prepare the report after both waves.',
@@ -112,7 +112,7 @@ const copy = {
     exit: 'Nachwahlbefragung am Wahltag', exitLead: 'Das Institut kann für einen bestimmten Stimmzettel und Wahlgang eine eigene Studie anlegen.',
     exitSteps: ['Ziehen Sie Stimmbezirke innerhalb der Schichten und legen Sie fest, jede wievielte Person beim Verlassen des Wahllokals eingeladen wird. Der Abstand lässt sich an die Größe des Bezirks anpassen.', 'Erfassen Sie anonyme Stimmzettel und Teilnahmeverweigerungen je Schicht. Das Intervall berücksichtigt die Bezirksauswahl. Eine Sensitivitätsanalyse zeigt, wie andere Präferenzen der Personen, die die Teilnahme abgelehnt haben, die Schätzung verändern würden.', 'Liegt eine geprüfte amtliche Niederschrift vor, ersetzt sie im Late Poll die Schätzung für diesen Bezirk. Der ursprüngliche Exit Poll bleibt zum Vergleich verfügbar.'],
     source: 'Quellcode und Installationsanleitung des Plugins auf GitHub',
-    files: 'Planer in LimeSurvey einrichten', install: 'Installieren und aktivieren Sie die ZIP-Datei in der Plugin-Verwaltung. Öffnen Sie Planery kampanii (Wahlkampfplaner) und legen Sie einen Wahlkampf an. Planen Sie Termine, Aufgaben und Haltestellen. Die beiden Beispielumfragen können Sie später importieren, aktivieren und als Wellen mit dem Wahlkampf verknüpfen.',
+    files: 'Planer in LimeSurvey einrichten', install: 'Installieren und aktivieren Sie die ZIP-Datei in der Plugin-Verwaltung. Öffnen Sie Planery kampanii (Wahlkampfplaner), wählen Sie Polska (Polen) und bestimmen Sie Ihr Wahlkampfgebiet aus dem Verzeichnis der polnischen Wahlkommission. Planen Sie Termine, Aufgaben und Haltestellen. Die beiden Beispielumfragen können Sie später importieren, aktivieren und als Wellen mit dem Wahlkampf verknüpfen.',
     zip: 'Plugin mit amtlichem Wahlarchiv', lss1: 'Beispielumfrage · Welle 1', lss2: 'Beispielumfrage · Welle 2', sums: 'Prüfsummen', tested: 'Lokal mit Beispieldaten getestet', licence: 'Lizenz des Codes',
     pilot: 'Pilotprojekt für Ihr Wahlkomitee', paid: 'Wir legen einen Wahlkampf an und richten den Zugang für das Team ein. Anhand eines Wahlkampftages plant die Koordination einen Termin, verteilt Aufgaben, ordnet die Stationen der Tagesroute und gleicht die Ausgaben mit dem Budget ab. Befragungswellen können später hinzukommen.',
     enquiry: 'Für ein Angebot nennen Sie uns Ihre LimeSurvey-Version, den gewünschten Starttermin und eine Veranstaltung für den Probelauf. Bei einer Befragung kann Ihr Institut nach beiden Wellen den Bericht mit Ihnen erstellen.',

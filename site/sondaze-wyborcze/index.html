@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>LimeControl Elections – planer kampanii dla komitetu wyborczego</title>
-  <meta name="description" content="Zaplanuj wydarzenia kampanii, przydziel zadania i terminy. Porównaj planowane i rzeczywiste wydatki komitetu. Zobacz planer w module Polska." />
+  <meta name="description" content="Wybierz kraj i obszar kampanii, zaplanuj wydarzenia, zadania i budżet. Sprawdź oficjalne wyniki wyborów w archiwach 29 krajów." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="google-site-verification" content="CSUXq2Z5en7Ay8OPV1Wwf4nERbD940QN_3dqoaUd2U0" />
   <link rel="canonical" href="https://limecontrol.eu/sondaze-wyborcze/" />
@@ -18,7 +18,7 @@
   <meta property="og:site_name" content="LimeControl" />
   <meta property="og:url" content="https://limecontrol.eu/sondaze-wyborcze/" />
   <meta property="og:title" content="LimeControl Elections – planer kampanii dla komitetu wyborczego" />
-  <meta property="og:description" content="Zaplanuj wydarzenia kampanii, przydziel zadania i terminy. Porównaj planowane i rzeczywiste wydatki komitetu. Zobacz planer w module Polska." />
+  <meta property="og:description" content="Wybierz kraj i obszar kampanii, zaplanuj wydarzenia, zadania i budżet. Sprawdź oficjalne wyniki wyborów w archiwach 29 krajów." />
   <meta property="og:image" content="https://limecontrol.eu/assets/og/pl.png?v=9" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -104,11 +104,12 @@
         <div>
           <h1>LimeControl Elections</h1>
           <p class="elections-lead">Prowadź kampanię komitetu w jednym kalendarzu. Przy każdym wydarzeniu widzisz, kto odpowiada za przygotowania, co trzeba zrobić na czas i ile wydano w stosunku do planu.</p>
-          <p class="muted">Załóż kampanię w swojej instalacji LimeSurvey i od razu ułóż kalendarz, budżet i trasę spotkań. Jeśli rozpoczniesz sondaż, podłącz dwie fale do tej samej kampanii.</p>
+          <p class="muted">Zakładając kampanię, wybierz kraj i obszar działania. Możesz od razu ułożyć trasę spotkań i przypisać wydarzenia do miejsc z krajowego wykazu. Dwie fale sondażu możesz dołączyć później.</p>
+          <p id="download"><a class="btn btn-primary" href="https://github.com/lukasz5/limecontrol-election-polls/releases/download/v0.11.0/LimeControlElectionPolls-0.11.0.zip" download>Pobierz wtyczkę 0.11.0 (ZIP)</a></p>
         </div>
-        <aside class="card elections-country" id="download" aria-labelledby="country-title">
+        <aside class="card elections-country" aria-labelledby="country-title">
           <div class="card-body">
-            <p class="elections-module-label">Dostępny moduł krajowy</p>
+            <p class="elections-module-label">Przykład kampanii</p>
             <h2 class="card-title" id="country-title"><a href="/sondaze-wyborcze/polska/">Polska</a></h2>
             <p>Zobacz, jak komitet przygotowuje debatę i udostępnia zatwierdzoną trasę wybranym osobom. Po zalogowaniu ekipa otwiera nawigację na telefonie i oznacza odwiedzone przystanki.</p>
             <div class="card-actions">
@@ -138,12 +139,18 @@
           </div>
         </div>
       </section>
+      <section class="elections-report" aria-labelledby="archive-title">
+        <h2 id="archive-title">Jakie wyniki zobaczysz w swoim kraju?</h2>
+        <div><p>Planer obejmuje 27 państw UE, Szwajcarię i USA. W archiwum kampanii wybierasz wybory i jednostkę terytorialną. Przy tabeli wyników znajdziesz link do oficjalnego źródła.</p>
+          <p class="elections-research-note">Dla wyborów do Bundestagu w 2025 r. dostępne są oba głosy dla kraju, 16 landów i 299 okręgów. Francja obejmuje obie tury wyborów prezydenckich w 2022 r. i 107 jednostek z urzędowego zestawienia w każdej turze. Archiwum rumuńskiej drugiej tury z 2025 r. zawiera wynik krajowy i przykładowe wyniki z trzech okręgów (județe).</p>
+        </div>
+      </section>
       <section id="report" class="elections-report" aria-labelledby="report-title">
         <h2 id="report-title">Raport dla komitetu po dwóch falach</h2>
         <div>
-          <p>Gdy pracownia zbierze odpowiedzi, zestawisz zmianę poparcia w wybranych obszarach z terminami i kosztami działań komitetu.</p>
+          <p>Po obu falach porównasz zmianę poparcia w całej kampanii z terminami i kosztami działań. W module Polska możesz też zestawić wyniki dla wybranych powiatów lub gmin, jeżeli oba sondaże zawierają zgodne pytanie o obszar.</p>
           <a href="/sondaze-wyborcze/polska/#report">Zobacz raport dla dwóch powiatów</a>
-          <p class="elections-research-note">W dniu wyborów pracownia może również przeprowadzić exit poll.</p>
+          <p class="elections-research-note">W Polsce pracownia może przygotować exit poll z losowaniem obwodów w warstwach.</p>
         </div>
       </section>
     </div>
